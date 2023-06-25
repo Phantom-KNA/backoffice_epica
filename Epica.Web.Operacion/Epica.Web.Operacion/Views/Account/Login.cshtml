@@ -1,0 +1,192 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+    ViewBag.Title = "Login";
+}
+
+
+<!-- Almacenar el mensaje de error en un atributo data-* -->
+<div id="error-message" data-error="@ViewBag.ErrorMessage" style="display:none;"></div>
+<!--begin::Card-->
+<div style="background-image:url('~/wwwroot/images/background/BACKGROUND.png');">
+<div class="card w-md-550px m-auto">
+    <!--begin::Card body-->
+    <div class="card-body p-10 p-lg-20">
+        <!--begin::Form-->
+        <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" data-kt-redirect-url="/Home" action="~/Account/Login" method="post">
+            @*action="~/Account/Login" method="post"*@@*data-kt-redirect-url="/Home"*@
+            <!--begin::Heading-->
+            <div class="text-center mb-11">
+                <img src="/images/logo/logo-alquimia-pay.png"  class="logo-imagen" alt="Logo Alquimia" >
+                <!--begin::Title-->
+                <br /><br /><br />
+                <h1 class=" fw-bolder mb-3" style="color: darkblue;">Bienvenido</h1>
+                <!--end::Title-->
+                <!--begin::Subtitle-->
+                @*<div class="text-gray-500 fw-semibold fs-6">Ingresa tu usuario y contraseña</div>*@
+                <!--end::Subtitle=-->
+            </div>
+            <!--begin::Heading-->
+            <!--begin::Input group=-->
+            <div class="fv-row mb-8">
+                <!--begin::Email-->
+                <label class="ms-0 py-0 me-10 ps-2 border-0" style="color: gray; font-size: 130%;">Usuario</label>
+                <input type="text" placeholder="Correo / No. Celular" onkeyup="validar2()" name="username" id="username" autocomplete="off" class="form-control " />
+                <div style="color:red" id="messageEmail"></div>
+                <!--end::Email-->
+            </div>
+                <label class="container">Recordar Usuario                    
+                    <input type="checkbox" checked="checked" name="radio">
+                    <span class="checkmark"></span>
+                </label>
+            <!--begin::Submit button-->
+            <div class="text-center mb-10">
+                @*<button id="login-account" class="btn btn-dark login-account">*@
+            
+            <button type="button" class="btn btn-dark" id="validacion"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                Iniciar Sesion
+            </button>
+            
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">    
+                    <div class="modal-content">
+                        <div class="modal-header " style="background-color: #212529; border-color: #212529; color: #fff;">
+                            <h5 class="modal-title" id="staticBackdropLabel"></h5>
+
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
+                                <label class="ms-0 py-0 me-10 ps-2 border-0" style="color: gray; font-size: 130%; float:left;">Contraseña</label>
+                            <div class="text-center mb-10">
+                                <!--end::Input group=-->
+                                <div class="fv-row mb-3">
+                                <!--begin::Password-->
+                                    
+                                <input type="password" placeholder="Contraseña" name="password" autocomplete="off" class="form-control " />
+                                <!--end::Password-->
+                                </div>
+                                <!--end::Input group=-->
+                                 <!--begin::Wrapper-->
+                                <div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
+                                <div></div>
+                                <!--begin::Link-->
+                                <a href="#" class="link-dark">¿Olvidaste tu contraseña?</a>
+                                <!--end::Link-->
+                                </div>
+                                <!--end::Wrapper-->
+                                <button type="submit" id="kt_sign_in_submit" class="btn btn-dark">
+                                    <!--begin::Indicator label-->
+                                    <span class="indicator-label">Acceder</span>
+                                    <!--end::Indicator label-->
+                                    <!--begin::Indicator progress-->
+                                    <span class="indicator-progress">
+                                        Please wait...
+                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                    <!--end::Indicator progress-->
+                                </button>
+                            </div>
+                        </div>
+@*                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-primary">Comprendido</button>
+                        </div>*@
+                    </div>
+                </div>
+            </div>
+            </div>
+            <!--end::Submit button-->
+        </form>
+        <!--end::Form-->
+       
+    </div>
+    <center>
+        <footer>
+            <a href="#" class="Wrap"><u>Aviso de Privacidad</u></a>
+        </footer>
+    </center>
+    <!--end::Card body-->
+</div>
+<!--end::Card-->
+</div>
+
+<style>
+    .logo-imagen {
+        background-color: white;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        width: 50%;
+        border-radius: 8px;
+    }
+    .card-body {
+        height: 90vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-image: url('../../wwwroot/images/background/fondo-login.png');
+        background-position: center;
+    }
+    /* The container */
+    .container {
+        display: block;
+        position: relative;
+        padding-left: 35px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        font-size: 15px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+        /* Hide the browser's default radio button */
+        .container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+    /* Create a custom radio button */
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 25px;
+        width: 25px;
+        background-color: #eee;
+        border-radius: 50%;
+    }
+
+    /* On mouse-over, add a grey background color */
+    .container:hover input ~ .checkmark {
+        background-color: #ccc;
+    }
+
+    /* When the radio button is checked, add a blue background */
+    .container input:checked ~ .checkmark {
+        background-color: #2196F3;
+    }
+
+    /* Create the indicator (the dot/circle - hidden when not checked) */
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    /* Show the indicator (dot/circle) when checked */
+    .container input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    /* Style the indicator (dot/circle) */
+    .container .checkmark:after {
+        top: 9px;
+        left: 9px;
+        width: 8px;
+        height: 8px;
+        border-radius: 55%;
+        background: white;
+    }
+</style>

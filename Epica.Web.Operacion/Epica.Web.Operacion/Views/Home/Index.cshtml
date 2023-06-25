@@ -1,6 +1,5 @@
 ﻿@{
     ViewData["Title"] = "Home page";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section LogoPage{
     <i class="bi bi-house fs-1 w-40px"></i>
@@ -149,7 +148,7 @@
     <!--end::Primary button-->
 }
 
-
-@section Scripts{
-
-}
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
