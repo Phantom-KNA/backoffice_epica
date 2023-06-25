@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<!--begin::Head-->
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Epica.Web.Operacion</title>
+    @*   <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Epica.Web.Operacion.styles.css" asp-append-version="true" />*@
+    <!--begin::Fonts(mandatory for all pages)-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+    <!--end::Fonts-->
+    <!--begin::Vendor Stylesheets(used for this page only)-->
+    <link href="/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
+    <!--end::Vendor Stylesheets-->
+    <!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
+    <link href="/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <!--end::Global Stylesheets Bundle-->
+    <script>
+        var siteLocation = window.location.href.split('/').slice(0, 3).join('/') + "/";
+    </script>
+</head>
+<!--end::Head-->
+<!--begin::Body-->
+<body id="kt_body" class="app-blank app-blank bgi-size-cover bgi-position-center bgi-no-repeat" style="max-height:100vh;">
+    <div class="d-flex flex-row flex-column-fluid h-150">
+        <!--begin::Body-->
+        
+        <!--end::Body-->
+        <div class="d-flex flex-column flex-lg-row-fluid w-lg-50 overflow-auto">
+
+            <!--begin::Carousel-->
+            <div id="carouselExampleIndicators" class="carousel slide h-100" data-bs-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></li>
+                    <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></li>
+                    <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner h-100">
+                    <div class="carousel-item active h-100" data-bs-interval="5000">
+                        <img class="d-block w-100 h-100 img-fluid" src="/images/slider/transferencias-internacionales.png" alt="First slide">
+                        <div class="carousel-caption">
+                            @*<p>
+                            <h1 class="text-light"><span class="fw-bold">Wallet Negocios</span></h1>
+
+                            Cuentas para grandes negocios y PyMES. Sin costos adicionales (sin costo de apertura, edo. de cuenta, softoken y más), paga según tus ingresos. Se parte de Alquimia Pay, agiliza tu negocio y migra a la tecnología.
+                            </p>*@
+                        </div>
+                    </div>
+                    <div class="carousel-item h-100" data-bs-interval="5000">
+                        <img class="d-block w-100 h-100 img-fluid" src="/images/slider/alquimia-wallet.png" alt="Second slide">
+                        <div class="carousel-caption">
+                            @* <p>
+                            <h1 class="text-light">Alquimia Wallet</h1>
+                            Párrafo de texto para la segunda imagen.
+                            </p>*@
+                        </div>
+                    </div>
+                    <div class="carousel-item h-100" data-bs-interval="5000">
+                        <img class="d-block w-100 h-100 img-fluid" src="/images/slider/alquimia-wallet-negocios1.png" alt="Third slide">
+                        <div class="carousel-caption">
+                            @*<h1 class="text-light">Tarjeta de gasto empresarial</h1>
+                            <p>Párrafo de texto para la tercera imagen.</p>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end::Carousel-->
+            <!-- Agregar recuadro verde encima del carrusel -->
+            @*<div class="position-fixed top-0 p-6" style="right:0;">
+            <img src="/images/logo/AP-blanco-logo.png" alt="Logo Alquimia" style="width: 90px; height: 60px;" />
+            </div>*@
+        </div>
+
+        <div class="d-flex flex-column flex-lg-row-fluid w-lg-50 overflow-auto">
+            @RenderBody()
+        </div>
+        <!--begin::Javascript-->
+        <script>var hostUrl = "assets/";</script>
+        <!--begin::Global Javascript Bundle(mandatory for all pages)-->
+        <script src="/assets/plugins/global/plugins.bundle.js"></script>
+        <script src="/assets/js/scripts.bundle.js"></script>
+        <!--end::Global Javascript Bundle-->
+        <!--begin::Custom Javascript(used for this page only)-->
+        <script src="~/js/account/epica.account.login.js" asp-append-version="true"></script>
+        <!--end::Custom Javascript-->
+        <!--end::Javascript-->
+    </div>
+</body>
+<!--end::Body-->
+</html>

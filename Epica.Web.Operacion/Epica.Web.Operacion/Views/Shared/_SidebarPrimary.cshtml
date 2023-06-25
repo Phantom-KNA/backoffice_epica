@@ -1,0 +1,108 @@
+﻿<!--begin::Sidebar primary-->
+<div class="app-sidebar-primary">
+    <!--begin::Logo-->
+    <div class="app-sidebar-logo d-none d-md-flex flex-center pt-10 mb-5 mb-lg-17" id="kt_app_sidebar_logo">
+        <!--begin::Logo image-->
+        <a asp-action="Index" asp-controller="Home">
+            <img alt="Logo" src="/assets/media/logos/AP-logo-blanco-simple.png" class="h-25px" />
+        </a>
+        <!--end::Logo image-->
+    </div>
+    <!--end::Logo-->
+    <!--begin::Primary menu-->
+    <div class="app-sidebar-menu flex-grow-1 hover-scroll-overlay-y my-5" id="kt_aside_menu_wrapper" data-kt-scroll="true" data-kt-scroll-height="auto" data-kt-scroll-dependencies="#kt_app_sidebar_logo, #kt_app_sidebar_footer" data-kt-scroll-wrappers="#kt_app_sidebar_menu" data-kt-scroll-offset="5px">
+        <!--begin::Menu-->
+        <div id="kt_aside_menu" class="menu menu-rounded menu-column menu-title-gray-600 menu-state-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500 fw-semibold fs-6" data-kt-menu="true">
+            <!--begin:Menu item-->
+            <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item py-2">
+                <!--begin:Menu link-->
+                <span class="menu-link menu-center">
+                    <span class="menu-icon me-0">
+                        <i class="bi bi-people fs-2"></i>
+                    </span>
+                </span>
+                <!--end:Menu link-->
+                <!--begin:Menu sub-->
+                <div class="menu-sub menu-sub-dropdown px-2 py-4 w-250px mh-75 overflow-auto">
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu content-->
+                        <div class="menu-content">
+                            <span class="menu-section fs-5 fw-bolder ps-1 py-1">Clientes</span>
+                        </div>
+                        <!--end:Menu content-->
+                    </div>
+                    <!--end:Menu item-->
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" asp-action="Index" asp-controller="PersonaMoral">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Persona Moral</span>
+                        </a>
+                        <!--end:Menu link-->
+                        <!--begin:Menu link-->
+                        <a class="menu-link" asp-action="Index" asp-controller="PersonaFisica">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Persona Física</span>
+                        </a>
+                        <!--end:Menu link-->
+
+                    </div>
+                    <!--end:Menu item-->
+                </div>
+                <!--end:Menu sub-->
+
+            </div>
+            <!--end:Menu item-->
+            <!--begin:Menu item-->
+            <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item py-2">
+                <!--begin:Menu link-->
+                <span class="menu-link menu-center">
+                    <span class="menu-icon me-0">
+                        <i class="fonticon-card fs-1"></i>
+                    </span>
+                </span>
+                <!--end:Menu link-->
+                <!--begin:Menu sub-->
+                <div class="menu-sub menu-sub-dropdown px-2 py-4 w-250px mh-75 overflow-auto">
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu content-->
+                        <div class="menu-content">
+                            <span class="menu-section fs-5 fw-bolder ps-1 py-1">Ahorro / Wallet</span>
+                        </div>
+                        <!--end:Menu content-->
+                    </div>
+                    <!--end:Menu item-->
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" asp-action="Index" asp-controller="MyAccounts">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Mis cuentas de ahorro</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <!--end:Menu item-->
+                </div>
+                <!--end:Menu sub-->
+            </div>
+            <!--end:Menu item-->
+         </div>
+        <!--end::Menu-->
+    </div>
+    <!--end::Primary menu-->
+    <!--begin::Footer-->
+    <div class="d-flex flex-column flex-center pb-4 pb-lg-8" id="kt_app_sidebar_footer">
+        <partial name="~/Views/Shared/_UserMenu.cshtml" />
+    </div>
+    <!--end::Footer-->
+</div>
+<!--end::Sidebar primary-->
