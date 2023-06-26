@@ -1,0 +1,87 @@
+# Deploy to Azure Kubernetes Service
+# Build and push image to Azure Container Registry; Deploy to Azure Kubernetes Service
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- development
+
+resources:
+- repo: self
+
+variables:
+
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: '498f15a3-295a-4e3c-86a7-dc77d561c279'
+  imageRepository: 'webappoperacion'
+  containerRegistry: 'acrepicadev.azurecr.io'
+  dockerfilePath: '**/Dockerfile'
+  tag: '$(Build.BuildId)'
+  imagePullSecret: 'acrepicadevfec3-auth'
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+
+stages:
+- stage: Build
+  displayName: Build stage
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - checkout: self
+      fetchDepth: 1
+    - task: Docker@0
+      displayName: Build an image
+      inputs:
+        azureSubscription: 'Azure subscription 1 (1bbd807f-3fcf-4844-8e40-760ec2cc71ad)'
+        azureContainerRegistry: '{"loginServer":"acrepicadev.azurecr.io", "id" : "/subscriptions/1bbd807f-3fcf-4844-8e40-760ec2cc71ad/resourceGroups/rg-epica-dev/providers/Microsoft.ContainerRegistry/registries/acrepicadev"}'
+        dockerFile: Epica.Web.Operacion/Epica.Web.Operacion/Dockerfile
+        defaultContext: false
+        context: Epica.Web.Operacion
+        includeLatestTag: true
+    - task: Docker@0
+      displayName: Push an image
+      inputs:
+        azureSubscription: 'Azure subscription 1 (1bbd807f-3fcf-4844-8e40-760ec2cc71ad)'
+        azureContainerRegistry: '{"loginServer":"acrepicadev.azurecr.io", "id" : "/subscriptions/1bbd807f-3fcf-4844-8e40-760ec2cc71ad/resourceGroups/rg-epica-dev/providers/Microsoft.ContainerRegistry/registries/acrepicadev"}'
+        action: Push an image
+
+    - upload: manifests
+      artifact: manifests
+
+- stage: Deploy
+  displayName: Deploy stage
+  dependsOn: Build
+
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: $(vmImageName)
+    environment: 'WebAppOperacion.epica'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: KubernetesManifest@0
+            displayName: Create imagePullSecret
+            inputs:
+              action: createSecret
+              secretName: $(imagePullSecret)
+              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+
+          - task: KubernetesManifest@0
+            displayName: Deploy to Kubernetes cluster
+            inputs:
+              action: deploy
+              manifests: |
+                $(Pipeline.Workspace)/manifests/deployment.yml
+                $(Pipeline.Workspace)/manifests/service.yml
+              imagePullSecrets: |
+                $(imagePullSecret)
+              containers: |
+                $(containerRegistry)/$(imageRepository):$(tag)
+
