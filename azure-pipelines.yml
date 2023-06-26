@@ -36,7 +36,7 @@ stages:
     - task: Docker@0
       displayName: Build an image
       inputs:
-        azureSubscriptionEndpoint: dfa3e428-b89c-4378-b2d4-5777eb0bfc9d
+        azureSubscription: 'Azure subscription 1 (1bbd807f-3fcf-4844-8e40-760ec2cc71ad)'
         azureContainerRegistry: '{"loginServer":"acrepicadev.azurecr.io", "id" : "/subscriptions/1bbd807f-3fcf-4844-8e40-760ec2cc71ad/resourceGroups/rg-epica-dev/providers/Microsoft.ContainerRegistry/registries/acrepicadev"}'
         dockerFile: Epica.Web.Operacion/Epica.Web.Operacion/Dockerfile
         defaultContext: false
@@ -45,7 +45,7 @@ stages:
     - task: Docker@0
       displayName: Push an image
       inputs:
-        azureSubscriptionEndpoint: dfa3e428-b89c-4378-b2d4-5777eb0bfc9d
+        azureSubscription: 'Azure subscription 1 (1bbd807f-3fcf-4844-8e40-760ec2cc71ad)'
         azureContainerRegistry: '{"loginServer":"acrepicadev.azurecr.io", "id" : "/subscriptions/1bbd807f-3fcf-4844-8e40-760ec2cc71ad/resourceGroups/rg-epica-dev/providers/Microsoft.ContainerRegistry/registries/acrepicadev"}'
         action: Push an image
 
