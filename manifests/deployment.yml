@@ -17,3 +17,6 @@ spec:
           image: acrepicadev.azurecr.io/webappoperacion
           ports:
           - containerPort: 80
+          env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Development
