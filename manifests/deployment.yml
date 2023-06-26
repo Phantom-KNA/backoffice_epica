@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: webappoperacion 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webappoperacion
+  template:
+    metadata:
+      labels:
+        app: webappoperacion 
+    spec:
+      containers:
+        - name: webappoperacion 
+          image: acrepicadev.azurecr.io/webappoperacion
+          ports:
+          - containerPort: 80
