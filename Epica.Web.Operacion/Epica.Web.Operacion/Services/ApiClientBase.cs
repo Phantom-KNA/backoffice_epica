@@ -31,6 +31,7 @@ public class ApiClientBase
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
         UserResolver = userResolver;
-        ApiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserResolver.GetToken());
+        //ApiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserResolver.GetToken());
+        //ApiClient.DefaultRequestHeaders.Add("x-api-key", userResolver.GetToken());
     }
 }
