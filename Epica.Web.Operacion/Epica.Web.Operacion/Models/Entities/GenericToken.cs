@@ -5,6 +5,7 @@ namespace Epica.Web.Operacion.Models.Entities;
 /// <summary>
 /// Clase del modelo genererico para la creacion de un token
 /// </summary>
+/// 
 public class GenericToken
 {
     public string Issuer { get; set; }

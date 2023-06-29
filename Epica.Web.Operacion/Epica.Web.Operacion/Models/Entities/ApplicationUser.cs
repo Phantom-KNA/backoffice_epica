@@ -1,5 +1,7 @@
 ﻿namespace Epica.Web.Operacion.Models.Entities;
-
+/// <summary>
+/// Esta clase representa un usuario de la aplicación.
+/// </summary>
 public class ApplicationUser
 {
     public long IdUser { get; set; }

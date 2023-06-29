@@ -58,10 +58,10 @@ namespace Epica.Web.Operacion.Services
         }
 
         /// <summary>
-        /// Creacion del token del sitio web
+        /// Creacion del token del sitio web.
         /// </summary>
-        /// <param name="autenticacion">Token que se creo ala api</param>
-        /// <param name="configuration">Configuraciones del appsettings json</param>
+        /// <param name="autenticacion">Token que se creo ala api.</param>
+        /// <param name="configuration">Configuraciones del appsettings json.</param>
         /// <returns></returns>
         public string CreacionTokenWebSite(IConfiguration configuration, string token)
         {
@@ -79,9 +79,9 @@ namespace Epica.Web.Operacion.Services
         }
 
         /// <summary>
-        /// Método generico de la creacion del token
+        /// Método generico de la creacion del token.
         /// </summary>
-        /// <param name="genericToken">Entidad de la sesion</param>
+        /// <param name="genericToken">Entidad de la sesion.</param>
         /// <returns></returns>
         private string GenerarToken(GenericToken genericToken)
         {

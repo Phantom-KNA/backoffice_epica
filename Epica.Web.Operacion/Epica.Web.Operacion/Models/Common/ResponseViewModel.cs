@@ -8,6 +8,7 @@ namespace Epica.Web.Operacion.Models.Common;
 /// <summary>
 /// ViewModel de regresar una respuesta al frontend
 /// </summary>
+/// 
 public class ResponseViewModel
 {
     #region Propiedades

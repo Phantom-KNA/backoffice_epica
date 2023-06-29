@@ -1,6 +1,9 @@
 ﻿using System.Text.Json.Serialization;
 
 namespace Epica.Web.Operacion.Models.Response;
+/// <summary>
+/// Clase que representa la respuesta de un token de autenticación.
+/// </summary>
 
 public class TokenResponse
 {
