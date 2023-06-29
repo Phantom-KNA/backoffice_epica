@@ -1,5 +1,9 @@
 ﻿namespace Epica.Web.Operacion.Config;
 
+/// <summary>
+/// Esta clase  contiene las configuraciones de las URL utilizadas en la operación de autenticación.
+/// </summary>
+/// 
 public class UrlsConfig
 {
 

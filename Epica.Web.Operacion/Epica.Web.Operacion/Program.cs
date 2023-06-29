@@ -11,6 +11,8 @@ builder.WebHost.ConfigureKestrel(options =>
 {
     options.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(10);
 });
+
+// Configuración de autenticación JWT
 builder.Services.AddAuthentication(jtw =>
 {
     jtw.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -20,6 +22,8 @@ builder.Services.AddAuthentication(jtw =>
     jtw.SaveToken = true;
     jtw.TokenValidationParameters = new TokenValidationParameters
     {
+        // Parámetros de validación del token JWT
+
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
@@ -31,7 +35,7 @@ builder.Services.AddAuthentication(jtw =>
     };
 });
 
-// Add services to the container.
+// Configuración de servicios
 builder.Services.AddRazorPages();
 builder.Services.AddSignalR();
 builder.Services.AddScoped<IUserResolver, UserResolver>();
@@ -41,6 +45,8 @@ builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(Convert.ToUInt32(builder.Configuration["TiempoExpiracionSesion"]));
 });
+
+// Configuración de HttpClient para servicios de API
 
 #region CanalProxy
 builder.Services.AddHttpClient("serviciosAPI", client =>
@@ -67,7 +73,8 @@ builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configuración de manejo de errores y redirección HTTPS
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
@@ -94,9 +101,11 @@ app.Use(async (context, next) =>
     }
     catch (Exception ex)
     {
+        // Manejo de excepciones
 
     }
 });
+
 
 app.UseAuthentication();
 app.UseAuthorization();
