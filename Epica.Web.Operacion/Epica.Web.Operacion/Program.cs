@@ -5,6 +5,7 @@ using Epica.Web.Operacion.Config;
 using Epica.Web.Operacion.Services.UserResolver;
 using Epica.Web.Operacion.Services.Authentication;
 using Epica.Web.Operacion.Services;
+using Epica.Web.Operacion.Services.Transaccion;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>
@@ -36,6 +37,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddSignalR();
 builder.Services.AddScoped<IUserResolver, UserResolver>();
 builder.Services.AddScoped<IServiceAuth, ServiceAuth>();
+builder.Services.AddScoped<ITransaccionesApiClient, TransaccionesApiClient>();
 
 builder.Services.AddSession(options =>
 {
@@ -81,22 +83,39 @@ app.UseRouting();
 
 app.UseSession();
 
-app.Use(async (context, next) =>
-{
-    try
-    {
-        var JWToken = context.Session.GetString("WebApp");
-        if (!string.IsNullOrEmpty(JWToken))
-        {
-            context.Request.Headers.Add("Authorization", "Bearer " + JWToken);
-        }
-        await next();
-    }
-    catch (Exception ex)
-    {
+//app.Use(async (context, next) =>
+//{
+//    try
+//    {
+//        var JWToken = context.Session.GetString("WebApp");
+//        if (!string.IsNullOrEmpty(JWToken))
+//        {
+//            context.Request.Headers.Add("Authorization", "Bearer " + JWToken);
+//        }
+//        await next();
+//    }
+//    catch (Exception ex)
+//    {
 
-    }
-});
+//    }
+//});
+
+//app.Use(async (context, next) =>
+//{
+//    try
+//    {
+//        var apiKey = context.Session.GetString("WebApp");
+//        if (!string.IsNullOrEmpty(apiKey))
+//        {
+//            context.Request.Headers.Add("x-api-key", apiKey);
+//        }
+//        await next();
+//    }
+//    catch (Exception ex)
+//    {
+
+//    }
+//});
 
 app.UseAuthentication();
 app.UseAuthorization();
