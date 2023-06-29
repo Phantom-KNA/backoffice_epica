@@ -3,17 +3,19 @@ using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace Epica.Web.Operacion.Utilities;
-
+/// <summary>
+/// Clase de extension para controladores que proporciona métodos para rendelizar vistas parciales a una cadena.
+/// </summary>
 public static class ControllerExtensions
 {
     /// <summary>
-    /// Render a partial view to string.
+    /// Renderice una vista parcial a la cadena.
     /// </summary>
-    /// <typeparam name="TModel"></typeparam>
-    /// <param name="controller"></param>
-    /// <param name="viewNamePath"></param>
-    /// <param name="model"></param>
-    /// <returns></returns>
+    /// <typeparam name="TModel">El tipo de modelo utilizado por la vista parcial.</typeparam>
+    /// <param name="controller">Controlador por el cual se invoca el método.</param>
+    /// <param name="viewNamePath">La ruta de la vista parcial.</param>
+    /// <param name="model">Modelo utilizado por la vista parcial.</param>
+    /// <returns>Una tarea que representa la operacion y  devuelve la vista parcial como una cadena.</returns>
     public static async Task<string> RenderViewToStringAsync<TModel>(this Controller controller, string viewNamePath, TModel model)
     {
         if (string.IsNullOrEmpty(viewNamePath))
@@ -58,12 +60,12 @@ public static class ControllerExtensions
     }
 
     /// <summary>
-    /// Render a partial view to string, without a model present.
+    /// Renderiza una vista parcial a una cadena sin un modelo presente.
     /// </summary>
     /// <typeparam name="TModel"></typeparam>
-    /// <param name="controller"></param>
-    /// <param name="viewNamePath"></param>
-    /// <returns></returns>
+    /// <param name="controller">El controlador desde el cual se invoca el metodo.</param>
+    /// <param name="viewNamePath">La vista de la ruta parcial a renderizar.</param>
+    /// <returns>Operacion asincróna y devuelve la vista parcial renderizada. </returns>
     public static async Task<string> RenderViewToStringAsync(this Controller controller, string viewNamePath)
     {
         if (string.IsNullOrEmpty(viewNamePath))

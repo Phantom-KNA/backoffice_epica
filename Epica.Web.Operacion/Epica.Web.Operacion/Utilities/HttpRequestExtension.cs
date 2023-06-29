@@ -2,8 +2,19 @@
 
 namespace Epica.Web.Operacion.Utilities
 {
+    /// <summary>
+    /// Clase de extensión para HttpRequest que da los métodos  para el manejo de solicitudes .
+    /// </summary>
     public static class HttpRequestExtension
     {
+        /// <summary>
+        /// Obtiene un objeto de tipo T que representa la solicitud de cuadrícula y asigna el valor de la variable 'draw'.
+        /// </summary>
+        /// <typeparam name="T">El tipo del objeto de solicitud .</typeparam>
+        /// <param name="request">HttpRequest.</param>
+        /// <param name="draw">La variable 'draw' que se asignará.</param>
+        /// <returns>Un objeto de tipo T que representa la solicitud de cuadrícula.</returns>
+        /// <exception cref="Exception">Se lanza cuando el objeto predeterminado es nulo o el formulario de la solicitud está vacío.</exception>
         public static T GridRequest<T>(this HttpRequest request, out string draw) where T : GridRequestViewModel
         {
             try
