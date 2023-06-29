@@ -1,7 +1,11 @@
-﻿using Epica.Web.Operacion.Models.Common;
+﻿using Epica.Web.Operacion.Config;
+using Epica.Web.Operacion.Models.Common;
+using Epica.Web.Operacion.Services.UserResolver;
 using Epica.Web.Operacion.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Epica.Web.Operacion.Controllers;
 
@@ -16,7 +20,6 @@ public class CuentaController : Controller
     [HttpPost]
     public async Task<JsonResult> Consulta(List<RequestListFilters> filters)
     {
-        //Temporalmente vamos a trabajar con datos en local en lo que se trabaja en la api de consumo
         var request = new RequestList();
 
         int totalRecord = 0;
@@ -33,8 +36,22 @@ public class CuentaController : Controller
         request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
 
         var gridData = new ResponseGrid<CuentasResponseGrid>();
-        var ListPF = GetList();
-        //var List = new List<FoliosCanceladosResponseGrid>();
+        List<CuentasResponse> ListPF = new List<CuentasResponse>();
+        HttpClient ApiClient = new HttpClient();
+        ApiClient.BaseAddress = new Uri("https://localhost:44308/");
+        //ApiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserResolver.GetToken());
+        var url = "https://localhost:44308/" + "api/cuentas";
+
+        var response = await ApiClient.GetAsync(url);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            ListPF = JsonConvert.DeserializeObject<List<CuentasResponse>>(jsonResponse);
+        }
+
+        //Entorno local de pruebas
+        //var ListPF = GetList();
 
         var List = new List<CuentasResponseGrid>();
         foreach (var row in ListPF)
@@ -64,7 +81,7 @@ public class CuentaController : Controller
         }
 
         if (filtronombreCliente.Value != null) {
-            List = List.Where(x => x.cliente == Convert.ToString(filtronombreCliente.Value)).ToList();
+            List = List.Where(x => x.cliente.Contains(Convert.ToString(filtronombreCliente.Value))).ToList();
         }
 
         if (filtroNoCuenta.Value != null) {

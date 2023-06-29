@@ -1,3 +1,4 @@
+var table;
 var datatable;
 var filterAccount;
 
@@ -69,12 +70,18 @@ var KTDatatableRemoteAjax = function () {
                 {
                     data: 'estatus', name: 'Estatus', title: 'Estatus',
                     render: function (data, type, row) {
-                        return data == "Activo" ?
+                        return data == "1" ?
                             "<span class='badge badge-light-success' >Activo</span>" : "<span class='badge badge-light-danger' >Desactivado</span>";
                     }
                 },
                 { data: 'saldo', name: 'Saldo', title: 'Saldo' },
-                { data: 'tipo', name: 'Tipo', title: 'Tipo' },
+                {
+                    data: 'tipo', name: 'Tipo', title: 'Tipo',
+                    render: function (data, type, row) {
+                        return data == "1" ?
+                            "Credito" : "Debito";
+                    }
+                },
                 {
                     title: '',
                     orderable: false,
@@ -178,6 +185,67 @@ var KTDatatableRemoteAjax = function () {
         recargar();
     });
 
+    // Template de subtabla
+    const subtable = document.querySelector('[data-kt-docs-datatable-subtable="subtable_template"]');
+    template = subtable.cloneNode(true);
+    template.classList.remove('d-none');
+
+    // Remove subtable template
+    subtable.parentNode.removeChild(subtable);
+
+    // Handle action button
+    const handleActionButton = () => {
+        const buttonsSubTable = document.querySelectorAll('[data-kt-docs-datatable-subtable="expand_row"]');
+
+        buttonsSubTable.forEach((button, index) => {
+            button.addEventListener('click', e => {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+
+                const row = button.closest('tr');
+                const rowClasses = ['isOpen', 'border-bottom-0'];
+
+                // Get total number of items to generate --- for demo purpose only, remove this code snippet in your project
+                const demoData = [];
+                for (var j = 0; j < rowItems[index]; j++) {
+                    demoData.push(data[j]);
+                }
+                // End of generating demo data
+
+                // Handle subtable expanded state
+                if (row.classList.contains('isOpen')) {
+                    // Remove all subtables from current order row
+                    while (row.nextSibling && row.nextSibling.getAttribute('data-kt-docs-datatable-subtable') === 'subtable_template') {
+                        row.nextSibling.parentNode.removeChild(row.nextSibling);
+                    }
+                    row.classList.remove(...rowClasses);
+                    button.classList.remove('active');
+                } else {
+                    populateTemplate(demoData, row);
+                    row.classList.add(...rowClasses);
+                    button.classList.add('active');
+                }
+            });
+        });
+    }
+
+
+    // Reset subtable
+    const resetSubtable = () => {
+        const subtables = document.querySelectorAll('[data-kt-docs-datatable-subtable="subtable_template"]');
+        subtables.forEach(st => {
+            st.parentNode.removeChild(st);
+        });
+
+        const rows = table.querySelectorAll('tbody tr');
+        rows.forEach(r => {
+            r.classList.remove('isOpen');
+            if (r.querySelector('[data-kt-docs-datatable-subtable="expand_row"]')) {
+                r.querySelector('[data-kt-docs-datatable-subtable="expand_row"]').classList.remove('active');
+            }
+        });
+    }
+
     return {
         init: function () {
             //init();
@@ -190,6 +258,8 @@ var KTDatatableRemoteAjax = function () {
             initDatatable();
             exportButtons();
             handleSearchDatatable();
+            resetSubtable();
+            handleActionButton();
             //handleFilterDatatable();
         },
         recargar: function () {
@@ -201,3 +271,110 @@ var KTDatatableRemoteAjax = function () {
 jQuery(document).ready(function () {
     KTDatatableRemoteAjax.init();
 });
+
+function pruebas() {
+    const data = [
+        {
+            image: '76',
+            name: 'Go Pro 8',
+            description: 'Latest  version of Go Pro.',
+            cost: '500.00',
+            qty: '1',
+            total: '500.00',
+            stock: '12'
+        },
+    ];
+
+    const buttonsSubTable = document.querySelectorAll('[data-kt-docs-datatable-subtable="expand_row"]');
+    const rowItems = [1];
+    buttonsSubTable.forEach((button, index) => {
+        button.addEventListener('click', e => {
+            e.stopImmediatePropagation();
+            e.preventDefault();
+
+            const row = button.closest('tr');
+            const rowClasses = ['isOpen', 'border-bottom-0'];
+
+            // Get total number of items to generate --- for demo purpose only, remove this code snippet in your project
+            const demoData = [];
+            for (var j = 0; j < rowItems[index]; j++) {
+                demoData.push(data[j]);
+            }
+            // End of generating demo data
+
+            // Handle subtable expanded state
+            if (row.classList.contains('isOpen')) {
+                // Remove all subtables from current order row
+                while (row.nextSibling && row.nextSibling.getAttribute('data-kt-docs-datatable-subtable') === 'subtable_template') {
+                    row.nextSibling.parentNode.removeChild(row.nextSibling);
+                }
+                row.classList.remove(...rowClasses);
+                button.classList.remove('active');
+            } else {
+                populateTemplate(demoData, row);
+                row.classList.add(...rowClasses);
+                button.classList.add('active');
+            }
+        });
+    });
+}
+
+const populateTemplate = (data, target) => {
+    data.forEach((d, index) => {
+        // Clone template node
+        const newTemplate = template.cloneNode(true);
+
+        // Stock badges
+        const lowStock = `<div class="badge badge-light-warning">Low Stock</div>`;
+        const inStock = `<div class="badge badge-light-success">In Stock</div>`;
+
+        // Select data elements
+        const image = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_image"]');
+        const name = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_name"]');
+        const description = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_description"]');
+        const cost = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_cost"]');
+        const qty = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_qty"]');
+        const total = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_total"]');
+        const stock = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_stock"]');
+
+        // Populate elements with data
+        name.innerText = "j";
+        description.innerText = "j";
+        cost.innerText = "j";
+        qty.innerText = "j";
+        total.innerText = "j";
+
+        // New template border controller
+        // When only 1 row is available
+        if (data.length === 1) {
+            let borderClasses = ['rounded', 'rounded-end-0'];
+            newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
+            borderClasses = ['rounded', 'rounded-start-0'];
+            newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
+
+            // Remove bottom border
+            newTemplate.classList.add('border-bottom-0');
+        } else {
+            // When multiple rows detected
+            if (index === (data.length - 1)) { // first row
+                let borderClasses = ['rounded-start', 'rounded-bottom-0'];
+                newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
+                borderClasses = ['rounded-end', 'rounded-bottom-0'];
+                newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
+            }
+            if (index === 0) { // last row
+                let borderClasses = ['rounded-start', 'rounded-top-0'];
+                newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
+                borderClasses = ['rounded-end', 'rounded-top-0'];
+                newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
+
+                // Remove bottom border on last row
+                newTemplate.classList.add('border-bottom-0');
+            }
+        }
+
+        // Insert new template into table
+        const tbody = document.querySelector('tbody');
+        tbody.insertBefore(newTemplate, target.nextSibling);
+    });
+}
