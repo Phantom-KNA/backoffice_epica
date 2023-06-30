@@ -15,6 +15,7 @@ public class UrlsConfig
     public class TransaccionesOperations
     {
         public static string GetTransacciones() => $"/api/resumentransaccion";
+        public static string GetTransaccion(int idInterno) => $"/api/resumentransaccion?idInterno={idInterno}";
     }
 
     public string Authenticate { get; set; }

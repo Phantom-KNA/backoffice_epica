@@ -13,6 +13,7 @@ public class ApiClientBase
     protected readonly IHttpContextAccessor HttpContext;
     protected readonly JsonSerializerOptions SerializerOptions;
     protected readonly IUserResolver UserResolver;
+    protected readonly string _apiKey;
 
     public ApiClientBase(HttpClient httpClient,
     ILogger logger,
@@ -31,6 +32,8 @@ public class ApiClientBase
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
         UserResolver = userResolver;
+        _apiKey = configuration.GetValue<string>("credential:privatekey");
+        ApiClient.DefaultRequestHeaders.Add("Private-Merchant-Id", _apiKey);
         //ApiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserResolver.GetToken());
         //ApiClient.DefaultRequestHeaders.Add("x-api-key", userResolver.GetToken());
     }
