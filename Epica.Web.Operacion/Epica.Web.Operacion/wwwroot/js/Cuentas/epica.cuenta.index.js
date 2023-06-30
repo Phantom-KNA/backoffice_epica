@@ -1,3 +1,4 @@
+var table;
 var datatable;
 var filterAccount;
 
@@ -69,12 +70,23 @@ var KTDatatableRemoteAjax = function () {
                 {
                     data: 'estatus', name: 'Estatus', title: 'Estatus',
                     render: function (data, type, row) {
-                        return data == "Activo" ?
+                        return data == "1" ?
                             "<span class='badge badge-light-success' >Activo</span>" : "<span class='badge badge-light-danger' >Desactivado</span>";
                     }
                 },
-                { data: 'saldo', name: 'Saldo', title: 'Saldo' },
-                { data: 'tipo', name: 'Tipo', title: 'Tipo' },
+                {
+                    data: 'saldo', name: 'Saldo', title: 'Saldo',
+                    render: function (data, type, row) {
+                        return accounting.formatMoney(data);
+                    }
+                },
+                {
+                    data: 'tipo', name: 'Tipo', title: 'Tipo',
+                    render: function (data, type, row) {
+                        return data == "1" ?
+                            "Credito" : "Debito";
+                    }
+                },
                 {
                     title: '',
                     orderable: false,
@@ -178,6 +190,31 @@ var KTDatatableRemoteAjax = function () {
         recargar();
     });
 
+    // Template de subtabla
+    const subtable = document.querySelector('[data-kt-docs-datatable-subtable="subtable_template"]');
+    template = subtable.cloneNode(true);
+    template.classList.remove('d-none');
+
+    // Remove subtable template
+    subtable.parentNode.removeChild(subtable);
+
+
+    // Reset subtable
+    const resetSubtable = () => {
+        const subtables = document.querySelectorAll('[data-kt-docs-datatable-subtable="subtable_template"]');
+        subtables.forEach(st => {
+            st.parentNode.removeChild(st);
+        });
+
+        const rows = table.querySelectorAll('tbody tr');
+        rows.forEach(r => {
+            r.classList.remove('isOpen');
+            if (r.querySelector('[data-kt-docs-datatable-subtable="expand_row"]')) {
+                r.querySelector('[data-kt-docs-datatable-subtable="expand_row"]').classList.remove('active');
+            }
+        });
+    }
+
     return {
         init: function () {
             //init();
@@ -190,6 +227,7 @@ var KTDatatableRemoteAjax = function () {
             initDatatable();
             exportButtons();
             handleSearchDatatable();
+            resetSubtable();
             //handleFilterDatatable();
         },
         recargar: function () {
@@ -201,3 +239,148 @@ var KTDatatableRemoteAjax = function () {
 jQuery(document).ready(function () {
     KTDatatableRemoteAjax.init();
 });
+
+function pruebas(id) {
+
+    var dataInfo = []; 
+    dataInfo.length = 0;
+
+    $.ajax({
+        url: siteLocation + 'Cuenta/ConsultarSubCuentas',
+        async: true,
+        cache: false,
+        contentType: false,
+        processData: false,
+        type: 'POST',
+        success: function (data) {
+            
+            var buttonsSubTable = document.querySelectorAll('[data-kt-docs-datatable-subtable="expand_row"]');
+            buttonsSubTable.forEach((button, index) => {
+                button.addEventListener('click', e => {
+                    //e.stopImmediatePropagation();
+                    e.preventDefault();
+                    var row = button.closest('tr');
+                    var rowClasses = ['isOpen', 'border-bottom-0'];
+
+                    if (row.classList.contains('isOpen')) {
+                        while (row.nextSibling && row.nextSibling.getAttribute('data-kt-docs-datatable-subtable') === 'subtable_template') {
+                            row.nextSibling.parentNode.removeChild(row.nextSibling);
+                        }
+                        row.classList.remove(...rowClasses);
+                        button.classList.remove('active');
+                    } else {
+
+                        data.forEach((d, index) => {
+                            // Clone template node
+                            var newTemplate = template.cloneNode(true);
+
+                            // Select data elements
+                            var id = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_id"]');
+                            var numcuenta = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_numero_cuenta"]');
+                            var cliente = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_cliente"]');
+                            var estatus = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_estatus"]');
+                            var saldo = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_saldo"]');
+                            var tipo = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_tipo"]');
+
+                            // Mapeo de Datos
+                            id.innerText = d.id;
+                            numcuenta.innerText = d.noCuenta;
+                            cliente.innerText = d.cliente;
+                            estatus.innerHTML = d.estatus == "1" ? "<span class='badge badge-light-success'>Activo</span>" : "<span class='badge badge-light-danger'>Desactivado</span>";
+                            saldo.innerText = accounting.formatMoney(d.saldo);
+                            tipo.innerText = d.tipo == "1" ? "Credito" : "Debito";
+
+                            if (data.length === 1) {
+                                let borderClasses = ['rounded', 'rounded-end-0'];
+                                newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
+                                borderClasses = ['rounded', 'rounded-start-0'];
+                                newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
+
+                                newTemplate.classList.add('border-bottom-0');
+                            } else {
+                                if (index === (data.length - 1)) { // first row
+                                    let borderClasses = ['rounded-start', 'rounded-bottom-0'];
+                                    newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
+                                    borderClasses = ['rounded-end', 'rounded-bottom-0'];
+                                    newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
+                                }
+                                if (index === 0) { // last row
+                                    let borderClasses = ['rounded-start', 'rounded-top-0'];
+                                    newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
+                                    borderClasses = ['rounded-end', 'rounded-top-0'];
+                                    newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
+
+                                    newTemplate.classList.add('border-bottom-0');
+                                }
+                            }
+
+                            var tbody = document.querySelector('tbody');
+                            tbody.insertBefore(newTemplate, row.nextSibling);
+                        });
+
+                        row.classList.add(...rowClasses);
+                        button.classList.add('active');
+                    }
+                });
+            });
+        }
+    });
+
+
+
+}
+
+//function populateTemplate(dataMapper, target){
+//    console.log(dataMapper);
+//    dataMapper.forEach((d, index) => {
+//        // Clone template node
+//        const newTemplate = template.cloneNode(true);
+
+//        // Stock badges
+//        const lowStock = `<div class="badge badge-light-warning">Low Stock</div>`;
+//        const inStock = `<div class="badge badge-light-success">In Stock</div>`;
+
+//        // Select data elements
+//        const id = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_id"]');
+//        const numcuenta = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_numero_cuenta"]');
+//        const cliente = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_cliente"]');
+//        const estatus = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_estatus"]');
+//        const saldo = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_saldo"]');
+//        const tipo = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_tipo"]');
+
+//        // Mapeo de Datos
+//        id.innerText = d.id;
+//        numcuenta.innerText = d.noCuenta;
+//        cliente.innerText = d.cliente;
+//        estatus.innerText = d.estatus;
+//        saldo.innerText = d.saldo;
+//        tipo.innerText = d.tipo;
+
+//        if (dataMapper.length === 1) {
+//            let borderClasses = ['rounded', 'rounded-end-0'];
+//            newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
+//            borderClasses = ['rounded', 'rounded-start-0'];
+//            newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
+
+//            newTemplate.classList.add('border-bottom-0');
+//        } else {
+//            if (index === (dataMapper.length - 1)) { // first row
+//                let borderClasses = ['rounded-start', 'rounded-bottom-0'];
+//                newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
+//                borderClasses = ['rounded-end', 'rounded-bottom-0'];
+//                newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
+//            }
+//            if (index === 0) { // last row
+//                let borderClasses = ['rounded-start', 'rounded-top-0'];
+//                newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
+//                borderClasses = ['rounded-end', 'rounded-top-0'];
+//                newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
+
+//                newTemplate.classList.add('border-bottom-0');
+//            }
+//        }
+
+//        const tbody = document.querySelector('tbody');
+//        tbody.insertBefore(newTemplate, target.nextSibling);
+//    });
+//}

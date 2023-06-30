@@ -1,12 +1,28 @@
-﻿using Epica.Web.Operacion.Models.Common;
+﻿using Epica.Web.Operacion.Config;
+using Epica.Web.Operacion.Models.Common;
+using Epica.Web.Operacion.Services.Transaccion;
+using Epica.Web.Operacion.Services.UserResolver;
 using Epica.Web.Operacion.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Epica.Web.Operacion.Controllers;
 
 public class CuentaController : Controller
 {
+    #region "Locales"
+    private readonly ICuentaApiClient _cuentaApiClient;
+    #endregion
+
+    #region "Constructores"
+    public CuentaController(ICuentaApiClient cuentaApiClient)
+    {
+        _cuentaApiClient = cuentaApiClient;
+    }
+    #endregion
+
     #region "Funciones"
     public IActionResult Index()
     {
@@ -16,7 +32,6 @@ public class CuentaController : Controller
     [HttpPost]
     public async Task<JsonResult> Consulta(List<RequestListFilters> filters)
     {
-        //Temporalmente vamos a trabajar con datos en local en lo que se trabaja en la api de consumo
         var request = new RequestList();
 
         int totalRecord = 0;
@@ -33,8 +48,12 @@ public class CuentaController : Controller
         request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
 
         var gridData = new ResponseGrid<CuentasResponseGrid>();
-        var ListPF = GetList();
-        //var List = new List<FoliosCanceladosResponseGrid>();
+        List<CuentasResponse> ListPF = new List<CuentasResponse>();
+
+        ListPF = await _cuentaApiClient.GetCuentasAsync();
+
+        //Entorno local de pruebas
+        //ListPF = GetList();
 
         var List = new List<CuentasResponseGrid>();
         foreach (var row in ListPF)
@@ -59,31 +78,36 @@ public class CuentaController : Controller
         var filtroSaldo = filters.FirstOrDefault(x => x.Key == "saldo");
         var filtroTipo = filters.FirstOrDefault(x => x.Key == "tipo");
 
-        if (filtroid.Value != null) {
+        if (filtroid.Value != null)
+        {
             List = List.Where(x => x.Id == Convert.ToInt32(filtroid.Value)).ToList();
         }
 
-        if (filtronombreCliente.Value != null) {
-            List = List.Where(x => x.cliente == Convert.ToString(filtronombreCliente.Value)).ToList();
+        if (filtronombreCliente.Value != null)
+        {
+            List = List.Where(x => x.cliente.Contains(Convert.ToString(filtronombreCliente.Value))).ToList();
         }
 
-        if (filtroNoCuenta.Value != null) {
+        if (filtroNoCuenta.Value != null)
+        {
             List = List.Where(x => x.noCuenta == Convert.ToString(filtroNoCuenta.Value)).ToList();
         }
 
-        if (filtroEstatus.Value != null) {
+        if (filtroEstatus.Value != null)
+        {
             List = List.Where(x => x.estatus == Convert.ToString(filtroEstatus.Value)).ToList();
         }
 
-        if (filtroSaldo.Value != null) {
+        if (filtroSaldo.Value != null)
+        {
             List = List.Where(x => x.saldo == Convert.ToString(filtroSaldo.Value)).ToList();
         }
 
-        if (filtroTipo.Value != null) {
+        if (filtroTipo.Value != null)
+        {
             List = List.Where(x => x.tipo == Convert.ToString(filtroTipo.Value)).ToList();
         }
 
-        //List.Add(new EstadisiticaUsoFormaValoradaResponse() { }, new EstadisiticaUsoFormaValoradaResponse() { });
         gridData.Data = List;
         gridData.RecordsTotal = List.Count;
         gridData.Data = gridData.Data.Skip(skip).Take(pageSize).ToList();
@@ -91,15 +115,15 @@ public class CuentaController : Controller
         gridData.RecordsFiltered = filterRecord;
         gridData.Draw = draw;
 
-        //var returnObj = new
-        //{
-        //    draw,
-        //    recordsTotal = totalRecord,
-        //    recordsFiltered = filterRecord,
-        //    data = List
-        //};
-
         return Json(gridData);
+    }
+
+    [HttpPost]
+    public async Task<JsonResult> ConsultarSubCuentas()
+    {
+        var ListPF = await _cuentaApiClient.GetCuentasAsync();
+        //var ListPF = GetList();
+        return Json(ListPF);
     }
 
     #endregion
