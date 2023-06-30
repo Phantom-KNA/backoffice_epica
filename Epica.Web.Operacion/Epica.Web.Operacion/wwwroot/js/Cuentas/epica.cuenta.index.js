@@ -74,7 +74,12 @@ var KTDatatableRemoteAjax = function () {
                             "<span class='badge badge-light-success' >Activo</span>" : "<span class='badge badge-light-danger' >Desactivado</span>";
                     }
                 },
-                { data: 'saldo', name: 'Saldo', title: 'Saldo' },
+                {
+                    data: 'saldo', name: 'Saldo', title: 'Saldo',
+                    render: function (data, type, row) {
+                        return accounting.formatMoney(data);
+                    }
+                },
                 {
                     data: 'tipo', name: 'Tipo', title: 'Tipo',
                     render: function (data, type, row) {
@@ -193,42 +198,6 @@ var KTDatatableRemoteAjax = function () {
     // Remove subtable template
     subtable.parentNode.removeChild(subtable);
 
-    // Handle action button
-    const handleActionButton = () => {
-        const buttonsSubTable = document.querySelectorAll('[data-kt-docs-datatable-subtable="expand_row"]');
-
-        buttonsSubTable.forEach((button, index) => {
-            button.addEventListener('click', e => {
-                e.stopImmediatePropagation();
-                e.preventDefault();
-
-                const row = button.closest('tr');
-                const rowClasses = ['isOpen', 'border-bottom-0'];
-
-                // Get total number of items to generate --- for demo purpose only, remove this code snippet in your project
-                const demoData = [];
-                for (var j = 0; j < rowItems[index]; j++) {
-                    demoData.push(data[j]);
-                }
-                // End of generating demo data
-
-                // Handle subtable expanded state
-                if (row.classList.contains('isOpen')) {
-                    // Remove all subtables from current order row
-                    while (row.nextSibling && row.nextSibling.getAttribute('data-kt-docs-datatable-subtable') === 'subtable_template') {
-                        row.nextSibling.parentNode.removeChild(row.nextSibling);
-                    }
-                    row.classList.remove(...rowClasses);
-                    button.classList.remove('active');
-                } else {
-                    populateTemplate(demoData, row);
-                    row.classList.add(...rowClasses);
-                    button.classList.add('active');
-                }
-            });
-        });
-    }
-
 
     // Reset subtable
     const resetSubtable = () => {
@@ -259,7 +228,6 @@ var KTDatatableRemoteAjax = function () {
             exportButtons();
             handleSearchDatatable();
             resetSubtable();
-            handleActionButton();
             //handleFilterDatatable();
         },
         recargar: function () {
@@ -272,109 +240,147 @@ jQuery(document).ready(function () {
     KTDatatableRemoteAjax.init();
 });
 
-function pruebas() {
-    const data = [
-        {
-            image: '76',
-            name: 'Go Pro 8',
-            description: 'Latest  version of Go Pro.',
-            cost: '500.00',
-            qty: '1',
-            total: '500.00',
-            stock: '12'
-        },
-    ];
+function pruebas(id) {
 
-    const buttonsSubTable = document.querySelectorAll('[data-kt-docs-datatable-subtable="expand_row"]');
-    const rowItems = [1];
-    buttonsSubTable.forEach((button, index) => {
-        button.addEventListener('click', e => {
-            e.stopImmediatePropagation();
-            e.preventDefault();
+    var dataInfo = []; 
+    dataInfo.length = 0;
 
-            const row = button.closest('tr');
-            const rowClasses = ['isOpen', 'border-bottom-0'];
+    $.ajax({
+        url: siteLocation + 'Cuenta/ConsultarSubCuentas',
+        async: true,
+        cache: false,
+        contentType: false,
+        processData: false,
+        type: 'POST',
+        success: function (data) {
+            
+            var buttonsSubTable = document.querySelectorAll('[data-kt-docs-datatable-subtable="expand_row"]');
+            buttonsSubTable.forEach((button, index) => {
+                button.addEventListener('click', e => {
+                    //e.stopImmediatePropagation();
+                    e.preventDefault();
+                    var row = button.closest('tr');
+                    var rowClasses = ['isOpen', 'border-bottom-0'];
 
-            // Get total number of items to generate --- for demo purpose only, remove this code snippet in your project
-            const demoData = [];
-            for (var j = 0; j < rowItems[index]; j++) {
-                demoData.push(data[j]);
-            }
-            // End of generating demo data
+                    if (row.classList.contains('isOpen')) {
+                        while (row.nextSibling && row.nextSibling.getAttribute('data-kt-docs-datatable-subtable') === 'subtable_template') {
+                            row.nextSibling.parentNode.removeChild(row.nextSibling);
+                        }
+                        row.classList.remove(...rowClasses);
+                        button.classList.remove('active');
+                    } else {
 
-            // Handle subtable expanded state
-            if (row.classList.contains('isOpen')) {
-                // Remove all subtables from current order row
-                while (row.nextSibling && row.nextSibling.getAttribute('data-kt-docs-datatable-subtable') === 'subtable_template') {
-                    row.nextSibling.parentNode.removeChild(row.nextSibling);
-                }
-                row.classList.remove(...rowClasses);
-                button.classList.remove('active');
-            } else {
-                populateTemplate(demoData, row);
-                row.classList.add(...rowClasses);
-                button.classList.add('active');
-            }
-        });
-    });
-}
+                        data.forEach((d, index) => {
+                            // Clone template node
+                            var newTemplate = template.cloneNode(true);
 
-const populateTemplate = (data, target) => {
-    data.forEach((d, index) => {
-        // Clone template node
-        const newTemplate = template.cloneNode(true);
+                            // Select data elements
+                            var id = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_id"]');
+                            var numcuenta = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_numero_cuenta"]');
+                            var cliente = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_cliente"]');
+                            var estatus = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_estatus"]');
+                            var saldo = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_saldo"]');
+                            var tipo = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_tipo"]');
 
-        // Stock badges
-        const lowStock = `<div class="badge badge-light-warning">Low Stock</div>`;
-        const inStock = `<div class="badge badge-light-success">In Stock</div>`;
+                            // Mapeo de Datos
+                            id.innerText = d.id;
+                            numcuenta.innerText = d.noCuenta;
+                            cliente.innerText = d.cliente;
+                            estatus.innerHTML = d.estatus == "1" ? "<span class='badge badge-light-success'>Activo</span>" : "<span class='badge badge-light-danger'>Desactivado</span>";
+                            saldo.innerText = accounting.formatMoney(d.saldo);
+                            tipo.innerText = d.tipo == "1" ? "Credito" : "Debito";
 
-        // Select data elements
-        const image = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_image"]');
-        const name = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_name"]');
-        const description = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_description"]');
-        const cost = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_cost"]');
-        const qty = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_qty"]');
-        const total = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_total"]');
-        const stock = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_stock"]');
+                            if (data.length === 1) {
+                                let borderClasses = ['rounded', 'rounded-end-0'];
+                                newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
+                                borderClasses = ['rounded', 'rounded-start-0'];
+                                newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
 
-        // Populate elements with data
-        name.innerText = "j";
-        description.innerText = "j";
-        cost.innerText = "j";
-        qty.innerText = "j";
-        total.innerText = "j";
+                                newTemplate.classList.add('border-bottom-0');
+                            } else {
+                                if (index === (data.length - 1)) { // first row
+                                    let borderClasses = ['rounded-start', 'rounded-bottom-0'];
+                                    newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
+                                    borderClasses = ['rounded-end', 'rounded-bottom-0'];
+                                    newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
+                                }
+                                if (index === 0) { // last row
+                                    let borderClasses = ['rounded-start', 'rounded-top-0'];
+                                    newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
+                                    borderClasses = ['rounded-end', 'rounded-top-0'];
+                                    newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
 
-        // New template border controller
-        // When only 1 row is available
-        if (data.length === 1) {
-            let borderClasses = ['rounded', 'rounded-end-0'];
-            newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
-            borderClasses = ['rounded', 'rounded-start-0'];
-            newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
+                                    newTemplate.classList.add('border-bottom-0');
+                                }
+                            }
 
-            // Remove bottom border
-            newTemplate.classList.add('border-bottom-0');
-        } else {
-            // When multiple rows detected
-            if (index === (data.length - 1)) { // first row
-                let borderClasses = ['rounded-start', 'rounded-bottom-0'];
-                newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
-                borderClasses = ['rounded-end', 'rounded-bottom-0'];
-                newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
-            }
-            if (index === 0) { // last row
-                let borderClasses = ['rounded-start', 'rounded-top-0'];
-                newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
-                borderClasses = ['rounded-end', 'rounded-top-0'];
-                newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
+                            var tbody = document.querySelector('tbody');
+                            tbody.insertBefore(newTemplate, row.nextSibling);
+                        });
 
-                // Remove bottom border on last row
-                newTemplate.classList.add('border-bottom-0');
-            }
+                        row.classList.add(...rowClasses);
+                        button.classList.add('active');
+                    }
+                });
+            });
         }
-
-        // Insert new template into table
-        const tbody = document.querySelector('tbody');
-        tbody.insertBefore(newTemplate, target.nextSibling);
     });
+
+
+
 }
+
+//function populateTemplate(dataMapper, target){
+//    console.log(dataMapper);
+//    dataMapper.forEach((d, index) => {
+//        // Clone template node
+//        const newTemplate = template.cloneNode(true);
+
+//        // Stock badges
+//        const lowStock = `<div class="badge badge-light-warning">Low Stock</div>`;
+//        const inStock = `<div class="badge badge-light-success">In Stock</div>`;
+
+//        // Select data elements
+//        const id = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_id"]');
+//        const numcuenta = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_numero_cuenta"]');
+//        const cliente = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_cliente"]');
+//        const estatus = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_estatus"]');
+//        const saldo = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_saldo"]');
+//        const tipo = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_tipo"]');
+
+//        // Mapeo de Datos
+//        id.innerText = d.id;
+//        numcuenta.innerText = d.noCuenta;
+//        cliente.innerText = d.cliente;
+//        estatus.innerText = d.estatus;
+//        saldo.innerText = d.saldo;
+//        tipo.innerText = d.tipo;
+
+//        if (dataMapper.length === 1) {
+//            let borderClasses = ['rounded', 'rounded-end-0'];
+//            newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
+//            borderClasses = ['rounded', 'rounded-start-0'];
+//            newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
+
+//            newTemplate.classList.add('border-bottom-0');
+//        } else {
+//            if (index === (dataMapper.length - 1)) { // first row
+//                let borderClasses = ['rounded-start', 'rounded-bottom-0'];
+//                newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
+//                borderClasses = ['rounded-end', 'rounded-bottom-0'];
+//                newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
+//            }
+//            if (index === 0) { // last row
+//                let borderClasses = ['rounded-start', 'rounded-top-0'];
+//                newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
+//                borderClasses = ['rounded-end', 'rounded-top-0'];
+//                newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
+
+//                newTemplate.classList.add('border-bottom-0');
+//            }
+//        }
+
+//        const tbody = document.querySelector('tbody');
+//        tbody.insertBefore(newTemplate, target.nextSibling);
+//    });
+//}

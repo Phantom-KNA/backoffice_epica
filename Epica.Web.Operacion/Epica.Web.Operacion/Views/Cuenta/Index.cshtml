@@ -122,32 +122,31 @@
                 <div class="datatable datatable-bordered datatable-head-custom">
                     <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" id="kt_datatable">
                         <tr data-kt-docs-datatable-subtable="subtable_template" class="d-none">
-                            <td class="text-end">
-                                <div class="text-dark fs-7 me-3">On hand</div>
-                                <div class="text-muted fs-7 fw-bold" data-kt-docs-datatable-subtable="template_ns">32</div>
+                            <td class="text-center">
+                                <div class="text-dark fs-7 me-3">Id</div>
+                                <div class="text-muted fs-7 fw-bold" data-kt-docs-datatable-subtable="template_id"></div>
                             </td>
                             <td class="text-end">
-                                <div class="text-dark fs-7 me-3">On hand</div>
-                                <div class="text-muted fs-7 fw-bold" data-kt-docs-datatable-subtable="template_name">32</div>
+                                <div class="text-dark fs-7">Número de Cuenta</div>
+                                <div class="text-muted fs-7 fw-bold" data-kt-docs-datatable-subtable="template_numero_cuenta"></div>
                             </td>
                             <td class="text-end">
-                                <div class="text-dark fs-7">Cost</div>
-                                <div class="text-muted fs-7 fw-bold" data-kt-docs-datatable-subtable="template_cost">1</div>
+                                <div class="text-dark fs-7">Cliente</div>
+                                <div class="text-muted fs-7 fw-bold" data-kt-docs-datatable-subtable="template_cliente"></div>
                             </td>
                             <td class="text-end">
-                                <div class="text-dark fs-7">Qty</div>
-                                <div class="text-muted fs-7 fw-bold" data-kt-docs-datatable-subtable="template_qty">1</div>
+                                <div class="text-dark fs-7">Estatus</div>
+                                <div class="text-muted fs-7 fw-bold" data-kt-docs-datatable-subtable="template_estatus"></div>
                             </td>
                             <td class="text-end">
-                                <div class="text-dark fs-7">Total</div>
-                                <div class="text-muted fs-7 fw-bold" data-kt-docs-datatable-subtable="template_total">name</div>
+                                <div class="text-dark fs-7">Saldo</div>
+                                <div class="text-muted fs-7 fw-bold" data-kt-docs-datatable-subtable="template_saldo"></div>
                             </td>
                             <td class="text-end">
-                                <div class="text-dark fs-7 me-3">On hand</div>
-                                <div class="text-muted fs-7 fw-bold" data-kt-docs-datatable-subtable="template_description">32</div>
+                                <div class="text-dark fs-7">Tipo</div>
+                                <div class="text-muted fs-7 fw-bold" data-kt-docs-datatable-subtable="template_tipo"></div>
                             </td>
-                            <td>
-
+                            <td class="text-end">
                             </td>
                         </tr>
                     </table>
@@ -159,5 +158,6 @@
 </div>
 
 @section Scripts{
+    <script asp-append-version="true" src="~/js/components/accounting.js"></script>
     <script asp-append-version="true" src="~/js/Cuentas/epica.cuenta.index.js"></script>
 }

@@ -42,6 +42,7 @@ builder.Services.AddSignalR();
 builder.Services.AddScoped<IUserResolver, UserResolver>();
 builder.Services.AddScoped<IServiceAuth, ServiceAuth>();
 builder.Services.AddScoped<ITransaccionesApiClient, TransaccionesApiClient>();
+builder.Services.AddScoped<ICuentaApiClient, CuentaApiClient>();
 
 builder.Services.AddSession(options =>
 {
