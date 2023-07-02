@@ -1,8 +1,8 @@
 ﻿"use strict";
+var datatable_myAccounts;
 
 //Agregar la tabla de transacciones
 var KTDatatableTransacciones = (function () {
-    let datatable_myAccounts;
     var table;
 
     var init = function () {
@@ -23,12 +23,28 @@ var KTDatatableTransacciones = (function () {
                 "zeroRecords": "No se encontraron resultados para mostrar"
             },
             responsive: true,
+            pagingType: 'simple_numbers',
+            searching: true,
+            lengthMenu: [10, 15, 25, 50, 100],
+            processing: true,
+            serverSide: true,
+            filter: true,
             ordering: true,
             // Configuración de la fuente de datos AJAX
             ajax: {
-                url: "Home/Transacciones",
-                type: "GET",
-                dataSrc: "", // La respuesta del controlador debe ser un array de movimientos
+                url: "Transacciones/Consulta",
+                type: "POST",
+                data: function (d) {
+                    var filtros = [];
+                    $(".filtro-control").each(function () {
+                        if ($(this).data('filtrar') == undefined) return;
+                        filtros.push({
+                            key: $(this).data('filtrar'),
+                            value: $(this).val()
+                        });
+                    });
+                    d.filters = filtros;
+                },
             },
             // Configuración de las columnas
             columns: [
@@ -50,40 +66,94 @@ var KTDatatableTransacciones = (function () {
                         return '<pan style ="color: ' + color + '">' + "$" + data + '<s/span>';
                     }
                 },
-                { data: "estatus", name: "Estatus", title: "ESTATUS" },
+                {
+                    data: "estatus", name: "Estatus", title: "ESTATUS",
+                    render: function (data, type, row) {
+
+                        if (data == "Liquidado") {
+                            return "<span class='badge badge-light-success'>Liquidado</span>"
+                        } else if (data == "En Tránsito") {
+                            return "<span class='badge badge-light-warning'>En Tránsito</span>"
+                        } else {
+                            return "<span class='badge badge-light-danger'>"+data+"</span>"
+                        }
+                    }
+                },
                 { data: "concepto", name: "Concepto", title: "CONCEPTO" },
                 { data: "medioPago", name: "MedioPago", title: "MEDIO DE PAGO" },    
-                { data: "tipo", name: "Tipo", title: "TIPO" },
+                {
+                    data: "tipo", name: "Tipo", title: "TIPO",
+                    render: function (data, type, row) {
+
+                        return data == "0" ?
+                            "Ingreso" : "Egreso";
+                    }
+                },
                 { data: "fecha", name: "Fecha", title: "FECHA" },
                 {
-                    title: "ACCIONES",
+                    title: '',
                     orderable: false,
                     data: null,
-                    defaultContent: "",
-                    render: function (data, type) {
-                        // Renderización del contenido HTML de la columna de acciones
-                        if (type === "display") {
-                            var button = ' <button data-idtransaccion="' + data.idTransaccion + '" id="download-btn" type="button" class="btn btn-sm btn-light-primary me-3" data-kt-menu-placement="bottom-end" data-kt-menu-trigger="click"> <span> <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect opacity="0.3" width="12" height="2" rx="1" transform="matrix(0 -1 -1 0 12.75 19.75)" fill="currentColor" /><path d="M12.0573 17.8813L13.5203 16.1256C13.9121 15.6554 14.6232 15.6232 15.056 16.056C15.4457 16.4457 15.4641 17.0716 15.0979 17.4836L12.4974 20.4092C12.0996 20.8567 11.4004 20.8567 11.0026 20.4092L8.40206 17.4836C8.0359 17.0716 8.0543 16.4457 8.44401 16.056C8.87683 15.6232 9.58785 15.6554 9.9797 16.1256L11.4427 17.8813C11.6026 18.0732 11.8974 18.0732 12.0573 17.8813Z" fill="currentColor" /><path opacity="0.3" d="M18.75 15.75H17.75C17.1977 15.75 16.75 15.3023 16.75 14.75C16.75 14.1977 17.1977 13.75 17.75 13.75C18.3023 13.75 18.75 13.3023 18.75 12.75V5.75C18.75 5.19771 18.3023 4.75 17.75 4.75L5.75 4.75C5.19772 4.75 4.75 5.19771 4.75 5.75V12.75C4.75 13.3023 5.19771 13.75 5.75 13.75C6.30229 13.75 6.75 14.1977 6.75 14.75C6.75 15.3023 6.30229 15.75 5.75 15.75H4.75C3.64543 15.75 2.75 14.8546 2.75 13.75V4.75C2.75 3.64543 3.64543 2.75 4.75 2.75L18.75 2.75C19.8546 2.75 20.75 3.64543 20.75 4.75V13.75C20.75 14.8546 19.8546 15.75 18.75 15.75Z" fill="currentColor" /></svg>Descargar</span ></button > ';
-                            return button;
+                    defaultContent: '',
+                    render: function (data, type, row) {
+                        if (type === 'display') {
+                            var htmlString = row.acciones;
+                            return htmlString
                         }
-                        return "";
-                    },
+                    }
                 },
             ],
         });
     };
     // Función de busqueda 
-    var handleSearchDatatable = function () {
-        const filterSearch = document.querySelector('[data-kt-myaacounts-table-filter="search"]');
-        filterSearch.addEventListener('keyup', function (e) {
-            datatable_myAccounts.search(e.target.value).draw();
+    //var handleSearchDatatable = function () {
+    //    const filterSearch = document.querySelector('[data-kt-myaacounts-table-filter="search"]');
+    //    filterSearch.addEventListener('keyup', function (e) {
+    //        datatable_myAccounts.search(e.target.value).draw();
+    //    });
+    //};
+
+    var exportButtons = () => {
+        const documentTitle = 'Transacciones';
+        var buttons = new $.fn.dataTable.Buttons(table, {
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    title: documentTitle,
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                    }
+                }
+            ]
+        }).container().appendTo($('#kt_datatable_buttons'));
+
+        const exportButtons = document.querySelectorAll('#kt_datatable_export_menu [data-kt-export]');
+        exportButtons.forEach(exportButton => {
+            exportButton.addEventListener('click', e => {
+                e.preventDefault();
+
+                const exportValue = e.target.getAttribute('data-kt-export');
+                const target = document.querySelector('.dt-buttons .buttons-' + exportValue);
+                target.click();
+            });
         });
-    };
+    }
+
     // Función para descarga del archivo
     //var Download = function (idTransaccion) {
     //    var url = "Home/Archivo?idTransaccion=" + idTransaccion;
     //    window.location.href = url;
     //};
+
+    $(".btn-filtrar").click(function () {
+        reload();
+    })
+
+    $(".btn_limpiar_filtros").click(function () {
+        $(".filtro-control").val('');
+        $(".filtro-control-select").val(null).trigger('change');;
+        reload();
+    });
 
     // Función de recarga
     var reload = function () {
@@ -103,7 +173,8 @@ var KTDatatableTransacciones = (function () {
                 return;
             }
             init();
-            handleSearchDatatable();
+            //handleSearchDatatable();
+            exportButtons();
 
         },
         reload: function () {
@@ -114,4 +185,9 @@ var KTDatatableTransacciones = (function () {
 $(document).ready(function () {
     KTDatatableTransacciones.init();
 });
+
+function modalCrearTransaccion() {
+    $('#newTransaccionModal').modal('show');
+};
+
 
