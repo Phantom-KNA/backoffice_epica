@@ -20,12 +20,20 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
         public async Task<List<Transacciones>> GetTransaccionesAsync()
         {
-            var uri = "https://localhost:44308/api/resumentransaccion\r\n";
-                //Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetTransacciones();
-            //ApiClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {UserResolver.GetToken()}");
+            var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetTransacciones();
+           
+            var response = await ApiClient.GetAsync(uri);
 
-            //ApiClient.DefaultRequestHeaders.Remove("Authorization");
-            //ApiClient.DefaultRequestHeaders.Add("x-api-key", UserResolver.GetToken());
+            response.EnsureSuccessStatusCode();
+
+            var stringResponse = await response.Content.ReadAsStringAsync();
+
+            return JsonSerializer.Deserialize<List<Transacciones>>(stringResponse, SerializerOptions);
+        }
+
+        public async Task<Transacciones> GetTransaccionAsync(int idInterno)
+        {
+            var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetTransaccion(idInterno);
 
             var response = await ApiClient.GetAsync(uri);
 
@@ -33,16 +41,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
             var stringResponse = await response.Content.ReadAsStringAsync();
 
-            try
-            {
-                return JsonSerializer.Deserialize<List<Transacciones>>(stringResponse, SerializerOptions);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Processing failed: {e.Message}");
-            }
-
-            return JsonSerializer.Deserialize<List<Transacciones>>(stringResponse, SerializerOptions);
+            return JsonSerializer.Deserialize<Transacciones>(stringResponse, SerializerOptions);
         }
     }
 }

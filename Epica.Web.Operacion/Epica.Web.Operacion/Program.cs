@@ -121,23 +121,23 @@ app.UseSession();
 //    }
 //    catch (Exception ex)
 //    {
-app.Use(async (context, next) =>
-{
-    try
-    {
-        var JWToken = context.Session.GetString("WebApp");
-        if (!string.IsNullOrEmpty(JWToken))
-        {
-            context.Request.Headers.Add("Authorization", "Bearer " + JWToken);
-        }
-        await next();
-    }
-    catch (Exception ex)
-    {
-         //Manejo de excepciones
+//app.Use(async (context, next) =>
+//{
+//    try
+//    {
+//        var JWToken = context.Session.GetString("WebApp");
+//        if (!string.IsNullOrEmpty(JWToken))
+//        {
+//            context.Request.Headers.Add("Authorization", "Bearer " + JWToken);
+//        }
+//        await next();
+//    }
+//    catch (Exception ex)
+//    {
+//         //Manejo de excepciones
 
-            }
- });
+//            }
+// });
 
 
         app.UseAuthentication();
