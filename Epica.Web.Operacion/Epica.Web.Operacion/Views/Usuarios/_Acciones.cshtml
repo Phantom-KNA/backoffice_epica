@@ -1,0 +1,28 @@
+﻿@model Epica.Web.Operacion.Models.Response.UserResponse
+<div class="dropdown dropdown-inline">
+    <a href="javascript:;" class="btn btn-sm btn-icon btn-light btn-active-light-primary me-2" data-bs-toggle="dropdown">
+        <i class="bi bi-three-dots"></i>
+    </a>
+    <ul class="dropdown-menu menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4">
+        <li class="menu-item px-3">
+            @if (Model.Estatus == true) {
+                <a data-id="@Model.IdCliente" asp-controller="Cuenta" asp-action="BloquearUsuario" asp-route-id="@Model.IdCliente" class="btnEditar menu-link px-3">
+                    <i class="bi bi-lock"></i>&nbsp;
+                    Bloquear
+                </a>
+            } else {
+                <a data-id="@Model.IdCliente" asp-controller="Cuenta" asp-action="DesbloquearUsuario" asp-route-id="@Model.IdCliente" class="btnEditar menu-link px-3">
+                    <i class="bi bi-unlock"></i>&nbsp;
+                    Desbloquear
+                </a>
+            }
+
+        </li>
+        <li class="menu-item px-3">
+            <a data-id="@Model.IdCliente" asp-controller="Usuarios" asp-action="Detalles" asp-route-id="@Model.IdCliente" class="btnDetalle menu-link px-3">
+                <i class="bi bi-search"></i>&nbsp;
+                Detalles
+            </a>
+        </li>
+    </ul>
+</div>

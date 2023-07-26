@@ -258,7 +258,7 @@ function pruebas(id) {
             buttonsSubTable.forEach((button, index) => {
                 button.addEventListener('click', e => {
                     //e.stopImmediatePropagation();
-                    e.preventDefault();
+                    //e.preventDefault();
                     var row = button.closest('tr');
                     var rowClasses = ['isOpen', 'border-bottom-0'];
 
@@ -326,9 +326,27 @@ function pruebas(id) {
         }
     });
 
-
-
 }
+
+
+function GestionarCuenta(AccountID, estatus) {
+    $.ajax({
+        url: siteLocation + 'Cuenta/GestionarEstadoCuentas',
+        async: true,
+        cache: false,
+        type: 'POST',
+        data: { id: AccountID, Estatus: estatus },
+        success: function (data) {
+
+            datatable.ajax.reload();
+            alert("Se ha actualizado la cuenta con exito.");
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+        }
+    });
+}
+
 
 //function populateTemplate(dataMapper, target){
 //    console.log(dataMapper);

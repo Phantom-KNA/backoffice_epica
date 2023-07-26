@@ -126,6 +126,32 @@ public class CuentaController : Controller
         return Json(ListPF);
     }
 
+    [HttpPost]
+    public async Task<JsonResult> GestionarEstadoCuentas(int id, string Estatus)
+    {
+        //Esta función tiene la tarea de bloquear o desbloquear cuentas segun el estatus
+        //Temporalmente solo retornara un valor correcto en lo que se trabaja en la logica
+        //para actualizar el estatus de las cuentas.
+
+        try
+        {
+
+            if (Estatus == "True") {
+
+            } else if (Estatus == "False") {
+
+            } else {
+                //Deteccion de posible cambio en codigo HTML a través de inspeccionar elemento
+                return Json(BadRequest());
+            }
+        } catch (Exception ex) {
+
+            return Json(BadRequest());
+        }
+
+        return Json(Ok());
+    }
+
     #endregion
 
     #region "Modelos"

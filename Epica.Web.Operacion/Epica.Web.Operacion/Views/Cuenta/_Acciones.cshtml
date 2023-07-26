@@ -1,17 +1,40 @@
 ﻿@model Epica.Web.Operacion.Controllers.CuentaController.CuentasResponse
 <div class="dropdown dropdown-inline">
-    <button type="button" class="btn btn-sm btn-icon btn-light btn-active-light-primary toggle h-25px w-25px" onclick="pruebas(@Model.Id)" data-kt-docs-datatable-subtable="expand_row">
-        <i class="ki-duotone ki-plus fs-3 m-0 toggle-off"></i><i class="ki-duotone ki-minus fs-3 m-0 toggle-on"></i>
+    <button type="button" class="btn btn-sm btn-icon btn-light btn-active-light-primary me-2" onclick="pruebas(@Model.Id)" title="Ver SubCuentas" data-kt-docs-datatable-subtable="expand_row">
+        <i class="bi bi-plus"></i>
     </button>
 
-    <a href="javascript:;" class="btn btn-sm btn-icon btn-light btn-active-light-primary me-2" data-bs-toggle="dropdown">
+    <a href="javascript:;" class="btn btn-sm btn-icon btn-light btn-active-light-primary me-2" title="Acciones" data-bs-toggle="dropdown">
         <i class="bi bi-three-dots"></i>
     </a>
     <ul class="dropdown-menu menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4">
         <li class="menu-item px-3">
-            <a data-id="@Model.Id" asp-controller="Cuenta" asp-action="ConsultarTransacciones" asp-route-id="@Model.Id" class="btnEditar menu-link px-3">
-                <i class="bi bi-search"></i>&nbsp;
+            <a data-id="@Model.Id" asp-controller="Cuenta" asp-action="ConsultarTransacciones" asp-route-id="@Model.Id" title="Consultar Transacciones de la cuenta" class="btnEditar menu-link px-3">
+                <i class="bi bi-credit-card"></i>&nbsp;
                 Transacciones
+            </a>
+        </li>
+        <li class="menu-item px-3">
+            @if (Model.estatus == "1")
+            {
+                <a data-id="@Model.Id" onclick="GestionarCuenta(@Model.Id, 'False')" title="Bloquear Cuenta" class="btnEditar menu-link px-3">
+                    <i class="bi bi-lock"></i>&nbsp;
+                    Bloquear
+                </a>
+            }
+            else
+            {
+                <a data-id="@Model.Id" onclick="GestionarCuenta(@Model.Id, 'True')" title="Desbloquear Cuenta" class="btnEditar menu-link px-3">
+                    <i class="bi bi-unlock"></i>&nbsp;
+                    Desbloquear
+                </a>
+            }
+
+        </li>
+        <li class="menu-item px-3">
+            <a data-id="@Model.Id" title="Ver más información de esta cuenta" class="btnEditar menu-link px-3">
+                <i class="bi bi-search"></i>&nbsp;
+                Detalles
             </a>
         </li>
     </ul>
