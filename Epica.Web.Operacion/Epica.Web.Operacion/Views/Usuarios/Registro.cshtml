@@ -1,0 +1,275 @@
+﻿@{
+    ViewData["Title"] = "Crear nuevo usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section LogoPage{
+    <i class="bi bi-person fs-1 w-40px"></i>
+}
+
+@section breadcrumb{
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted">
+        <a class="text-muted" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
+    </li>
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted">
+        @ViewData["Title"]
+    </li>
+}
+
+<div class="col-md-12">
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h3 class="card-title">Crear nuevo usuario</h3>
+            <div class="separator separator-dashed border-light-secondary my-2"></div>
+            <div class="card-toolbar">
+                <button type="button" class="btn btn-sm btn-light-primary id=" btnGuardarUsuario"">
+                    Guardar
+                </button>
+            </div>
+        </div>
+        <div class="card-body pt-5">
+            <div class="d-flex mb-6 mt-6">
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label required">Nombre: &nbsp;</label>
+                    <div class="position-relative">
+                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label required">Apellido paterno: &nbsp;</label>
+                    <div class="position-relative">
+                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label required">Email: &nbsp;</label>
+                    <div class="position-relative">
+                    <input class="form-control form-control-sm form-control-solid" type="email" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex mb-6 mt-6">
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label required">Curp: &nbsp;</label>
+                    <div class="position-relative">
+                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label required">RFC: &nbsp;</label>
+                    <div class="position-relative">
+                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label required">INE: &nbsp;</label>
+                    <div class="position-relative">
+                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex mb-6 mt-6">
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label required">Fecha Nacimiento: &nbsp;</label>
+                    <div class="position-relative">
+                    <input class="form-control form-control-sm form-control-solid datepicker-js" type="text" />
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label">Observaciones: &nbsp;</label>
+                    <div class="position-relative">
+                    <textarea class="form-control form-control-sm form-control-solid" rows="2"></textarea>
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label required">País Nacimiento: &nbsp;</label>
+                    <div class="position-relative">
+                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex mb-6 mt-6">
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label">Sexo: &nbsp;</label>
+                    <div class="position-relative">
+                        <select class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción">
+                            <option></option>
+                            <option value="M">Hombre</option>
+                            <option value="F">Mujer</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label">Ocupación: &nbsp;</label>
+                    <div class="position-relative">
+                    <select class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción">
+                        <option></option>
+                        <option value="1">Option 1</option>
+                        <option value="2">Option 2</option>
+                    </select>
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label">Nacionalidad: &nbsp;</label>
+                    <div class="position-relative">
+                    <select class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción">
+                        <option></option>
+                        <option value="1">Option 1</option>
+                        <option value="2">Option 2</option>
+                    </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex mb-6 mt-6">
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label">Fiel: &nbsp;</label>
+                    <div class="position-relative">
+                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label">País: &nbsp;</label>
+                    <div class="position-relative">
+                    <select class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción">
+                        <option></option>
+                        <option value="1">Option 1</option>
+                        <option value="2">Option 2</option>
+                    </select>
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label">Ingreso Mensual: &nbsp;</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">$</span>
+                        <input type="text" class="form-control" aria-describedby="basic-addon1" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex mb-6 mt-6">
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label">Monto Máximo: &nbsp;</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon2">$</span>
+                        <input type="text" class="form-control" aria-describedby="basic-addon2" />
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label required">Teléfono: &nbsp;</label>
+                    <div class="position-relative">
+                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label required">Calle: &nbsp;</label>
+                    <div class="position-relative">
+                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex mb-6 mt-6">
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label">Calle Numero: &nbsp;</label>
+                    <div class="position-relative">
+                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label">Primera Calle: &nbsp;</label>
+                    <div class="position-relative">
+                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label">Segunda Calle: &nbsp;</label>
+                    <div class="position-relative">
+                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex mb-6 mt-6">
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label required">Colonia: &nbsp;</label>
+                    <div class="position-relative">
+                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label required">Delegacion/municipio: &nbsp;</label>
+                    <div class="position-relative">
+                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label required">Código postal: &nbsp;</label>
+                    <div class="position-relative">
+                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex mb-6 mt-6">
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label">Ciudad estado: &nbsp;</label>
+                    <div class="position-relative">
+                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label">Calle Número: &nbsp;</label>
+                    <div class="position-relative">
+                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label">Puesto: &nbsp;</label>
+                    <div class="position-relative">
+                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex mb-6 mt-6">
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label">Empresa: &nbsp;</label>
+                    <div class="position-relative">
+                    <select class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción">
+                        <option></option>
+                        <option value="1">Option 1</option>
+                        <option value="2">Option 2</option>
+                    </select>
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label">Apoderado Legal: &nbsp;</label>
+                    <div class="position-relative">
+                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label">Rol: &nbsp;</label>
+                    <div class="position-relative">
+                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/Usuarios/epica.usuarios.registro.js" asp-append-version="true"></script>
+}
