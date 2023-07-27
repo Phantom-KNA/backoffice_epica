@@ -28,6 +28,10 @@ public class UsuariosController : Controller
     {
         return View();
     }
+    public IActionResult Registro()
+    {
+        return View("~/Views/Usuarios/Registro.cshtml");
+    }
 
     [HttpPost]
     public async Task<JsonResult> Consulta(List<RequestListFilters> filters)
