@@ -9,7 +9,7 @@
     </a>
     <ul class="dropdown-menu menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4">
         <li class="menu-item px-3">
-            <a data-id="@Model.Id" asp-controller="Cuenta" asp-action="ConsultarTransacciones" asp-route-id="@Model.Id" title="Consultar Transacciones de la cuenta" class="btnEditar menu-link px-3">
+            <a data-id="@Model.Id" asp-controller="Transacciones" asp-action="Index" asp-route-AccountID="@Model.Id" title="Consultar Transacciones de la cuenta" class="btnEditar menu-link px-3">
                 <i class="bi bi-credit-card"></i>&nbsp;
                 Transacciones
             </a>
@@ -35,6 +35,12 @@
             <a data-id="@Model.Id" title="Ver más información de esta cuenta" class="btnEditar menu-link px-3">
                 <i class="bi bi-search"></i>&nbsp;
                 Detalles
+            </a>
+        </li>
+        <li class="menu-item px-3">
+            <a data-id="@Model.Id" title="Ver usuarios asociados a esta cuenta" class="btnEditar menu-link px-3">
+                <i class="bi bi-people"></i>&nbsp;
+                Ver Usuarios
             </a>
         </li>
     </ul>

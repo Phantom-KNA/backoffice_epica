@@ -20,9 +20,10 @@ namespace Epica.Web.Operacion.Controllers
         }
         #endregion
 
-        #region
-        public IActionResult Index()
+        #region "Funciones"
+        public IActionResult Index(string AccountID = "")
         {
+            ViewBag.AccountID = AccountID;
             return View();
         }
         public async Task<IActionResult> Transacciones()

@@ -184,6 +184,7 @@ var KTDatatableTransacciones = (function () {
 })();
 $(document).ready(function () {
     KTDatatableTransacciones.init();
+    alert(AccountId);
 });
 
 function modalCrearTransaccion() {
