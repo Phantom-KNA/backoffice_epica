@@ -8,15 +8,15 @@ namespace Epica.Web.Operacion.Models.Response;
 
 public class UserResponse
 {
-    public long IdCliente { get; set; }
-    public string Nombre { get; set; }
-    public string Telefono { get; set; }
-    public string Email { get; set; }
-    public string Curp { get; set; }
-    public string Organizacion { get; set; }
-    public string TipoMembresia { get; set; }
-    public string Sexo { get; set; }
-    public bool Estatus { get; set; }
+    public long id { get; set; }
+    public string nombreCompleto { get; set; }
+    public string telefono { get; set; }
+    public string email { get; set; }
+    public string CURP { get; set; }
+    public string organizacion { get; set; }
+    public string membresia { get; set; }
+    public string sexo { get; set; }
+    public int estatus { get; set; }
 }
 
 public class UserResponseGrid : UserResponse

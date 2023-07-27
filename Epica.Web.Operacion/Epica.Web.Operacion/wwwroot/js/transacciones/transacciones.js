@@ -47,11 +47,15 @@ var KTDatatableTransacciones = (function () {
                 },
             },
             // Configuración de las columnas
+            columnDefs: [{
+                "defaultContent": "-",
+                "targets": "_all"
+            }],
             columns: [
+                { data: "id", name: "IdInterno", title: "ID" },
                 { data: "claveRastreo", name: "ClaveRastreo", title: "CLAVE DE RASTREO" },
-                { data: "idInterno", name: "IdInterno", title: "ID INTERNO" },
-                { data: "nombreCuenta", name: "NombreCuenta", title: "NOMBRE DE LA CUENTA" },
-                { data: "institucion", name: "Institucion", title: "INSTITUCION" },
+                { data: "nombreOrdenante", name: "NombreCuenta", title: "NOMBRE ORDENANTE" },
+                { data: "nombreBeneficiario", name: "Institucion", title: "NOMBRE BENEFICIARIO" },
                 {
                     data: "monto",
                     name: "Monto",
@@ -63,14 +67,14 @@ var KTDatatableTransacciones = (function () {
                         } else if (row.monto < 0) {
                             color = 'red';//Color rojo si es menor a 0
                         }
-                        return '<pan style ="color: ' + color + '">' + "$" + data + '<s/span>';
+                        return '<pan style ="color: ' + color + '">' + accounting.formatMoney(data) + '<s/span>';
                     }
                 },
                 {
                     data: "estatus", name: "Estatus", title: "ESTATUS",
                     render: function (data, type, row) {
 
-                        if (data == "Liquidado") {
+                        if (data == 0) {
                             return "<span class='badge badge-light-success'>Liquidado</span>"
                         } else if (data == "En Tránsito") {
                             return "<span class='badge badge-light-warning'>En Tránsito</span>"
@@ -80,16 +84,9 @@ var KTDatatableTransacciones = (function () {
                     }
                 },
                 { data: "concepto", name: "Concepto", title: "CONCEPTO" },
-                { data: "medioPago", name: "MedioPago", title: "MEDIO DE PAGO" },    
-                {
-                    data: "tipo", name: "Tipo", title: "TIPO",
-                    render: function (data, type, row) {
-
-                        return data == "0" ?
-                            "Ingreso" : "Egreso";
-                    }
-                },
-                { data: "fecha", name: "Fecha", title: "FECHA" },
+                { data: "idMedioPago", name: "MedioPago", title: "MEDIO DE PAGO" },    
+                { data: "idCuentaAhorro", name: "Tipo", title: "TIPO" },
+                { data: "fechaAlta", name: "Fecha", title: "FECHA" },
                 {
                     title: '',
                     orderable: false,
@@ -104,6 +101,7 @@ var KTDatatableTransacciones = (function () {
                 },
             ],
         });
+        $('thead tr').addClass('text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0');
     };
     // Función de busqueda 
     //var handleSearchDatatable = function () {
@@ -184,7 +182,6 @@ var KTDatatableTransacciones = (function () {
 })();
 $(document).ready(function () {
     KTDatatableTransacciones.init();
-    alert(AccountId);
 });
 
 function modalCrearTransaccion() {

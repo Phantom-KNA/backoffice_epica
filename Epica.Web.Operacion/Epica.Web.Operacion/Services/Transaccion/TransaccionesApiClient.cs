@@ -1,7 +1,7 @@
 ﻿using Epica.Web.Operacion.Config;
-using Epica.Web.Operacion.Models.Entities;
 using Epica.Web.Operacion.Services.UserResolver;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System.Text.Json;
 
 namespace Epica.Web.Operacion.Services.Transaccion
@@ -18,20 +18,30 @@ namespace Epica.Web.Operacion.Services.Transaccion
         {
         }
 
-        public async Task<List<Transacciones>> GetTransaccionesAsync()
+        public async Task<List<TransaccionesResponse>> GetTransaccionesAsync(int pageNumber, int recordsTotal)
         {
-            var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetTransacciones();
-           
-            var response = await ApiClient.GetAsync(uri);
+            List<TransaccionesResponse>? ListaTransacciones = new List<TransaccionesResponse>();
 
-            response.EnsureSuccessStatusCode();
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetTransacciones(pageNumber, recordsTotal);
+                var response = await ApiClient.GetAsync(uri);
 
-            var stringResponse = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    ListaTransacciones = JsonConvert.DeserializeObject<List<TransaccionesResponse>>(jsonResponse);
+                }
 
-            return JsonSerializer.Deserialize<List<Transacciones>>(stringResponse, SerializerOptions);
+            } catch (Exception ex) {
+                return ListaTransacciones;
+            }
+
+            return ListaTransacciones;
         }
 
-        public async Task<Transacciones> GetTransaccionAsync(int idInterno)
+        public async Task<TransaccionesResponse> GetTransaccionAsync(int idInterno)
         {
             var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetTransaccion(idInterno);
 
@@ -41,7 +51,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
             var stringResponse = await response.Content.ReadAsStringAsync();
 
-            return JsonSerializer.Deserialize<Transacciones>(stringResponse, SerializerOptions);
+            return JsonConvert.DeserializeObject<TransaccionesResponse>(stringResponse);
         }
     }
 }

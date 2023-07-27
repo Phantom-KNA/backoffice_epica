@@ -1,11 +1,9 @@
-﻿using Epica.Web.Operacion.Models.Entities;
-
-namespace Epica.Web.Operacion.Services.Transaccion
+﻿namespace Epica.Web.Operacion.Services.Transaccion
 {
     public interface ITransaccionesApiClient
     {
-        Task<List<Transacciones>> GetTransaccionesAsync();
+        Task<List<TransaccionesResponse>> GetTransaccionesAsync(int pageNumber, int recordsTotal);
 
-        Task<Transacciones> GetTransaccionAsync(int idInterno);
+        Task<TransaccionesResponse> GetTransaccionAsync(int idInterno);
     }
 }

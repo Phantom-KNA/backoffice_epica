@@ -1,17 +1,17 @@
-﻿@model Epica.Web.Operacion.Models.Entities.Transacciones
+﻿@model Epica.Web.Operacion.Models.Response.TransaccionesResponse
 <div class="dropdown dropdown-inline">
     <a href="javascript:;" class="btn btn-sm btn-icon btn-light btn-active-light-primary me-2" data-bs-toggle="dropdown">
         <i class="bi bi-three-dots"></i>
     </a>
     <ul class="dropdown-menu menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4">
         <li class="menu-item px-3">
-            <a data-id="@Model.idInterno" asp-controller="Cuenta" asp-action="ImprimirTransaccion" asp-route-id="@Model.idInterno" class="btnEditar menu-link px-3">
+            <a data-id="@Model.id" asp-controller="Cuenta" asp-action="ImprimirTransaccion" asp-route-id="@Model.id" class="btnEditar menu-link px-3">
                 <i class="bi bi-printer"></i>&nbsp;
                 Imprimir
             </a>
         </li>
         <li class="menu-item px-3">
-            <a data-id="@Model.idInterno" asp-controller="Cuenta" asp-action="DetallesTransaccion" asp-route-id="@Model.idInterno" class="btnEditar menu-link px-3">
+            <a data-id="@Model.id" asp-controller="Cuenta" asp-action="DetallesTransaccion" asp-route-id="@Model.id" class="btnEditar menu-link px-3">
                 <i class="bi bi-search"></i>&nbsp;
                 Detalles
             </a>

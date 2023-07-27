@@ -7,19 +7,20 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Text;
+using static Epica.Web.Operacion.Controllers.CuentaController;
 
 namespace Epica.Web.Operacion.Controllers;
 
 public class UsuariosController : Controller
 {
     #region "Locales"
-    private readonly ICuentaApiClient _cuentaApiClient;
+    private readonly IUsuariosApiClient _usuriosApiClient;
     #endregion
 
     #region "Constructores"
-    public UsuariosController(ICuentaApiClient cuentaApiClient)
+    public UsuariosController(IUsuariosApiClient usuariosApiClient)
     {
-        _cuentaApiClient = cuentaApiClient;
+        _usuriosApiClient = usuariosApiClient;
     }
     #endregion
 
@@ -50,25 +51,25 @@ public class UsuariosController : Controller
         var gridData = new ResponseGrid<UserResponseGrid>();
         List<UserResponse> ListPF = new List<UserResponse>();
 
-        //ListPF = await _cuentaApiClient.GetCuentasAsync();
+        ListPF = await _usuriosApiClient.GetUsuariosAsync(1,200);
 
         //Entorno local de pruebas
-        ListPF = GetList();
+        //ListPF = GetList();
 
         var List = new List<UserResponseGrid>();
         foreach (var row in ListPF)
         {
             List.Add(new UserResponseGrid
             {
-                IdCliente = row.IdCliente,
-                Nombre = row.Nombre,
-                Telefono = row.Telefono,
-                Email = row.Email,
-                Curp = row.Curp,
-                Organizacion = row.Organizacion,
-                TipoMembresia = row.TipoMembresia,
-                Sexo = row.Sexo,
-                Estatus = row.Estatus,
+                id = row.id,
+                nombreCompleto = row.nombreCompleto,
+                telefono = row.telefono,
+                email = row.email,
+                CURP = row.CURP,
+                organizacion = row.organizacion,
+                membresia = row.membresia,
+                sexo = row.sexo,
+                estatus = row.estatus,
                 Acciones = await this.RenderViewToStringAsync("~/Views/Usuarios/_Acciones.cshtml", row)
             });
         }
@@ -124,7 +125,7 @@ public class UsuariosController : Controller
     [HttpPost]
     public async Task<JsonResult> ConsultarSubCuentas()
     {
-        var ListPF = await _cuentaApiClient.GetCuentasAsync();
+        var ListPF = await _usuriosApiClient.GetUsuariosAsync(1,200);
         //var ListPF = GetList();
         return Json(ListPF);
     }
@@ -232,15 +233,15 @@ public class UsuariosController : Controller
                 var gen = generarnombre(i);
 
                 var pf = new UserResponse();
-                pf.IdCliente = i;
-                pf.Nombre = gen.NombreCompleto;
-                pf.Telefono = GenNumeroTelefono(10);
-                pf.Email = GenerarEmail();
-                pf.Curp = "DOOM982834HMCRNS07";
-                pf.Organizacion = "Doom Organizacion";
-                pf.TipoMembresia = "Negocios";
-                pf.Sexo = "Masculino";
-                pf.Estatus = true;
+                pf.id = i;
+                pf.nombreCompleto = gen.NombreCompleto;
+                pf.telefono = GenNumeroTelefono(10);
+                pf.email = GenerarEmail();
+                pf.CURP = "DOOM982834HMCRNS07";
+                pf.organizacion = "Doom Organizacion";
+                pf.membresia = "Negocios";
+                pf.sexo = "Masculino";
+                pf.estatus = 1;
 
                 List.Add(pf);
             }

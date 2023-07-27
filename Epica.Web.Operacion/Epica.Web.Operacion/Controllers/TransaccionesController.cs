@@ -1,8 +1,8 @@
 ﻿using Epica.Web.Operacion.Models.Common;
-using Epica.Web.Operacion.Models.Entities;
 using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Utilities;
 using Newtonsoft.Json;
+using System.Threading;
 using static Epica.Web.Operacion.Controllers.CuentaController;
 
 namespace Epica.Web.Operacion.Controllers
@@ -28,7 +28,7 @@ namespace Epica.Web.Operacion.Controllers
         }
         public async Task<IActionResult> Transacciones()
         {
-            var recibir = await _transaccionesApiClient.GetTransaccionesAsync();
+            var recibir = await _transaccionesApiClient.GetTransaccionesAsync(1,100);
             return Json(recibir);
         }
 
@@ -58,9 +58,9 @@ namespace Epica.Web.Operacion.Controllers
             request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
 
             var gridData = new ResponseGrid<ResumenTransaccionResponseGrid>();
-            List<Transacciones> ListPF = new List<Transacciones>();
+            List<TransaccionesResponse> ListPF = new List<TransaccionesResponse>();
 
-            ListPF = await _transaccionesApiClient.GetTransaccionesAsync();
+            ListPF = await _transaccionesApiClient.GetTransaccionesAsync(1,100);
 
             //Entorno local de pruebas
             //ListPF = GetList();
@@ -70,81 +70,81 @@ namespace Epica.Web.Operacion.Controllers
             {
                 List.Add(new ResumenTransaccionResponseGrid
                 {
-                    IdInterno = row.idInterno,
-                    ClaveRastreo = row.claveRastreo,
-                    NombreCuenta = row.nombreCuenta,
-                    Institucion = row.institucion,
-                    Monto = Convert.ToString(row.monto),
-                    Estatus = row.estatus,
-                    Concepto = row.concepto,
-                    MedioPago = Convert.ToString(row.medioPago),
-                    Tipo = Convert.ToString(row.tipo),
-                    Fecha = row.fecha,
+                    id = row.id,
+                    claveRastreo = row.claveRastreo,
+                    nombreOrdenante = row.nombreOrdenante,
+                    nombreBeneficiario = row.nombreBeneficiario,
+                    monto = row.monto,
+                    estatus = row.estatus,
+                    concepto = row.concepto,
+                    idMedioPago = row.idMedioPago,
+                    idCuentaAhorro = row.idCuentaAhorro,
+                    fechaAlta = row.fechaAlta,
                     Acciones = await this.RenderViewToStringAsync("~/Views/Transacciones/_Acciones.cshtml", row)
                 });
             }
 
             //Aplicacion de Filtros temporal, 
-            var filtroid = filters.FirstOrDefault(x => x.Key == "idInterno");
-            var filtronombreClaveRastreo = filters.FirstOrDefault(x => x.Key == "claveRastreo");
-            var filtroNombreCuenta = filters.FirstOrDefault(x => x.Key == "nombreCuenta");
-            var filtroInstitucion = filters.FirstOrDefault(x => x.Key == "institucion");
-            var filtroMonto = filters.FirstOrDefault(x => x.Key == "monto");
-            var filtroEstatus = filters.FirstOrDefault(x => x.Key == "estatus");
-            var filtroConcepto = filters.FirstOrDefault(x => x.Key == "concepto");
-            var filtroMedioPago = filters.FirstOrDefault(x => x.Key == "medioPago");
-            var filtroTipo = filters.FirstOrDefault(x => x.Key == "tipo");
-            var filtroFecha = filters.FirstOrDefault(x => x.Key == "fecha");
+            //var filtroid = filters.FirstOrDefault(x => x.Key == "idInterno");
+            //var filtronombreClaveRastreo = filters.FirstOrDefault(x => x.Key == "claveRastreo");
+            //var filtroNombreCuenta = filters.FirstOrDefault(x => x.Key == "nombreCuenta");
+            //var filtroInstitucion = filters.FirstOrDefault(x => x.Key == "institucion");
+            //var filtroMonto = filters.FirstOrDefault(x => x.Key == "monto");
+            //var filtroEstatus = filters.FirstOrDefault(x => x.Key == "estatus");
+            //var filtroConcepto = filters.FirstOrDefault(x => x.Key == "concepto");
+            //var filtroMedioPago = filters.FirstOrDefault(x => x.Key == "medioPago");
+            //var filtroTipo = filters.FirstOrDefault(x => x.Key == "tipo");
+            //var filtroFecha = filters.FirstOrDefault(x => x.Key == "fecha");
 
-            if (filtroid.Value != null)
-            {
-                List = List.Where(x => x.IdInterno == Convert.ToInt32(filtroid.Value)).ToList();
-            }
+            //if (filtroid.Value != null)
+            //{
+            //    List = List.Where(x => x.IdInterno == Convert.ToInt32(filtroid.Value)).ToList();
+            //}
 
-            if (filtronombreClaveRastreo.Value != null)
-            {
-                List = List.Where(x => x.ClaveRastreo.Contains(Convert.ToString(filtronombreClaveRastreo.Value))).ToList();
-            }
+            //if (filtronombreClaveRastreo.Value != null)
+            //{
+            //    List = List.Where(x => x.ClaveRastreo.Contains(Convert.ToString(filtronombreClaveRastreo.Value))).ToList();
+            //}
 
-            if (filtroNombreCuenta.Value != null)
-            {
-                List = List.Where(x => x.NombreCuenta == Convert.ToString(filtroNombreCuenta.Value)).ToList();
-            }
+            //if (filtroNombreCuenta.Value != null)
+            //{
+            //    List = List.Where(x => x.NombreCuenta == Convert.ToString(filtroNombreCuenta.Value)).ToList();
+            //}
 
-            if (filtroInstitucion.Value != null)
-            {
-                List = List.Where(x => x.Institucion == Convert.ToString(filtroInstitucion.Value)).ToList();
-            }
+            //if (filtroInstitucion.Value != null)
+            //{
+            //    List = List.Where(x => x.Institucion == Convert.ToString(filtroInstitucion.Value)).ToList();
+            //}
 
-            if (filtroMonto.Value != null)
-            {
-                List = List.Where(x => x.Monto.ToString() == Convert.ToString(filtroMonto.Value)).ToList();
-            }
+            //if (filtroMonto.Value != null)
+            //{
+            //    List = List.Where(x => x.Monto.ToString() == Convert.ToString(filtroMonto.Value)).ToList();
+            //}
 
-            if (filtroEstatus.Value != null)
-            {
-                List = List.Where(x => x.Estatus == Convert.ToString(filtroEstatus.Value)).ToList();
-            }
+            //if (filtroEstatus.Value != null)
+            //{
+            //    List = List.Where(x => x.Estatus == Convert.ToString(filtroEstatus.Value)).ToList();
+            //}
 
-            if (filtroConcepto.Value != null)
-            {
-                List = List.Where(x => x.Concepto == Convert.ToString(filtroConcepto.Value)).ToList();
-            }
+            //if (filtroConcepto.Value != null)
+            //{
+            //    List = List.Where(x => x.Concepto == Convert.ToString(filtroConcepto.Value)).ToList();
+            //}
 
-            if (filtroMedioPago.Value != null)
-            {
-                List = List.Where(x => x.MedioPago.ToString() == Convert.ToString(filtroMedioPago.Value)).ToList();
-            }
+            //if (filtroMedioPago.Value != null)
+            //{
+            //    List = List.Where(x => x.MedioPago.ToString() == Convert.ToString(filtroMedioPago.Value)).ToList();
+            //}
 
-            if (filtroTipo.Value != null)
-            {
-                List = List.Where(x => x.Tipo.ToString() == Convert.ToString(filtroTipo.Value)).ToList();
-            }
+            //if (filtroTipo.Value != null)
+            //{
+            //    List = List.Where(x => x.Tipo.ToString() == Convert.ToString(filtroTipo.Value)).ToList();
+            //}
 
-            if (filtroFecha.Value != null)
-            {
-                List = List.Where(x => x.Fecha.ToString() == Convert.ToString(filtroFecha.Value)).ToList();
-            }
+            //if (filtroFecha.Value != null)
+            //{
+            //    List = List.Where(x => x.Fecha.ToString() == Convert.ToString(filtroFecha.Value)).ToList();
+            //}
 
             gridData.Data = List;
             gridData.RecordsTotal = List.Count;
@@ -167,16 +167,16 @@ namespace Epica.Web.Operacion.Controllers
         }
         public class ResumenTransaccionResponse
         {
-            public int IdInterno { get; set; }
-            public string ClaveRastreo { get; set; }
-            public string NombreCuenta { get; set; }
-            public string Institucion { get; set; }
-            public string Monto { get; set; }
-            public string Estatus { get; set; }
-            public string Concepto { get; set; }
-            public string MedioPago { get; set; }
-            public string Tipo { get; set; }
-            public DateTime Fecha { get; set; }
+            public int id { get; set; }
+            public string claveRastreo { get; set; }
+            public string nombreOrdenante { get; set; }
+            public string nombreBeneficiario { get; set; }
+            public decimal monto { get; set; }
+            public int estatus { get; set; }
+            public string concepto { get; set; }
+            public int idMedioPago { get; set; }
+            public int idCuentaAhorro { get; set; }
+            public DateTime fechaAlta { get; set; }
         }
         public class ResumenTransaccionResponseGrid : ResumenTransaccionResponse
         {

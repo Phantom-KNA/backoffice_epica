@@ -32,9 +32,7 @@ public class ApiClientBase
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
         UserResolver = userResolver;
-        _apiKey = configuration.GetValue<string>("credential:privatekey");
-        ApiClient.DefaultRequestHeaders.Add("Private-Merchant-Id", _apiKey);
-        //ApiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserResolver.GetToken());
-        //ApiClient.DefaultRequestHeaders.Add("x-api-key", userResolver.GetToken());
+        _apiKey = configuration.GetValue<string>("credential:ApiKey");
+        ApiClient.DefaultRequestHeaders.Add("Api-Key", _apiKey);
     }
 }

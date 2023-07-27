@@ -168,28 +168,37 @@
                         <input class="form-control form-control-sm fw-bold crear-control" data-crear="claveRastreo" placeholder="Clave de Rastreo" id="create_clave_rastreo" />
                     </div>
                     <div class="mb-5">
-                        <label class="form-label fs-5 fw-semibold mb-3">Nombre de la cuenta:</label>
-                        <input class="form-control form-control-sm fw-bold crear-control" data-crear="nombreCuenta" placeholder="Nombre de la cuenta" id="create_nombre_cuenta" />
-                    </div>
-                    <div class="mb-5">
-                        <label class="form-label fs-5 fw-semibold mb-3">Institución:</label>
-                        <input class="form-control form-control-sm fw-bold crear-control" data-crear="institucion" placeholder="Institución" id="create_institucion" />
+                        <label class="form-label fs-5 fw-semibold mb-3">Cuenta Beneficiario:</label>
+                        <input type="number" class="form-control form-control-sm fw-bold crear-control" min="0" data-crear="cuentaBeneficiario" placeholder="Cuenta Beneficiario" id="create_cuenta_beneficiario" />
                     </div>
                     <div class="mb-5">
                         <label class="form-label fs-5 fw-semibold mb-3">Monto:</label>
-                        <input class="form-control form-control-sm fw-bold crear-control" data-crear="monto" placeholder="Monto" id="create_monto" />
+                        <input type="number" class="form-control form-control-sm fw-bold crear-control" min="0" data-crear="monto" placeholder="Monto Transacción" id="create_monto" />
                     </div>
                     <div class="mb-5">
                         <label class="form-label fs-5 fw-semibold mb-3">Concepto:</label>
                         <input class="form-control form-control-sm fw-bold crear-control" data-crear="concepto" placeholder="Concepto" id="create_concepto" />
                     </div>
                     <div class="mb-5">
+                        <label class="form-label fs-5 fw-semibold mb-3">Tipo de Operación:</label>
+                        <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-crear="tipoOperacion" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="create_tipo_Operacion">
+                            <option></option>
+                            <option value="1">IN</option>
+                            <option value="2">OUT</option>
+                            <option value="3">Comisión</option>
+                        </select>
+                    </div>
+                    <div class="mb-5">
                         <label class="form-label fs-5 fw-semibold mb-3">Medio de Pago:</label>
                         <input class="form-control form-control-sm fw-bold crear-control" data-crear="medioPago" placeholder="Medio de Pago" id="create_medio_pago" />
                     </div>
                     <div class="mb-5">
-                        <label class="form-label fs-5 fw-semibold mb-3">Tipo:</label>
-                        <input class="form-control form-control-sm fw-bold crear-control" data-crear="tipo" placeholder="Tipo" id="create_tipo" />
+                        <label class="form-label fs-5 fw-semibold mb-3">Comisión:</label>
+                        <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-crear="comision" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="create_comision">
+                            <option></option>
+                            <option value="0">Sin Comisión</option>
+                            <option value="1">Con Comisión</option>
+                        </select>
                     </div>
                 </div>
 
@@ -204,6 +213,7 @@
 </div>
 
 @section Scripts{
+    <script asp-append-version="true" src="~/js/components/accounting.js"></script>
     <script src="~/js/transacciones/transacciones.js" asp-append-version="true"></script>
     <script>
         var AccountId = '@ViewBag.AccountID';

@@ -64,18 +64,23 @@ var KTDatatableRemoteAjax = function () {
                 "targets": "_all"
             }],
             columns: [
-                { data: 'idCliente', name: 'IdCliente', title: 'Id Cliente' },
-                { data: 'nombre', name: 'Nombre', title: 'Nombre del Cliente' },
+                { data: 'id', name: 'Id', title: 'Id Usuario' },
+                { data: 'nombreCompleto', name: 'NombreCompleto', title: 'Nombre del Cliente' },
                 { data: 'telefono', name: 'Telefono', title: 'Telefono' },
                 { data: 'email', name: 'Email', title: 'Correo Electrónico' },
                 { data: 'curp', name: 'Curp', title: 'CURP' },
                 { data: 'organizacion', name: 'Organizacion', title: 'Organizacion' },
-                { data: 'tipoMembresia', name: 'TipoMembresia', title: 'Tipo Membresia' },
-                { data: 'sexo', name: 'Sexo', title: 'Sexo' },
+                { data: 'membresia', name: 'membresia', title: 'Tipo Membresia' },
+                {
+                    data: 'sexo', name: 'Sexo', title: 'Sexo',
+                    render: function (data, type, row) {
+                        return data == "M" ?
+                            "Masculino" : "Femenino";
+                    } },
                 {
                     data: 'estatus', name: 'Estatus', title: 'Estatus',
                     render: function (data, type, row) {
-                        return data == true ?
+                        return data == 1 ?
                             "<span class='badge badge-light-success' >Activo</span>" : "<span class='badge badge-light-danger' >Desactivado</span>";
                     }
                 },

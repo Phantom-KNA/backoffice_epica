@@ -43,6 +43,7 @@ builder.Services.AddScoped<IUserResolver, UserResolver>();
 builder.Services.AddScoped<IServiceAuth, ServiceAuth>();
 builder.Services.AddScoped<ITransaccionesApiClient, TransaccionesApiClient>();
 builder.Services.AddScoped<ICuentaApiClient, CuentaApiClient>();
+builder.Services.AddScoped<IUsuariosApiClient, UsuariosApiClient>();
 
 builder.Services.AddSession(options =>
 {

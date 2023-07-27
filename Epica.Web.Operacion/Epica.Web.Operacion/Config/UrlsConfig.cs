@@ -14,7 +14,7 @@ public class UrlsConfig
 
     public class TransaccionesOperations
     {
-        public static string GetTransacciones() => $"/api/resumentransaccion";
+        public static string GetTransacciones(int numberPage, int TotalRecords) => $"/api/v1/transacciones/movimientos_cta?pageNumber={numberPage}&pageSize={TotalRecords}";
         public static string GetTransaccion(int idInterno) => $"/api/resumentransaccion?idInterno={idInterno}";
     }
 
