@@ -253,8 +253,9 @@ function pruebas(id) {
             var buttonsSubTable = document.querySelectorAll('[data-kt-docs-datatable-subtable="expand_row"]');
             buttonsSubTable.forEach((button, index) => {
                 button.addEventListener('click', e => {
-                    //e.stopImmediatePropagation();
-                    //e.preventDefault();
+                    e.stopImmediatePropagation();
+                    e.preventDefault();
+                    console.log('oper');
                     var row = button.closest('tr');
                     var rowClasses = ['isOpen', 'border-bottom-0'];
 
@@ -271,20 +272,20 @@ function pruebas(id) {
                             var newTemplate = template.cloneNode(true);
 
                             // Select data elements
-                            var id = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_id"]');
                             var numcuenta = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_numero_cuenta"]');
                             var cliente = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_cliente"]');
                             var estatus = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_estatus"]');
-                            var saldo = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_saldo"]');
-                            var tipo = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_tipo"]');
+                            var mediopago = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_medio_pago"]');
+                            var noreferencia = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_numero_referencia"]');
+                            var fechadato = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_fecha"]');
 
                             // Mapeo de Datos
-                            id.innerText = d.idCuenta;
                             numcuenta.innerText = d.noCuenta;
                             cliente.innerText = d.nombrePersona;
                             estatus.innerHTML = d.estatus == 1 ? "<span class='badge badge-light-success'>Activo</span>" : "<span class='badge badge-light-danger'>Desactivado</span>";
-                            saldo.innerText = accounting.formatMoney(d.saldo);
-                            tipo.innerText = d.tipoPersona;
+                            mediopago.innerText = "Transferencia";
+                            noreferencia.innerText = "0020302030405020";
+                            fechadato.innerText = "27/07/2023";
 
                             if (data.length === 1) {
                                 let borderClasses = ['rounded', 'rounded-end-0'];
