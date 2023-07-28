@@ -21,26 +21,26 @@ namespace Epica.Web.Operacion.Services.Transaccion
         {
         }
 
-        public async Task<List<CuentasResponse>> GetCuentasAsync()
+        public async Task<List<CuentasResponse>> GetCuentasAsync(int pageNumber, int recordsTotal)
         {
-            //URL de pruebas
-            HttpClient ApiClient = new HttpClient();
+
             List<CuentasResponse>? ListaCuentas = new List<CuentasResponse>();
 
             try
             {
-                ApiClient.BaseAddress = new Uri("https://localhost:44308/");
-                //ApiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserResolver.GetToken());
-                var url = "https://localhost:44308/" + "api/cuentas";
-                var response = await ApiClient.GetAsync(url);
+                var uri = Urls.Transaccion + UrlsConfig.CuentasOperations.GetCuentas(pageNumber, recordsTotal);
+                var response = await ApiClient.GetAsync(uri);
 
                 if (response.IsSuccessStatusCode)
                 {
+                    response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
                     ListaCuentas = JsonConvert.DeserializeObject<List<CuentasResponse>>(jsonResponse);
                 }
 
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 return ListaCuentas;
             }
 

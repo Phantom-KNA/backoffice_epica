@@ -50,7 +50,7 @@ public class CuentaController : Controller
         var gridData = new ResponseGrid<CuentasResponseGrid>();
         List<CuentasResponse> ListPF = new List<CuentasResponse>();
 
-        ListPF = await _cuentaApiClient.GetCuentasAsync();
+        ListPF = await _cuentaApiClient.GetCuentasAsync(1,100);
 
         //Entorno local de pruebas
         //ListPF = GetList();
@@ -60,53 +60,53 @@ public class CuentaController : Controller
         {
             List.Add(new CuentasResponseGrid
             {
-                Id = row.Id,
-                cliente = row.cliente,
+                idCuenta = row.idCuenta,
+                nombrePersona = row.nombrePersona,
                 noCuenta = row.noCuenta,
                 saldo = row.saldo,
                 estatus = row.estatus,
-                tipo = row.tipo,
+                tipoPersona = row.tipoPersona,
                 Acciones = await this.RenderViewToStringAsync("~/Views/Cuenta/_Acciones.cshtml", row)
             });
         }
 
         //Aplicacion de Filtros temporal, 
-        var filtroid = filters.FirstOrDefault(x => x.Key == "Id");
-        var filtronombreCliente = filters.FirstOrDefault(x => x.Key == "NombreCliente");
-        var filtroNoCuenta = filters.FirstOrDefault(x => x.Key == "noCuenta");
-        var filtroEstatus = filters.FirstOrDefault(x => x.Key == "estatus");
-        var filtroSaldo = filters.FirstOrDefault(x => x.Key == "saldo");
-        var filtroTipo = filters.FirstOrDefault(x => x.Key == "tipo");
+        //var filtroid = filters.FirstOrDefault(x => x.Key == "Id");
+        //var filtronombreCliente = filters.FirstOrDefault(x => x.Key == "NombreCliente");
+        //var filtroNoCuenta = filters.FirstOrDefault(x => x.Key == "noCuenta");
+        //var filtroEstatus = filters.FirstOrDefault(x => x.Key == "estatus");
+        //var filtroSaldo = filters.FirstOrDefault(x => x.Key == "saldo");
+        //var filtroTipo = filters.FirstOrDefault(x => x.Key == "tipo");
 
-        if (filtroid.Value != null)
-        {
-            List = List.Where(x => x.Id == Convert.ToInt32(filtroid.Value)).ToList();
-        }
+        //if (filtroid.Value != null)
+        //{
+        //    List = List.Where(x => x.Id == Convert.ToInt32(filtroid.Value)).ToList();
+        //}
 
-        if (filtronombreCliente.Value != null)
-        {
-            List = List.Where(x => x.cliente.Contains(Convert.ToString(filtronombreCliente.Value))).ToList();
-        }
+        //if (filtronombreCliente.Value != null)
+        //{
+        //    List = List.Where(x => x.cliente.Contains(Convert.ToString(filtronombreCliente.Value))).ToList();
+        //}
 
-        if (filtroNoCuenta.Value != null)
-        {
-            List = List.Where(x => x.noCuenta == Convert.ToString(filtroNoCuenta.Value)).ToList();
-        }
+        //if (filtroNoCuenta.Value != null)
+        //{
+        //    List = List.Where(x => x.noCuenta == Convert.ToString(filtroNoCuenta.Value)).ToList();
+        //}
 
-        if (filtroEstatus.Value != null)
-        {
-            List = List.Where(x => x.estatus == Convert.ToString(filtroEstatus.Value)).ToList();
-        }
+        //if (filtroEstatus.Value != null)
+        //{
+        //    List = List.Where(x => x.estatus == Convert.ToString(filtroEstatus.Value)).ToList();
+        //}
 
-        if (filtroSaldo.Value != null)
-        {
-            List = List.Where(x => x.saldo == Convert.ToString(filtroSaldo.Value)).ToList();
-        }
+        //if (filtroSaldo.Value != null)
+        //{
+        //    List = List.Where(x => x.saldo == Convert.ToString(filtroSaldo.Value)).ToList();
+        //}
 
-        if (filtroTipo.Value != null)
-        {
-            List = List.Where(x => x.tipo == Convert.ToString(filtroTipo.Value)).ToList();
-        }
+        //if (filtroTipo.Value != null)
+        //{
+        //    List = List.Where(x => x.tipo == Convert.ToString(filtroTipo.Value)).ToList();
+        //}
 
         gridData.Data = List;
         gridData.RecordsTotal = List.Count;
@@ -121,7 +121,7 @@ public class CuentaController : Controller
     [HttpPost]
     public async Task<JsonResult> ConsultarSubCuentas()
     {
-        var ListPF = await _cuentaApiClient.GetCuentasAsync();
+        var ListPF = await _cuentaApiClient.GetCuentasAsync(1,5);
         //var ListPF = GetList();
         return Json(ListPF);
     }
@@ -155,20 +155,6 @@ public class CuentaController : Controller
     #endregion
 
     #region "Modelos"
-    public class CuentasResponse
-    {
-        public long Id { get; set; }
-        public string noCuenta { get; set; }
-        public string cliente { get; set; }
-        public string estatus { get; set; }
-        public string saldo { get; set; }
-        public string tipo { get; set; }
-    }
-
-    public class CuentasResponseGrid : CuentasResponse
-    {
-        public string Acciones { get; set; }
-    }
 
     public class GenerarNombreResponse
     {
@@ -230,12 +216,12 @@ public class CuentaController : Controller
                 var gen = generarnombre(i);
 
                 var pf = new CuentasResponse();
-                pf.Id = i;
-                pf.cliente = gen.NombreCompleto;
+                pf.idCuenta = i;
+                pf.nombrePersona = gen.NombreCompleto;
                 pf.noCuenta = string.Format("465236478963245{0}", i);
-                pf.saldo = rnd.Next(0001, 99999).ToString("C2");
-                pf.estatus = "Activo";
-                pf.tipo = "Credito";
+                pf.saldo = Convert.ToDecimal(rnd.Next(0001, 99999).ToString("C2"));
+                pf.estatus = 1;
+                pf.tipoPersona = "Persona fisica";
 
                 List.Add(pf);
             }

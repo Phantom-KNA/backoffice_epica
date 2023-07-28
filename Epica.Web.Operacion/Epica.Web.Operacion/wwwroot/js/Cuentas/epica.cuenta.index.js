@@ -64,13 +64,13 @@ var KTDatatableRemoteAjax = function () {
                 "targets": "_all"
             }],
             columns: [
-                { data: 'id', name: 'id', title: 'ID' },
+                { data: 'idCuenta', name: 'idCuenta', title: 'ID' },
                 { data: 'noCuenta', name: 'NoCuenta', title: 'Numero de Cuenta' },
-                { data: 'cliente', name: 'Cliente', title: 'Cliente' },
+                { data: 'nombrePersona', name: 'nombrePersona', title: 'Cliente' },
                 {
                     data: 'estatus', name: 'Estatus', title: 'Estatus',
                     render: function (data, type, row) {
-                        return data == "1" ?
+                        return data == 1 ?
                             "<span class='badge badge-light-success' >Activo</span>" : "<span class='badge badge-light-danger' >Desactivado</span>";
                     }
                 },
@@ -81,11 +81,7 @@ var KTDatatableRemoteAjax = function () {
                     }
                 },
                 {
-                    data: 'tipo', name: 'Tipo', title: 'Tipo',
-                    render: function (data, type, row) {
-                        return data == "1" ?
-                            "Credito" : "Debito";
-                    }
+                    data: 'tipoPersona', name: 'Tipo', title: 'Tipo Persona'
                 },
                 {
                     title: '',
@@ -283,12 +279,12 @@ function pruebas(id) {
                             var tipo = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_tipo"]');
 
                             // Mapeo de Datos
-                            id.innerText = d.id;
+                            id.innerText = d.idCuenta;
                             numcuenta.innerText = d.noCuenta;
-                            cliente.innerText = d.cliente;
-                            estatus.innerHTML = d.estatus == "1" ? "<span class='badge badge-light-success'>Activo</span>" : "<span class='badge badge-light-danger'>Desactivado</span>";
+                            cliente.innerText = d.nombrePersona;
+                            estatus.innerHTML = d.estatus == 1 ? "<span class='badge badge-light-success'>Activo</span>" : "<span class='badge badge-light-danger'>Desactivado</span>";
                             saldo.innerText = accounting.formatMoney(d.saldo);
-                            tipo.innerText = d.tipo == "1" ? "Credito" : "Debito";
+                            tipo.innerText = d.tipoPersona;
 
                             if (data.length === 1) {
                                 let borderClasses = ['rounded', 'rounded-end-0'];

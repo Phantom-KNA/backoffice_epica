@@ -18,6 +18,11 @@ public class UrlsConfig
         public static string GetTransaccion(int idInterno) => $"/api/resumentransaccion?idInterno={idInterno}";
     }
 
+    public class CuentasOperations
+    {
+        public static string GetCuentas(int numberPage, int TotalRecords) => $"/api/v1/cuentas/cliente_vista?pageNumber={numberPage}&pageSize={TotalRecords}";
+    }
+
     public string Authenticate { get; set; }
     public string Transaccion { get; set; }
 }

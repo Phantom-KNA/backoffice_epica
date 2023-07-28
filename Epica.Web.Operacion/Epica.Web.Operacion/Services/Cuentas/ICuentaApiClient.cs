@@ -5,6 +5,6 @@ namespace Epica.Web.Operacion.Services.Transaccion
 {
     public interface ICuentaApiClient
     {
-        Task<List<CuentasResponse>> GetCuentasAsync();
+        Task<List<CuentasResponse>> GetCuentasAsync(int pageNumber, int recordsTotal);
     }
 }
