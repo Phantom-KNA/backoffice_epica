@@ -26,12 +26,10 @@ namespace Epica.Web.Operacion.Services.Login
 
             try
             {
-                //var uri = Urls.Transaccion + UrlsConfig.LoginOperations.GetCredentials(loginRequest.User ?? "", loginRequest.Password ?? "");
-                var apiClient = new HttpClient();
-                apiClient.DefaultRequestHeaders.Add("Api-Key", "tmfiiA3sCEe9Ybf4GL5D8gqlN0BOtWakmgvD1yHF6BhA");
+                var uri = Urls.Transaccion + UrlsConfig.LoginOperations.GetCredentials();
                 var jsonRequest = JsonConvert.SerializeObject(loginRequest);
                 var httpContent = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
-                var response = await apiClient.PostAsync(Urls.Transaccion + UrlsConfig.LoginOperations.GetCredentials(), httpContent);
+                var response = await ApiClient.PostAsync(uri, httpContent);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -49,7 +47,7 @@ namespace Epica.Web.Operacion.Services.Login
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 loginResponse.IsAuthenticated = false;
 

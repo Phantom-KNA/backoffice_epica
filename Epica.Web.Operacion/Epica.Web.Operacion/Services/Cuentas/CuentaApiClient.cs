@@ -53,10 +53,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
             try
             {
                 var uri = Urls.Transaccion + UrlsConfig.CuentasOperations.GetCuentasTotal();
-                var apiClient = new HttpClient();
-                apiClient.DefaultRequestHeaders.Add("Api-Key", "tmfiiA3sCEe9Ybf4GL5D8gqlN0BOtWakmgvD1yHF6BhA");
-
-                var response = await apiClient.GetAsync(uri);
+                var response = await ApiClient.GetAsync(uri);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -66,7 +63,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return result;
             }
