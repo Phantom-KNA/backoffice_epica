@@ -48,5 +48,32 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
             return ListaUsuarios;
         }
+
+        public async Task<int> GetTotalUsuariosAsync()
+        {
+            int result = 0;
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.UsuariosOperations.GetUsuariosTotal();
+                var apiClient = new HttpClient();
+                apiClient.DefaultRequestHeaders.Add("Api-Key", "tmfiiA3sCEe9Ybf4GL5D8gqlN0BOtWakmgvD1yHF6BhA");
+
+                var response = await apiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    result = int.Parse(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return result;
+            }
+
+            return result;
+        }
     }
 }
