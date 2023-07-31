@@ -119,9 +119,9 @@ public class CuentaController : Controller
     }
 
     [HttpPost]
-    public async Task<JsonResult> ConsultarSubCuentas()
+    public async Task<JsonResult> ConsultarSubCuentas(int id)
     {
-        var ListPF = await _cuentaApiClient.GetCuentasAsync(1,5);
+        var ListPF = await _cuentaApiClient.GetCobranzaReferenciadaAsync(24);
         //var ListPF = GetList();
         return Json(ListPF);
     }

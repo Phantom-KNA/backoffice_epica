@@ -46,5 +46,36 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
             return ListaCuentas;
         }
+
+        public async Task<List<CobranzaReferenciadaResponse>> GetCobranzaReferenciadaAsync(int id)
+        {
+
+            List<CobranzaReferenciadaResponse>? ListaCobranza = new List<CobranzaReferenciadaResponse>();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.CuentasOperations.GetCobranzaReferenciada(id);
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var settings = new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+                    ListaCobranza = JsonConvert.DeserializeObject<List<CobranzaReferenciadaResponse>>(jsonResponse, settings);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return ListaCobranza;
+            }
+
+            return ListaCobranza;
+        }
     }
 }

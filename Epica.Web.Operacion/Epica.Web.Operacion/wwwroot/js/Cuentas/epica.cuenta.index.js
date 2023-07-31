@@ -236,7 +236,7 @@ jQuery(document).ready(function () {
     KTDatatableRemoteAjax.init();
 });
 
-function pruebas(id) {
+function pruebas(idAccount) {
 
     var dataInfo = []; 
     dataInfo.length = 0;
@@ -245,9 +245,8 @@ function pruebas(id) {
         url: siteLocation + 'Cuenta/ConsultarSubCuentas',
         async: true,
         cache: false,
-        contentType: false,
-        processData: false,
         type: 'POST',
+        data: { 'id': idAccount },
         success: function (data) {
             
             var buttonsSubTable = document.querySelectorAll('[data-kt-docs-datatable-subtable="expand_row"]');
@@ -255,7 +254,7 @@ function pruebas(id) {
                 button.addEventListener('click', e => {
                     e.stopImmediatePropagation();
                     e.preventDefault();
-                    console.log('oper');
+
                     var row = button.closest('tr');
                     var rowClasses = ['isOpen', 'border-bottom-0'];
 
@@ -266,7 +265,7 @@ function pruebas(id) {
                         row.classList.remove(...rowClasses);
                         button.classList.remove('active');
                     } else {
-
+                        console.log(data);
                         data.forEach((d, index) => {
                             // Clone template node
                             var newTemplate = template.cloneNode(true);
@@ -279,13 +278,14 @@ function pruebas(id) {
                             var noreferencia = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_numero_referencia"]');
                             var fechadato = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_fecha"]');
 
+                            console.log(d);
                             // Mapeo de Datos
-                            numcuenta.innerText = d.noCuenta;
-                            cliente.innerText = d.nombrePersona;
+                            numcuenta.innerText = d.noCuentaPadre;
+                            cliente.innerText = d.nombre;
                             estatus.innerHTML = d.estatus == 1 ? "<span class='badge badge-light-success'>Activo</span>" : "<span class='badge badge-light-danger'>Desactivado</span>";
-                            mediopago.innerText = "Transferencia";
-                            noreferencia.innerText = "0020302030405020";
-                            fechadato.innerText = "27/07/2023";
+                            mediopago.innerText = d.idMedioPago;
+                            noreferencia.innerText = d.numeroReferencia;
+                            fechadato.innerText = d.fechaAlta;
 
                             if (data.length === 1) {
                                 let borderClasses = ['rounded', 'rounded-end-0'];
