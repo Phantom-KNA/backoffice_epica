@@ -1,22 +1,51 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Epica.Web.Operacion.Models.Request;
+using Epica.Web.Operacion.Services.Login;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Epica.Web.Operacion.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly ILoginApiClient _loginApiClient;
+
+        public AccountController(ILoginApiClient loginApiClient) 
+        {
+            _loginApiClient = loginApiClient;
+        }
+
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         [HttpGet]
         public IActionResult Login()
         {
             return View("~/Views/Account/Login.cshtml");
         }
 
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         [HttpPost]
-        public IActionResult Login(string username = "", string password = "")
+        public async Task<ActionResult> Login(string username, string password)
         {
-            HttpContext.Session.SetString("CurrentSession", "Ok");
-            return RedirectToAction("Index", "Home");
+            var loginRequest = new LoginRequest
+            {
+                User = username,
+                Password = password
+            };
+
+            var loginResponse = await _loginApiClient.GetCredentialsAsync(loginRequest);
+
+            if (loginResponse.IsAuthenticated)
+            {
+                HttpContext.Session.SetString("CurrentSession", "Ok");
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "Nombre de usuario o contraseña inválidos.";
+                return View("~/Views/Account/Login.cshtml");
+            }
+
         }
 
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();

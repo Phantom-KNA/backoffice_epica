@@ -48,5 +48,29 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
             return ListaUsuarios;
         }
+
+        public async Task<int> GetTotalUsuariosAsync()
+        {
+            int result = 0;
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.UsuariosOperations.GetUsuariosTotal();
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    result = int.Parse(jsonResponse);
+                }
+
+            }
+            catch (Exception)
+            {
+                return result;
+            }
+
+            return result;
+        }
     }
 }

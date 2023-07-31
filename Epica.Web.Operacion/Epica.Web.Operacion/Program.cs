@@ -6,6 +6,7 @@ using Epica.Web.Operacion.Services.UserResolver;
 using Epica.Web.Operacion.Services.Authentication;
 using Epica.Web.Operacion.Services;
 using Epica.Web.Operacion.Services.Transaccion;
+using Epica.Web.Operacion.Services.Login;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>
@@ -44,6 +45,8 @@ builder.Services.AddScoped<IServiceAuth, ServiceAuth>();
 builder.Services.AddScoped<ITransaccionesApiClient, TransaccionesApiClient>();
 builder.Services.AddScoped<ICuentaApiClient, CuentaApiClient>();
 builder.Services.AddScoped<IUsuariosApiClient, UsuariosApiClient>();
+builder.Services.AddScoped<IUsuariosApiClient, UsuariosApiClient>();
+builder.Services.AddTransient<ILoginApiClient, LoginApiClient>();
 
 builder.Services.AddSession(options =>
 {

@@ -47,6 +47,30 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return ListaCuentas;
         }
 
+        public async Task<int> GetTotalCuentasAsync()
+        {
+            int result = 0;
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.CuentasOperations.GetCuentasTotal();
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    result = int.Parse(jsonResponse);
+                }
+
+            }
+            catch (Exception)
+            {
+                return result;
+            }
+
+            return result;
+        }
+
         public async Task<List<CobranzaReferenciadaResponse>> GetCobranzaReferenciadaAsync(int id)
         {
 

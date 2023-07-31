@@ -12,6 +12,20 @@ function validar2() {
     }
 }
 
+document.getElementById('kt_sign_in_form').addEventListener('keydown', function (event) {
+    if (event.key === 13) {
+        event.preventDefault();
+        document.getElementById('validacion').click();
+    }
+});
+
+document.getElementById('staticBackdrop').addEventListener('keydown', function (event) {
+    if (event.key === 13) {
+        event.preventDefault();
+        document.getElementById('kt_sign_in_submit').click();
+    }
+});
+
 var signin = function () {
     var form;
     var btnSubmit;

@@ -53,5 +53,29 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
             return JsonConvert.DeserializeObject<TransaccionesResponse>(stringResponse);
         }
+
+        public async Task<int> GetTotalTransaccionesAsync()
+        {
+            int result = 0;
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetTransaccionesTotal();
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    result = int.Parse(jsonResponse);
+                }
+
+            }
+            catch (Exception)
+            {
+                return result;
+            }
+
+            return result;
+        }
     }
 }

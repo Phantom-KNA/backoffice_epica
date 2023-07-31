@@ -14,13 +14,13 @@ namespace Epica.Web.Operacion.Controllers;
 public class UsuariosController : Controller
 {
     #region "Locales"
-    private readonly IUsuariosApiClient _usuriosApiClient;
+    private readonly IUsuariosApiClient _usuariosApiClient;
     #endregion
 
     #region "Constructores"
     public UsuariosController(IUsuariosApiClient usuariosApiClient)
     {
-        _usuriosApiClient = usuariosApiClient;
+        _usuariosApiClient = usuariosApiClient;
     }
     #endregion
 
@@ -32,6 +32,16 @@ public class UsuariosController : Controller
     public IActionResult Registro()
     {
         return View("~/Views/Usuarios/Registro.cshtml");
+    }
+
+    [Route("Usuarios/Detalle/Cuentas")]
+    public IActionResult Cuentas(long id)
+    {
+        ViewBag.UrlView = "Cuentas";
+        var Info = GetList().FirstOrDefault(x => x.id == id);
+        ViewBag.Info = Info;
+        ViewBag.Nombre = Info.nombreCompleto;
+        return View("~/Views/Usuarios/Detalle/Cuenta/DetalleCuentas.cshtml");
     }
 
     [HttpPost]
@@ -55,7 +65,7 @@ public class UsuariosController : Controller
         var gridData = new ResponseGrid<UserResponseGrid>();
         List<UserResponse> ListPF = new List<UserResponse>();
 
-        ListPF = await _usuriosApiClient.GetUsuariosAsync(1,200);
+        ListPF = await _usuariosApiClient.GetUsuariosAsync(1,200);
 
         //Entorno local de pruebas
         //ListPF = GetList();
@@ -129,7 +139,7 @@ public class UsuariosController : Controller
     [HttpPost]
     public async Task<JsonResult> ConsultarSubCuentas()
     {
-        var ListPF = await _usuriosApiClient.GetUsuariosAsync(1,200);
+        var ListPF = await _usuariosApiClient.GetUsuariosAsync(1,200);
         //var ListPF = GetList();
         return Json(ListPF);
     }

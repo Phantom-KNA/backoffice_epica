@@ -6,5 +6,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
     public interface IUsuariosApiClient
     {
         Task<List<UserResponse>> GetUsuariosAsync(int pageNumber, int recordsTotal);
+        Task<int> GetTotalUsuariosAsync();
+
     }
 }
