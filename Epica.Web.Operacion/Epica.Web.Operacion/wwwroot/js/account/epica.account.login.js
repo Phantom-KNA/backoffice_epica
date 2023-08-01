@@ -13,16 +13,13 @@ function validar2() {
 }
 
 document.getElementById('kt_sign_in_form').addEventListener('keydown', function (event) {
-    if (event.key === 13) {
+    if (event.key === 'Enter') {
         event.preventDefault();
-        document.getElementById('validacion').click();
-    }
-});
-
-document.getElementById('staticBackdrop').addEventListener('keydown', function (event) {
-    if (event.key === 13) {
-        event.preventDefault();
-        document.getElementById('kt_sign_in_submit').click();
+        if (document.getElementById('staticBackdrop').classList.contains('show')) {
+            document.getElementById('kt_sign_in_submit').click();
+        } else {
+            document.getElementById('validacion').click();
+        }
     }
 });
 
