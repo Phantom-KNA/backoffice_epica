@@ -241,30 +241,31 @@ function pruebas(idAccount) {
     var dataInfo = []; 
     dataInfo.length = 0;
 
-    $.ajax({
-        url: siteLocation + 'Cuenta/ConsultarSubCuentas',
-        async: true,
-        cache: false,
-        type: 'POST',
-        data: { 'id': idAccount },
-        success: function (data) {
-            
-            var buttonsSubTable = document.querySelectorAll('[data-kt-docs-datatable-subtable="expand_row"]');
-            buttonsSubTable.forEach((button, index) => {
-                button.addEventListener('click', e => {
-                    e.stopImmediatePropagation();
-                    e.preventDefault();
+    var buttonsSubTable = document.querySelectorAll('[data-kt-docs-datatable-subtable="expand_row"]');
+    buttonsSubTable.forEach((button, index) => {
+        button.addEventListener('click', e => {
+            e.stopImmediatePropagation();
+            e.preventDefault();
 
-                    var row = button.closest('tr');
-                    var rowClasses = ['isOpen', 'border-bottom-0'];
+            var row = button.closest('tr');
+            var rowClasses = ['isOpen', 'border-bottom-0'];
 
-                    if (row.classList.contains('isOpen')) {
-                        while (row.nextSibling && row.nextSibling.getAttribute('data-kt-docs-datatable-subtable') === 'subtable_template') {
-                            row.nextSibling.parentNode.removeChild(row.nextSibling);
-                        }
-                        row.classList.remove(...rowClasses);
-                        button.classList.remove('active');
-                    } else {
+            if (row.classList.contains('isOpen')) {
+                while (row.nextSibling && row.nextSibling.getAttribute('data-kt-docs-datatable-subtable') === 'subtable_template') {
+                    row.nextSibling.parentNode.removeChild(row.nextSibling);
+                }
+                row.classList.remove(...rowClasses);
+                button.classList.remove('active');
+            } else {
+
+                $.ajax({
+                    url: siteLocation + 'Cuenta/ConsultarSubCuentas',
+                    async: true,
+                    cache: false,
+                    type: 'POST',
+                    data: { 'id': idAccount },
+                    success: function (data) {
+
                         console.log(data);
                         data.forEach((d, index) => {
                             // Clone template node
@@ -278,11 +279,21 @@ function pruebas(idAccount) {
                             var noreferencia = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_numero_referencia"]');
                             var fechadato = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_fecha"]');
 
-                            console.log(d);
+                            console.log(d.estatus);
                             // Mapeo de Datos
                             numcuenta.innerText = d.noCuentaPadre;
                             cliente.innerText = d.nombre;
-                            estatus.innerHTML = d.estatus == 1 ? "<span class='badge badge-light-success'>Activo</span>" : "<span class='badge badge-light-danger'>Desactivado</span>";
+
+                            if (d.estatus == null) {
+                                estatus.innerHTML = "<span class='badge badge-light-warning'>En Proceso</span>"
+                            } else if (d.estatus == 0) {
+                                estatus.innerHTML = "<span class='badge badge-light-success'>Liquidado</span>"
+                            } else if (d.estatus == 1) {
+                                estatus.innerHTML = "<span class='badge badge-light-danger'>Error</span>"
+                            } else {
+                                estatus.innerHTML = "<span class='badge badge-light-danger'>Error</span>"
+                            }
+                            //estatus.innerHTML = d.estatus == 1 ? "<span class='badge badge-light-success'>Activo</span>" : "<span class='badge badge-light-danger'>Desactivado</span>";
                             mediopago.innerText = d.idMedioPago;
                             noreferencia.innerText = d.numeroReferencia;
                             fechadato.innerText = d.fechaAlta;
@@ -319,8 +330,8 @@ function pruebas(idAccount) {
                         button.classList.add('active');
                     }
                 });
-            });
-        }
+            }
+        });
     });
 
 }

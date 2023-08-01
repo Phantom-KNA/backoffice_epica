@@ -47,6 +47,7 @@ builder.Services.AddScoped<ICuentaApiClient, CuentaApiClient>();
 builder.Services.AddScoped<IUsuariosApiClient, UsuariosApiClient>();
 builder.Services.AddScoped<IUsuariosApiClient, UsuariosApiClient>();
 builder.Services.AddTransient<ILoginApiClient, LoginApiClient>();
+builder.Services.AddScoped<ITarjetasApiClient, TarjetasApiClient>();
 
 builder.Services.AddSession(options =>
 {
