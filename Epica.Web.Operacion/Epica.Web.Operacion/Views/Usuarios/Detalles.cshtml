@@ -1,6 +1,7 @@
 ﻿@model Epica.Web.Operacion.Models.Response.UserResponse
+
 @{
-    ViewData["Title"] = "Crear nuevo usuario";
+    ViewData["Title"] = "Detalles de usuario";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -26,15 +27,15 @@
 <div class="col-md-12">
     <div class="card shadow-sm">
         <div class="card-header">
-            <h3 class="card-title">Crear nuevo usuario</h3>
+            <h3 class="card-title">Detalles de usuario</h3>
             <div class="separator separator-dashed border-light-secondary my-2"></div>
             <div class="card-toolbar">
                 <button href="javascript:void(0)" onclick="history.back();" type="button" class="btn btn-sm btn-light-primary me-2">
                     Cancelar
                 </button>
-                <button type="button" class="btn btn-sm btn-light-primary" id="btnGuardarUsuario">
-                    Guardar
-                </button>
+                <a data-id="@Model.id" asp-route-id="@Model.id" asp-action="Modificar" asp-controller="Usuarios" class="btn btn-sm btn-primary me-3">
+                    <i class="bi bi-plus-lg"></i>&nbsp;Modificar
+                </a>
             </div>
         </div>
         <div class="card-body pt-5">
@@ -42,19 +43,19 @@
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label required">Nombre: &nbsp;</label>
                     <div class="position-relative">
-                        <input name="Nombre" class="form-control form-control-sm form-control-solid" type="text" value="@(Model?.nombreCompleto ?? "")" />
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly value="@(@Model?.nombreCompleto ?? "")" />
                     </div>
                 </div>
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label required">Apellido paterno: &nbsp;</label>
                     <div class="position-relative">
-                        <input name="ApellidoPaterno" class="form-control form-control-sm form-control-solid" type="text" value="@(Model?.nombreCompleto ?? "")" />
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly value="@(Model?.nombreCompleto ?? "")" />
                     </div>
                 </div>
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label required">Email: &nbsp;</label>
                     <div class="position-relative">
-                        <input name="Email" class="form-control form-control-sm form-control-solid" type="email" value="@(Model?.email ?? "")" />
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly value="@(Model?.email ?? "")" />
                     </div>
                 </div>
             </div>
@@ -63,19 +64,19 @@
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label required">Curp: &nbsp;</label>
                     <div class="position-relative">
-                        <input name="Curp" class="form-control form-control-sm form-control-solid" type="text" value="@(Model?.CURP ?? "")" />
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly value="@(Model?.CURP ?? "")" />
                     </div>
                 </div>
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label required">RFC: &nbsp;</label>
                     <div class="position-relative">
-                        <input name="RFC" class="form-control form-control-sm form-control-solid" type="text"/>
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly />
                     </div>
                 </div>
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label required">INE: &nbsp;</label>
                     <div class="position-relative">
-                        <input name="INE" class="form-control form-control-sm form-control-solid" type="text" />
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly />
                     </div>
                 </div>
             </div>
@@ -84,76 +85,40 @@
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label required">Fecha Nacimiento: &nbsp;</label>
                     <div class="position-relative">
-                        <input name="FechaNacimiento" class="form-control form-control-sm form-control-solid datepicker-js" type="text" />
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly />
                     </div>
                 </div>
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label">Observaciones: &nbsp;</label>
                     <div class="position-relative">
-                        <textarea name="Observaciones" class="form-control form-control-sm form-control-solid" rows="2"></textarea>
+                        <textarea class="form-control form-control-sm form-control-solid" rows="2" type="text" readonly></textarea>
                     </div>
                 </div>
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label required">País Nacimiento: &nbsp;</label>
                     <div class="position-relative">
-                        <input name="PaisNacimiento" class="form-control form-control-sm form-control-solid" type="text" />
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly />
                     </div>
                 </div>
             </div>
 
             <div class="d-flex mb-6 mt-6">
                 <div class="py-2 px-4 col-md-4 fv-row">
-                    <label class="form-label">Sexo: &nbsp;</label>
+                    <label class="form-label required">Sexo: &nbsp;</label>
                     <div class="position-relative">
-                        <select name="Sexo" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción">
-                            <option></option>
-                            @{
-                                if (Model != null)
-                                {
-                                    if (Model.sexo == "M")
-                                    {
-                                        <option value="M" selected>M</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="M">M</option>
-                                    }
-                                    if (Model.sexo == "F")
-                                    {
-                                        <option value="F" selected>F</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="F">F</option>
-                                    }
-                                }
-                                else
-                                {
-                                    <option value="M">M</option>
-                                    <option value="F">F</option>
-                                }
-                            }
-                        </select>
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly value="@(Model?.sexo ?? "")" />
                     </div>
                 </div>
                 <div class="py-2 px-4 col-md-4 fv-row">
-                    <label class="form-label">Ocupación: &nbsp;</label>
+                    <label class="form-label required">Ocupación: &nbsp;</label>
                     <div class="position-relative">
-                    <select class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción">
-                        <option></option>
-                        <option value="1">Option 1</option>
-                        <option value="2">Option 2</option>
-                    </select>
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly />
                     </div>
                 </div>
                 <div class="py-2 px-4 col-md-4 fv-row">
-                    <label class="form-label">Nacionalidad: &nbsp;</label>
+                    <label class="form-label required">Nacionalidad: &nbsp;</label>
                     <div class="position-relative">
-                    <select class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción">
-                        <option></option>
-                        <option value="1">Option 1</option>
-                        <option value="2">Option 2</option>
-                    </select>
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly />
                     </div>
                 </div>
             </div>
@@ -162,24 +127,20 @@
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label">Fiel: &nbsp;</label>
                     <div class="position-relative">
-                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly />
                     </div>
                 </div>
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label">País: &nbsp;</label>
                     <div class="position-relative">
-                    <select class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción">
-                        <option></option>
-                        <option value="1">Option 1</option>
-                        <option value="2">Option 2</option>
-                    </select>
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly />
                     </div>
                 </div>
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label">Ingreso Mensual: &nbsp;</label>
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="basic-addon1">$</span>
-                        <input type="text" class="form-control" aria-describedby="basic-addon1" />
+                        <input type="text" class="form-control" aria-describedby="basic-addon1" readonly />
                     </div>
                 </div>
             </div>
@@ -189,19 +150,19 @@
                     <label class="form-label">Monto Máximo: &nbsp;</label>
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="basic-addon2">$</span>
-                        <input type="text" class="form-control" aria-describedby="basic-addon2" />
+                        <input type="text" class="form-control" aria-describedby="basic-addon2" readonly />
                     </div>
                 </div>
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label required">Teléfono: &nbsp;</label>
                     <div class="position-relative">
-                        <input class="form-control form-control-sm form-control-solid" type="text" value="@(Model?.telefono ?? "")" />
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly value="@(Model?.telefono ?? "")" />
                     </div>
                 </div>
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label required">Calle: &nbsp;</label>
                     <div class="position-relative">
-                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly />
                     </div>
                 </div>
             </div>
@@ -210,19 +171,19 @@
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label">Calle Numero: &nbsp;</label>
                     <div class="position-relative">
-                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly />
                     </div>
                 </div>
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label">Primera Calle: &nbsp;</label>
                     <div class="position-relative">
-                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly />
                     </div>
                 </div>
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label">Segunda Calle: &nbsp;</label>
                     <div class="position-relative">
-                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly />
                     </div>
                 </div>
             </div>
@@ -231,19 +192,19 @@
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label required">Colonia: &nbsp;</label>
                     <div class="position-relative">
-                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly />
                     </div>
                 </div>
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label required">Delegacion/municipio: &nbsp;</label>
                     <div class="position-relative">
-                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly />
                     </div>
                 </div>
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label required">Código postal: &nbsp;</label>
                     <div class="position-relative">
-                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly />
                     </div>
                 </div>
             </div>
@@ -252,19 +213,19 @@
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label">Ciudad estado: &nbsp;</label>
                     <div class="position-relative">
-                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly />
                     </div>
                 </div>
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label">Calle Número: &nbsp;</label>
                     <div class="position-relative">
-                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly />
                     </div>
                 </div>
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label">Puesto: &nbsp;</label>
                     <div class="position-relative">
-                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly />
                     </div>
                 </div>
             </div>
@@ -273,23 +234,19 @@
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label">Empresa: &nbsp;</label>
                     <div class="position-relative">
-                    <select class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción">
-                        <option></option>
-                        <option value="1">Option 1</option>
-                        <option value="2">Option 2</option>
-                    </select>
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly value="@(Model?.organizacion ?? "")" />
                     </div>
                 </div>
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label">Apoderado Legal: &nbsp;</label>
                     <div class="position-relative">
-                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly />
                     </div>
                 </div>
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label">Rol: &nbsp;</label>
                     <div class="position-relative">
-                    <input class="form-control form-control-sm form-control-solid" type="text" />
+                        <input class="form-control form-control-sm form-control-solid" type="text" readonly />
                     </div>
                 </div>
             </div>

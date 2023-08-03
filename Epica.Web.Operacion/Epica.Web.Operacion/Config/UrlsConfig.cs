@@ -31,6 +31,7 @@ public class UrlsConfig
     public class UsuariosOperations
     {
         public static string GetUsuariosTotal() => $"/api/v1/usuarios/total";
+        public static string GetUsuario(int id) => $"/api/v1/usuarios/usuario?id={id}";
 
     }
 

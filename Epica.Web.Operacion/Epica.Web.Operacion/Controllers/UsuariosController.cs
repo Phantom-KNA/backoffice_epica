@@ -31,7 +31,33 @@ public class UsuariosController : Controller
     }
     public IActionResult Registro()
     {
+
         return View("~/Views/Usuarios/Registro.cshtml");
+    }
+
+    public async Task<ActionResult> Detalles(int id)
+    {
+        UserResponse user = await _usuariosApiClient.GetUsuarioAsync(id);
+        return View("~/Views/Usuarios/Detalles.cshtml", user);
+    }
+
+    public async Task<ActionResult> Modificar(int id)
+    {
+        try
+        {
+            UserResponse model = await _usuariosApiClient.GetUsuarioAsync(id);
+
+            if (model == null)
+            {
+                return RedirectToAction("Error404", "Error"); 
+            }
+
+            return View("~/Views/Usuarios/Registro.cshtml", model);
+        }
+        catch (Exception)
+        {
+            return RedirectToAction("Error", "Error");
+        }
     }
 
     [Route("Usuarios/Detalle/Cuentas")]
