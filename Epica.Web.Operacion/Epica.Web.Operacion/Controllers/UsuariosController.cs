@@ -31,7 +31,7 @@ public class UsuariosController : Controller
     }
     public IActionResult Registro()
     {
-
+        ViewBag.TituloForm = "Crear nuevo usuario";
         return View("~/Views/Usuarios/Registro.cshtml");
     }
 
@@ -43,6 +43,7 @@ public class UsuariosController : Controller
 
     public async Task<ActionResult> Modificar(int id)
     {
+        ViewBag.TituloForm = "Modificar usuario";
         try
         {
             UserResponse model = await _usuariosApiClient.GetUsuarioAsync(id);
