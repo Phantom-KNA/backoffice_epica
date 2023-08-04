@@ -72,5 +72,29 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
             return result;
         }
+
+        public async Task<UserResponse> GetUsuarioAsync(int id)
+        {
+            UserResponse? Usuario = new UserResponse();
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.UsuariosOperations.GetUsuario(id);
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    Usuario = JsonConvert.DeserializeObject<UserResponse>(jsonResponse);
+                }
+
+            }
+            catch (Exception)
+            {
+                return Usuario;
+            }
+
+            return Usuario;
+        }
     }
 }

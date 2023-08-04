@@ -30,6 +30,11 @@ public class TarjetasController : Controller
         return View();
     }
 
+    public IActionResult RegistroTarjetaUsuario()
+    {
+        return View("~/Views/Tarjetas/RegistroTarjetaUsuario.cshtml");
+    }
+
     [HttpPost]
     public async Task<JsonResult> Consulta(List<RequestListFilters> filters)
     {
