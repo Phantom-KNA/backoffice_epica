@@ -87,6 +87,20 @@ public class UsuariosController : Controller
                 Acciones = await this.RenderViewToStringAsync("~/Views/Usuarios/_Acciones.cshtml", row)
             });
         }
+        if (!string.IsNullOrEmpty(request.Busqueda))
+        {
+            List = List.Where( x =>
+            (x.id.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.nombreCompleto?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.telefono?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.email?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.CURP?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) || 
+            (x.organizacion?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.membresia?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.sexo?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
+            ).ToList();
+
+        }
 
         //Aplicacion de Filtros temporal, 
         //var filtroid = filters.FirstOrDefault(x => x.Key == "Id");

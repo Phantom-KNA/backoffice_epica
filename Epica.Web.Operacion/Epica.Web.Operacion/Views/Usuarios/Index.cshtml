@@ -55,54 +55,41 @@
 
                             <div class="px-7 py-5">
                                 <div class="mb-5">
-                                    <label class="form-label fs-5 fw-semibold mb-3">Clave de Rastreo:</label>
-                                    <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="claveRastreo" placeholder="Clave de Rastreo" id="filtro_clave_rastreo" />
+                                    <label class="form-label fs-5 fw-semibold mb-3">Id Usuario:</label>
+                                    <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="idUsuario" placeholder="ID de Usuario" id="filtro_idusuario" />
                                 </div>
                                 <div class="mb-5">
-                                    <label class="form-label fs-5 fw-semibold mb-3">Id Interno:</label>
-                                    <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="idInterno" placeholder="Id Interno" id="filtro_id_interno" />
+                                    <label class="form-label fs-5 fw-semibold mb-3">Nombre del Cliente:</label>
+                                    <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="idInterno" placeholder="Nombre del Cliente" id="filtro_nombre_cliente" />
                                 </div>
                                 <div class="mb-5">
-                                    <label class="form-label fs-5 fw-semibold mb-3">Nombre de la cuenta:</label>
-                                    <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreCuenta" placeholder="Nombre de la cuenta" id="filtro_nombre_cuenta" />
+                                    <label class="form-label fs-5 fw-semibold mb-3">Teléfono:</label>
+                                    <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="telefono" placeholder="Teléfono" id="filtro_telefono" />
                                 </div>
                                 <div class="mb-5">
-                                    <label class="form-label fs-5 fw-semibold mb-3">Institución:</label>
-                                    <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="institucion" placeholder="Institución" id="filtro_institucion" />
+                                    <label class="form-label fs-5 fw-semibold mb-3">Correo Electrónico:</label>
+                                    <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="correoElectronico" placeholder="Correo Electrónico" id="filtro_correo_electronico" />
                                 </div>
                                 <div class="mb-5">
-                                    <label class="form-label fs-5 fw-semibold mb-3">Monto:</label>
-                                    <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="monto" placeholder="Monto" id="filtro_monto" />
+                                    <label class="form-label fs-5 fw-semibold mb-3">CURP:</label>
+                                    <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="curp" placeholder="CURP" id="filtro_curp" />
                                 </div>
                                 <div class="mb-5">
-                                    <label class="form-label fs-5 fw-semibold mb-3">Estatus:</label>
-                                    <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="estatus" placeholder="Estatus" id="filtro_estatus" />
+                                    <label class="form-label fs-5 fw-semibold mb-3">Organización:</label>
+                                    <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="organizacion" placeholder="Organización" id="filtro_organizacion" />
                                 </div>
                                 <div class="mb-5">
-                                    <label class="form-label fs-5 fw-semibold mb-3">Concepto:</label>
-                                    <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="concepto" placeholder="Concepto" id="filtro_concepto" />
+                                    <label class="form-label fs-5 fw-semibold mb-3">Tipo de membresia:</label>
+                                    <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="tipoMembresia" placeholder="Tipo de Membresia" id="filtro_tipo_membresia" />
                                 </div>
                                 <div class="mb-5">
-                                    <label class="form-label fs-5 fw-semibold mb-3">Medio de Pago:</label>
-                                    <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="medioPago" placeholder="Medio de Pago" id="filtro_medio_pago" />
+                                    <label class="form-label fs-5 fw-semibold mb-3">Sexo:</label>
+                                    <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="sexo" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_sexo">
+                                        <option></option>
+                                        <option value="M">Masculino</option>
+                                        <option value="F">Femenino</option>
+                                    </select>
                                 </div>
-                                <div class="mb-5">
-                                    <label class="form-label fs-5 fw-semibold mb-3">Tipo:</label>
-                                    <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="tipo" placeholder="Tipo" id="filtro_tipo" />
-                                </div>
-                                <div class="mb-5">
-                                    <label class="form-label fs-5 fw-semibold mb-3">Fecha:</label>
-                                    <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="fecha" placeholder="Fecha" id="filtro_fecha" />
-                                </div>
-                                @*                                <div class="mb-5">
-                                <label class="form-label fs-5 fw-semibold mb-3">Tipo:</label>
-                                <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="tipo" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_tipo">
-                                <option></option>
-                                <option value="Credito">Credito</option>
-                                <option value="Debito">Debito</option>
-                                </select>
-                                </div>*@
-
                                 <div class="d-flex justify-content-end">
                                     <button type="reset" class="btn btn-sm btn-light btn-active-light-primary me-2 btn_limpiar_filtros" data-kt-menu-dismiss="true" data-kt-customer-table-filter="reset">Limpiar</button>
                                     <button type="submit" class="btn btn-sm btn-primary btn-filtrar" data-kt-menu-dismiss="true" data-kt-customer-table-filter="filter">Aplicar</button>
@@ -110,11 +97,6 @@
                             </div>
                         </div>
                         <div id="kt_datatable_buttons" class="d-none"></div>
-@*                        <button type="button" onclick="modalCrearTransaccion()" class="btn btn-sm btn-light-primary me-3">
-                            <i class="bi bi-plus"></i>
-                            &nbsp;
-                            Nuevo Usuario
-                        </button>*@
                         <a asp-action="Registro" asp-controller="Usuarios" class="btn btn-sm btn-primary me-3">
                             <i class="bi bi-plus-lg"></i>&nbsp;Nuevo Usuario
                         </a>

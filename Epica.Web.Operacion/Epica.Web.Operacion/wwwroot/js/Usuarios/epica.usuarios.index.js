@@ -129,38 +129,11 @@ var KTDatatableRemoteAjax = function () {
     }
 
     var handleSearchDatatable = function () {
-        const filterSearch = document.querySelector('[data-kt-customer-table-filter="search"]');
+        var filterSearch = document.getElementById('search_input');
         filterSearch.addEventListener('keyup', function (e) {
             datatable.search(e.target.value).draw();
         });
     }
-
-    //var handleFilterDatatable = () => {
-    //    // Select filter options
-    //    filterAccount = document.querySelectorAll('[data-kt-customer-table-filter="payment_type"] [name="payment_type"]');
-    //    const filterButton = document.querySelector('[data-kt-customer-table-filter="filter"]');
-
-    //    // Filter datatable on submit
-    //    filterButton.addEventListener('click', function () {
-    //        // Get filter values
-    //        //let paymentValue = '';
-
-    //        //// Get payment value
-    //        //filterAccount.forEach(r => {
-    //        //    if (r.checked) {
-    //        //        paymentValue = r.value;
-    //        //    }
-
-    //        //    // Reset payment value if "All" is selected
-    //        //    if (paymentValue === 'all') {
-    //        //        paymentValue = '';
-    //        //    }
-    //        //});
-
-    //        // Filter datatable --- official docs reference: https://datatables.net/reference/api/search()
-    //        datatable.search('4652364789632453').draw();
-    //    });
-    //}
 
     // Reset Filter
     var handleResetForm = () => {
