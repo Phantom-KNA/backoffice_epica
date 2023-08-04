@@ -32,6 +32,7 @@ public class UrlsConfig
     {
         public static string GetUsuariosTotal() => $"/api/v1/usuarios/total";
         public static string GetUsuario(int id) => $"/api/v1/usuarios/usuario?id={id}";
+        public static string GetDocumentosUsuario(int idUsuario) => $"/api/v1/usuarios/Usuario_documento?idUsuario={idUsuario}";
 
     }
 

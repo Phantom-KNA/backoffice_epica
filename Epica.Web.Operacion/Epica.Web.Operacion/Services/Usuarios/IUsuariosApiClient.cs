@@ -8,6 +8,8 @@ namespace Epica.Web.Operacion.Services.Transaccion
         Task<List<UserResponse>> GetUsuariosAsync(int pageNumber, int recordsTotal);
         Task<int> GetTotalUsuariosAsync();
         Task<UserResponse> GetUsuarioAsync(int id);
+        Task<List<DocumentosUsuarioResponse>> GetDocumentosUsuarioAsync(int idUsuario);
+
 
     }
 }
