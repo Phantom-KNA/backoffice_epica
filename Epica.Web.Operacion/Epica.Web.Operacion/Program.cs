@@ -49,6 +49,8 @@ builder.Services.AddScoped<IUsuariosApiClient, UsuariosApiClient>();
 builder.Services.AddTransient<ILoginApiClient, LoginApiClient>();
 builder.Services.AddScoped<ITarjetasApiClient, TarjetasApiClient>();
 
+builder.Services.AddDistributedMemoryCache();
+
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(Convert.ToUInt32(builder.Configuration["TiempoExpiracionSesion"]));

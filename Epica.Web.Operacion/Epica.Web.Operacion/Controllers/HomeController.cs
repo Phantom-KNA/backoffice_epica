@@ -31,6 +31,7 @@ public class HomeController : Controller
         _transaccionesApiClient = transaccionesApiClient;
         _cuentaApiClient = cuentaApiClient;
     }
+
     [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public async Task<ActionResult> Index()
     {
@@ -51,6 +52,7 @@ public class HomeController : Controller
         }
     }
 
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public IActionResult Account()
     {
         return View();
