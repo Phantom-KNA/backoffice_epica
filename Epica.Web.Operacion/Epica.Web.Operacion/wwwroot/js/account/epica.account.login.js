@@ -1,9 +1,5 @@
 ﻿"use strict";
 
-document.addEventListener('DOMContentLoaded', function () {
-    var usernameField = document.getElementById('username');
-    usernameField.focus();
-});
 function validar2() {
     var user = document.getElementById("username").value;
     if (user.length <= 0) {
