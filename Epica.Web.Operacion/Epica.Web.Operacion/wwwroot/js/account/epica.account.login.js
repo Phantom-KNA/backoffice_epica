@@ -1,5 +1,9 @@
 ﻿"use strict";
 
+document.addEventListener('DOMContentLoaded', function () {
+    var usernameField = document.getElementById('username');
+    usernameField.focus();
+});
 function validar2() {
     var user = document.getElementById("username").value;
     if (user.length <= 0) {
@@ -114,6 +118,7 @@ var signin = function () {
 jQuery(document).ready(function () {
     document.querySelector("#validacion").disabled = true;
     signin.init();
+
     $('#staticBackdrop').on('shown.bs.modal', function () {
         $('#password').focus();
     });
