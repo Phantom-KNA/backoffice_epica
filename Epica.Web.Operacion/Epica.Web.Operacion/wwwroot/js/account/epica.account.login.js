@@ -114,4 +114,10 @@ var signin = function () {
 jQuery(document).ready(function () {
     document.querySelector("#validacion").disabled = true;
     signin.init();
+    $('#staticBackdrop').on('shown.bs.modal', function () {
+        $('#password').focus();
+    });
+    $('#staticBackdrop').on('hidden.bs.modal', function () {
+        $('#password').val('');
+    });
 });
