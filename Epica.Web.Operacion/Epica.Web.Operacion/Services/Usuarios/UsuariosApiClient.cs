@@ -23,18 +23,13 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
         public async Task<List<UserResponse>> GetUsuariosAsync(int pageNumber, int recordsTotal)
         {
-            //URL de pruebas
-            HttpClient ApiClient = new HttpClient();
+
             List<UserResponse>? ListaUsuarios = new List<UserResponse>();
 
             try
             {
-                
-                ApiClient.BaseAddress = new Uri("http://20.225.114.135/");
-                ApiClient.DefaultRequestHeaders.Add("Api-Key", "tmfiiA3sCEe9Ybf4GL5D8gqlN0BOtWakmgvD1yHF6BhA");
-                var parametros = string.Format("api/v1/usuarios/usuario_info?pageNumber={0}&pageSize={1}", pageNumber,recordsTotal);
-                var url = "http://20.225.114.135/" + parametros;
-                var response = await ApiClient.GetAsync(url);
+                var uri = Urls.Transaccion + UrlsConfig.UsuariosOperations.GetUsuarioInfo(pageNumber, recordsTotal);
+                var response = await ApiClient.GetAsync(uri);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -95,6 +90,31 @@ namespace Epica.Web.Operacion.Services.Transaccion
             }
 
             return Usuario;
+        }
+
+        public async Task<List<DocumentosUserResponse>> GetDocumentosUsuarioAsync(int id)
+        {
+            List<DocumentosUserResponse>? ListaDocumentosUsuario = new List<DocumentosUserResponse>();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.UsuariosOperations.GetUsuarioDocumentos(id);
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    ListaDocumentosUsuario = JsonConvert.DeserializeObject<List<DocumentosUserResponse>>(jsonResponse);
+                }
+
+            }
+            catch (Exception)
+            {
+                return ListaDocumentosUsuario;
+            }
+
+            return ListaDocumentosUsuario;
         }
     }
 }

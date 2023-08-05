@@ -1,4 +1,6 @@
-﻿namespace Epica.Web.Operacion.Config;
+﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+
+namespace Epica.Web.Operacion.Config;
 
 /// <summary>
 /// Esta clase  contiene las configuraciones de las URL utilizadas en la operación de autenticación.
@@ -32,7 +34,8 @@ public class UrlsConfig
     {
         public static string GetUsuariosTotal() => $"/api/v1/usuarios/total";
         public static string GetUsuario(int id) => $"/api/v1/usuarios/usuario?id={id}";
-
+        public static string GetUsuarioDocumentos(int id) => $"/api/v1/usuarios/usuario_documento?idUsuario={id}";
+        public static string GetUsuarioInfo(int pageNumber, int totalRecords) => $"/api/v1/usuarios/usuario_info?pageNumber={pageNumber}&pageSize={totalRecords}";
     }
 
     public class LoginOperations

@@ -103,14 +103,14 @@ var KTDatatableRemoteAjax = function () {
     };
 
     var exportButtons = () => {
-        const documentTitle = 'Cuentas';
+        const documentTitle = 'Usuarios';
         var buttons = new $.fn.dataTable.Buttons(table, {
             buttons: [
                 {
                     extend: 'excelHtml5',
                     title: documentTitle,
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5]
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
                     }
                 }
             ]

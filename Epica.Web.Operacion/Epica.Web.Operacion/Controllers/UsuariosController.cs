@@ -1,5 +1,6 @@
 ﻿using Epica.Web.Operacion.Config;
 using Epica.Web.Operacion.Models.Common;
+using Epica.Web.Operacion.Models.Entities;
 using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Services.UserResolver;
 using Epica.Web.Operacion.Utilities;
@@ -33,6 +34,26 @@ public class UsuariosController : Controller
     {
         ViewBag.TituloForm = "Crear nuevo usuario";
         return View("~/Views/Usuarios/Registro.cshtml");
+    }
+
+    public async Task<IActionResult> GestionarDocumentos(string AccountID = "")
+    {
+        if (AccountID == "")
+        {
+            return RedirectToAction("Index");
+        }
+
+        UserResponse GetDatosUsuario = await _usuariosApiClient.GetUsuarioAsync(Convert.ToInt32(AccountID));
+
+        ViewBag.AccountID = AccountID;
+
+        if (GetDatosUsuario.nombreCompleto == null) {
+            ViewBag.Nombre = "S/N";
+        } else {
+            ViewBag.Nombre = GetDatosUsuario.nombreCompleto;
+        }
+
+        return View();
     }
 
     public async Task<ActionResult> Detalles(int id)
@@ -185,6 +206,61 @@ public class UsuariosController : Controller
         return Json(ListPF);
     }
 
+    [HttpPost]
+    public async Task<JsonResult> ConsultarListadoDocumentos(string idAccount)
+    {
+
+        var gridData = new ResponseGrid<DocumentosUserResponseGrid>();
+
+        try
+        {
+            var request = new RequestList();
+
+            int totalRecord = 0;
+            int filterRecord = 0;
+
+            var draw = Request.Form["draw"].FirstOrDefault();
+            int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
+            int skip = Convert.ToInt32(Request.Form["start"].FirstOrDefault() ?? "0");
+
+            request.Pagina = skip / pageSize + 1;
+            request.Registros = pageSize;
+            request.Busqueda = Request.Form["search[value]"].FirstOrDefault();
+            request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+            request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
+
+            List<DocumentosUserResponse> ListPF = new List<DocumentosUserResponse>();
+            ListPF = await _usuariosApiClient.GetDocumentosUsuarioAsync(Convert.ToInt32(idAccount));
+
+            var List = new List<DocumentosUserResponseGrid>();
+            foreach (var row in ListPF)
+            {
+                List.Add(new DocumentosUserResponseGrid
+                {
+                    idCliente = row.idCliente,
+                    idDocApodLeg = row.idDocApodLeg,
+                    tipoDocumento = row.tipoDocumento,
+                    documento = row.documento,
+                    numeroIdentificacion = row.numeroIdentificacion,
+                    nombreDocumento = row.nombreDocumento,
+                    Acciones = await this.RenderViewToStringAsync("~/Views/Usuarios/_AccionesDocumentos.cshtml", row)
+                });
+            }
+
+            gridData.Data = List;
+            gridData.RecordsTotal = List.Count;
+            gridData.Data = gridData.Data.Skip(skip).Take(pageSize).ToList();
+            filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.Data.Count;
+            gridData.RecordsFiltered = filterRecord;
+            gridData.Draw = draw;
+
+        } catch (Exception ex) {
+            return Json(gridData);
+        }
+
+        return Json(gridData);
+    }
+
     #endregion
 
     #region "Modelos"
@@ -225,6 +301,20 @@ public class UsuariosController : Controller
         res.NombreCompleto = gen;
 
         return res;
+    }
+
+    private string generarNombreArchivo(int i)
+    {
+        Random rnd = new Random((int)DateTime.Now.Ticks);
+
+        i = i - 1;
+
+        String[] nombres = { "INE", "Comprobante de Domicilio", "RFC", "CURP", "CARNET" };
+        var genNombre = nombres[i];
+
+        String gen = genNombre;
+
+        return gen;
     }
 
     public static string GenNumeroTelefono(int length)
@@ -304,6 +394,35 @@ public class UsuariosController : Controller
         catch (Exception e)
         {
             List = new List<UserResponse>();
+        }
+
+        return List;
+    }
+
+    public async Task<List<DocumentosUserResponse>> GetListArchivos(int idUser)
+    {
+        var List = new List<DocumentosUserResponse>();
+
+        try
+        {
+            for (int i = 1; i <= 4; i++)
+            {
+                var gen = generarNombreArchivo(i);
+
+                var pf = new DocumentosUserResponse();
+                pf.idCliente = i;
+                pf.idDocApodLeg = 100 + i;
+                pf.tipoDocumento = i;
+                pf.documento = GenNumeroTelefono(5);
+                pf.numeroIdentificacion = GenNumeroTelefono(20);
+                pf.nombreDocumento = generarNombreArchivo(i);
+
+                List.Add(pf);
+            }
+        }
+        catch (Exception e)
+        {
+            List = new List<DocumentosUserResponse>();
         }
 
         return List;
