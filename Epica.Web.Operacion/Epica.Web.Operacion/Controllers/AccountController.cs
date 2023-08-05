@@ -1,4 +1,5 @@
-﻿using Epica.Web.Operacion.Models.Request;
+﻿using Epica.Web.Operacion.Extensions;
+using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.Login;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,7 +13,7 @@ namespace Epica.Web.Operacion.Controllers
         {
             _loginApiClient = loginApiClient;
         }
-
+        
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         [HttpGet]
         public IActionResult Login()
@@ -34,6 +35,7 @@ namespace Epica.Web.Operacion.Controllers
 
             if (loginResponse.IsAuthenticated)
             {
+                HttpContext.Session.SetObject("LoginResponse", loginResponse);
                 HttpContext.Session.SetString("CurrentSession", "Ok");
                 return RedirectToAction("Index", "Home");
             }
@@ -46,6 +48,7 @@ namespace Epica.Web.Operacion.Controllers
         }
 
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();

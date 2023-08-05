@@ -92,6 +92,30 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return Usuario;
         }
 
+        public async Task<List<DocumentosUsuarioResponse>> GetDocumentosUsuarioAsync(int idUsuario)
+        {
+            List<DocumentosUsuarioResponse>? documentosResponseList = new List<DocumentosUsuarioResponse>();
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.UsuariosOperations.GetDocumentosUsuario(idUsuario);
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    documentosResponseList = JsonConvert.DeserializeObject<List<DocumentosUsuarioResponse>>(jsonResponse);
+                }
+
+            }
+            catch (Exception)
+            {
+                return documentosResponseList;
+            }
+
+            return documentosResponseList;
+        }
+
         public async Task<List<DocumentosUserResponse>> GetDocumentosUsuarioAsync(int id)
         {
             List<DocumentosUserResponse>? ListaDocumentosUsuario = new List<DocumentosUserResponse>();

@@ -1,9 +1,11 @@
 ﻿using Epica.Web.Operacion.Config;
 using Epica.Web.Operacion.Models.Common;
+using Epica.Web.Operacion.Models.ViewModels;
 using Epica.Web.Operacion.Models.Entities;
 using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Services.UserResolver;
 using Epica.Web.Operacion.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -59,7 +61,18 @@ public class UsuariosController : Controller
     public async Task<ActionResult> Detalles(int id)
     {
         UserResponse user = await _usuariosApiClient.GetUsuarioAsync(id);
-        return View("~/Views/Usuarios/Detalles.cshtml", user);
+        UsuariosDetallesViewModel usuariosDetallesViewModel = new UsuariosDetallesViewModel
+        {
+            Id = user.id,
+            Nombre = user.nombreCompleto,
+            Telefono = user.telefono,
+            Email = user.email,
+            Curp = user.CURP,
+            Empresa = user.organizacion,
+            Sexo = user.sexo,
+        };
+
+        return View("~/Views/Usuarios/Detalles.cshtml", usuariosDetallesViewModel);
     }
 
     public async Task<ActionResult> Modificar(int id)
@@ -67,14 +80,24 @@ public class UsuariosController : Controller
         ViewBag.TituloForm = "Modificar usuario";
         try
         {
-            UserResponse model = await _usuariosApiClient.GetUsuarioAsync(id);
+            UserResponse user = await _usuariosApiClient.GetUsuarioAsync(id);
+            UsuariosDetallesViewModel usuariosDetallesViewModel = new UsuariosDetallesViewModel
+            {
+                Id = user.id,
+                Nombre = user.nombreCompleto,
+                Telefono = user.telefono,
+                Email = user.email,
+                Curp = user.CURP,
+                Empresa = user.organizacion,
+                Sexo = user.sexo,
+            };
 
-            if (model == null)
+            if (usuariosDetallesViewModel == null)
             {
                 return RedirectToAction("Error404", "Error"); 
             }
 
-            return View("~/Views/Usuarios/Registro.cshtml", model);
+            return View("~/Views/Usuarios/Registro.cshtml", usuariosDetallesViewModel);
         }
         catch (Exception)
         {

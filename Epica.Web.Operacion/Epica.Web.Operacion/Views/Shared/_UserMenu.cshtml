@@ -1,4 +1,5 @@
-﻿
+﻿@model Epica.Web.Operacion.Models.Response.LoginResponse
+
 <!--begin::User menu-->
 <div class="cursor-pointer symbol symbol-40px symbol-circle" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-attach="parent" data-kt-menu-placement="right-end">
     <img src="/assets/media/avatars/usuario.png" alt="user" />
@@ -16,9 +17,9 @@
             <!--begin::Username-->
             <div class="d-flex flex-column">
                 <div class="fw-bold d-flex align-items-center fs-5">
-                    Usuario
+                    @Model.Nombre
                 </div>
-                <a href="#" class="fw-semibold text-muted text-hover-primary fs-7">rsanchez@test.com</a>
+                <a href="#" class="fw-semibold text-muted text-hover-primary fs-7">@Model.User</a>
             </div>
             <!--end::Username-->
         </div>

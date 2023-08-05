@@ -36,6 +36,8 @@ public class UrlsConfig
         public static string GetUsuario(int id) => $"/api/v1/usuarios/usuario?id={id}";
         public static string GetUsuarioDocumentos(int id) => $"/api/v1/usuarios/usuario_documento?idUsuario={id}";
         public static string GetUsuarioInfo(int pageNumber, int totalRecords) => $"/api/v1/usuarios/usuario_info?pageNumber={pageNumber}&pageSize={totalRecords}";
+        public static string GetDocumentosUsuario(int idUsuario) => $"/api/v1/usuarios/Usuario_documento?idUsuario={idUsuario}";
+
     }
 
     public class LoginOperations
