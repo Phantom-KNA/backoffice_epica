@@ -26,6 +26,11 @@ namespace Epica.Web.Operacion.Controllers
             ViewBag.AccountID = AccountID;
             return View();
         }
+
+        public IActionResult Registro()
+        {
+            return View("~/Views/Transacciones/Registro.cshtml");
+        }
         public async Task<IActionResult> Transacciones()
         {
             var recibir = await _transaccionesApiClient.GetTransaccionesAsync(1,100);

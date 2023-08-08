@@ -1,0 +1,106 @@
+﻿@{
+    ViewData["Title"] = "Crear nueva transacción";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section LogoPage{
+    <i class="bi bi-cash fs-1 w-40px"></i>
+}
+
+@section breadcrumb{
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted">
+        <a class="text-muted" asp-controller="Transacciones" asp-action="Index">Transacciones</a>
+    </li>
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted">
+        @ViewData["Title"]
+    </li>
+}
+
+<div class="col-md-12">
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h3 class="card-title">Crear nueva transacción</h3>
+            <div class="separator separator-dashed border-light-secondary my-2"></div>
+            <div class="card-toolbar">
+                <button href="javascript:void(0)" onclick="history.back();" type="button" class="btn btn-sm btn-light-primary me-2">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-sm btn-light-primary me-2" id="btnGuardarUsuario">
+                    Guardar
+                </button>
+            </div>
+        </div>
+        <div class="card-body pt-5">
+            <div class="d-flex mb-6 mt-6">
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label required">Clave de rastreo: &nbsp;</label>
+                    <div class="position-relative">
+                        <input name="ClaveDeRastreo" class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label required">Cuenta ordenante: &nbsp;</label>
+                    <div class="position-relative">
+                        <input name="CuentaOrdenante" class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label required">Cuenta beneficiario: &nbsp;</label>
+                    <div class="position-relative">
+                        <input name="CuentaBeneficiario" class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex mb-6 mt-6">
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label">Monto: &nbsp;</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">$</span>
+                        <input name="Monto" type="text" class="form-control" aria-describedby="basic-addon1" />
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label required">Concepto: &nbsp;</label>
+                    <div class="position-relative">
+                        <input name="Concepto" class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label">Tipo de operación: &nbsp;</label>
+                    <div class="position-relative">
+                        <select class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción">
+                            <option></option>
+                            <option value="1">IN</option>
+                            <option value="2">OUT</option>
+                            <option value="3">Comisión</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex mb-6 mt-6">
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label">Medio de pago: &nbsp;</label>
+                    <div class="position-relative">
+                        <input name="medioDePago" class="form-control form-control-sm form-control-solid" type="text" />
+                    </div>
+                </div>
+                <div class="py-2 px-4 col-md-4 fv-row">
+                    <label class="form-label">Comisión: &nbsp;</label>
+                    <div class="position-relative">
+                        <select class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción">
+                            <option value="0">Sin Comisión</option>
+                            <option value="1">Con Comisión</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
