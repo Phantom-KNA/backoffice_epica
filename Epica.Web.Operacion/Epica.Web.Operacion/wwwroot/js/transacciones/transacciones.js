@@ -85,7 +85,7 @@ var KTDatatableTransacciones = (function () {
                 },
                 { data: "concepto", name: "Concepto", title: "CONCEPTO" },
                 { data: "idMedioPago", name: "MedioPago", title: "MEDIO DE PAGO" },    
-                { data: "idCuentaAhorro", name: "Tipo", title: "TIPO" },
+                { data: "idCuentaAhorro", name: "Tipo", title: "TIPO CUENTA" },
                 { data: "fechaAlta", name: "Fecha", title: "FECHA" },
                 {
                     title: '',
@@ -103,13 +103,13 @@ var KTDatatableTransacciones = (function () {
         });
         $('thead tr').addClass('text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0');
     };
-    // Función de busqueda 
-    //var handleSearchDatatable = function () {
-    //    const filterSearch = document.querySelector('[data-kt-myaacounts-table-filter="search"]');
-    //    filterSearch.addEventListener('keyup', function (e) {
-    //        datatable_myAccounts.search(e.target.value).draw();
-    //    });
-    //};
+
+    var handleSearchDatatable = function () {
+        var filterSearch = document.getElementById('search_input');
+        filterSearch.addEventListener('keyup', function (e) {
+            datatable_myAccounts.search(e.target.value).draw();
+        });
+    }
 
     var exportButtons = () => {
         const documentTitle = 'Transacciones';
@@ -171,7 +171,7 @@ var KTDatatableTransacciones = (function () {
                 return;
             }
             init();
-            //handleSearchDatatable();
+            handleSearchDatatable();
             exportButtons();
 
         },

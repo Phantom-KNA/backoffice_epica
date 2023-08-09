@@ -1,4 +1,5 @@
 ﻿using Epica.Web.Operacion.Models.Entities;
+using Epica.Web.Operacion.Models.Request;
 using static Epica.Web.Operacion.Controllers.CuentaController;
 
 namespace Epica.Web.Operacion.Services.Transaccion
@@ -9,6 +10,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
         Task<int> GetTotalUsuariosAsync();
         Task<UserResponse> GetUsuarioAsync(int id);
         Task<List<DocumentosUserResponse>> GetDocumentosUsuarioAsync(int id);
-
+        Task<BloqueoWebResponse> GetBloqueoWeb(BloqueoWebUsuarioRequest request);
+        Task<BloqueoTotalResponse> GetBloqueoTotal(BloqueoTotalUsuarioRequest request);
     }
 }

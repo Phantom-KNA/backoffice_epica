@@ -184,3 +184,20 @@ jQuery(document).ready(function () {
     KTDatatableRemoteAjax.init();
 });
 
+function GestionarUsuario(AccountID, estatus) {
+    $.ajax({
+        url: siteLocation + 'Usuarios/GestionarEstatusUsuario',
+        async: true,
+        cache: false,
+        type: 'POST',
+        data: { id: AccountID, Estatus: estatus },
+        success: function (data) {
+
+            datatable.ajax.reload();
+            alert("Se ha actualizado la cuenta con exito.");
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+        }
+    });
+}

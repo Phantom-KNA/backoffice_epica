@@ -1,9 +1,12 @@
 ﻿using Epica.Web.Operacion.Config;
 using Epica.Web.Operacion.Models.Entities;
+using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.UserResolver;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.Json;
 using static Epica.Web.Operacion.Controllers.CuentaController;
 
@@ -115,6 +118,64 @@ namespace Epica.Web.Operacion.Services.Transaccion
             }
 
             return ListaDocumentosUsuario;
+        }
+
+        public async Task<BloqueoWebResponse> GetBloqueoWeb(BloqueoWebUsuarioRequest request)
+        {
+            BloqueoWebResponse respuesta = new BloqueoWebResponse();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.UsuariosOperations.GetBloqueaWebUsuario();
+                var json = JsonConvert.SerializeObject(request);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await ApiClient.PostAsync(uri, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    respuesta = JsonConvert.DeserializeObject<BloqueoWebResponse>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                respuesta.error = true;
+                respuesta.detalle = ex.Message;
+                return respuesta;
+            }
+
+            return respuesta;
+        }
+
+        public async Task<BloqueoTotalResponse> GetBloqueoTotal(BloqueoTotalUsuarioRequest request)
+        {
+            BloqueoTotalResponse respuesta = new BloqueoTotalResponse();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.UsuariosOperations.GetBloqueaTotalUsuario();
+                var json = JsonConvert.SerializeObject(request);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await ApiClient.PostAsync(uri, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    respuesta = JsonConvert.DeserializeObject<BloqueoTotalResponse>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                respuesta.error = true;
+                respuesta.detalle = ex.Message;
+                return respuesta;
+            }
+
+            return respuesta;
         }
     }
 }

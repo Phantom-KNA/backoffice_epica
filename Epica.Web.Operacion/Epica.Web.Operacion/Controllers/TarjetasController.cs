@@ -76,6 +76,18 @@ public class TarjetasController : Controller
                 Acciones = await this.RenderViewToStringAsync("~/Views/Tarjetas/_Acciones.cshtml", row)
             });
         }
+        if (!string.IsNullOrEmpty(request.Busqueda))
+        {
+            List = List.Where(x =>
+            (x.idCuentaAhorro.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.idCliente.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.nombre?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.proxyNumber?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.clabe?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.tarjeta?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.Estatus.ToString()?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
+            ).ToList();
+        }
 
         //Aplicacion de Filtros temporal, 
         //var filtroid = filters.FirstOrDefault(x => x.Key == "Id");

@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Text;
 using static Epica.Web.Operacion.Controllers.CuentaController;
+using Epica.Web.Operacion.Models.Request;
 
 namespace Epica.Web.Operacion.Controllers;
 
@@ -37,7 +38,10 @@ public class UsuariosController : Controller
         ViewBag.TituloForm = "Crear nuevo usuario";
         return View("~/Views/Usuarios/Registro.cshtml");
     }
-
+    public IActionResult GestionarPermisos()
+    {
+        return View();
+    }
     public async Task<IActionResult> GestionarDocumentos(string AccountID = "")
     {
         if (AccountID == "")
@@ -170,7 +174,6 @@ public class UsuariosController : Controller
             (x.membresia?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
             (x.sexo?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
             ).ToList();
-
         }
 
         //Aplicacion de Filtros temporal, 
@@ -282,6 +285,45 @@ public class UsuariosController : Controller
         }
 
         return Json(gridData);
+    }
+
+    [HttpPost]
+    public async Task<JsonResult> GestionarEstatusUsuario(int id, string Estatus)
+    {
+
+        BloqueoWebResponse bloqueoWebResponse = new BloqueoWebResponse();
+        try
+        {
+            if (Estatus == "True") {
+
+                BloqueoWebUsuarioRequest bloqueoWebRequest = new BloqueoWebUsuarioRequest();
+                bloqueoWebRequest.idCliente = id;
+                bloqueoWebRequest.estatus = 1;
+
+                bloqueoWebResponse = await _usuariosApiClient.GetBloqueoWeb(bloqueoWebRequest);
+
+            } else if (Estatus == "False") {
+
+                BloqueoWebUsuarioRequest bloqueoWebRequest = new BloqueoWebUsuarioRequest();
+                bloqueoWebRequest.idCliente = id;
+                bloqueoWebRequest.estatus = 2;
+
+                bloqueoWebResponse = await _usuariosApiClient.GetBloqueoWeb(bloqueoWebRequest);
+
+            } else {
+                //Deteccion de posible cambio en codigo HTML a través de inspeccionar elemento
+                return Json(BadRequest());
+            }
+
+            if (bloqueoWebResponse.error == false) {
+                return Json(Ok());
+            } else {
+                return Json(BadRequest());
+            }
+
+        } catch (Exception ex) {
+            return Json(BadRequest());
+        }
     }
 
     #endregion

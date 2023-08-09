@@ -128,7 +128,7 @@ var KTDatatableRemoteAjax = function () {
     }
 
     var handleSearchDatatable = function () {
-        const filterSearch = document.querySelector('[data-kt-customer-table-filter="search"]');
+        var filterSearch = document.getElementById('search_input');
         filterSearch.addEventListener('keyup', function (e) {
             datatable.search(e.target.value).draw();
         });
@@ -339,7 +339,7 @@ function pruebas(idAccount) {
 
 function GestionarCuenta(AccountID, estatus) {
     $.ajax({
-        url: siteLocation + 'Cuenta/GestionarEstadoCuentas',
+        url: siteLocation + 'Cuenta/GestionarEstatusCuentas',
         async: true,
         cache: false,
         type: 'POST',

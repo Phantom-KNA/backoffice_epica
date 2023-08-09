@@ -37,15 +37,8 @@ namespace Epica.Web.Operacion.Controllers
             return Json(recibir);
         }
 
-        //public async Task<IActionResult> Transaccion(int idInterno)
-        //{
-        //    var recibir = await _transaccionesApiClient.GetTransaccionAsync(idInterno);
-        //    return Json(recibir);
-        //}
-
-
         [HttpPost]
-        public async Task<JsonResult> Consulta(List<RequestListFilters> filters)
+        public async Task<JsonResult> Consulta(List<RequestListFilters> filters, string idAccount = "")
         {
             var request = new RequestList();
 
@@ -88,7 +81,21 @@ namespace Epica.Web.Operacion.Controllers
                     Acciones = await this.RenderViewToStringAsync("~/Views/Transacciones/_Acciones.cshtml", row)
                 });
             }
-
+            if (!string.IsNullOrEmpty(request.Busqueda))
+            {
+                List = List.Where(x =>
+                (x.id.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.claveRastreo?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.nombreOrdenante?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.nombreBeneficiario?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.monto.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.estatus.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.concepto?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.idMedioPago.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.idCuentaAhorro.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.fechaAlta.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) 
+                ).ToList();
+            }
             //Aplicacion de Filtros temporal, 
             //var filtroid = filters.FirstOrDefault(x => x.Key == "idInterno");
             //var filtronombreClaveRastreo = filters.FirstOrDefault(x => x.Key == "claveRastreo");

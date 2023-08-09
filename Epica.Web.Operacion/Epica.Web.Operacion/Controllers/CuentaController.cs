@@ -69,7 +69,17 @@ public class CuentaController : Controller
                 Acciones = await this.RenderViewToStringAsync("~/Views/Cuenta/_Acciones.cshtml", row)
             });
         }
-
+        if (!string.IsNullOrEmpty(request.Busqueda))
+        {
+            List = List.Where(x =>
+            (x.idCuenta.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.nombrePersona?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.noCuenta?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.saldo.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.estatus.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.tipoPersona?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
+            ).ToList();
+        }
         //Aplicacion de Filtros temporal, 
         //var filtroid = filters.FirstOrDefault(x => x.Key == "Id");
         //var filtronombreCliente = filters.FirstOrDefault(x => x.Key == "NombreCliente");
@@ -127,12 +137,8 @@ public class CuentaController : Controller
     }
 
     [HttpPost]
-    public async Task<JsonResult> GestionarEstadoCuentas(int id, string Estatus)
+    public async Task<JsonResult> GestionarEstatusCuentas(int id, string Estatus)
     {
-        //Esta función tiene la tarea de bloquear o desbloquear cuentas segun el estatus
-        //Temporalmente solo retornara un valor correcto en lo que se trabaja en la logica
-        //para actualizar el estatus de las cuentas.
-
         try
         {
 
