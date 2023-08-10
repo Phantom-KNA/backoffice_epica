@@ -2,6 +2,7 @@
 using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.Login;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Epica.Web.Operacion.Controllers
 {
@@ -35,6 +36,7 @@ namespace Epica.Web.Operacion.Controllers
 
             if (loginResponse.IsAuthenticated)
             {
+                HttpContext.Session.SetString("UserSession", JsonConvert.SerializeObject(loginResponse));
                 HttpContext.Session.SetObject("LoginResponse", loginResponse);
                 HttpContext.Session.SetString("CurrentSession", "Ok");
                 return RedirectToAction("Index", "Home");

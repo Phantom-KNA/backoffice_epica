@@ -42,12 +42,15 @@ public class HomeController : Controller
         else
         {
 
-            var indexViewModel = new HomeIndexViewModel();
-            indexViewModel.DashboardSummarys = new DashboardSummaryModel();
-            indexViewModel.DashboardSummarys.UsuariosTotal = await _usuariosApiClient.GetTotalUsuariosAsync();
-            indexViewModel.DashboardSummarys.TransaccionesTotal = await _transaccionesApiClient.GetTotalTransaccionesAsync();
-            indexViewModel.DashboardSummarys.CuentasTotal = await _cuentaApiClient.GetTotalCuentasAsync();
-            indexViewModel.DashboardSummarys.FechaActual = DateTime.Now;
+            HomeIndexViewModel indexViewModel = new HomeIndexViewModel()
+            {
+                UsuariosTotal = await _usuariosApiClient.GetTotalUsuariosAsync(),
+                TransaccionesTotal = await _transaccionesApiClient.GetTotalTransaccionesAsync(),
+                CuentasTotal = await _cuentaApiClient.GetTotalCuentasAsync(),
+                FechaActual = DateTime.Now
+
+        };
+
             return View(indexViewModel);
         }
     }

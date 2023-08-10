@@ -7,6 +7,7 @@ using Epica.Web.Operacion.Services.Authentication;
 using Epica.Web.Operacion.Services;
 using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Services.Login;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>
@@ -15,26 +16,42 @@ builder.WebHost.ConfigureKestrel(options =>
 });
 
 // Configuración de autenticación JWT
-builder.Services.AddAuthentication(jtw =>
-{
-    jtw.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    jtw.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(jtw =>
-{
-    jtw.SaveToken = true;
-    jtw.TokenValidationParameters = new TokenValidationParameters
-    {
-        // Parámetros de validación del token JWT
+//builder.Services.AddAuthentication(jtw =>
+//{
+//    jtw.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//    jtw.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+//}).AddJwtBearer(jtw =>
+//{
+//    jtw.SaveToken = true;
+//    jtw.TokenValidationParameters = new TokenValidationParameters
+//    {
+//        // Parámetros de validación del token JWT
 
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        RequireExpirationTime = true,
-        ValidIssuer = builder.Configuration["JWT:Issuer"],
-        ValidAudience = builder.Configuration["JWT:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:ClaveSecreta"]))
-    };
+//        ValidateIssuer = true,
+//        ValidateAudience = true,
+//        ValidateLifetime = true,
+//        ValidateIssuerSigningKey = true,
+//        RequireExpirationTime = true,
+//        ValidIssuer = builder.Configuration["JWT:Issuer"],
+//        ValidAudience = builder.Configuration["JWT:Audience"],
+//        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:ClaveSecreta"]))
+//    };
+//});
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login"; 
+        options.AccessDeniedPath = "/Account/AccessDenied";
+    });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdministradorPolicy", policy =>
+        policy.RequireAuthenticatedUser().RequireRole("Administrador"));
+
+    options.AddPolicy("OperadorPolicy", policy =>
+        policy.RequireAuthenticatedUser().RequireRole("Operador"));
 });
 
 // Configuración de servicios

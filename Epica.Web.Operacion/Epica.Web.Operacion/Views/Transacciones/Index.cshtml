@@ -128,10 +128,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="kt_datatable_buttons" class="d-none"></div>
-                        <a asp-action="Registro" asp-controller="Transacciones" class="btn btn-sm btn-primary me-3">
-                            <i class="bi bi-plus-lg"></i>&nbsp;Nueva transacción
-                        </a>
+                        @if(ViewBag.UserRole == "Administrador")
+                        {
+                            <div id="kt_datatable_buttons" class="d-none"></div>
+                            <a asp-action="Registro" asp-controller="Transacciones" class="btn btn-sm btn-primary me-3">
+                                <i class="bi bi-plus-lg"></i>&nbsp;Nueva transacción
+                            </a>
+                        }
                     </div>
                 </div>
             </div>
