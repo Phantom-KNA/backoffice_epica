@@ -2,7 +2,9 @@
 {
     public class HomeIndexViewModel
     {
-        public DashboardSummaryModel DashboardSummarys { get; set; }
-        public LoginResponse LoginResponses { get; set; }
+        public int UsuariosTotal { get; set; }
+        public int TransaccionesTotal { get; set; }
+        public int CuentasTotal { get; set; }
+        public DateTime FechaActual { get; set; }
     }
 }

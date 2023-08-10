@@ -1,7 +1,9 @@
 ﻿using Epica.Web.Operacion.Models.Common;
 using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
+using System.Security.Claims;
 using System.Threading;
 using static Epica.Web.Operacion.Controllers.CuentaController;
 
@@ -23,9 +25,12 @@ namespace Epica.Web.Operacion.Controllers
         #region "Funciones"
         public IActionResult Index(string AccountID = "")
         {
+            var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+            ViewBag.UserRole = userRole;
             ViewBag.AccountID = AccountID;
             return View();
         }
+        [Authorize(Roles = "Administrador")]
 
         public IActionResult Registro()
         {
