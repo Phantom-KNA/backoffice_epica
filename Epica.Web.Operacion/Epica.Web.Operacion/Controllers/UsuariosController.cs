@@ -38,7 +38,6 @@ public class UsuariosController : Controller
         ViewBag.TituloForm = "Crear nuevo usuario";
         return View("~/Views/Usuarios/Registro.cshtml");
     }
-    [AllowAnonymous]
     public IActionResult GestionarPermisos()
     {
         return View();

@@ -39,6 +39,7 @@ public class UrlsConfig
         public static string GetDocumentosUsuario(int idUsuario) => $"/api/v1/clientes/Usuario_documento?idUsuario={idUsuario}";
         public static string GetBloqueaWebUsuario() => $"/api/v1/clientes/bloque_web";
         public static string GetBloqueaTotalUsuario() => $"/api/v1/clientes/bloque_total";
+        public static string InsertarUsuarioNuevo() => $"/api/v1/clientes/inserta_cliente";
     }
 
     public class LoginOperations
