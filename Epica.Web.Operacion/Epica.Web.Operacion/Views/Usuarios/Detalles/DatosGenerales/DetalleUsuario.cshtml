@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Epica.Web.Operacion.Models.ViewModels.UsuariosDetallesViewModel
+@{
     //ViewData["Title"] = "Persona Fisica";
     ViewData["Title"] = "Datos Generales";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -17,7 +18,7 @@
         <span class="bullet bg-gray-400 w-5px h-2px"></span>
     </li>
     <li class="breadcrumb-item text-muted">
-        <a class="text-muted" asp-controller="PersonaFisica" asp-action="Index">Detalles Usuario</a>
+        <a class="text-muted" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
     </li>
 }
 
@@ -40,66 +41,48 @@
                                 <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
                                     <tbody>
                                         <tr>
-                                            <td class="text-gray-400">Nivel de Cuenta:</td>
-                                            <td class="text-gray-800">
-                                                2
-                                            </td>
-                                        </tr>
-                                        <tr>
                                             <td class="text-gray-400">No. Cliente:</td>
                                             <td class="text-gray-800">
-                                                23
+                                                @(@Model.Id)
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="text-gray-400">Nombre Completo:</td>
                                             <td class="text-gray-800">
-                                                COTIJA LAGUNA PEREZ
+                                                @(@Model?.Nombre ?? "")
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="text-gray-400">Estado Civil:</td>
-                                            <td class="text-gray-800">Soltero</td>
-                                        </tr>
-                                        <tr>
                                             <td class="text-gray-400">Correo Electrónico:</td>
-                                            <td class="text-gray-800">CORREO_PERO1@TECNOCEN.COM</td>
+                                            <td class="text-gray-800">@(@Model?.Email ?? "")</td>
                                         </tr>
                                         <tr>
                                             <td class="text-gray-400">RFC:</td>
-                                            <td class="text-gray-800">LAPC870101912</td>
+                                            <td class="text-gray-800">@(@Model?.Rfc ?? "")</td>
                                         </tr>
                                         <tr>
                                             <td class="text-gray-400">País de Nacimiento:</td>
-                                            <td class="text-gray-800">MX</td>
+                                            <td class="text-gray-800">@(@Model?.Pais ?? "")</td>
                                         </tr>
                                         <tr>
                                             <td class="text-gray-400">Fecha de Nacimiento:</td>
-                                            <td class="text-gray-800">1987/01/01</td>
+                                            <td class="text-gray-800">@(@Model?.FechaNacimiento?.ToString("dd/MM/yyyy") ?? "")</td>
                                         </tr>
                                         <tr>
                                             <td class="text-gray-400">Género:</td>
-                                            <td class="text-gray-800">M</td>
+                                            <td class="text-gray-800">@(@Model?.Sexo ?? "")</td>
                                         </tr>
                                         <tr>
                                             <td class="text-gray-400">CURP:</td>
-                                            <td class="text-gray-800">LAPC870101HASGRT01</td>
+                                            <td class="text-gray-800">@(@Model?.Curp ?? "")</td>
                                         </tr>
                                         <tr>
                                             <td class="text-gray-400">Nacionalidad:</td>
-                                            <td class="text-gray-800">MX</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-gray-400">Membresía:</td>
-                                            <td class="text-gray-800">11</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-gray-400">No. Membresía:</td>
-                                            <td class="text-gray-800">LUUR-0003</td>
+                                            <td class="text-gray-800">@(@Model?.Nacionalidad ?? "")</td>
                                         </tr>
                                         <tr>
                                             <td class="text-gray-400">Télefono:</td>
-                                            <td class="text-gray-800">5512340098</td>
+                                            <td class="text-gray-800">@(@Model?.Telefono ?? "")</td>
                                         </tr>
                                         <tr>
                                             <td class="text-gray-400">Región:</td>
@@ -107,7 +90,7 @@
                                         </tr>
                                         <tr>
                                             <td class="text-gray-400">Observaciones:</td>
-                                            <td class="text-gray-800">Lorem impsum Lorem impsum Lorem impsum Lorem impsum Lorem impsum Lorem impsum Lorem impsum Lorem impsum Lorem impsum Lorem impsum</td>
+                                            <td class="text-gray-800">@(@Model?.Observaciones ?? "")</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -118,7 +101,7 @@
                                         <tr>
                                             <td class="text-gray-400">Colonia:</td>
                                             <td class="text-gray-800">
-                                                INSURGENTES SAN BORJA
+                                                @(@Model?.Colonia ?? "")
                                             </td>
                                         </tr>
                                         <tr>
@@ -130,52 +113,20 @@
                                         <tr>
                                             <td class="text-gray-400">Alcaldía/Municipio:</td>
                                             <td class="text-gray-800">
-                                                MEXICO
+                                                @(@Model?.DelegacionMunicipio ?? "")
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="text-gray-400">Ciudad/Estado:</td>
-                                            <td class="text-gray-800">MEXICO</td>
+                                            <td class="text-gray-800">@(@Model?.CiudadEstado ?? "")</td>
                                         </tr>
                                         <tr>
                                             <td class="text-gray-400">Calle:</td>
-                                            <td class="text-gray-800">CDA. ANICETO ORTEGA</td>
+                                            <td class="text-gray-800">@(@Model?.Calle ?? "")</td>
                                         </tr>
                                         <tr>
                                             <td class="text-gray-400">Código Postal:</td>
-                                            <td class="text-gray-800">03100</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-gray-400">Tipo de Vivienda:</td>
-                                            <td class="text-gray-800">Sin especificar</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-gray-400">Tiempo de habitar:</td>
-                                            <td class="text-gray-800">Sin especificar</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-gray-400">Tipo de Nómina:</td>
-                                            <td class="text-gray-800">Sin especificar</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-gray-400">Tipo de Trabajador:</td>
-                                            <td class="text-gray-800">Sin especificar</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-gray-400">Fecha de Ingreso:</td>
-                                            <td class="text-gray-800">Sin especificar</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-gray-400">Puesto:</td>
-                                            <td class="text-gray-800">Sin especificar</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-gray-400">Salario:</td>
-                                            <td class="text-gray-800">8000.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-gray-400">Antigüedad:</td>
-                                            <td class="text-gray-800">1 año</td>
+                                            <td class="text-gray-800">@(@Model?.CodigoPostal ?? "")</td>
                                         </tr>
                                         <tr>
                                             <td class="text-gray-400">Identificación Oficial:</td>

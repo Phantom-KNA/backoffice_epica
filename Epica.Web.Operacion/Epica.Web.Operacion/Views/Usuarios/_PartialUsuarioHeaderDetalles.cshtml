@@ -79,44 +79,23 @@
         <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bold">
 
             <li class="nav-item mt-2">
-                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(ViewBag.UrlView.Contains("DatosGenerales") ? "active" : "")" asp-action="DatosGenerales" asp-controller="PersonaFisica" asp-route-id="@Model.Id">
+                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(ViewBag.UrlView.Contains("DatosGenerales") ? "active" : "")" asp-action="DatosGenerales" asp-controller="Usuarios" asp-route-id="@Model.Id">
                     DATOS GENERALES
                 </a>
             </li>
 
             <li class="nav-item mt-2">
-                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(ViewBag.UrlView.Contains("Cuentas") ? "active" : "")" asp-action="Cuentas" asp-controller="PersonaFisica" asp-route-id="@Model.Id">
+                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(ViewBag.UrlView.Contains("Cuentas") ? "active" : "")" asp-action="Cuentas" asp-controller="Usuarios" asp-route-id="@Model.Id">
                     CUENTAS
                 </a>
             </li>
 
 
-            <li class="nav-item mt-2">
+@*            <li class="nav-item mt-2">
                 <a class="nav-link text-active-primary ms-0 me-10 py-5 @(ViewBag.UrlView.Contains("Documentacion") ? "active" : "")" asp-action="Documentacion" asp-controller="PersonaFisica" asp-route-id="@Model.Id">
                     DOCUMENTACIÓN
                 </a>
-            </li>
-
-
-            <li class="nav-item mt-2">
-                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(ViewBag.UrlView.Contains("Funciones") ? "active" : "")" asp-action="Funciones" asp-controller="PersonaFisica" asp-route-id="@Model.Id">
-                    FUNCIONES
-                </a>
-            </li>
-
-
-            <li class="nav-item mt-2">
-                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(ViewBag.UrlView.Contains("Scoring") ? "active" : "")" asp-action="Scoring" asp-controller="PersonaFisica" asp-route-id="@Model.Id">
-                    SCORING
-                </a>
-            </li>
-
-
-            <li class="nav-item mt-2">
-                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(ViewBag.UrlView.Contains("AsignarEmpresa") ? "active" : "")" asp-action="AsignarEmpresa" asp-controller="PersonaFisica" asp-route-id="@Model.Id">
-                    ASIGNAR A EMPRESA
-                </a>
-            </li>
+            </li>*@
 
         </ul>
     </div>

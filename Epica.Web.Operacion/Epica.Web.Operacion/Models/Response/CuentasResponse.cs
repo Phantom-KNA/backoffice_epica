@@ -11,7 +11,9 @@ public class CuentasResponse
     public int estatus { get; set; }
     public decimal saldo { get; set; }
     public string tipoPersona { get; set; }
-
+    public string alias { get; set; }
+    public DateTime fechaAlta { get; set; }
+    public DateTime fechaActualizacion { get; set; }
 }
 
 public class CuentasResponseGrid : CuentasResponse

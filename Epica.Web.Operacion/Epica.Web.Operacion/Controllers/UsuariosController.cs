@@ -19,12 +19,14 @@ public class UsuariosController : Controller
 {
     #region "Locales"
     private readonly IUsuariosApiClient _usuariosApiClient;
+    private readonly ICuentaApiClient _cuentaApiClient;
     #endregion
 
     #region "Constructores"
-    public UsuariosController(IUsuariosApiClient usuariosApiClient)
+    public UsuariosController(IUsuariosApiClient usuariosApiClient, ICuentaApiClient cuentaApiClient)
     {
         _usuariosApiClient = usuariosApiClient;
+        _cuentaApiClient = cuentaApiClient;
     }
     #endregion
 
@@ -135,44 +137,50 @@ public class UsuariosController : Controller
     }
 
     [Route("Usuarios/Detalle/DatosGenerales")]
-    public async Task<ActionResult> DatosGenerales(int id)
+    public async Task<IActionResult> DatosGenerales(int id)
     {
 
         UserDetailsResponse user = await _usuariosApiClient.GetDetallesCliente(id);
-        //UsuariosDetallesViewModel usuariosDetallesViewModel = new UsuariosDetallesViewModel
-        //{
-        //    Id = user.value.IdCliente,
-        //    Nombre = user.value.NombreCompleto,
-        //    Telefono = user.value.Telefono,
-        //    Email = user.value.Email,
-        //    Curp = user.value.CURP,
-        //    Empresa = user.value.Organizacion,
-        //    Sexo = user.value.Sexo,
-        //    Rfc = user.value.RFC,
-        //    Ine = user.value.INE,
-        //    FechaNacimiento = user.value.FechaNacimiento,
-        //    Observaciones = user.value.Observaciones,
-        //    PaisNacimiento = user.value.PaisNacimiento,
-        //    Ocupacion = user.value.IdOcupacion.ToString(),
-        //    Nacionalidad = user.value.Nacionalidad,
-        //    Fiel = user.value.Fiel,
-        //    Pais = user.value.PaisNacimiento,
-        //    IngresoMensual = Convert.ToDecimal(user.value.SalarioNetoMensual),
-        //    MontoMaximo = Convert.ToDecimal(user.value.SalarioNetoMensual),
-        //    Calle = user.value.Calle,
-        //    CalleNumero = user.value.NoIntExt,
-        //    PrimeraCalle = user.value.CalleSecundaria,
-        //    SegundaCalle = user.value.CalleSecundaria2,
-        //    Colonia = user.value.Colonia,
-        //    CodigoPostal = user.value.CodigoPostal,
-        //    NoInterior = user.value.NoIntExt,
-        //    Puesto = user.value.Puesto,
-        //    //Rol = user.value.rol,
-        //    //    DelegacionMunicipio = user.value.del;
-        //    //CiudadEstado = user.value.CiudadEstado
-        //    //Empresa = Convert.ToInt32(user.value.em),
-        //    //ApoderadoLegal = Convert.ToInt32(user.value.);
-        //};
+
+        if (user.value == null)
+        {
+            return RedirectToAction("Index");
+        }
+
+        UsuariosDetallesViewModel usuariosDetallesViewModel = new UsuariosDetallesViewModel
+        {
+            Id = user.value.IdCliente,
+            Nombre = user.value.NombreCompleto,
+            Telefono = user.value.Telefono,
+            Email = user.value.Email,
+            Curp = user.value.CURP,
+            Empresa = user.value.Organizacion,
+            Sexo = user.value.Sexo,
+            Rfc = user.value.RFC,
+            Ine = user.value.INE,
+            FechaNacimiento = user.value.FechaNacimiento,
+            Observaciones = user.value.Observaciones,
+            PaisNacimiento = user.value.PaisNacimiento,
+            Ocupacion = user.value.IdOcupacion.ToString(),
+            Nacionalidad = user.value.Nacionalidad,
+            Fiel = user.value.Fiel,
+            Pais = user.value.PaisNacimiento,
+            IngresoMensual = Convert.ToDecimal(user.value.SalarioNetoMensual),
+            MontoMaximo = Convert.ToDecimal(user.value.SalarioNetoMensual),
+            Calle = user.value.Calle,
+            CalleNumero = user.value.NoIntExt,
+            PrimeraCalle = user.value.CalleSecundaria,
+            SegundaCalle = user.value.CalleSecundaria2,
+            Colonia = user.value.Colonia,
+            CodigoPostal = user.value.CodigoPostal,
+            NoInterior = user.value.NoIntExt,
+            Puesto = user.value.Puesto
+            //Rol = user.value.rol,
+            //    DelegacionMunicipio = user.value.del;
+            //CiudadEstado = user.value.CiudadEstado
+            //Empresa = Convert.ToInt32(user.value.em),
+            //ApoderadoLegal = Convert.ToInt32(user.value.);
+        };
 
         UsuarioHeaderViewModel header = new UsuarioHeaderViewModel {
             Id = user.value.IdCliente,
@@ -185,7 +193,117 @@ public class UsuariosController : Controller
             Sexo = user.value.Sexo
         };
         ViewBag.Info = header;
-        return View("~/Views/Usuarios/Detalles/DatosGenerales/DetalleUsuario.cshtml");
+        ViewBag.UrlView = "DatosGenerales";
+        return View("~/Views/Usuarios/Detalles/DatosGenerales/DetalleUsuario.cshtml", usuariosDetallesViewModel);
+    }
+
+    [Route("Usuarios/Detalle/Cuentas")]
+    public async Task<IActionResult> Cuentas(int id)
+    {
+        UserDetailsResponse user = await _usuariosApiClient.GetDetallesCliente(id);
+
+        if (user.value == null)
+        {
+            return RedirectToAction("Index");
+        }
+
+        ViewBag.UrlView = "Cuentas";
+        UsuarioHeaderViewModel header = new UsuarioHeaderViewModel
+        {
+            Id = user.value.IdCliente,
+            NombreCompleto = user.value.NombreCompleto,
+            Telefono = user.value.Telefono,
+            Correo = user.value.Email,
+            Curp = user.value.CURP,
+            Organizacion = user.value.Organizacion,
+            Rfc = user.value.RFC,
+            Sexo = user.value.Sexo
+        };
+        ViewBag.Info = header;
+        ViewBag.Nombre = header.NombreCompleto;
+        ViewBag.AccountID = id;
+        return View("~/Views/Usuarios/Detalles/Cuentas/DetalleCuentas.cshtml");
+    }
+
+    [HttpPost]
+    public async Task<JsonResult> ConsultaCuentas(string id)
+    {
+        JsonResult result = new JsonResult("");
+        //Invoca al método que se encarga de realizar la petición Api
+        var request = new RequestList();
+
+        int totalRecord = 0;
+        int filterRecord = 0;
+
+        var draw = Request.Form["draw"].FirstOrDefault();
+        int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
+        int skip = Convert.ToInt32(Request.Form["start"].FirstOrDefault() ?? "0");
+
+        request.Pagina = skip / pageSize + 1;
+        request.Registros = pageSize;
+        request.Busqueda = Request.Form["search[value]"].FirstOrDefault();
+        request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+        request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
+
+        var gridData = new ResponseGrid<CuentasResponseGrid>();
+        List<CuentasResponse> ListPF = new List<CuentasResponse>();
+
+        ListPF = await _cuentaApiClient.GetCuentasByClienteAsync(Convert.ToInt32(id));
+
+        ////Almacena el subtotal de registro en caso de obtener un parámetro de búsqueda
+        var List = new List<CuentasResponseGrid>();
+        foreach (var row in ListPF)
+        {
+            List.Add(new CuentasResponseGrid
+            {
+                idCuenta = row.idCuenta,
+                nombrePersona = row.nombrePersona,
+                noCuenta = row.noCuenta,
+                saldo = row.saldo,
+                estatus = row.estatus,
+                tipoPersona = row.tipoPersona,
+                alias = row.alias,
+                fechaActualizacion = row.fechaActualizacion,
+                fechaAlta = row.fechaAlta
+                //Acciones = await this.RenderViewToStringAsync("~/Views/Cuenta/_Acciones.cshtml", row)
+            });
+        }
+        //if (!string.IsNullOrEmpty(request.Busqueda))
+        //{
+        //    List = List.Where(
+        //        x =>
+        //        x.NoCuenta.ToLower().Contains(request.Busqueda.ToLower()) ||
+        //        x.Saldo.ToLower().Contains(request.Busqueda.ToLower()) ||
+        //        x.Alias.ToLower().Contains(request.Busqueda.ToLower()) ||
+        //        x.NombrePersona.ToLower().Contains(request.Busqueda.ToLower()) ||
+        //        x.Tipo.ToLower().Contains(request.Busqueda.ToLower())
+        //        ).ToList();
+        //}
+        //if (!string.IsNullOrEmpty(request.ColumnaOrdenamiento) && !string.IsNullOrEmpty(request.Ordenamiento))
+        //{
+        //    var quer = List.AsQueryable();
+        //    List = quer.OrderBy(request.ColumnaOrdenamiento + " " + request.Ordenamiento).ToList();
+
+        //}
+
+
+        //List.Add(new EstadisiticaUsoFormaValoradaResponse() { }, new EstadisiticaUsoFormaValoradaResponse() { });
+        gridData.Data = List;
+        gridData.RecordsTotal = List.Count;
+        gridData.Data = gridData.Data.Skip(skip).Take(pageSize).ToList();
+        filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.Data.Count;
+        gridData.RecordsFiltered = filterRecord;
+        gridData.Draw = draw;
+
+        //var returnObj = new
+        //{
+        //    draw,
+        //    recordsTotal = totalRecord,
+        //    recordsFiltered = filterRecord,
+        //    data = List
+        //};
+
+        return Json(gridData);
     }
     #endregion
 
@@ -407,16 +525,6 @@ public class UsuariosController : Controller
         {
             return RedirectToAction("Error", "Error");
         }
-    }
-
-    [Route("Usuarios/Detalle/Cuentas")]
-    public IActionResult Cuentas(long id)
-    {
-        ViewBag.UrlView = "Cuentas";
-        var Info = GetList().FirstOrDefault(x => x.id == id);
-        ViewBag.Info = Info;
-        ViewBag.Nombre = Info.nombreCompleto;
-        return View("~/Views/Usuarios/Detalle/Cuenta/DetalleCuentas.cshtml");
     }
 
     [HttpPost]
