@@ -64,19 +64,20 @@ var KTDatatableRemoteAjax = function () {
                 "targets": "_all"
             }],
             columns: [
-                { data: 'id', name: 'Id', title: 'Id Usuario' },
+                //{ data: 'id', name: 'Id', title: 'Id Usuario' },
                 { data: 'nombreCompleto', name: 'NombreCompleto', title: 'Nombre del Cliente' },
                 { data: 'telefono', name: 'Telefono', title: 'Telefono' },
                 { data: 'email', name: 'Email', title: 'Correo Electrónico' },
                 { data: 'curp', name: 'Curp', title: 'CURP' },
                 { data: 'organizacion', name: 'Organizacion', title: 'Organizacion' },
-                { data: 'membresia', name: 'membresia', title: 'Tipo Membresia' },
-                {
-                    data: 'sexo', name: 'Sexo', title: 'Sexo',
-                    render: function (data, type, row) {
-                        return data == "M" ?
-                            "Masculino" : "Femenino";
-                    } },
+                //{ data: 'membresia', name: 'membresia', title: 'Tipo Membresia' },
+                //{
+                //    data: 'sexo', name: 'Sexo', title: 'Sexo',
+                //    render: function (data, type, row) {
+                //        return data == "M" ?
+                //            "Masculino" : "Femenino";
+                //    }
+                //},
                 {
                     data: 'estatus', name: 'Estatus', title: 'Estatus',
                     render: function (data, type, row) {
@@ -110,7 +111,7 @@ var KTDatatableRemoteAjax = function () {
                     extend: 'excelHtml5',
                     title: documentTitle,
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                        columns: [0, 1, 2, 3, 4, 5]
                     }
                 }
             ]
@@ -184,9 +185,27 @@ jQuery(document).ready(function () {
     KTDatatableRemoteAjax.init();
 });
 
-function GestionarUsuario(AccountID, estatus) {
+function GestionarUsuarioWeb(AccountID, estatus) {
     $.ajax({
-        url: siteLocation + 'Usuarios/GestionarEstatusUsuario',
+        url: siteLocation + 'Usuarios/GestionarEstatusUsuarioWeb',
+        async: true,
+        cache: false,
+        type: 'POST',
+        data: { id: AccountID, Estatus: estatus },
+        success: function (data) {
+
+            datatable.ajax.reload();
+            alert("Se ha actualizado la cuenta con exito.");
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+        }
+    });
+}
+
+function GestionarUsuarioTotal(AccountID, estatus) {
+    $.ajax({
+        url: siteLocation + 'Usuarios/GestionarEstatusUsuarioTotal',
         async: true,
         cache: false,
         type: 'POST',

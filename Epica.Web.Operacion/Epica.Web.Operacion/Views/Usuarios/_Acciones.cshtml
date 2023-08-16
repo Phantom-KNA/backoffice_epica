@@ -7,31 +7,46 @@
         <li class="menu-item px-3">
             @if (Model.estatus == 1)
             {
-                <a data-id="@Model.id" onclick="GestionarUsuario(@Model.id, 'False')" title="Bloquear Cuenta" class="btnEditar menu-link px-3">
+                <a data-id="@Model.id" onclick="GestionarUsuarioWeb(@Model.id, 'False')" title="Bloquear Cuenta Web" class="btnEditar menu-link px-3">
                     <i class="bi bi-lock"></i>&nbsp;
-                    Bloquear
+                    Bloquear Web
                 </a>
             }
             else
             {
-                <a data-id="@Model.id" onclick="GestionarUsuario(@Model.id, 'True')" title="Desbloquear Cuenta" class="btnEditar menu-link px-3">
+                <a data-id="@Model.id" onclick="GestionarUsuarioWeb(@Model.id, 'True')" title="Desbloquear Cuenta Web" class="btnEditar menu-link px-3">
                     <i class="bi bi-unlock"></i>&nbsp;
-                    Desbloquear
+                    Desbloquear Web
                 </a>
             }
-
         </li>
         <li class="menu-item px-3">
-            <a data-id="@Model.id" asp-controller="Usuarios" asp-action="Detalles" asp-route-id="@Model.id" class="btnDetalle menu-link px-3">
+            @if (Model.estatus == 1)
+            {
+                <a data-id="@Model.id" onclick="GestionarUsuarioTotal(@Model.id, 'False')" title="Bloquear Cuenta Web" class="btnEditar menu-link px-3">
+                    <i class="bi bi-lock"></i>&nbsp;
+                    Bloquear Total
+                </a>
+            }
+            else
+            {
+                <a data-id="@Model.id" onclick="GestionarUsuarioTotal(@Model.id, 'True')" title="Desbloquear Cuenta Web" class="btnEditar menu-link px-3">
+                    <i class="bi bi-unlock"></i>&nbsp;
+                    Desbloquear Total
+                </a>
+            }
+        </li>
+        <li class="menu-item px-3">
+            <a data-id="@Model.id" asp-controller="Usuarios" asp-action="DatosGenerales" asp-route-id="@Model.id" class="btnDetalle menu-link px-3">
                 <i class="bi bi-search"></i>&nbsp;
                 Detalles
             </a>
         </li>
-        <li class="menu-item px-3">
+@*        <li class="menu-item px-3">
             <a data-id="@Model.id" asp-controller="Usuarios" asp-action="GestionarDocumentos" asp-route-AccountID="@Model.id" class="btnDetalle menu-link px-3">
                 <i class="bi bi-file-earmark-bar-graph"></i>&nbsp;
                 Documentos
             </a>
-        </li>
+        </li>*@
     </ul>
 </div>

@@ -22,7 +22,7 @@ var Init = function () {
         });
 
         $(document).on('click', '#btnGuardarUsuario', function (e) {
-            toastr.success('Usuario guardado exitosamente', "");
+            toastr.info('Registrando información', "");
         });
     }
     return {

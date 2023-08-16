@@ -29,15 +29,233 @@ public class UsuariosController : Controller
     #endregion
 
     #region "Funciones"
+
+    #region Consulta Clientes
     public IActionResult Index()
     {
         return View();
     }
+
+    [HttpPost]
+    public async Task<JsonResult> GestionarEstatusUsuarioWeb(int id, string Estatus)
+    {
+
+        BloqueoWebResponse bloqueoWebResponse = new BloqueoWebResponse();
+        try
+        {
+            if (Estatus == "True")
+            {
+
+                BloqueoWebUsuarioRequest bloqueoWebRequest = new BloqueoWebUsuarioRequest();
+                bloqueoWebRequest.idCliente = id;
+                bloqueoWebRequest.estatus = 1;
+
+                bloqueoWebResponse = await _usuariosApiClient.GetBloqueoWeb(bloqueoWebRequest);
+
+            }
+            else if (Estatus == "False")
+            {
+
+                BloqueoWebUsuarioRequest bloqueoWebRequest = new BloqueoWebUsuarioRequest();
+                bloqueoWebRequest.idCliente = id;
+                bloqueoWebRequest.estatus = 2;
+
+                bloqueoWebResponse = await _usuariosApiClient.GetBloqueoWeb(bloqueoWebRequest);
+
+            }
+            else
+            {
+                //Deteccion de posible cambio en codigo HTML a través de inspeccionar elemento
+                return Json(BadRequest());
+            }
+
+            if (bloqueoWebResponse.error == false)
+            {
+                return Json(Ok());
+            }
+            else
+            {
+                return Json(BadRequest());
+            }
+
+        }
+        catch (Exception ex)
+        {
+            return Json(BadRequest());
+        }
+    }
+
+    [HttpPost]
+    public async Task<JsonResult> GestionarEstatusUsuarioTotal(int id, string Estatus)
+    {
+
+        BloqueoTotalResponse bloqueototalResponse = new BloqueoTotalResponse();
+        try
+        {
+            if (Estatus == "True")
+            {
+
+                BloqueoTotalUsuarioRequest bloqueoTotalRequest = new BloqueoTotalUsuarioRequest();
+                bloqueoTotalRequest.idCliente = id;
+                bloqueoTotalRequest.estatus = 1;
+
+                bloqueototalResponse = await _usuariosApiClient.GetBloqueoTotal(bloqueoTotalRequest);
+
+            }
+            else if (Estatus == "False")
+            {
+
+                BloqueoTotalUsuarioRequest bloqueoTotalRequest = new BloqueoTotalUsuarioRequest();
+                bloqueoTotalRequest.idCliente = id;
+                bloqueoTotalRequest.estatus = 2;
+
+                bloqueototalResponse = await _usuariosApiClient.GetBloqueoTotal(bloqueoTotalRequest);
+
+            }
+            else
+            {
+                //Deteccion de posible cambio en codigo HTML a través de inspeccionar elemento
+                return Json(BadRequest());
+            }
+
+            if (bloqueototalResponse.error == false)
+            {
+                return Json(Ok());
+            }
+            else
+            {
+                return Json(BadRequest());
+            }
+
+        }
+        catch (Exception ex)
+        {
+            return Json(BadRequest());
+        }
+    }
+
+    [Route("Usuarios/Detalle/DatosGenerales")]
+    public async Task<ActionResult> DatosGenerales(int id)
+    {
+
+        UserDetailsResponse user = await _usuariosApiClient.GetDetallesCliente(id);
+        //UsuariosDetallesViewModel usuariosDetallesViewModel = new UsuariosDetallesViewModel
+        //{
+        //    Id = user.value.IdCliente,
+        //    Nombre = user.value.NombreCompleto,
+        //    Telefono = user.value.Telefono,
+        //    Email = user.value.Email,
+        //    Curp = user.value.CURP,
+        //    Empresa = user.value.Organizacion,
+        //    Sexo = user.value.Sexo,
+        //    Rfc = user.value.RFC,
+        //    Ine = user.value.INE,
+        //    FechaNacimiento = user.value.FechaNacimiento,
+        //    Observaciones = user.value.Observaciones,
+        //    PaisNacimiento = user.value.PaisNacimiento,
+        //    Ocupacion = user.value.IdOcupacion.ToString(),
+        //    Nacionalidad = user.value.Nacionalidad,
+        //    Fiel = user.value.Fiel,
+        //    Pais = user.value.PaisNacimiento,
+        //    IngresoMensual = Convert.ToDecimal(user.value.SalarioNetoMensual),
+        //    MontoMaximo = Convert.ToDecimal(user.value.SalarioNetoMensual),
+        //    Calle = user.value.Calle,
+        //    CalleNumero = user.value.NoIntExt,
+        //    PrimeraCalle = user.value.CalleSecundaria,
+        //    SegundaCalle = user.value.CalleSecundaria2,
+        //    Colonia = user.value.Colonia,
+        //    CodigoPostal = user.value.CodigoPostal,
+        //    NoInterior = user.value.NoIntExt,
+        //    Puesto = user.value.Puesto,
+        //    //Rol = user.value.rol,
+        //    //    DelegacionMunicipio = user.value.del;
+        //    //CiudadEstado = user.value.CiudadEstado
+        //    //Empresa = Convert.ToInt32(user.value.em),
+        //    //ApoderadoLegal = Convert.ToInt32(user.value.);
+        //};
+
+        UsuarioHeaderViewModel header = new UsuarioHeaderViewModel {
+            Id = user.value.IdCliente,
+            NombreCompleto = user.value.NombreCompleto,
+            Telefono = user.value.Telefono,
+            Correo = user.value.Email,
+            Curp = user.value.CURP,
+            Organizacion = user.value.Organizacion,
+            Rfc = user.value.RFC,
+            Sexo = user.value.Sexo
+        };
+        ViewBag.Info = header;
+        return View("~/Views/Usuarios/Detalles/DatosGenerales/DetalleUsuario.cshtml");
+    }
+    #endregion
+
+
+    #region Registro Usuarios
     public IActionResult Registro()
     {
+        ViewData["IsEdit"] = false;
         ViewBag.TituloForm = "Crear nuevo usuario";
         return View("~/Views/Usuarios/Registro.cshtml");
     }
+
+    [HttpPost]
+    public async Task<IActionResult> RegistrarUsuario(UsuariosDetallesViewModel model)
+    {
+
+        RegistrarModificarClienteResponse response = new RegistrarModificarClienteResponse();
+
+        try
+        {
+            RegistroModificacionClienteRequest registraCliente = new RegistroModificacionClienteRequest();
+
+            registraCliente.Nombre = model.Nombre;
+            registraCliente.ApellidoPaterno = model.ApellidoPaterno;
+            registraCliente.ApellidoMaterno = model.ApellidoMaterno;
+            registraCliente.Email = model.Email;
+            registraCliente.Curp = model.Curp;
+            registraCliente.RFC = model.Rfc;
+            registraCliente.INE = model.Ine;
+            registraCliente.FechaNacimiento = model.FechaNacimiento;
+            registraCliente.Observaciones = model.Observaciones;
+            registraCliente.PaisNacimiento = model.PaisNacimiento;
+            registraCliente.Sexo = model.Sexo;
+            registraCliente.IdOcupacion = Convert.ToInt32(model.Ocupacion);
+            registraCliente.IdNacionalidad = Convert.ToInt32(model.Nacionalidad);
+            registraCliente.Fiel = model.Fiel;
+            registraCliente.IdPais = Convert.ToInt32(model.Pais);
+            registraCliente.IngresoMensual = Convert.ToString(model.IngresoMensual);
+            registraCliente.MontoMaximo = Convert.ToString(model.MontoMaximo);
+            registraCliente.Telefono = model.Telefono;
+            //registraCliente.TelefonoTipo = model.Telefono;
+            registraCliente.Calle = model.Calle;
+            registraCliente.CalleNumero = model.CalleNumero;
+            registraCliente.EntreCallePrimera = model.PrimeraCalle;
+            registraCliente.EntreCalleSegunda = model.SegundaCalle;
+            registraCliente.Colonia = model.Colonia;
+            registraCliente.DelegacionMunicipio = model.DelegacionMunicipio;
+            registraCliente.CodigoPostal = model.CodigoPostal;
+            registraCliente.CiudadEstado = model.CiudadEstado;
+            registraCliente.NoInterior = model.NoInterior;
+            registraCliente.Puesto = model.Puesto;
+            registraCliente.Empresa = Convert.ToInt32(model.Empresa);
+            registraCliente.ApoderadoLegal = Convert.ToInt32(model.ApoderadoLegal);
+            registraCliente.Rol = model.Rol;
+
+            response = await _usuariosApiClient.GetRegistroCliente(registraCliente);
+
+            if (response.codigo == "200")
+            {
+                return RedirectToAction("Index");
+            } else {
+                return View();
+            }
+        } catch (Exception ex) {
+            return View();
+        }
+    }
+    #endregion
+
+
     public IActionResult GestionarPermisos()
     {
         return View();
@@ -141,7 +359,6 @@ public class UsuariosController : Controller
         return Json(gridData);
     }
 
-
     public async Task<IActionResult> GestionarDocumentos(string AccountID = "")
     {
         if (AccountID == "")
@@ -160,23 +377,6 @@ public class UsuariosController : Controller
         }
 
         return View();
-    }
-
-    public async Task<ActionResult> Detalles(int id)
-    {
-        UserResponse user = await _usuariosApiClient.GetUsuarioAsync(id);
-        UsuariosDetallesViewModel usuariosDetallesViewModel = new UsuariosDetallesViewModel
-        {
-            Id = user.id,
-            Nombre = user.nombreCompleto,
-            Telefono = user.telefono,
-            Email = user.email,
-            Curp = user.CURP,
-            Empresa = user.organizacion,
-            Sexo = user.sexo,
-        };
-
-        return View("~/Views/Usuarios/Detalles.cshtml", usuariosDetallesViewModel);
     }
 
     public async Task<ActionResult> Modificar(int id)
@@ -385,45 +585,6 @@ public class UsuariosController : Controller
         }
 
         return Json(gridData);
-    }
-
-    [HttpPost]
-    public async Task<JsonResult> GestionarEstatusUsuario(int id, string Estatus)
-    {
-
-        BloqueoWebResponse bloqueoWebResponse = new BloqueoWebResponse();
-        try
-        {
-            if (Estatus == "True") {
-
-                BloqueoWebUsuarioRequest bloqueoWebRequest = new BloqueoWebUsuarioRequest();
-                bloqueoWebRequest.idCliente = id;
-                bloqueoWebRequest.estatus = 1;
-
-                bloqueoWebResponse = await _usuariosApiClient.GetBloqueoWeb(bloqueoWebRequest);
-
-            } else if (Estatus == "False") {
-
-                BloqueoWebUsuarioRequest bloqueoWebRequest = new BloqueoWebUsuarioRequest();
-                bloqueoWebRequest.idCliente = id;
-                bloqueoWebRequest.estatus = 2;
-
-                bloqueoWebResponse = await _usuariosApiClient.GetBloqueoWeb(bloqueoWebRequest);
-
-            } else {
-                //Deteccion de posible cambio en codigo HTML a través de inspeccionar elemento
-                return Json(BadRequest());
-            }
-
-            if (bloqueoWebResponse.error == false) {
-                return Json(Ok());
-            } else {
-                return Json(BadRequest());
-            }
-
-        } catch (Exception ex) {
-            return Json(BadRequest());
-        }
     }
 
     #endregion

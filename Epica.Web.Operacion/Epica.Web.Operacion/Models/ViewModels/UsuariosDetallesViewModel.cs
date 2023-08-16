@@ -5,6 +5,7 @@
         public long Id { get; set; }
         public string Nombre { get; set; }
         public string? ApellidoPaterno { get; set; }
+        public string? ApellidoMaterno { get; set; }
         public string Email { get; set; }
         public string Curp { get; set; }
         public string? Rfc { get; set; }
@@ -15,7 +16,7 @@
         public string Sexo { get; set; }
         public string? Ocupacion { get; set; }
         public string? Nacionalidad { get; set; }
-        public bool? Fiel { get; set; }
+        public string? Fiel { get; set; }
         public string? Pais { get; set; }
         public decimal? IngresoMensual { get; set; }
         public decimal? MontoMaximo { get; set; }
@@ -32,5 +33,6 @@
         public string? ApoderadoLegal { get; set; }
         public string? Empresa { get; set; }
         public string? Rol { get; set; }
+        public string? NoInterior { get; set; }
     }
 }

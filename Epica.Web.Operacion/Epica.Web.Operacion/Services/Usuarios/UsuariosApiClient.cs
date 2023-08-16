@@ -177,5 +177,58 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
             return respuesta;
         }
+
+        public async Task<RegistrarModificarClienteResponse> GetRegistroCliente(RegistroModificacionClienteRequest request)
+        {
+            RegistrarModificarClienteResponse respuesta = new RegistrarModificarClienteResponse();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.UsuariosOperations.InsertarUsuarioNuevo();
+                var json = JsonConvert.SerializeObject(request);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await ApiClient.PostAsync(uri, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    respuesta = JsonConvert.DeserializeObject<RegistrarModificarClienteResponse>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                respuesta.error = true;
+                respuesta.detalle = ex.Message;
+                return respuesta;
+            }
+
+            return respuesta;
+        }
+
+        public async Task<UserDetailsResponse> GetDetallesCliente(int id)
+        {
+            UserDetailsResponse? Usuario = new UserDetailsResponse();
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.UsuariosOperations.GetUsuario(id);
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    Usuario = JsonConvert.DeserializeObject<UserDetailsResponse>(jsonResponse);
+                }
+
+            }
+            catch (Exception)
+            {
+                return Usuario;
+            }
+
+            return Usuario;
+        }
     }
 }
