@@ -33,7 +33,7 @@ namespace Epica.Web.Operacion.Controllers
         public IActionResult Index(string AccountID = "")
         {
             var loginResponse = _userContextService.GetLoginResponse();
-            if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Ver")) == true)
+            if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Transacciones" && modulo.Acciones.Contains("Ver")) == true)
             {
                 ViewBag.AccountID = AccountID;
                 return View();

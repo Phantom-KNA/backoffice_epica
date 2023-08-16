@@ -9,7 +9,6 @@ using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Services.Login;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Epica.Web.Operacion.Helpers;
-using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>
