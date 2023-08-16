@@ -15,14 +15,12 @@ namespace Epica.Web.Operacion.Controllers
             _loginApiClient = loginApiClient;
         }
         
-        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         [HttpGet]
         public IActionResult Login()
         {
             return View("~/Views/Account/Login.cshtml");
         }
 
-        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         [HttpPost]
         public async Task<ActionResult> Login(string username, string password)
         {
@@ -48,8 +46,6 @@ namespace Epica.Web.Operacion.Controllers
             }
 
         }
-
-        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
 
         public IActionResult Logout()
         {
