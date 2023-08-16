@@ -1,6 +1,7 @@
 ﻿using Epica.Web.Operacion.Models;
 using Epica.Web.Operacion.Models.ViewModels;
 using Epica.Web.Operacion.Services.Transaccion;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using System.Collections.Generic;
@@ -32,7 +33,6 @@ public class HomeController : Controller
         _cuentaApiClient = cuentaApiClient;
     }
 
-    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public async Task<ActionResult> Index()
     {
         if (HttpContext.Session.GetString("CurrentSession") == null)
@@ -55,7 +55,6 @@ public class HomeController : Controller
         }
     }
 
-    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public IActionResult Account()
     {
         return View();

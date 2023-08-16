@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Text;
 using static Epica.Web.Operacion.Controllers.CuentaController;
 using Epica.Web.Operacion.Models.Request;
+using Epica.Web.Operacion.Helpers;
+
 
 namespace Epica.Web.Operacion.Controllers;
 
@@ -20,24 +22,37 @@ public class UsuariosController : Controller
     #region "Locales"
     private readonly IUsuariosApiClient _usuariosApiClient;
     private readonly ICuentaApiClient _cuentaApiClient;
+    private readonly UserContextService _userContextService;
     #endregion
 
     #region "Constructores"
-    public UsuariosController(IUsuariosApiClient usuariosApiClient, ICuentaApiClient cuentaApiClient)
+    public UsuariosController(IUsuariosApiClient usuariosApiClient,
+        ICuentaApiClient cuentaApiClient,
+        UserContextService userContextService
+        )
     {
         _usuariosApiClient = usuariosApiClient;
         _cuentaApiClient = cuentaApiClient;
+        _userContextService = userContextService;
     }
     #endregion
 
     #region "Funciones"
 
     #region Consulta Clientes
+
+    [Authorize]
     public IActionResult Index()
     {
-        return View();
+        var loginResponse = _userContextService.GetLoginResponse();
+        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Insertar")) == true)
+            return View();
+
+        return NotFound();
+
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<JsonResult> GestionarEstatusUsuarioWeb(int id, string Estatus)
     {
@@ -87,6 +102,7 @@ public class UsuariosController : Controller
         }
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<JsonResult> GestionarEstatusUsuarioTotal(int id, string Estatus)
     {
@@ -136,6 +152,7 @@ public class UsuariosController : Controller
         }
     }
 
+    [Authorize]
     [Route("Usuarios/Detalle/DatosGenerales")]
     public async Task<IActionResult> DatosGenerales(int id)
     {
@@ -197,6 +214,7 @@ public class UsuariosController : Controller
         return View("~/Views/Usuarios/Detalles/DatosGenerales/DetalleUsuario.cshtml", usuariosDetallesViewModel);
     }
 
+    [Authorize]
     [Route("Usuarios/Detalle/Cuentas")]
     public async Task<IActionResult> Cuentas(int id)
     {
@@ -225,6 +243,7 @@ public class UsuariosController : Controller
         return View("~/Views/Usuarios/Detalles/Cuentas/DetalleCuentas.cshtml");
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<JsonResult> ConsultaCuentas(string id)
     {
@@ -307,15 +326,22 @@ public class UsuariosController : Controller
     }
     #endregion
 
-
     #region Registro Usuarios
+    [Authorize]
     public IActionResult Registro()
     {
-        ViewData["IsEdit"] = false;
-        ViewBag.TituloForm = "Crear nuevo usuario";
-        return View("~/Views/Usuarios/Registro.cshtml");
+        var loginResponse = _userContextService.GetLoginResponse();
+        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Insertar")) == true)
+        {
+            ViewData["IsEdit"] = false;
+            ViewBag.TituloForm = "Crear nuevo usuario";
+            return View();
+        }
+
+        return NotFound();
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> RegistrarUsuario(UsuariosDetallesViewModel model)
     {
@@ -373,12 +399,13 @@ public class UsuariosController : Controller
     }
     #endregion
 
-
+    [Authorize]
     public IActionResult GestionarPermisos()
     {
         return View();
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<JsonResult> ConsultaPermisos(List<RequestListFilters> filters)
     {
@@ -477,6 +504,7 @@ public class UsuariosController : Controller
         return Json(gridData);
     }
 
+    [Authorize]
     public async Task<IActionResult> GestionarDocumentos(string AccountID = "")
     {
         if (AccountID == "")
@@ -497,36 +525,44 @@ public class UsuariosController : Controller
         return View();
     }
 
+    [Authorize]
     public async Task<ActionResult> Modificar(int id)
     {
-        ViewBag.TituloForm = "Modificar usuario";
-        try
+        var loginResponse = _userContextService.GetLoginResponse();
+        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Insertar")) == true)
         {
-            UserResponse user = await _usuariosApiClient.GetUsuarioAsync(id);
-            UsuariosDetallesViewModel usuariosDetallesViewModel = new UsuariosDetallesViewModel
+            try
             {
-                Id = user.id,
-                Nombre = user.nombreCompleto,
-                Telefono = user.telefono,
-                Email = user.email,
-                Curp = user.CURP,
-                Empresa = user.organizacion,
-                Sexo = user.sexo,
-            };
+                UserResponse user = await _usuariosApiClient.GetUsuarioAsync(id);
+                UsuariosDetallesViewModel usuariosDetallesViewModel = new UsuariosDetallesViewModel
+                {
+                    Id = user.id,
+                    Nombre = user.nombreCompleto,
+                    Telefono = user.telefono,
+                    Email = user.email,
+                    Curp = user.CURP,
+                    Empresa = user.organizacion,
+                    Sexo = user.sexo,
+                };
 
-            if (usuariosDetallesViewModel == null)
-            {
-                return RedirectToAction("Error404", "Error"); 
+                if (usuariosDetallesViewModel == null)
+                {
+                    return RedirectToAction("Error404", "Error");
+                }
+
+                return View("~/Views/Usuarios/Registro.cshtml", usuariosDetallesViewModel);
             }
+            catch (Exception)
+            {
+                return RedirectToAction("Error", "Error");
+            }
+        }
 
-            return View("~/Views/Usuarios/Registro.cshtml", usuariosDetallesViewModel);
-        }
-        catch (Exception)
-        {
-            return RedirectToAction("Error", "Error");
-        }
+        return NotFound();
+
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<JsonResult> Consulta(List<RequestListFilters> filters)
     {
@@ -632,6 +668,7 @@ public class UsuariosController : Controller
         return Json(gridData);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<JsonResult> ConsultarSubCuentas()
     {
@@ -640,6 +677,7 @@ public class UsuariosController : Controller
         return Json(ListPF);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<JsonResult> ConsultarListadoDocumentos(string idAccount)
     {

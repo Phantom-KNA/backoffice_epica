@@ -1,4 +1,6 @@
-﻿<!--begin::Sidebar primary-->
+﻿@model Epica.Web.Operacion.Models.Response.LoginResponse
+
+<!--begin::Sidebar primary-->
 <div class="app-sidebar-primary">
     <!--begin::Logo-->
     <div class="app-sidebar-logo d-none d-md-flex flex-center pt-10 mb-5 mb-lg-17" id="kt_app_sidebar_logo">
@@ -14,130 +16,154 @@
         <!--begin::Menu-->
         <div id="kt_aside_menu" class="menu menu-rounded menu-column menu-title-gray-600 menu-state-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500 fw-semibold fs-6" data-kt-menu="true">
             <!--begin:Menu item-->
-            <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item py-2">
-                <!--begin:Menu link-->
-                <span class="menu-link menu-center">
-                    <span class="menu-icon me-0">
-                        <i class="bi bi-people fs-2"></i>
-                    </span>
-                </span>
-                <!--end:Menu link-->
-                <!--begin:Menu sub-->
-                <div class="menu-sub menu-sub-dropdown px-2 py-4 w-250px mh-75 overflow-auto">
-                    <!--begin:Menu item-->
-                    <div class="menu-item">
+            @{
+                if (Model.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Ver")) == true)
+                {
+                    <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item py-2">
                         <!--begin:Menu link-->
-                        <a class="menu-link" asp-action="Index" asp-controller="Usuarios">
-                            <span class="menu-bullet">
-                                <span class="bullet bullet-dot"></span>
+                        <span class="menu-link menu-center">
+                            <span class="menu-icon me-0">
+                                <i class="bi bi-people fs-2"></i>
                             </span>
-                            <span class="menu-title">Usuarios</span>
-                        </a>
+                        </span>
                         <!--end:Menu link-->
-                    </div>
-                    <div class="menu-item">
-                        <!--begin:Menu link-->
-                        <a class="menu-link" asp-action="GestionarPermisos" asp-controller="Usuarios">
-                            <span class="menu-bullet">
-                                <span class="bullet bullet-dot"></span>
-                            </span>
-                            <span class="menu-title">Gestionar Permisos</span>
-                        </a>
-                        <!--end:Menu link-->
-                    </div>
-                    <!--end:Menu item-->
-                </div>
-                <!--end:Menu sub-->
-            </div>
-            <!--end:Menu item-->
-            <!--begin:Menu item-->
-            <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item py-2">
-                <!--begin:Menu link-->
-                <span class="menu-link menu-center">
-                    <span class="menu-icon me-0">
-                        <i class="fonticon-card fs-1"></i>
-                    </span>
-                </span>
-                <!--end:Menu link-->
-                <!--begin:Menu sub-->
-                <div class="menu-sub menu-sub-dropdown px-2 py-4 w-250px mh-75 overflow-auto">
-                    <!--begin:Menu item-->
-                    <div class="menu-item">
-                        <!--begin:Menu link-->
-                        <a class="menu-link" asp-action="Index" asp-controller="Cuenta">
-                            <span class="menu-bullet">
-                                <span class="bullet bullet-dot"></span>
-                            </span>
-                            <span class="menu-title">Cuentas</span>
-                        </a>
-                        <!--end:Menu link-->
+                        <!--begin:Menu sub-->
+                        <div class="menu-sub menu-sub-dropdown px-2 py-4 w-250px mh-75 overflow-auto">
+                            <!--begin:Menu item-->
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link" asp-action="Index" asp-controller="Usuarios">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Usuarios</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link" asp-action="GestionarPermisos" asp-controller="Usuarios">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Gestionar Permisos</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                            <!--end:Menu item-->
+                        </div>
+                        <!--end:Menu sub-->
                     </div>
                     <!--end:Menu item-->
-                </div>
-                <!--end:Menu sub-->
-            </div>
-            <!--end:Menu item-->
-            <!--begin:Menu item-->
-            <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item py-2">
-                <!--begin:Menu link-->
-                <span class="menu-link menu-center">
-                    <span class="menu-icon me-0">
-                        <i class="bi bi-file-earmark-break fs-2"></i>
-                    </span>
-                </span>
-                <!--end:Menu link-->
-                <!--begin:Menu sub-->
-                <div class="menu-sub menu-sub-dropdown menu-sub-indention px-2 py-4 w-250px mh-75 overflow-auto">
                     <!--begin:Menu item-->
-                    <div class="menu-item">
-                        <!--begin:Menu link-->
-                        <a class="menu-link" asp-action="Index" asp-controller="Transacciones">
-                            <span class="menu-bullet">
-                                <span class="bullet bullet-dot"></span>
-                            </span>
-                            <span class="menu-title">Transacciones</span>
-                        </a>
-                        <!--end:Menu link-->
-                    </div>
-                    <!--end:Menu item-->
+                }
+             }
 
-                </div>
-                <!--end:Menu sub-->
-            </div>
-            <!--end:Menu item-->
-            <!--begin:Menu item-->
-            <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item py-2">
-                <!--begin:Menu link-->
-                <span class="menu-link menu-center">
-                    <span class="menu-icon me-0">
-                        <i class="bi bi-credit-card fs-2"></i>
-                    </span>
-                </span>
-                <!--end:Menu link-->
-                <!--begin:Menu sub-->
-                <div class="menu-sub menu-sub-dropdown menu-sub-indention px-2 py-4 w-250px mh-75 overflow-auto">
-                    <!--begin:Menu item-->
-                    <div class="menu-item">
+            @{
+                if (Model.AccionesPorModulo.Any(modulo => modulo.Modulo == "Cuentas" && modulo.Acciones.Contains("Ver")) == true)
+                {
+                    <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item py-2">
                         <!--begin:Menu link-->
-                        <a class="menu-link" asp-action="Index" asp-controller="Tarjetas">
-                            <span class="menu-bullet">
-                                <span class="bullet bullet-dot"></span>
+                        <span class="menu-link menu-center">
+                            <span class="menu-icon me-0">
+                                <i class="fonticon-card fs-1"></i>
                             </span>
-                            <span class="menu-title">Tarjetas</span>
-                        </a>
+                        </span>
                         <!--end:Menu link-->
+                        <!--begin:Menu sub-->
+                        <div class="menu-sub menu-sub-dropdown px-2 py-4 w-250px mh-75 overflow-auto">
+                            <!--begin:Menu item-->
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link" asp-action="Index" asp-controller="Cuenta">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Cuentas</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                            <!--end:Menu item-->
+                        </div>
+                        <!--end:Menu sub-->
+                    </div>
+                }
+                <!--end:Menu item-->
+                <!--begin:Menu item-->
+            }
+
+            @{
+                if (Model.AccionesPorModulo.Any(modulo => modulo.Modulo == "Transacciones" && modulo.Acciones.Contains("Ver")) == true)
+                {
+                    <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item py-2">
+                        <!--begin:Menu link-->
+                        <span class="menu-link menu-center">
+                            <span class="menu-icon me-0">
+                                <i class="bi bi-file-earmark-break fs-2"></i>
+                            </span>
+                        </span>
+                        <!--end:Menu link-->
+                        <!--begin:Menu sub-->
+                        <div class="menu-sub menu-sub-dropdown menu-sub-indention px-2 py-4 w-250px mh-75 overflow-auto">
+                            <!--begin:Menu item-->
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link" asp-action="Index" asp-controller="Transacciones">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Transacciones</span>
+                                </a>
+
+                                <!--end:Menu link-->
+                            </div>
+                            <!--end:Menu item-->
+
+                        </div>
+                        <!--end:Menu sub-->
+                    </div>
+                }
+                <!--end:Menu item-->
+                <!--begin:Menu item-->
+            }
+            @{
+                if (Model.AccionesPorModulo.Any(modulo => modulo.Modulo == "Tarjetas" && modulo.Acciones.Contains("Ver")) == true)
+                {
+                    <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item py-2">
+                        <!--begin:Menu link-->
+                        <span class="menu-link menu-center">
+                            <span class="menu-icon me-0">
+                                <i class="bi bi-credit-card fs-2"></i>
+                            </span>
+                        </span>
+                        <!--end:Menu link-->
+                        <!--begin:Menu sub-->
+                        <div class="menu-sub menu-sub-dropdown menu-sub-indention px-2 py-4 w-250px mh-75 overflow-auto">
+                            <!--begin:Menu item-->
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link" asp-action="Index" asp-controller="Tarjetas">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Tarjetas</span>
+                                </a>
+                                 <!--end:Menu link-->
+                            </div>
+                            <!--end:Menu item-->
+
+                        </div>
+                        <!--end:Menu sub-->
                     </div>
                     <!--end:Menu item-->
-
-                </div>
-                <!--end:Menu sub-->
-            </div>
-            <!--end:Menu item-->
+                }
+            }
          </div>
         <!--end::Menu-->
     </div>
     <!--end::Primary menu-->
     <!--begin::Footer-->
+
     <div class="d-flex flex-column flex-center pb-4 pb-lg-8" id="kt_app_sidebar_footer">
         <partial name="~/Views/Shared/_UserMenu.cshtml" />
     </div>
