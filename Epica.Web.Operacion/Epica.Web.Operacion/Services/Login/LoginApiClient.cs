@@ -40,14 +40,7 @@ namespace Epica.Web.Operacion.Services.Login
                     loginResponse = JsonConvert.DeserializeObject<LoginResponse>(jsonResponse);
 
                     loginResponse.IsAuthenticated = true;
-                    var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, loginResponse.User),
-                        new Claim(ClaimTypes.Role, loginResponse.Rol)
-                    };
-                    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    var principal = new ClaimsPrincipal(identity);
-                    await HttpContext.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
                 }
                 else
                 {
