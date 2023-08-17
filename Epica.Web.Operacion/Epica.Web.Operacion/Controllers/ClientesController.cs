@@ -323,56 +323,6 @@ public class ClientesController : Controller
             return View("~/Views/Clientes/Detalles/DatosGenerales/DetalleCliente.cshtml", clientesDetallesViewModel);
         }
         return NotFound();
-
-        ClientesDetallesViewModel clientesDetallesViewModel = new ClientesDetallesViewModel
-        {
-            Id = user.value.IdCliente,
-            Nombre = user.value.NombreCompleto,
-            Telefono = user.value.Telefono,
-            Email = user.value.Email,
-            Curp = user.value.CURP,
-            Empresa = user.value.Organizacion,
-            Sexo = user.value.Sexo,
-            Rfc = user.value.RFC,
-            Ine = user.value.INE,
-            FechaNacimiento = user.value.FechaNacimiento,
-            Observaciones = user.value.Observaciones,
-            PaisNacimiento = user.value.PaisNacimiento,
-            Ocupacion = user.value.IdOcupacion.ToString(),
-            Nacionalidad = user.value.Nacionalidad,
-            Fiel = user.value.Fiel,
-            Pais = user.value.PaisNacimiento,
-            IngresoMensual = Convert.ToDecimal(user.value.SalarioNetoMensual),
-            MontoMaximo = Convert.ToDecimal(user.value.SalarioNetoMensual),
-            Calle = user.value.Calle,
-            CalleNumero = user.value.NoIntExt,
-            PrimeraCalle = user.value.CalleSecundaria,
-            SegundaCalle = user.value.CalleSecundaria2,
-            Colonia = user.value.Colonia,
-            CodigoPostal = user.value.CodigoPostal,
-            NoInterior = user.value.NoIntExt,
-            Puesto = user.value.Puesto
-            //Rol = user.value.rol,
-            //    DelegacionMunicipio = user.value.del;
-            //CiudadEstado = user.value.CiudadEstado
-            //Empresa = Convert.ToInt32(user.value.em),
-            //ApoderadoLegal = Convert.ToInt32(user.value.);
-        };
-
-        ClientesHeaderViewModel header = new ClientesHeaderViewModel
-        {
-            Id = user.value.IdCliente,
-            NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
-            Telefono = user.value.Telefono,
-            Correo = user.value.Email,
-            Curp = user.value.CURP,
-            Organizacion = user.value.Organizacion,
-            Rfc = user.value.RFC,
-            Sexo = user.value.Sexo
-        };
-        ViewBag.Info = header;
-        ViewBag.UrlView = "DatosGenerales";
-        return View("~/Views/Clientes/Detalles/DatosGenerales/DetalleCliente.cshtml", clientesDetallesViewModel);
     }
 
     [Authorize]
