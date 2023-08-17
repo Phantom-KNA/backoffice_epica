@@ -1,4 +1,4 @@
-﻿@model Epica.Web.Operacion.Models.Response.UserResponse
+﻿@model Epica.Web.Operacion.Models.Response.ClienteResponse
 <div class="dropdown dropdown-inline">
     <a href="javascript:;" class="btn btn-sm btn-icon btn-light btn-active-light-primary me-2" data-bs-toggle="dropdown">
         <i class="bi bi-three-dots"></i>
@@ -7,14 +7,14 @@
         <li class="menu-item px-3">
             @if (Model.estatus == 1)
             {
-                <a data-id="@Model.id" onclick="GestionarUsuarioWeb(@Model.id, 'False')" title="Bloquear Cuenta Web" class="btnEditar menu-link px-3">
+                <a data-id="@Model.id" onclick="GestionarClienteWeb(@Model.id, 'False')" title="Bloquear Cuenta Web" class="btnEditar menu-link px-3">
                     <i class="bi bi-lock"></i>&nbsp;
                     Bloquear Web
                 </a>
             }
             else
             {
-                <a data-id="@Model.id" onclick="GestionarUsuarioWeb(@Model.id, 'True')" title="Desbloquear Cuenta Web" class="btnEditar menu-link px-3">
+                <a data-id="@Model.id" onclick="GestionarClienteWeb(@Model.id, 'True')" title="Desbloquear Cuenta Web" class="btnEditar menu-link px-3">
                     <i class="bi bi-unlock"></i>&nbsp;
                     Desbloquear Web
                 </a>
@@ -23,21 +23,21 @@
         <li class="menu-item px-3">
             @if (Model.estatus == 1)
             {
-                <a data-id="@Model.id" onclick="GestionarUsuarioTotal(@Model.id, 'False')" title="Bloquear Cuenta Web" class="btnEditar menu-link px-3">
+                <a data-id="@Model.id" onclick="GestionarClienteTotal(@Model.id, 'False')" title="Bloquear Cuenta Web" class="btnEditar menu-link px-3">
                     <i class="bi bi-lock"></i>&nbsp;
                     Bloquear Total
                 </a>
             }
             else
             {
-                <a data-id="@Model.id" onclick="GestionarUsuarioTotal(@Model.id, 'True')" title="Desbloquear Cuenta Web" class="btnEditar menu-link px-3">
+                <a data-id="@Model.id" onclick="GestionarClienteTotal(@Model.id, 'True')" title="Desbloquear Cuenta Web" class="btnEditar menu-link px-3">
                     <i class="bi bi-unlock"></i>&nbsp;
                     Desbloquear Total
                 </a>
             }
         </li>
         <li class="menu-item px-3">
-            <a data-id="@Model.id" asp-controller="Usuarios" asp-action="DatosGenerales" asp-route-id="@Model.id" class="btnDetalle menu-link px-3">
+            <a data-id="@Model.id" asp-controller="Clientes" asp-action="DatosGenerales" asp-route-id="@Model.id" class="btnDetalle menu-link px-3">
                 <i class="bi bi-search"></i>&nbsp;
                 Detalles
             </a>

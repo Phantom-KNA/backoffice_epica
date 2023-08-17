@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Usuarios";
+    ViewData["Title"] = "Clientes";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section LogoPage{
@@ -10,13 +10,13 @@
         <span class="bullet bg-gray-400 w-5px h-2px"></span>
     </li>
     <li class="breadcrumb-item text-muted">
-        Usuarios
+        Clientes
     </li>
     <li class="breadcrumb-item">
         <span class="bullet bg-gray-400 w-5px h-2px"></span>
     </li>
     <li class="breadcrumb-item text-muted">
-        Consulta Usuarios
+        Consulta Clientes
     </li>
 }
 
@@ -116,8 +116,8 @@
                             </div>
                         </div>
                         <div id="kt_datatable_buttons" class="d-none"></div>
-                        <a asp-action="Registro" asp-controller="Usuarios" class="btn btn-sm btn-primary me-3">
-                            <i class="bi bi-plus-lg"></i>&nbsp;Nuevo Usuario
+                        <a asp-action="Registro" asp-controller="Clientes" class="btn btn-sm btn-primary me-3">
+                            <i class="bi bi-plus-lg"></i>&nbsp;Nuevo cliente
                         </a>
                     </div>
                 </div>
@@ -189,5 +189,5 @@
 </div>
 
 @section Scripts{
-    <script src="~/js/Usuarios/epica.usuarios.index.js" asp-append-version="true"></script>
+    <script src="~/js/Clientes/epica.clientes.index.js" asp-append-version="true"></script>
 }

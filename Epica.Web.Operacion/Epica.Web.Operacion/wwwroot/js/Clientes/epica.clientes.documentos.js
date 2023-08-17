@@ -37,7 +37,7 @@ var KTDatatableRemoteAjax = function () {
             filter: true,
             ordering: true,
             ajax: {
-                url: siteLocation + 'Usuarios/ConsultarListadoDocumentos',
+                url: siteLocation + 'Clientes/ConsultarListadoDocumentos',
                 type: 'POST',
                 data: function (d) {
                     d.idAccount = AccountId;

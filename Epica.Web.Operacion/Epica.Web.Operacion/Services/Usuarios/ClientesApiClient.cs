@@ -12,9 +12,9 @@ using static Epica.Web.Operacion.Controllers.CuentaController;
 
 namespace Epica.Web.Operacion.Services.Transaccion
 {
-    public class UsuariosApiClient : ApiClientBase, IUsuariosApiClient
+    public class ClientesApiClient : ApiClientBase, IClientesApiClient
     {
-        public UsuariosApiClient(
+        public ClientesApiClient(
             HttpClient httpClient, 
             ILogger<CuentaApiClient> logger, 
             IOptions<UrlsConfig> config, 
@@ -24,35 +24,35 @@ namespace Epica.Web.Operacion.Services.Transaccion
         {
         }
 
-        public async Task<List<UserResponse>> GetUsuariosAsync(int pageNumber, int recordsTotal)
+        public async Task<List<ClienteResponse>> GetClientesAsync(int pageNumber, int recordsTotal)
         {
 
-            List<UserResponse>? ListaUsuarios = new List<UserResponse>();
+            List<ClienteResponse>? listaClientes = new List<ClienteResponse>();
 
             try
             {
-                var uri = Urls.Transaccion + UrlsConfig.UsuariosOperations.GetUsuarioInfo(pageNumber, recordsTotal);
+                var uri = Urls.Transaccion + UrlsConfig.ClientesOperations.GetClienteInfo(pageNumber, recordsTotal);
                 var response = await ApiClient.GetAsync(uri);
 
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    ListaUsuarios = JsonConvert.DeserializeObject<List<UserResponse>>(jsonResponse);
+                    listaClientes = JsonConvert.DeserializeObject<List<ClienteResponse>>(jsonResponse);
                 }
 
             } catch (Exception ex) {
-                return ListaUsuarios;
+                return listaClientes;
             }
 
-            return ListaUsuarios;
+            return listaClientes;
         }
 
-        public async Task<int> GetTotalUsuariosAsync()
+        public async Task<int> GetTotalClientesAsync()
         {
             int result = 0;
             try
             {
-                var uri = Urls.Transaccion + UrlsConfig.UsuariosOperations.GetUsuariosTotal();
+                var uri = Urls.Transaccion + UrlsConfig.ClientesOperations.GetClientesTotal();
                 var response = await ApiClient.GetAsync(uri);
 
                 if (response.IsSuccessStatusCode)
@@ -71,62 +71,62 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return result;
         }
 
-        public async Task<UserResponse> GetUsuarioAsync(int id)
+        public async Task<ClienteResponse> GetClienteAsync(int id)
         {
-            UserResponse? Usuario = new UserResponse();
+            ClienteResponse? cliente = new ClienteResponse();
             try
             {
-                var uri = Urls.Transaccion + UrlsConfig.UsuariosOperations.GetUsuario(id);
+                var uri = Urls.Transaccion + UrlsConfig.ClientesOperations.GetCliente(id);
                 var response = await ApiClient.GetAsync(uri);
 
                 if (response.IsSuccessStatusCode)
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    Usuario = JsonConvert.DeserializeObject<UserResponse>(jsonResponse);
+                    cliente = JsonConvert.DeserializeObject<ClienteResponse>(jsonResponse);
                 }
 
             }
             catch (Exception)
             {
-                return Usuario;
+                return cliente;
             }
 
-            return Usuario;
+            return cliente;
         }
 
-        public async Task<List<DocumentosUserResponse>> GetDocumentosUsuarioAsync(int id)
+        public async Task<List<DocumentosClienteResponse>> GetDocumentosClienteAsync(int id)
         {
-            List<DocumentosUserResponse>? ListaDocumentosUsuario = new List<DocumentosUserResponse>();
+            List<DocumentosClienteResponse>? listaDocumentosCliente = new List<DocumentosClienteResponse>();
 
             try
             {
-                var uri = Urls.Transaccion + UrlsConfig.UsuariosOperations.GetUsuarioDocumentos(id);
+                var uri = Urls.Transaccion + UrlsConfig.ClientesOperations.GetClienteDocumentos(id);
                 var response = await ApiClient.GetAsync(uri);
 
                 if (response.IsSuccessStatusCode)
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    ListaDocumentosUsuario = JsonConvert.DeserializeObject<List<DocumentosUserResponse>>(jsonResponse);
+                    listaDocumentosCliente = JsonConvert.DeserializeObject<List<DocumentosClienteResponse>>(jsonResponse);
                 }
 
             }
             catch (Exception)
             {
-                return ListaDocumentosUsuario;
+                return listaDocumentosCliente;
             }
 
-            return ListaDocumentosUsuario;
+            return listaDocumentosCliente;
         }
 
-        public async Task<BloqueoWebResponse> GetBloqueoWeb(BloqueoWebUsuarioRequest request)
+        public async Task<BloqueoWebResponse> GetBloqueoWeb(BloqueoWebClienteRequest request)
         {
             BloqueoWebResponse respuesta = new BloqueoWebResponse();
 
             try
             {
-                var uri = Urls.Transaccion + UrlsConfig.UsuariosOperations.GetBloqueaWebUsuario();
+                var uri = Urls.Transaccion + UrlsConfig.ClientesOperations.GetBloqueaWebCliente();
                 var json = JsonConvert.SerializeObject(request);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -149,13 +149,13 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return respuesta;
         }
 
-        public async Task<BloqueoTotalResponse> GetBloqueoTotal(BloqueoTotalUsuarioRequest request)
+        public async Task<BloqueoTotalResponse> GetBloqueoTotal(BloqueoTotalClienteRequest request)
         {
             BloqueoTotalResponse respuesta = new BloqueoTotalResponse();
 
             try
             {
-                var uri = Urls.Transaccion + UrlsConfig.UsuariosOperations.GetBloqueaTotalUsuario();
+                var uri = Urls.Transaccion + UrlsConfig.ClientesOperations.GetBloqueaTotalCliente();
                 var json = JsonConvert.SerializeObject(request);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -184,7 +184,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
             try
             {
-                var uri = Urls.Transaccion + UrlsConfig.UsuariosOperations.InsertarUsuarioNuevo();
+                var uri = Urls.Transaccion + UrlsConfig.ClientesOperations.InsertarClienteNuevo();
                 var json = JsonConvert.SerializeObject(request);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -207,28 +207,28 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return respuesta;
         }
 
-        public async Task<UserDetailsResponse> GetDetallesCliente(int id)
+        public async Task<ClienteDetailsResponse> GetDetallesCliente(int id)
         {
-            UserDetailsResponse? Usuario = new UserDetailsResponse();
+            ClienteDetailsResponse? cliente = new ClienteDetailsResponse();
             try
             {
-                var uri = Urls.Transaccion + UrlsConfig.UsuariosOperations.GetUsuario(id);
+                var uri = Urls.Transaccion + UrlsConfig.ClientesOperations.GetCliente(id);
                 var response = await ApiClient.GetAsync(uri);
 
                 if (response.IsSuccessStatusCode)
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    Usuario = JsonConvert.DeserializeObject<UserDetailsResponse>(jsonResponse);
+                    cliente = JsonConvert.DeserializeObject<ClienteDetailsResponse>(jsonResponse);
                 }
 
             }
             catch (Exception)
             {
-                return Usuario;
+                return cliente;
             }
 
-            return Usuario;
+            return cliente;
         }
     }
 }

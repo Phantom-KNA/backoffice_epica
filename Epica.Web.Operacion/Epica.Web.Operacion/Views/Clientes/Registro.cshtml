@@ -1,4 +1,4 @@
-﻿@model Epica.Web.Operacion.Models.ViewModels.UsuariosDetallesViewModel
+﻿@model Epica.Web.Operacion.Models.ViewModels.ClientesDetallesViewModel
 @{
     ViewData["Title"] = ViewBag.TituloForm;
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -13,7 +13,7 @@
         <span class="bullet bg-gray-400 w-5px h-2px"></span>
     </li>
     <li class="breadcrumb-item text-muted">
-        <a class="text-muted" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
+        <a class="text-muted" asp-controller="Clientes" asp-action="Index">Clientes</a>
     </li>
     <li class="breadcrumb-item">
         <span class="bullet bg-gray-400 w-5px h-2px"></span>
@@ -23,7 +23,7 @@
     </li>
 }
 
-<form asp-controller="Usuarios" asp-action="RegistrarUsuario" method="post">
+<form asp-controller="Clientes" asp-action="RegistrarCliente" method="post">
     <div class="col-md-12">
         <div class="card shadow-sm">
             <div class="card-header">
@@ -33,13 +33,13 @@
                     <button href="javascript:void(0)" onclick="history.back();" type="button" class="btn btn-sm btn-light-primary me-2">
                         Cancelar
                     </button>
-                    <button type="submit" class="btn btn-sm btn-light-primary me-2" id="btnGuardarUsuario">
+                    <button type="submit" class="btn btn-sm btn-light-primary me-2" id="btnGuardarCliente">
                         Guardar
                     </button>
                     @{
                         if (Model != null)
                         {
-                            <button href="#" type="button" class="btn btn-sm btn-light-primary" id="btnBloquearUsuario">
+                            <button href="#" type="button" class="btn btn-sm btn-light-primary" id="btnBloquearCliente">
                                 Bloquear
                             </button>
                         }
@@ -348,5 +348,5 @@
 </form>
 
 @section Scripts{
-    <script src="~/js/Usuarios/epica.usuarios.registro.js" asp-append-version="true"></script>
+    <script src="~/js/Clientes/epica.clientes.registro.js" asp-append-version="true"></script>
 }

@@ -2,10 +2,10 @@
 namespace Epica.Web.Operacion.Models.Request;
 
 /// <summary>
-/// Clase que representa una solicitud de bloqueo de usuario.
+/// Clase que representa una solicitud de bloqueo total de usuario.
 /// </summary>
 
-public class BloqueoWebUsuarioRequest
+public class BloqueoTotalClienteRequest
 {
 	public int idCliente { get; set; }
 	public int estatus { get; set; }

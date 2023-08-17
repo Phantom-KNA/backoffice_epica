@@ -4,7 +4,7 @@
 /// Clase del modelo para obtener el listado de documentos
 /// </summary>
 /// 
-public class DocumentosUserResponse
+public class DocumentosClienteResponse
 {
     public int idCliente { get; set; }
     public int idDocApodLeg { get; set; }
@@ -14,7 +14,7 @@ public class DocumentosUserResponse
     public string nombreDocumento { get; set; }
 }
 
-public class DocumentosUserResponseGrid : DocumentosUserResponse
+public class DocumentosClienteResponseGrid : DocumentosClienteResponse
 {
     public string Acciones { get; set; }
 }

@@ -37,7 +37,7 @@ var KTDatatableRemoteAjax = function () {
             filter: true,
             ordering: true,
             ajax: {
-                url: siteLocation + 'Usuarios/Consulta',
+                url: siteLocation + 'Clientes/Consulta',
                 type: 'POST',
                 data: function (d) {
                     var filtros = [];
@@ -71,7 +71,7 @@ var KTDatatableRemoteAjax = function () {
                         var partes = data.split("|"); // Separar la parte entera y decimal
                         var Nombre = partes[0];
                         var ID = partes[1]
-                        return "<a href='/Usuarios/Detalle/DatosGenerales?id="+ID+"'>" + Nombre +"</a>";
+                        return "<a href='/Clientes/Detalle/DatosGenerales?id="+ID+"'>" + Nombre +"</a>";
                     }
                 },
                 { data: 'telefono', name: 'Telefono', title: 'Telefono' },
@@ -112,7 +112,7 @@ var KTDatatableRemoteAjax = function () {
     };
 
     var exportButtons = () => {
-        const documentTitle = 'Usuarios';
+        const documentTitle = 'Clientes';
         var buttons = new $.fn.dataTable.Buttons(table, {
             buttons: [
                 {
@@ -193,9 +193,9 @@ jQuery(document).ready(function () {
     KTDatatableRemoteAjax.init();
 });
 
-function GestionarUsuarioWeb(AccountID, estatus) {
+function GestionarClienteWeb(AccountID, estatus) {
     $.ajax({
-        url: siteLocation + 'Usuarios/GestionarEstatusUsuarioWeb',
+        url: siteLocation + 'Clientes/GestionarEstatusClienteWeb',
         async: true,
         cache: false,
         type: 'POST',
@@ -211,9 +211,9 @@ function GestionarUsuarioWeb(AccountID, estatus) {
     });
 }
 
-function GestionarUsuarioTotal(AccountID, estatus) {
+function GestionarClienteTotal(AccountID, estatus) {
     $.ajax({
-        url: siteLocation + 'Usuarios/GestionarEstatusUsuarioTotal',
+        url: siteLocation + 'Clientes/GestionarEstatusClienteTotal',
         async: true,
         cache: false,
         type: 'POST',

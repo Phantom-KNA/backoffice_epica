@@ -21,7 +21,7 @@ var Init = function () {
             }
         });
 
-        $(document).on('click', '#btnGuardarUsuario', function (e) {
+        $(document).on('click', '#btnGuardarCliente', function (e) {
             toastr.info('Registrando información', "");
         });
     }

@@ -1,4 +1,4 @@
-﻿@model Epica.Web.Operacion.Models.ViewModels.UsuariosDetallesViewModel
+﻿@model Epica.Web.Operacion.Models.ViewModels.ClientesDetallesViewModel
 @{
     //ViewData["Title"] = "Persona Fisica";
     ViewData["Title"] = "Datos Generales";
@@ -12,17 +12,17 @@
         <span class="bullet bg-gray-400 w-5px h-2px"></span>
     </li>
     <li class="breadcrumb-item text-muted">
-        Usuarios
+        Clientes
     </li>
     <li class="breadcrumb-item">
         <span class="bullet bg-gray-400 w-5px h-2px"></span>
     </li>
     <li class="breadcrumb-item text-muted">
-        <a class="text-muted" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
+        <a class="text-muted" asp-controller="Clientes" asp-action="Index">Clientes</a>
     </li>
 }
 
-<partial name="~/Views/Usuarios/_PartialUsuarioHeaderDetalles.cshtml" model="@ViewBag.Info" />
+<partial name="~/Views/Clientes/_PartialClienteHeaderDetalles.cshtml" model="@ViewBag.Info" />
 
 <div class="card">
     <div class="container-fluid">

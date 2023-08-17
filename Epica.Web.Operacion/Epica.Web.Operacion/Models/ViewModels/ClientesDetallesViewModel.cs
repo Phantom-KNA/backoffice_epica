@@ -1,6 +1,6 @@
 ﻿namespace Epica.Web.Operacion.Models.ViewModels
 {
-    public class UsuariosDetallesViewModel
+    public class ClientesDetallesViewModel
     {
         public long Id { get; set; }
         public string Nombre { get; set; }

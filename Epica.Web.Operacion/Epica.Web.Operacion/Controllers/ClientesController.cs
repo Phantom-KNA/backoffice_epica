@@ -17,21 +17,21 @@ using Epica.Web.Operacion.Helpers;
 
 namespace Epica.Web.Operacion.Controllers;
 
-public class UsuariosController : Controller
+public class ClientesController : Controller
 {
     #region "Locales"
-    private readonly IUsuariosApiClient _usuariosApiClient;
+    private readonly IClientesApiClient _clientesApiClient;
     private readonly ICuentaApiClient _cuentaApiClient;
     private readonly UserContextService _userContextService;
     #endregion
 
     #region "Constructores"
-    public UsuariosController(IUsuariosApiClient usuariosApiClient,
+    public ClientesController(IClientesApiClient clientesApiClient,
         ICuentaApiClient cuentaApiClient,
         UserContextService userContextService
         )
     {
-        _usuariosApiClient = usuariosApiClient;
+        _clientesApiClient = clientesApiClient;
         _cuentaApiClient = cuentaApiClient;
         _userContextService = userContextService;
     }
@@ -71,18 +71,18 @@ public class UsuariosController : Controller
         request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
         request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
 
-        var gridData = new ResponseGrid<UserResponseGrid>();
-        List<UserResponse> ListPF = new List<UserResponse>();
+        var gridData = new ResponseGrid<ClienteResponseGrid>();
+        List<ClienteResponse> ListPF = new List<ClienteResponse>();
 
-        ListPF = await _usuariosApiClient.GetUsuariosAsync(1, 200);
+        ListPF = await _clientesApiClient.GetClientesAsync(1, 200);
 
         //Entorno local de pruebas
         //ListPF = GetList();
 
-        var List = new List<UserResponseGrid>();
+        var List = new List<ClienteResponseGrid>();
         foreach (var row in ListPF)
         {
-            List.Add(new UserResponseGrid
+            List.Add(new ClienteResponseGrid
             {
                 id = row.id,
                 nombreCompleto = row.nombreCompleto + "|" + row.id.ToString(),
@@ -93,7 +93,7 @@ public class UsuariosController : Controller
                 membresia = row.membresia,
                 sexo = row.sexo,
                 estatus = row.estatus,
-                Acciones = await this.RenderViewToStringAsync("~/Views/Usuarios/_Acciones.cshtml", row)
+                Acciones = await this.RenderViewToStringAsync("~/Views/Clientes/_Acciones.cshtml", row)
             });
         }
         if (!string.IsNullOrEmpty(request.Busqueda))
@@ -159,7 +159,7 @@ public class UsuariosController : Controller
     }
 
     [HttpPost]
-    public async Task<JsonResult> GestionarEstatusUsuarioWeb(int id, string Estatus)
+    public async Task<JsonResult> GestionarEstatusClienteWeb(int id, string Estatus)
     {
 
         BloqueoWebResponse bloqueoWebResponse = new BloqueoWebResponse();
@@ -168,21 +168,21 @@ public class UsuariosController : Controller
             if (Estatus == "True")
             {
 
-                BloqueoWebUsuarioRequest bloqueoWebRequest = new BloqueoWebUsuarioRequest();
+                BloqueoWebClienteRequest bloqueoWebRequest = new BloqueoWebClienteRequest();
                 bloqueoWebRequest.idCliente = id;
                 bloqueoWebRequest.estatus = 1;
 
-                bloqueoWebResponse = await _usuariosApiClient.GetBloqueoWeb(bloqueoWebRequest);
+                bloqueoWebResponse = await _clientesApiClient.GetBloqueoWeb(bloqueoWebRequest);
 
             }
             else if (Estatus == "False")
             {
 
-                BloqueoWebUsuarioRequest bloqueoWebRequest = new BloqueoWebUsuarioRequest();
+                BloqueoWebClienteRequest bloqueoWebRequest = new BloqueoWebClienteRequest();
                 bloqueoWebRequest.idCliente = id;
                 bloqueoWebRequest.estatus = 2;
 
-                bloqueoWebResponse = await _usuariosApiClient.GetBloqueoWeb(bloqueoWebRequest);
+                bloqueoWebResponse = await _clientesApiClient.GetBloqueoWeb(bloqueoWebRequest);
 
             }
             else
@@ -209,7 +209,7 @@ public class UsuariosController : Controller
 
     [Authorize]
     [HttpPost]
-    public async Task<JsonResult> GestionarEstatusUsuarioTotal(int id, string Estatus)
+    public async Task<JsonResult> GestionarEstatusClienteTotal(int id, string Estatus)
     {
 
         BloqueoTotalResponse bloqueototalResponse = new BloqueoTotalResponse();
@@ -218,21 +218,21 @@ public class UsuariosController : Controller
             if (Estatus == "True")
             {
 
-                BloqueoTotalUsuarioRequest bloqueoTotalRequest = new BloqueoTotalUsuarioRequest();
+                BloqueoTotalClienteRequest bloqueoTotalRequest = new BloqueoTotalClienteRequest();
                 bloqueoTotalRequest.idCliente = id;
                 bloqueoTotalRequest.estatus = 1;
 
-                bloqueototalResponse = await _usuariosApiClient.GetBloqueoTotal(bloqueoTotalRequest);
+                bloqueototalResponse = await _clientesApiClient.GetBloqueoTotal(bloqueoTotalRequest);
 
             }
             else if (Estatus == "False")
             {
 
-                BloqueoTotalUsuarioRequest bloqueoTotalRequest = new BloqueoTotalUsuarioRequest();
+                BloqueoTotalClienteRequest bloqueoTotalRequest = new BloqueoTotalClienteRequest();
                 bloqueoTotalRequest.idCliente = id;
                 bloqueoTotalRequest.estatus = 2;
 
-                bloqueototalResponse = await _usuariosApiClient.GetBloqueoTotal(bloqueoTotalRequest);
+                bloqueototalResponse = await _clientesApiClient.GetBloqueoTotal(bloqueoTotalRequest);
 
             }
             else
@@ -260,18 +260,18 @@ public class UsuariosController : Controller
 
     #region Detalles Cliente
     [Authorize]
-    [Route("Usuarios/Detalle/DatosGenerales")]
+    [Route("Clientes/Detalle/DatosGenerales")]
     public async Task<IActionResult> DatosGenerales(int id)
     {
 
-        UserDetailsResponse user = await _usuariosApiClient.GetDetallesCliente(id);
+        ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(id);
 
         if (user.value == null)
         {
             return RedirectToAction("Index");
         }
 
-        UsuariosDetallesViewModel usuariosDetallesViewModel = new UsuariosDetallesViewModel
+        ClientesDetallesViewModel clientesDetallesViewModel = new ClientesDetallesViewModel
         {
             Id = user.value.IdCliente,
             Nombre = user.value.NombreCompleto,
@@ -306,7 +306,7 @@ public class UsuariosController : Controller
             //ApoderadoLegal = Convert.ToInt32(user.value.);
         };
 
-        UsuarioHeaderViewModel header = new UsuarioHeaderViewModel
+        ClientesHeaderViewModel header = new ClientesHeaderViewModel
         {
             Id = user.value.IdCliente,
             NombreCompleto = user.value.NombreCompleto,
@@ -319,14 +319,14 @@ public class UsuariosController : Controller
         };
         ViewBag.Info = header;
         ViewBag.UrlView = "DatosGenerales";
-        return View("~/Views/Usuarios/Detalles/DatosGenerales/DetalleUsuario.cshtml", usuariosDetallesViewModel);
+        return View("~/Views/Clientes/Detalles/DatosGenerales/DetalleCliente.cshtml", clientesDetallesViewModel);
     }
 
     [Authorize]
-    [Route("Usuarios/Detalle/Cuentas")]
+    [Route("Clientes/Detalle/Cuentas")]
     public async Task<IActionResult> Cuentas(int id)
     {
-        UserDetailsResponse user = await _usuariosApiClient.GetDetallesCliente(id);
+        ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(id);
 
         if (user.value == null)
         {
@@ -334,7 +334,7 @@ public class UsuariosController : Controller
         }
 
         ViewBag.UrlView = "Cuentas";
-        UsuarioHeaderViewModel header = new UsuarioHeaderViewModel
+        ClientesHeaderViewModel header = new ClientesHeaderViewModel
         {
             Id = user.value.IdCliente,
             NombreCompleto = user.value.NombreCompleto,
@@ -348,7 +348,7 @@ public class UsuariosController : Controller
         ViewBag.Info = header;
         ViewBag.Nombre = header.NombreCompleto;
         ViewBag.AccountID = id;
-        return View("~/Views/Usuarios/Detalles/Cuentas/DetalleCuentas.cshtml");
+        return View("~/Views/Clientes/Detalles/Cuentas/DetalleCuentas.cshtml");
     }
 
     [Authorize]
@@ -436,7 +436,7 @@ public class UsuariosController : Controller
     }
     #endregion
 
-    #region Registro Usuarios
+    #region Registro Clientes
     [Authorize]
     public IActionResult Registro()
     {
@@ -444,7 +444,7 @@ public class UsuariosController : Controller
         if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Insertar")) == true)
         {
             ViewData["IsEdit"] = false;
-            ViewBag.TituloForm = "Crear nuevo usuario";
+            ViewBag.TituloForm = "Crear nuevo cliente";
             return View();
         }
 
@@ -453,7 +453,7 @@ public class UsuariosController : Controller
 
     [Authorize]
     [HttpPost]
-    public async Task<IActionResult> RegistrarUsuario(UsuariosDetallesViewModel model)
+    public async Task<IActionResult> RegistrarCliente(ClientesDetallesViewModel model)
     {
 
         RegistrarModificarClienteResponse response = new RegistrarModificarClienteResponse();
@@ -495,7 +495,7 @@ public class UsuariosController : Controller
             registraCliente.ApoderadoLegal = Convert.ToInt32(model.ApoderadoLegal);
             registraCliente.Rol = model.Rol;
 
-            response = await _usuariosApiClient.GetRegistroCliente(registraCliente);
+            response = await _clientesApiClient.GetRegistroCliente(registraCliente);
 
             if (response.codigo == "200")
             {
@@ -625,14 +625,14 @@ public class UsuariosController : Controller
             return RedirectToAction("Index");
         }
 
-        UserResponse GetDatosUsuario = await _usuariosApiClient.GetUsuarioAsync(Convert.ToInt32(AccountID));
+        ClienteResponse GetDatosCliente = await _clientesApiClient.GetClienteAsync(Convert.ToInt32(AccountID));
 
         ViewBag.AccountID = AccountID;
 
-        if (GetDatosUsuario.nombreCompleto == null) {
+        if (GetDatosCliente.nombreCompleto == null) {
             ViewBag.Nombre = "S/N";
         } else {
-            ViewBag.Nombre = GetDatosUsuario.nombreCompleto;
+            ViewBag.Nombre = GetDatosCliente.nombreCompleto;
         }
 
         return View();
@@ -646,8 +646,8 @@ public class UsuariosController : Controller
         {
             try
             {
-                UserResponse user = await _usuariosApiClient.GetUsuarioAsync(id);
-                UsuariosDetallesViewModel usuariosDetallesViewModel = new UsuariosDetallesViewModel
+                ClienteResponse user = await _clientesApiClient.GetClienteAsync(id);
+                ClientesDetallesViewModel clientesDetallesViewModel = new ClientesDetallesViewModel
                 {
                     Id = user.id,
                     Nombre = user.nombreCompleto,
@@ -658,12 +658,12 @@ public class UsuariosController : Controller
                     Sexo = user.sexo,
                 };
 
-                if (usuariosDetallesViewModel == null)
+                if (clientesDetallesViewModel == null)
                 {
                     return RedirectToAction("Error404", "Error");
                 }
 
-                return View("~/Views/Usuarios/Registro.cshtml", usuariosDetallesViewModel);
+                return View("~/Views/Clientes/Registro.cshtml", clientesDetallesViewModel);
             }
             catch (Exception)
             {
@@ -679,7 +679,7 @@ public class UsuariosController : Controller
     [HttpPost]
     public async Task<JsonResult> ConsultarSubCuentas()
     {
-        var ListPF = await _usuariosApiClient.GetUsuariosAsync(1,200);
+        var ListPF = await _clientesApiClient.GetClientesAsync(1,200);
         //var ListPF = GetList();
         return Json(ListPF);
     }
@@ -689,7 +689,7 @@ public class UsuariosController : Controller
     public async Task<JsonResult> ConsultarListadoDocumentos(string idAccount)
     {
 
-        var gridData = new ResponseGrid<DocumentosUserResponseGrid>();
+        var gridData = new ResponseGrid<DocumentosClienteResponseGrid>();
 
         try
         {
@@ -708,13 +708,13 @@ public class UsuariosController : Controller
             request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
             request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
 
-            List<DocumentosUserResponse> ListPF = new List<DocumentosUserResponse>();
-            ListPF = await _usuariosApiClient.GetDocumentosUsuarioAsync(Convert.ToInt32(idAccount));
+            List<DocumentosClienteResponse> ListPF = new List<DocumentosClienteResponse>();
+            ListPF = await _clientesApiClient.GetDocumentosClienteAsync(Convert.ToInt32(idAccount));
 
-            var List = new List<DocumentosUserResponseGrid>();
+            var List = new List<DocumentosClienteResponseGrid>();
             foreach (var row in ListPF)
             {
-                List.Add(new DocumentosUserResponseGrid
+                List.Add(new DocumentosClienteResponseGrid
                 {
                     idCliente = row.idCliente,
                     idDocApodLeg = row.idDocApodLeg,
@@ -722,7 +722,7 @@ public class UsuariosController : Controller
                     documento = row.documento,
                     numeroIdentificacion = row.numeroIdentificacion,
                     nombreDocumento = row.nombreDocumento,
-                    Acciones = await this.RenderViewToStringAsync("~/Views/Usuarios/_AccionesDocumentos.cshtml", row)
+                    Acciones = await this.RenderViewToStringAsync("~/Views/Clientes/_AccionesDocumentos.cshtml", row)
                 });
             }
 
@@ -840,11 +840,11 @@ public class UsuariosController : Controller
         return new Random(Guid.NewGuid().GetHashCode());
     }
 
-    public List<UserResponse> GetList()
+    public List<ClienteResponse> GetList()
     {
 
 
-        var List = new List<UserResponse>();
+        var List = new List<ClienteResponse>();
         Random rnd = new Random();
         const string characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
@@ -856,7 +856,7 @@ public class UsuariosController : Controller
             {
                 var gen = generarnombre(i);
 
-                var pf = new UserResponse();
+                var pf = new ClienteResponse();
                 pf.id = i;
                 pf.nombreCompleto = gen.NombreCompleto;
                 pf.telefono = GenNumeroTelefono(10);
@@ -872,15 +872,15 @@ public class UsuariosController : Controller
         }
         catch (Exception e)
         {
-            List = new List<UserResponse>();
+            List = new List<ClienteResponse>();
         }
 
         return List;
     }
 
-    public async Task<List<DocumentosUserResponse>> GetListArchivos(int idUser)
+    public async Task<List<DocumentosClienteResponse>> GetListArchivos(int idUser)
     {
-        var List = new List<DocumentosUserResponse>();
+        var List = new List<DocumentosClienteResponse>();
 
         try
         {
@@ -888,7 +888,7 @@ public class UsuariosController : Controller
             {
                 var gen = generarNombreArchivo(i);
 
-                var pf = new DocumentosUserResponse();
+                var pf = new DocumentosClienteResponse();
                 pf.idCliente = i;
                 pf.idDocApodLeg = 100 + i;
                 pf.tipoDocumento = i;
@@ -901,7 +901,7 @@ public class UsuariosController : Controller
         }
         catch (Exception e)
         {
-            List = new List<DocumentosUserResponse>();
+            List = new List<DocumentosClienteResponse>();
         }
 
         return List;
@@ -935,7 +935,7 @@ public class UsuariosController : Controller
     private List<ListUserPermissionResponse> generarListaPermisos()
     {
         var res = new List<ListUserPermissionResponse>();
-        String[] catalogoVista = { "Usuarios", "Transacciones", "Tarjetas", "Cuentas"};
+        String[] catalogoVista = { "Clientes", "Transacciones", "Tarjetas", "Cuentas"};
 
         for (int i = 0; i <= 3; i++)
         {

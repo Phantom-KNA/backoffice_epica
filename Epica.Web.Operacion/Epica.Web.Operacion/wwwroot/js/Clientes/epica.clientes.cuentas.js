@@ -37,7 +37,7 @@ var KTDatatableRemoteAjax = function () {
             filter: true,
             ordering: true,
             ajax: {
-                url: siteLocation + 'Usuarios/ConsultaCuentas',
+                url: siteLocation + 'Clientes/ConsultaCuentas',
                 type: 'POST',
                 data: function (d) {
                     d.id = AccountId;
@@ -54,7 +54,7 @@ var KTDatatableRemoteAjax = function () {
                         var partes = data.split("|"); // Separar la parte entera y decimal
                         var NumCuenta = partes[0];
                         var ID = partes[1]
-                        return "<a href='/Usuarios/Detalle/DatosGenerales?id=" + ID + "'>" + NumCuenta + "</a>";
+                        return "<a href='/Clientes/Detalle/DatosGenerales?id=" + ID + "'>" + NumCuenta + "</a>";
                     }
                 },
                 {

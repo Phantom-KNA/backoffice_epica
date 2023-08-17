@@ -7,7 +7,7 @@ namespace Epica.Web.Operacion.Models.Response;
 /// Clase que representa la respuesta de un token de autenticación.
 /// </summary>
 
-public class UserDetailsResponse
+public class ClienteDetailsResponse
 {
     public string result { get; set; }
     public DatosClienteResponse value { get; set; }

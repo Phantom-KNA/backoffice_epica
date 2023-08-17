@@ -1,7 +1,7 @@
-﻿@model Epica.Web.Operacion.Models.ViewModels.UsuariosDetallesViewModel
+﻿@model Epica.Web.Operacion.Models.ViewModels.ClientesDetallesViewModel
 
 @{
-    ViewData["Title"] = "Detalles de usuario";
+    ViewData["Title"] = "Detalles de cliente";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -14,7 +14,7 @@
         <span class="bullet bg-gray-400 w-5px h-2px"></span>
     </li>
     <li class="breadcrumb-item text-muted">
-        <a class="text-muted" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
+        <a class="text-muted" asp-controller="Clientes" asp-action="Index">Clientes</a>
     </li>
     <li class="breadcrumb-item">
         <span class="bullet bg-gray-400 w-5px h-2px"></span>
@@ -24,17 +24,17 @@
     </li>
 }
 
-<form asp-controller="Usuarios" asp-action="ActualizarUsuario" asp-route-id="@ViewData["idDato"]" method="post">
+<form asp-controller="Clientes" asp-action="ActualizarCliente" asp-route-id="@ViewData["idDato"]" method="post">
     <div class="col-md-12">
         <div class="card shadow-sm">
             <div class="card-header">
-                <h3 class="card-title">Detalles de usuario</h3>
+                <h3 class="card-title">Detalles de cliente</h3>
                 <div class="separator separator-dashed border-light-secondary my-2"></div>
                 <div class="card-toolbar">
                     <button href="javascript:void(0)" onclick="history.back();" type="button" class="btn btn-sm btn-light-primary me-2">
                         Cancelar
                     </button>
-                    <a data-id="@Model.Id" asp-route-id="@Model.Id" asp-action="Modificar" asp-controller="Usuarios" class="btn btn-sm btn-primary me-3">
+                    <a data-id="@Model.Id" asp-route-id="@Model.Id" asp-action="Modificar" asp-controller="Clientes" class="btn btn-sm btn-primary me-3">
                         &nbsp;Modificar
                     </a>
                     <button href="#" type="button" class="btn btn-sm btn-light-primary me-2">
@@ -263,5 +263,5 @@
 
 
 @section Scripts{
-    <script src="~/js/Usuarios/epica.usuarios.registro.js" asp-append-version="true"></script>
+    <script src="~/js/Clientes/epica.clientes.registro.js" asp-append-version="true"></script>
 }

@@ -1,4 +1,4 @@
-﻿@model Epica.Web.Operacion.Models.ViewModels.UsuarioHeaderViewModel
+﻿@model Epica.Web.Operacion.Models.ViewModels.ClientesHeaderViewModel
 <div class="card mb-5 mb-xl-10">
     <div class="card-body pt-9 pb-0">
         <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
@@ -79,13 +79,13 @@
         <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bold">
 
             <li class="nav-item mt-2">
-                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(ViewBag.UrlView.Contains("DatosGenerales") ? "active" : "")" asp-action="DatosGenerales" asp-controller="Usuarios" asp-route-id="@Model.Id">
+                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(ViewBag.UrlView.Contains("DatosGenerales") ? "active" : "")" asp-action="DatosGenerales" asp-controller="Clientes" asp-route-id="@Model.Id">
                     DATOS GENERALES
                 </a>
             </li>
 
             <li class="nav-item mt-2">
-                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(ViewBag.UrlView.Contains("Cuentas") ? "active" : "")" asp-action="Cuentas" asp-controller="Usuarios" asp-route-id="@Model.Id">
+                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(ViewBag.UrlView.Contains("Cuentas") ? "active" : "")" asp-action="Cuentas" asp-controller="Clientes" asp-route-id="@Model.Id">
                     CUENTAS
                 </a>
             </li>

@@ -37,7 +37,7 @@ var KTDatatableRemoteAjax = function () {
             filter: true,
             ordering: true,
             ajax: {
-                url: siteLocation + 'Usuarios/ConsultaPermisos',
+                url: siteLocation + 'Clientes/ConsultaPermisos',
                 type: 'POST',
                 data: function (d) {
                     var filtros = [];
@@ -324,7 +324,7 @@ jQuery(document).ready(function () {
 
 function GestionarUsuario(AccountID, estatus) {
     $.ajax({
-        url: siteLocation + 'Usuarios/GestionarEstatusUsuario',
+        url: siteLocation + 'Clientes/GestionarEstatusCliente',
         async: true,
         cache: false,
         type: 'POST',
