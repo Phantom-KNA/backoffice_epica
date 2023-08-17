@@ -511,13 +511,6 @@ public class ClientesController : Controller
     #endregion
 
     [Authorize]
-    #region Gestionar Permisos
-    public IActionResult GestionarPermisos()
-    {
-        return View();
-    }
-
-    [Authorize]
     [HttpPost]
     public async Task<JsonResult> ConsultaPermisos(List<RequestListFilters> filters)
     {
@@ -740,8 +733,6 @@ public class ClientesController : Controller
 
         return Json(gridData);
     }
-
-    #endregion
 
     #region "Modelos"
 
