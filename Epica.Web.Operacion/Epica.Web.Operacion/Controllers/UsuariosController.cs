@@ -18,7 +18,9 @@ namespace Epica.Web.Operacion.Controllers
         public IActionResult GestionarPermisos()
         {
             var loginResponse = _userContextService.GetLoginResponse();
-            return View(loginResponse);
+            if (loginResponse.Rol == "Administrador")
+                return View(loginResponse);
+            return NotFound();
         }
     }
 }
