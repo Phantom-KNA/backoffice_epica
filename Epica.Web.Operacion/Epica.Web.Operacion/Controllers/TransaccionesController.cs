@@ -1,5 +1,6 @@
 ﻿using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Models.Common;
+using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Utilities;
 using Microsoft.AspNetCore.Authorization;
@@ -200,9 +201,16 @@ namespace Epica.Web.Operacion.Controllers
 
             return Json(gridData);
         }
+
+        [Authorize]
+        [HttpPost]
+        public JsonResult RegistrarTransaccion(RegistrarTransaccionRequest model)
+        { 
+            return Json(model);
+        }
         #endregion
 
-        #region "Modelos"
+            #region "Modelos"
         public class RequestListFilters
         {
             [JsonProperty("key")]

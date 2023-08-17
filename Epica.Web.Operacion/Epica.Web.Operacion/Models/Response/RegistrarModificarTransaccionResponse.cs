@@ -1,6 +1,6 @@
 ﻿namespace Epica.Web.Operacion.Models.Response
 {
-    public class RegistrarModificarTransaccionResponse
+    public class RegistrarModificarClienteResponse
     {
         public bool error { get; set; }
         public string detalle { get; set; }

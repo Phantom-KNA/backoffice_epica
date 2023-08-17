@@ -1,7 +1,9 @@
 ﻿using Epica.Web.Operacion.Config;
+using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.UserResolver;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using System.Text;
 using System.Text.Json;
 
 namespace Epica.Web.Operacion.Services.Transaccion
@@ -101,6 +103,35 @@ namespace Epica.Web.Operacion.Services.Transaccion
             }
 
             return ListaTransacciones;
+        }
+
+        public async Task<RegistrarModificarTransaccionResponse> GetRegistroTransaccion(RegistrarTransaccionRequest request)
+        {
+            RegistrarModificarTransaccionResponse respuesta = new RegistrarModificarTransaccionResponse();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetRegistraTransaccion();
+                var json = JsonConvert.SerializeObject(request);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await ApiClient.PostAsync(uri, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    respuesta = JsonConvert.DeserializeObject<RegistrarModificarTransaccionResponse>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                respuesta.error = true;
+                respuesta.detalle = ex.Message;
+                return respuesta;
+            }
+
+            return respuesta;
         }
 
     }

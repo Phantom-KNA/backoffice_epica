@@ -1,5 +1,6 @@
 ﻿using Epica.Web.Operacion.Config;
 using Epica.Web.Operacion.Models.Common;
+using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Models.ViewModels;
 using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Services.UserResolver;
@@ -144,7 +145,7 @@ public class CuentaController : Controller
     #region Detalle Cuenta
     [Authorize]
     [Route("Cuentas/Detalle/Movimientos")]
-    public async Task<IActionResult> Cuentas(int id, int cliente)
+    public async Task<IActionResult> Cuentas(int id, int cliente, string noCuenta)
     {
         ClienteDetailsResponse user = await _usuariosApiClient.GetDetallesCliente(cliente);
 
@@ -163,11 +164,20 @@ public class CuentaController : Controller
             Curp = user.value.CURP,
             Organizacion = user.value.Organizacion,
             Rfc = user.value.RFC,
-            Sexo = user.value.Sexo
+            Sexo = user.value.Sexo,
+            NoCuenta = noCuenta
         };
         ViewBag.Info = header;
         ViewBag.Nombre = header.NombreCompleto;
         ViewBag.AccountID = id;
+        ViewBag.NumCuenta = noCuenta;
+
+        RegistrarTransaccionRequest renderInfo = new RegistrarTransaccionRequest
+        {
+            NombreOrdenante = header.NombreCompleto,
+            NoCuentaOrdenante = noCuenta
+        };
+        ViewBag.DatosRef = renderInfo;
         return View("~/Views/Cuenta/DetallesCuenta/Transacciones/DetalleMovimientos.cshtml");
     }
 
@@ -237,6 +247,28 @@ public class CuentaController : Controller
         gridData.Draw = draw;
 
         return Json(gridData);
+    }
+
+    [Authorize]
+    [Route("Cuentas/Detalle/Transacciones/RegistrarTransaccion")]
+    [HttpPost]
+    public async Task<JsonResult> RegistrarTransaccion(RegistrarTransaccionRequest model)
+    {
+        try
+        {
+            model.ClaveRastreo = string.Format("AQPAY100000000{0}{1}", DateTime.Now.ToString("yyyyMMdd"), 1234);
+            model.FechaOperacion = DateTime.Now.ToString("dd/mm/yyyy");
+            model.CuentaOrigenOrdenante = model.NoCuentaOrdenante;
+            model.CuentaDestinoBeneficiario = model.NoCuentaBeneficiario;
+
+            var Response = await _transaccionesApiClient.GetRegistroTransaccion(model);
+
+
+        } catch (Exception ex) {
+        
+        }
+
+        return Json(model);
     }
     #endregion
 

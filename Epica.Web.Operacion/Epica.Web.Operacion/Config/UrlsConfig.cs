@@ -20,6 +20,7 @@ public class UrlsConfig
         public static string GetTransaccion(int idInterno) => $"/api/resumentransaccion?idInterno={idInterno}";
         public static string GetTransaccionesTotal() => $"/api/v1/transacciones/total";
         public static string GetTransaccionesPorCuenta(int idCuenta) => $"/api/v1/cuentas/cuenta_trasacciones?idCuenta={idCuenta}";
+        public static string GetRegistraTransaccion() => $"/api/v1/transacciones/insertar";
     }
 
     public class CuentasOperations

@@ -51,6 +51,7 @@ var KTDatatableRemoteAjax = function () {
                 { data: "claveRastreo", name: "ClaveRastreo", title: "CLAVE DE RASTREO" },
                 { data: "nombreOrdenante", name: "NombreCuenta", title: "NOMBRE ORDENANTE" },
                 { data: "nombreBeneficiario", name: "Institucion", title: "NOMBRE BENEFICIARIO" },
+                { data: "concepto", name: "Concepto", title: "CONCEPTO" },
                 {
                     data: "monto",
                     name: "Monto",
@@ -65,6 +66,7 @@ var KTDatatableRemoteAjax = function () {
                         return '<pan style ="color: ' + color + '">' + accounting.formatMoney(data) + '<s/span>';
                     }
                 },
+                { data: "fechaAlta", name: "Fecha", title: "FECHA" },
                 {
                     data: "estatus", name: "Estatus", title: "ESTATUS",
                     render: function (data, type, row) {
@@ -77,10 +79,7 @@ var KTDatatableRemoteAjax = function () {
                             return "<span class='badge badge-light-danger'>" + data + "</span>"
                         }
                     }
-                },
-                { data: "concepto", name: "Concepto", title: "CONCEPTO" },
-                { data: "idMedioPago", name: "MedioPago", title: "MEDIO DE PAGO" },
-                { data: "fechaAlta", name: "Fecha", title: "FECHA" }
+                }
                 //{
                 //    title: '',
                 //    orderable: false,
@@ -100,7 +99,36 @@ var KTDatatableRemoteAjax = function () {
     };
 
     $(document).on('click', '#GuardarCuenta', function (e) {
-        toastr.success('Se guardo la informacion de manera exitosa', "");
+
+        $("#NoCuentaOrdenante").val(NumCuenta);
+    });
+
+    $(document).on('click', '#GuardarCuenta', function (e) {
+
+        toastr.info('Almacenando Transacción...', "");
+
+        var form = $("#TransaccionForm")
+        form.append("NoCuentaOrdenante", NumCuenta);
+        var valdata = form.serialize();
+        
+
+        $.ajax({
+            url: "Transacciones/RegistrarTransaccion",
+            type: "POST",
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            data: valdata,
+            success: function (data) {
+
+                datatable.ajax.reload();
+                toastr.success('Se guardo la informacion de manera exitosa', "");
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+            }
+
+
+        });   
         $("#btnCerrarCuenta").click();
     });
 

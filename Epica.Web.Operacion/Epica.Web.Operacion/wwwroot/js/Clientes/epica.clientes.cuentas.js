@@ -55,7 +55,7 @@ var KTDatatableRemoteAjax = function () {
                         var NumCuenta = partes[0];
                         var idCuenta = partes[1];
                         var idCliente = partes[2];
-                        return "<a href='/Cuentas/Detalle/Movimientos?id=" + idCuenta + "&cliente=" + idCliente +"'>" + NumCuenta + "</a>";
+                        return "<a href='/Cuentas/Detalle/Movimientos?id=" + idCuenta + "&cliente=" + idCliente + "&noCuenta=" + NumCuenta + "' target='_blank'>" + NumCuenta + "</a>";
                     }
                 },
                 {
@@ -87,6 +87,9 @@ var KTDatatableRemoteAjax = function () {
     };
 
     $(document).on('click', '#GuardarCuenta', function (e) {
+
+        
+
         toastr.success('Se guardo la informacion de manera exitosa', "");
         $("#btnCerrarCuenta").click();
     });

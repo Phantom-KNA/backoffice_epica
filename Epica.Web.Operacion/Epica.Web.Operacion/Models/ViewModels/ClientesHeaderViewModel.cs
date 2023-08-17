@@ -10,5 +10,6 @@
         public string Organizacion { get; set; }
         public string Rfc { get; set; }
         public string Sexo { get; set; }
+        public string NoCuenta { get; set; }
     }
 }
