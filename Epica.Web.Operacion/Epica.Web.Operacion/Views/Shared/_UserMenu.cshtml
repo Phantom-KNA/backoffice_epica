@@ -19,27 +19,14 @@
                 <div class="fw-bold d-flex align-items-center fs-5">
                     @Model.Usuario
                 </div>
-                <a href="#" class="fw-semibold text-muted text-hover-primary fs-7">@Model.Email</a>
+                <a class="fw-semibold text-muted text-hover-primary fs-7 max-width-ellipsis" data-toggle="tooltip" title="@Model.Email">
+                    @Model.Email
+                </a>
             </div>
             <!--end::Username-->
         </div>
     </div>
     <!--end::Menu item-->
-    <!--begin::Menu separator-->
-    <div class="separator my-2"></div>
-    <!--end::Menu separator-->
-    <!--begin::Menu item-->
-    <div class="menu-item px-5">
-        <a asp-action="GestionarPermisos" asp-controller="Usuarios" class="menu-link px-5 d-flex align-items-center justify-content-between">
-            Gestionar permisos<i class=""></i>
-            <i class="bi bi-gear bi-3x"></i>
-        </a>
-@*        <a href="../../demo29/dist/account/overview.html" class="menu-link px-5 d-flex align-items-center justify-content-between">
-            Gestionar permisos<i class=""></i>
-            <i class="bi bi-gear bi-3x"></i>
-        </a>*@
-    </div>
-    <!--end::Menu item-->    
     <!--begin::Menu separator-->
     <div class="separator my-2"></div>
     <!--end::Menu separator-->
@@ -150,3 +137,12 @@
     <!--end::Menu item-->
 </div>
 <!--end::User account menu-->
+
+<style>
+    .max-width-ellipsis {
+        max-width: 150px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>

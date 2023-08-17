@@ -1,4 +1,5 @@
 ﻿using Epica.Web.Operacion.Config;
+using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Models.Common;
 using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Models.ViewModels;
@@ -21,14 +22,20 @@ public class CuentaController : Controller
     private readonly ICuentaApiClient _cuentaApiClient;
     private readonly IClientesApiClient _usuariosApiClient;
     private readonly ITransaccionesApiClient _transaccionesApiClient;
+    private readonly UserContextService _userContextService;
     #endregion
 
     #region "Constructores"
-    public CuentaController(ICuentaApiClient cuentaApiClient, IClientesApiClient usuariosApiClient, ITransaccionesApiClient transaccionesApiClient)
+    public CuentaController(ICuentaApiClient cuentaApiClient,
+        IClientesApiClient usuariosApiClient,
+        ITransaccionesApiClient transaccionesApiClient,
+        UserContextService userContextService)
     {
+
         _cuentaApiClient = cuentaApiClient;
         _usuariosApiClient = usuariosApiClient;
         _transaccionesApiClient = transaccionesApiClient;
+        _userContextService = userContextService;
     }
     #endregion
 
@@ -38,7 +45,11 @@ public class CuentaController : Controller
     [Authorize]
     public IActionResult Index()
     {
-        return View();
+        var loginResponse = _userContextService.GetLoginResponse();
+        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Cuentas" && modulo.Acciones.Contains("Ver")) == true)
+            return View();
+
+        return NotFound();
     }
 
     [Authorize]
@@ -147,13 +158,44 @@ public class CuentaController : Controller
     [Route("Cuentas/Detalle/Movimientos")]
     public async Task<IActionResult> Cuentas(int id, int cliente, string noCuenta)
     {
-        ClienteDetailsResponse user = await _usuariosApiClient.GetDetallesCliente(cliente);
-
-        if (user.value == null)
+        var loginResponse = _userContextService.GetLoginResponse();
+        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Cuentas" && modulo.Acciones.Contains("Ver")) == true)
         {
-            return RedirectToAction("Index");
+            ClienteDetailsResponse user = await _usuariosApiClient.GetDetallesCliente(cliente);
+
+            if (user.value == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.UrlView = "Movimientos";
+            ClientesHeaderViewModel header = new ClientesHeaderViewModel
+            {
+                Id = user.value.IdCliente,
+                NombreCompleto = user.value.NombreCompleto,
+                Telefono = user.value.Telefono,
+                Correo = user.value.Email,
+                Curp = user.value.CURP,
+                Organizacion = user.value.Organizacion,
+                Rfc = user.value.RFC,
+                Sexo = user.value.Sexo,
+                NoCuenta = noCuenta
+            };
+            ViewBag.Info = header;
+            ViewBag.Nombre = header.NombreCompleto;
+            ViewBag.AccountID = id;
+            ViewBag.NumCuenta = noCuenta;
+
+            RegistrarTransaccionRequest renderInfo = new RegistrarTransaccionRequest
+            {
+                NombreOrdenante = header.NombreCompleto,
+                NoCuentaOrdenante = noCuenta
+            };
+            ViewBag.DatosRef = renderInfo;
+            return View("~/Views/Cuenta/DetallesCuenta/Transacciones/DetalleMovimientos.cshtml");
         }
 
+        return NotFound();
         ViewBag.UrlView = "Movimientos";
         ClientesHeaderViewModel header = new ClientesHeaderViewModel
         {
