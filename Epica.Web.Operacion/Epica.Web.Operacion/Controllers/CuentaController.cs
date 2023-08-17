@@ -3,6 +3,7 @@ using Epica.Web.Operacion.Models.Common;
 using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Services.UserResolver;
 using Epica.Web.Operacion.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Text;
 
 namespace Epica.Web.Operacion.Controllers;
 
+[Authorize]
 public class CuentaController : Controller
 {
     #region "Locales"
@@ -23,12 +25,15 @@ public class CuentaController : Controller
     }
     #endregion
 
-    #region "Funciones"
+    #region "Funciones"    
+    
+    [Authorize]
     public IActionResult Index()
     {
         return View();
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<JsonResult> Consulta(List<RequestListFilters> filters)
     {
@@ -128,6 +133,7 @@ public class CuentaController : Controller
         return Json(gridData);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<JsonResult> ConsultarSubCuentas(int id)
     {
@@ -136,6 +142,7 @@ public class CuentaController : Controller
         return Json(ListPF);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<JsonResult> GestionarEstatusCuentas(int id, string Estatus)
     {

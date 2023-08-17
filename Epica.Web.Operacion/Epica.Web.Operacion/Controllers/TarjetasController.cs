@@ -3,6 +3,7 @@ using Epica.Web.Operacion.Models.Common;
 using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Services.UserResolver;
 using Epica.Web.Operacion.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using static Epica.Web.Operacion.Controllers.CuentaController;
 
 namespace Epica.Web.Operacion.Controllers;
 
+[Authorize]
 public class TarjetasController : Controller
 {
     #region "Locales"
@@ -25,16 +27,19 @@ public class TarjetasController : Controller
     #endregion
 
     #region "Funciones"
+    [Authorize]
     public IActionResult Index()
     {
         return View();
     }
 
+    [Authorize]
     public IActionResult RegistroTarjetaUsuario()
     {
         return View("~/Views/Tarjetas/RegistroTarjetaUsuario.cshtml");
     }
-
+    
+    [Authorize]
     [HttpPost]
     public async Task<JsonResult> Consulta(List<RequestListFilters> filters)
     {
@@ -137,6 +142,7 @@ public class TarjetasController : Controller
         return Json(gridData);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<JsonResult> ConsultarSubCuentas()
     {

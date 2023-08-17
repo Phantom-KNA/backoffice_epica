@@ -1,4 +1,5 @@
-﻿using Epica.Web.Operacion.Models.Common;
+﻿using Epica.Web.Operacion.Helpers;
+using Epica.Web.Operacion.Models.Common;
 using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Utilities;
 using Microsoft.AspNetCore.Authorization;
@@ -9,39 +10,66 @@ using static Epica.Web.Operacion.Controllers.CuentaController;
 
 namespace Epica.Web.Operacion.Controllers
 {
+    [Authorize]
     public class TransaccionesController :  Controller
     {
+        private readonly UserContextService _userContextService;
         #region "Locales"
         private readonly ITransaccionesApiClient _transaccionesApiClient;//Transacciones
         #endregion
 
         #region "Constructores"
-        public TransaccionesController(ITransaccionesApiClient transaccionesApiClient)
+        public TransaccionesController(ITransaccionesApiClient transaccionesApiClient,
+            UserContextService userContextService
+            )
         {
+            _userContextService = userContextService;
             _transaccionesApiClient = transaccionesApiClient;
         }
         #endregion
 
         #region "Funciones"
+        [Authorize]
         public IActionResult Index(string AccountID = "")
         {
-            var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
-            ViewBag.UserRole = userRole;
-            ViewBag.AccountID = AccountID;
-            return View();
-        }
-        [Authorize(Roles = "Administrador")]
+            var loginResponse = _userContextService.GetLoginResponse();
+            if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Transacciones" && modulo.Acciones.Contains("Ver")) == true)
+            {
+                ViewBag.AccountID = AccountID;
+                return View();
+            }
 
+
+            return NotFound();
+        }
+
+        [Authorize]
         public IActionResult Registro()
         {
-            return View("~/Views/Transacciones/Registro.cshtml");
-        }
-        public async Task<IActionResult> Transacciones()
-        {
-            var recibir = await _transaccionesApiClient.GetTransaccionesAsync(1,100);
-            return Json(recibir);
+            var loginResponse = _userContextService.GetLoginResponse();
+            if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Transacciones" && modulo.Acciones.Contains("Insertar")) == true)
+            {
+                return View();
+            }
+
+
+            return NotFound();
         }
 
+        [Authorize]
+        public async Task<IActionResult> Transacciones()
+        {
+            var loginResponse = _userContextService.GetLoginResponse();
+            if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Transacciones" && modulo.Acciones.Contains("Ver")) == true)
+            {
+                var recibir = await _transaccionesApiClient.GetTransaccionesAsync(1, 100);
+                return Json(recibir);
+            }
+            return NotFound();
+
+        }
+
+        [Authorize]
         [HttpPost]
         public async Task<JsonResult> Consulta(List<RequestListFilters> filters, string idAccount = "")
         {

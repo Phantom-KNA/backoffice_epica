@@ -1,4 +1,5 @@
 ﻿using Epica.Web.Operacion.Config;
+using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Services.UserResolver;
@@ -22,7 +23,7 @@ namespace Epica.Web.Operacion.Services.Login
         {
         }
 
-        public async Task<LoginResponse> GetCredentialsAsync(LoginRequest loginRequest)
+        public async Task<LoginResponse> GetCredentialsAsync(LoginRequest loginRequest, UserContextService userContextService)
         {
             LoginResponse loginResponse = new LoginResponse();
 
@@ -41,6 +42,17 @@ namespace Epica.Web.Operacion.Services.Login
 
                     loginResponse.IsAuthenticated = true;
 
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, loginResponse.Usuario)
+                    };
+
+                    var claimsIdentity = new ClaimsIdentity(claims, "EpicaWebEsquema"); 
+
+                    await HttpContext.HttpContext.SignInAsync("EpicaWebEsquema", new ClaimsPrincipal(claimsIdentity));
+                    userContextService.SetLoginResponse(loginResponse);
+                    userContextService.SetUserId(loginResponse.IdUsuario);
+
                 }
                 else
                 {
@@ -56,6 +68,13 @@ namespace Epica.Web.Operacion.Services.Login
             }
 
             return loginResponse;
+        }
+
+        public async Task LogoutAsync(HttpContext httpContext)
+        {
+            await httpContext.SignOutAsync("EpicaWebEsquema");
+            httpContext.Session.Clear();
+            httpContext.Response.Clear();
         }
     }
 }

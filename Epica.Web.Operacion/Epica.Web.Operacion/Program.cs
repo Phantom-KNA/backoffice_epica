@@ -8,6 +8,7 @@ using Epica.Web.Operacion.Services;
 using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Services.Login;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Epica.Web.Operacion.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>
@@ -38,21 +39,16 @@ builder.WebHost.ConfigureKestrel(options =>
 //    };
 //});
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.LoginPath = "/Account/Login"; 
-        options.AccessDeniedPath = "/Account/AccessDenied";
-    });
-
-builder.Services.AddAuthorization(options =>
+builder.Services.AddAuthentication(options =>
 {
-    options.AddPolicy("AdministradorPolicy", policy =>
-        policy.RequireAuthenticatedUser().RequireRole("Administrador"));
-
-    options.AddPolicy("OperadorPolicy", policy =>
-        policy.RequireAuthenticatedUser().RequireRole("Operador"));
+    options.DefaultChallengeScheme = "EpicaWebEsquema";
+})
+.AddCookie("EpicaWebEsquema", options =>
+{
+    options.AccessDeniedPath = "/Account/Login";
+    options.LoginPath = "/Account/Login";
 });
+
 
 // Configuración de servicios
 builder.Services.AddRazorPages();
@@ -65,6 +61,9 @@ builder.Services.AddScoped<IUsuariosApiClient, UsuariosApiClient>();
 builder.Services.AddScoped<IUsuariosApiClient, UsuariosApiClient>();
 builder.Services.AddTransient<ILoginApiClient, LoginApiClient>();
 builder.Services.AddScoped<ITarjetasApiClient, TarjetasApiClient>();
+
+builder.Services.AddSingleton<UserContextService>();
+
 
 builder.Services.AddDistributedMemoryCache();
 
@@ -97,6 +96,8 @@ builder.Services.Configure<UrlsConfig>(builder.Configuration.GetSection("urls"))
 builder.Services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddMvc(options => options.Filters.Add(new ResponseCacheAttribute { NoStore = true, Location = ResponseCacheLocation.None }));
+
 
 var app = builder.Build();
 
@@ -163,15 +164,14 @@ app.UseSession();
 //            }
 // });
 
+app.UseAuthentication();
+app.UseAuthorization();
 
-        app.UseAuthentication();
-        app.UseAuthorization();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+});
 
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
-        });
-
-        app.Run();
+app.Run();

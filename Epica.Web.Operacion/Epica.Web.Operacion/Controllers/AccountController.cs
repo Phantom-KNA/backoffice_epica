@@ -1,6 +1,9 @@
 ﻿using Epica.Web.Operacion.Extensions;
+using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.Login;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -8,13 +11,21 @@ namespace Epica.Web.Operacion.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly UserContextService _userContextService;
         private readonly ILoginApiClient _loginApiClient;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AccountController(ILoginApiClient loginApiClient) 
+        public AccountController(ILoginApiClient loginApiClient,
+                    UserContextService userContextService,
+                    IHttpContextAccessor httpContextAccessor
+            ) 
         {
+            _userContextService = userContextService;
             _loginApiClient = loginApiClient;
+            _httpContextAccessor = httpContextAccessor;
+
         }
-        
+
         [HttpGet]
         public IActionResult Login()
         {
@@ -30,11 +41,10 @@ namespace Epica.Web.Operacion.Controllers
                 Password = password
             };
 
-            var loginResponse = await _loginApiClient.GetCredentialsAsync(loginRequest);
+            var loginResponse = await _loginApiClient.GetCredentialsAsync(loginRequest, _userContextService);
 
             if (loginResponse.IsAuthenticated)
             {
-                HttpContext.Session.SetString("UserSession", JsonConvert.SerializeObject(loginResponse));
                 HttpContext.Session.SetObject("LoginResponse", loginResponse);
                 HttpContext.Session.SetString("CurrentSession", "Ok");
                 return RedirectToAction("Index", "Home");
@@ -47,9 +57,15 @@ namespace Epica.Web.Operacion.Controllers
 
         }
 
-        public IActionResult Logout()
+        [Authorize]
+        public async Task<IActionResult> Logout()
         {
+            await _loginApiClient.LogoutAsync(_httpContextAccessor.HttpContext);
+
             HttpContext.Session.Clear();
+            HttpContext.Response.Clear();
+            await _httpContextAccessor.HttpContext.SignOutAsync("EpicaWebEsquema");
+
             return RedirectToAction("Login", "Account");
         }
     }
