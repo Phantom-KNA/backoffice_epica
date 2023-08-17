@@ -1,4 +1,5 @@
 ﻿using Epica.Web.Operacion.Config;
+using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Models.Common;
 using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Services.UserResolver;
@@ -17,12 +18,15 @@ public class TarjetasController : Controller
 {
     #region "Locales"
     private readonly IClientesApiClient _clientesApiClient;
+    private readonly UserContextService _userContextService;
     #endregion
 
     #region "Constructores"
-    public TarjetasController(IClientesApiClient clientesApiClient)
+    public TarjetasController(IClientesApiClient clientesApiClient,
+        UserContextService userContextService)
     {
         _clientesApiClient = clientesApiClient;
+        _userContextService = userContextService;
     }
     #endregion
 
@@ -30,13 +34,21 @@ public class TarjetasController : Controller
     [Authorize]
     public IActionResult Index()
     {
-        return View();
+        var loginResponse = _userContextService.GetLoginResponse();
+        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Tarjetas" && modulo.Acciones.Contains("Ver")) == true)
+            return View();
+
+        return NotFound();
     }
 
     [Authorize]
     public IActionResult RegistroTarjetaCliente()
     {
-        return View("~/Views/Tarjetas/RegistroTarjetaCliente.cshtml");
+        var loginResponse = _userContextService.GetLoginResponse();
+        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Tarjetas" && modulo.Acciones.Contains("Insertar")) == true)
+            return View("~/Views/Tarjetas/RegistroTarjetaCliente.cshtml");
+
+        return NotFound();
     }
     
     [Authorize]
