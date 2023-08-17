@@ -44,6 +44,26 @@
     <div class="d-flex flex-stack row">
         <div class="row mb-5 mt-5">
             <div class="form-group input-group-sm col-md-12 row">
+                <label class="col-md-3 form-label required">Monto: &nbsp;</label>
+                <div class="col-md-9">
+                    <input asp-for="Monto" class="form-control form-control-sm form-control-solid" id="Monto" type="number" min="0" autocomplete="off" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-stack row">
+        <div class="row mb-5 mt-5">
+            <div class="form-group input-group-sm col-md-12 row">
+                <label class="col-md-3 form-label">Concepto: &nbsp;</label>
+                <div class="col-md-9">
+                    <input asp-for="Concepto" class="form-control form-control-sm form-control-solid" id="Concepto" type="text" autocomplete="off" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-stack row">
+        <div class="row mb-5 mt-5">
+            <div class="form-group input-group-sm col-md-12 row">
                 <label class="col-md-3 form-label">Concepto: &nbsp;</label>
                 <div class="col-md-9">
                     <input asp-for="Concepto" class="form-control form-control-sm form-control-solid" id="Concepto" type="text" autocomplete="off" />

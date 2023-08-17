@@ -158,7 +158,7 @@ public class CuentaController : Controller
         ClientesHeaderViewModel header = new ClientesHeaderViewModel
         {
             Id = user.value.IdCliente,
-            NombreCompleto = user.value.NombreCompleto,
+            NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
             Telefono = user.value.Telefono,
             Correo = user.value.Email,
             Curp = user.value.CURP,
@@ -175,13 +175,13 @@ public class CuentaController : Controller
         RegistrarTransaccionRequest renderInfo = new RegistrarTransaccionRequest
         {
             NombreOrdenante = header.NombreCompleto,
-            NoCuentaOrdenante = noCuenta
+            NoCuentaOrdenante = noCuenta,
+            ClaveRastreo = string.Format("AQPAY100000000{0}{1}", DateTime.Now.ToString("yyyyMMdd"), 1234)
         };
         ViewBag.DatosRef = renderInfo;
         return View("~/Views/Cuenta/DetallesCuenta/Transacciones/DetalleMovimientos.cshtml");
     }
 
-    [Authorize]
     [HttpPost]
     public async Task<JsonResult> ConsultaCuentas(string id)
     {

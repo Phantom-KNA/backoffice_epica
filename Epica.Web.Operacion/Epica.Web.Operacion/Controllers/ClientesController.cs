@@ -309,7 +309,7 @@ public class ClientesController : Controller
         ClientesHeaderViewModel header = new ClientesHeaderViewModel
         {
             Id = user.value.IdCliente,
-            NombreCompleto = user.value.NombreCompleto,
+            NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
             Telefono = user.value.Telefono,
             Correo = user.value.Email,
             Curp = user.value.CURP,

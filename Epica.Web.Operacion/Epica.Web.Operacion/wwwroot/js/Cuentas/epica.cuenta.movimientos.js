@@ -100,18 +100,11 @@ var KTDatatableRemoteAjax = function () {
 
     $(document).on('click', '#GuardarCuenta', function (e) {
 
-        $("#NoCuentaOrdenante").val(NumCuenta);
-    });
-
-    $(document).on('click', '#GuardarCuenta', function (e) {
-
         toastr.info('Almacenando Transacción...', "");
 
         var form = $("#TransaccionForm")
-        form.append("NoCuentaOrdenante", NumCuenta);
         var valdata = form.serialize();
         
-
         $.ajax({
             url: "Transacciones/RegistrarTransaccion",
             type: "POST",

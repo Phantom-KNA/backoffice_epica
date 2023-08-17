@@ -12,8 +12,8 @@ public class CuentasResponse
     public decimal saldo { get; set; }
     public string tipoPersona { get; set; }
     public string alias { get; set; }
-    public DateTime fechaAlta { get; set; }
-    public DateTime fechaActualizacion { get; set; }
+    public string fechaAlta { get; set; }
+    public string fechaActualizacion { get; set; }
     public string fechaAltaFormat { get; set; }
     public string fechaActualizacionformat { get; set; }
 }
