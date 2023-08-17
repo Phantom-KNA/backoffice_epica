@@ -65,7 +65,15 @@ var KTDatatableRemoteAjax = function () {
             }],
             columns: [
                 //{ data: 'id', name: 'Id', title: 'Id Usuario' },
-                { data: 'nombreCompleto', name: 'NombreCompleto', title: 'Nombre del Cliente' },
+                {
+                    data: 'nombreCompleto', name: 'NombreCompleto', title: 'Nombre del Cliente',
+                    render: function (data, type, row) {
+                        var partes = data.split("|"); // Separar la parte entera y decimal
+                        var Nombre = partes[0];
+                        var ID = partes[1]
+                        return "<a href='/Usuarios/Detalle/DatosGenerales?id="+ID+"'>" + Nombre +"</a>";
+                    }
+                },
                 { data: 'telefono', name: 'Telefono', title: 'Telefono' },
                 { data: 'email', name: 'Email', title: 'Correo Electrónico' },
                 { data: 'curp', name: 'Curp', title: 'CURP' },

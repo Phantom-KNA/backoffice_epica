@@ -48,12 +48,25 @@ var KTDatatableRemoteAjax = function () {
                 "targets": "_all",
             }],
             columns: [
-                { data: 'noCuenta', name: 'noCuenta', title: 'Número Cuenta' },
-                { data: 'saldo', name: 'saldo', title: 'Saldo' },
+                {
+                    data: 'noCuenta', name: 'noCuenta', title: 'Número Cuenta',
+                    render: function (data, type, row) {
+                        var partes = data.split("|"); // Separar la parte entera y decimal
+                        var NumCuenta = partes[0];
+                        var ID = partes[1]
+                        return "<a href='/Usuarios/Detalle/DatosGenerales?id=" + ID + "'>" + NumCuenta + "</a>";
+                    }
+                },
+                {
+                    data: 'saldo', name: 'saldo', title: 'Saldo',
+                    render: function (data, type, row) {
+                        return accounting.formatMoney(data);
+                    }
+                },
                 { data: 'alias', name: 'Alias', title: 'Alias' },
                 { data: 'nombrePersona', name: 'NombrePersona', title: 'Nombre de Persona' },
-                { data: 'fechaAlta', name: 'FechaAlta', title: 'Fecha de Alta' },
-                { data: 'fechaActualizacion', name: 'FechaActualizacion', title: 'Fecha de Actualizacion' },
+                { data: 'fechaAltaFormat', name: 'fechaAltaFormat', title: 'Fecha de Alta' },
+                { data: 'fechaActualizacionformat', name: 'fechaActualizacionformat', title: 'Fecha de Actualizacion' },
                 //{
                 //    title: '',
                 //    orderable: false,

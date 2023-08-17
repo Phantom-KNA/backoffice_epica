@@ -39,6 +39,111 @@ public class UsuariosController : Controller
     }
 
     [HttpPost]
+    public async Task<JsonResult> Consulta(List<RequestListFilters> filters)
+    {
+        var request = new RequestList();
+
+        int totalRecord = 0;
+        int filterRecord = 0;
+
+        var draw = Request.Form["draw"].FirstOrDefault();
+        int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
+        int skip = Convert.ToInt32(Request.Form["start"].FirstOrDefault() ?? "0");
+
+        request.Pagina = skip / pageSize + 1;
+        request.Registros = pageSize;
+        request.Busqueda = Request.Form["search[value]"].FirstOrDefault();
+        request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+        request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
+
+        var gridData = new ResponseGrid<UserResponseGrid>();
+        List<UserResponse> ListPF = new List<UserResponse>();
+
+        ListPF = await _usuariosApiClient.GetUsuariosAsync(1, 200);
+
+        //Entorno local de pruebas
+        //ListPF = GetList();
+
+        var List = new List<UserResponseGrid>();
+        foreach (var row in ListPF)
+        {
+            List.Add(new UserResponseGrid
+            {
+                id = row.id,
+                nombreCompleto = row.nombreCompleto + "|" + row.id.ToString(),
+                telefono = row.telefono,
+                email = row.email,
+                CURP = row.CURP,
+                organizacion = row.organizacion,
+                membresia = row.membresia,
+                sexo = row.sexo,
+                estatus = row.estatus,
+                Acciones = await this.RenderViewToStringAsync("~/Views/Usuarios/_Acciones.cshtml", row)
+            });
+        }
+        if (!string.IsNullOrEmpty(request.Busqueda))
+        {
+            List = List.Where(x =>
+            (x.id.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.nombreCompleto?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.telefono?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.email?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.CURP?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.organizacion?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.membresia?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.sexo?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
+            ).ToList();
+        }
+
+        //Aplicacion de Filtros temporal, 
+        //var filtroid = filters.FirstOrDefault(x => x.Key == "Id");
+        //var filtronombreCliente = filters.FirstOrDefault(x => x.Key == "NombreCliente");
+        //var filtroNoCuenta = filters.FirstOrDefault(x => x.Key == "noCuenta");
+        //var filtroEstatus = filters.FirstOrDefault(x => x.Key == "estatus");
+        //var filtroSaldo = filters.FirstOrDefault(x => x.Key == "saldo");
+        //var filtroTipo = filters.FirstOrDefault(x => x.Key == "tipo");
+
+        //if (filtroid.Value != null)
+        //{
+        //    List = List.Where(x => x.Id == Convert.ToInt32(filtroid.Value)).ToList();
+        //}
+
+        //if (filtronombreCliente.Value != null)
+        //{
+        //    List = List.Where(x => x.cliente.Contains(Convert.ToString(filtronombreCliente.Value))).ToList();
+        //}
+
+        //if (filtroNoCuenta.Value != null)
+        //{
+        //    List = List.Where(x => x.noCuenta == Convert.ToString(filtroNoCuenta.Value)).ToList();
+        //}
+
+        //if (filtroEstatus.Value != null)
+        //{
+        //    List = List.Where(x => x.estatus == Convert.ToString(filtroEstatus.Value)).ToList();
+        //}
+
+        //if (filtroSaldo.Value != null)
+        //{
+        //    List = List.Where(x => x.saldo == Convert.ToString(filtroSaldo.Value)).ToList();
+        //}
+
+        //if (filtroTipo.Value != null)
+        //{
+        //    List = List.Where(x => x.tipo == Convert.ToString(filtroTipo.Value)).ToList();
+        //}
+
+        gridData.Data = List;
+        gridData.RecordsTotal = List.Count;
+        gridData.Data = gridData.Data.Skip(skip).Take(pageSize).ToList();
+        filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.Data.Count;
+        gridData.RecordsFiltered = filterRecord;
+        gridData.Draw = draw;
+
+        return Json(gridData);
+    }
+
+    [HttpPost]
     public async Task<JsonResult> GestionarEstatusUsuarioWeb(int id, string Estatus)
     {
 
@@ -135,6 +240,9 @@ public class UsuariosController : Controller
             return Json(BadRequest());
         }
     }
+    #endregion
+
+    #region Detalles Cliente
 
     [Route("Usuarios/Detalle/DatosGenerales")]
     public async Task<IActionResult> DatosGenerales(int id)
@@ -182,7 +290,8 @@ public class UsuariosController : Controller
             //ApoderadoLegal = Convert.ToInt32(user.value.);
         };
 
-        UsuarioHeaderViewModel header = new UsuarioHeaderViewModel {
+        UsuarioHeaderViewModel header = new UsuarioHeaderViewModel
+        {
             Id = user.value.IdCliente,
             NombreCompleto = user.value.NombreCompleto,
             Telefono = user.value.Telefono,
@@ -258,13 +367,15 @@ public class UsuariosController : Controller
             {
                 idCuenta = row.idCuenta,
                 nombrePersona = row.nombrePersona,
-                noCuenta = row.noCuenta,
+                noCuenta = row.noCuenta + "|" + row.idCuenta.ToString(),
                 saldo = row.saldo,
                 estatus = row.estatus,
                 tipoPersona = row.tipoPersona,
                 alias = row.alias,
                 fechaActualizacion = row.fechaActualizacion,
-                fechaAlta = row.fechaAlta
+                fechaAlta = row.fechaAlta,
+                fechaActualizacionformat = row.fechaActualizacion.ToString(),
+                fechaAltaFormat = row.fechaAlta.ToString()
                 //Acciones = await this.RenderViewToStringAsync("~/Views/Cuenta/_Acciones.cshtml", row)
             });
         }
@@ -306,7 +417,6 @@ public class UsuariosController : Controller
         return Json(gridData);
     }
     #endregion
-
 
     #region Registro Usuarios
     public IActionResult Registro()
@@ -373,7 +483,7 @@ public class UsuariosController : Controller
     }
     #endregion
 
-
+    #region Gestionar Permisos
     public IActionResult GestionarPermisos()
     {
         return View();
@@ -477,6 +587,8 @@ public class UsuariosController : Controller
         return Json(gridData);
     }
 
+    #endregion
+
     public async Task<IActionResult> GestionarDocumentos(string AccountID = "")
     {
         if (AccountID == "")
@@ -527,110 +639,6 @@ public class UsuariosController : Controller
         }
     }
 
-    [HttpPost]
-    public async Task<JsonResult> Consulta(List<RequestListFilters> filters)
-    {
-        var request = new RequestList();
-
-        int totalRecord = 0;
-        int filterRecord = 0;
-
-        var draw = Request.Form["draw"].FirstOrDefault();
-        int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
-        int skip = Convert.ToInt32(Request.Form["start"].FirstOrDefault() ?? "0");
-
-        request.Pagina = skip / pageSize + 1;
-        request.Registros = pageSize;
-        request.Busqueda = Request.Form["search[value]"].FirstOrDefault();
-        request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-        request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
-
-        var gridData = new ResponseGrid<UserResponseGrid>();
-        List<UserResponse> ListPF = new List<UserResponse>();
-
-        ListPF = await _usuariosApiClient.GetUsuariosAsync(1,200);
-
-        //Entorno local de pruebas
-        //ListPF = GetList();
-
-        var List = new List<UserResponseGrid>();
-        foreach (var row in ListPF)
-        {
-            List.Add(new UserResponseGrid
-            {
-                id = row.id,
-                nombreCompleto = row.nombreCompleto,
-                telefono = row.telefono,
-                email = row.email,
-                CURP = row.CURP,
-                organizacion = row.organizacion,
-                membresia = row.membresia,
-                sexo = row.sexo,
-                estatus = row.estatus,
-                Acciones = await this.RenderViewToStringAsync("~/Views/Usuarios/_Acciones.cshtml", row)
-            });
-        }
-        if (!string.IsNullOrEmpty(request.Busqueda))
-        {
-            List = List.Where( x =>
-            (x.id.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-            (x.nombreCompleto?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-            (x.telefono?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-            (x.email?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-            (x.CURP?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) || 
-            (x.organizacion?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-            (x.membresia?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-            (x.sexo?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
-            ).ToList();
-        }
-
-        //Aplicacion de Filtros temporal, 
-        //var filtroid = filters.FirstOrDefault(x => x.Key == "Id");
-        //var filtronombreCliente = filters.FirstOrDefault(x => x.Key == "NombreCliente");
-        //var filtroNoCuenta = filters.FirstOrDefault(x => x.Key == "noCuenta");
-        //var filtroEstatus = filters.FirstOrDefault(x => x.Key == "estatus");
-        //var filtroSaldo = filters.FirstOrDefault(x => x.Key == "saldo");
-        //var filtroTipo = filters.FirstOrDefault(x => x.Key == "tipo");
-
-        //if (filtroid.Value != null)
-        //{
-        //    List = List.Where(x => x.Id == Convert.ToInt32(filtroid.Value)).ToList();
-        //}
-
-        //if (filtronombreCliente.Value != null)
-        //{
-        //    List = List.Where(x => x.cliente.Contains(Convert.ToString(filtronombreCliente.Value))).ToList();
-        //}
-
-        //if (filtroNoCuenta.Value != null)
-        //{
-        //    List = List.Where(x => x.noCuenta == Convert.ToString(filtroNoCuenta.Value)).ToList();
-        //}
-
-        //if (filtroEstatus.Value != null)
-        //{
-        //    List = List.Where(x => x.estatus == Convert.ToString(filtroEstatus.Value)).ToList();
-        //}
-
-        //if (filtroSaldo.Value != null)
-        //{
-        //    List = List.Where(x => x.saldo == Convert.ToString(filtroSaldo.Value)).ToList();
-        //}
-
-        //if (filtroTipo.Value != null)
-        //{
-        //    List = List.Where(x => x.tipo == Convert.ToString(filtroTipo.Value)).ToList();
-        //}
-
-        gridData.Data = List;
-        gridData.RecordsTotal = List.Count;
-        gridData.Data = gridData.Data.Skip(skip).Take(pageSize).ToList();
-        filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.Data.Count;
-        gridData.RecordsFiltered = filterRecord;
-        gridData.Draw = draw;
-
-        return Json(gridData);
-    }
 
     [HttpPost]
     public async Task<JsonResult> ConsultarSubCuentas()

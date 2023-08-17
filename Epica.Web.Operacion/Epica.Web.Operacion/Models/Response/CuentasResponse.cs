@@ -14,6 +14,8 @@ public class CuentasResponse
     public string alias { get; set; }
     public DateTime fechaAlta { get; set; }
     public DateTime fechaActualizacion { get; set; }
+    public string fechaAltaFormat { get; set; }
+    public string fechaActualizacionformat { get; set; }
 }
 
 public class CuentasResponseGrid : CuentasResponse
