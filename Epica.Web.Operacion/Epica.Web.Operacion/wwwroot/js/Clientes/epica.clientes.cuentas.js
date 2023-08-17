@@ -53,8 +53,9 @@ var KTDatatableRemoteAjax = function () {
                     render: function (data, type, row) {
                         var partes = data.split("|"); // Separar la parte entera y decimal
                         var NumCuenta = partes[0];
-                        var ID = partes[1]
-                        return "<a href='/Clientes/Detalle/DatosGenerales?id=" + ID + "'>" + NumCuenta + "</a>";
+                        var idCuenta = partes[1];
+                        var idCliente = partes[2];
+                        return "<a href='/Cuentas/Detalle/Movimientos?id=" + idCuenta + "&cliente=" + idCliente +"'>" + NumCuenta + "</a>";
                     }
                 },
                 {

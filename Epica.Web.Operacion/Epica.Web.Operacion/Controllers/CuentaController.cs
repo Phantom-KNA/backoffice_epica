@@ -18,12 +18,12 @@ public class CuentaController : Controller
 {
     #region "Locales"
     private readonly ICuentaApiClient _cuentaApiClient;
-    private readonly IUsuariosApiClient _usuariosApiClient;
+    private readonly IClientesApiClient _usuariosApiClient;
     private readonly ITransaccionesApiClient _transaccionesApiClient;
     #endregion
 
     #region "Constructores"
-    public CuentaController(ICuentaApiClient cuentaApiClient, IUsuariosApiClient usuariosApiClient, ITransaccionesApiClient transaccionesApiClient)
+    public CuentaController(ICuentaApiClient cuentaApiClient, IClientesApiClient usuariosApiClient, ITransaccionesApiClient transaccionesApiClient)
     {
         _cuentaApiClient = cuentaApiClient;
         _usuariosApiClient = usuariosApiClient;
@@ -144,9 +144,9 @@ public class CuentaController : Controller
     #region Detalle Cuenta
     [Authorize]
     [Route("Cuentas/Detalle/Movimientos")]
-    public async Task<IActionResult> Cuentas(int id)
+    public async Task<IActionResult> Cuentas(int id, int cliente)
     {
-        UserDetailsResponse user = await _usuariosApiClient.GetDetallesCliente(id);
+        ClienteDetailsResponse user = await _usuariosApiClient.GetDetallesCliente(cliente);
 
         if (user.value == null)
         {
@@ -154,7 +154,7 @@ public class CuentaController : Controller
         }
 
         ViewBag.UrlView = "Movimientos";
-        UsuarioHeaderViewModel header = new UsuarioHeaderViewModel
+        ClientesHeaderViewModel header = new ClientesHeaderViewModel
         {
             Id = user.value.IdCliente,
             NombreCompleto = user.value.NombreCompleto,

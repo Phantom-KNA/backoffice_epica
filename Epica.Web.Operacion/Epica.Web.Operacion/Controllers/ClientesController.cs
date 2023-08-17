@@ -385,7 +385,7 @@ public class ClientesController : Controller
             {
                 idCuenta = row.idCuenta,
                 nombrePersona = row.nombrePersona,
-                noCuenta = row.noCuenta + "|" + row.idCuenta.ToString(),
+                noCuenta = row.noCuenta + "|" + row.idCuenta.ToString() + "|" + id,
                 saldo = row.saldo,
                 estatus = row.estatus,
                 tipoPersona = row.tipoPersona,
