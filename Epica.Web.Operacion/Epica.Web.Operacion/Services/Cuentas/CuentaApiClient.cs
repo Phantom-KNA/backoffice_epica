@@ -109,7 +109,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
             try
             {
-                var uri = Urls.Transaccion + UrlsConfig.CuentasOperations.GetCuentasUsuarios(idCliente);
+                var uri = Urls.Transaccion + UrlsConfig.CuentasOperations.GetCuentasClientes(idCliente);
                 var response = await ApiClient.GetAsync(uri);
 
                 if (response.IsSuccessStatusCode)

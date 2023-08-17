@@ -1,0 +1,146 @@
+﻿@model Epica.Web.Operacion.Models.ViewModels.ClientesDetallesViewModel
+@{
+    //ViewData["Title"] = "Persona Fisica";
+    ViewData["Title"] = "Datos Generales";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section LogoPage{
+    <i class="bi bi-person fs-1 w-40px"></i>
+}
+@section breadcrumb{
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted">
+        Clientes
+    </li>
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted">
+        <a class="text-muted" asp-controller="Clientes" asp-action="Index">Clientes</a>
+    </li>
+}
+
+<partial name="~/Views/Clientes/_PartialClienteHeaderDetalles.cshtml" model="@ViewBag.Info" />
+
+<div class="card">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="card-body pt-5 pb-5 mb-5 col-md-12">
+                <div class="card-header pt-5 pb-5">
+                    <div class="card-title">
+                        <h2 class="card-label fw-bold fs-3 mb-1">Datos del cliente</h2>
+                    </div>
+                </div>
+                <div class="card-body pt-5 pb-5 mt-3">
+                    <div class="mb-5">
+                        @*<h5 class="mb-4">Datos Económicos generales</h5>*@
+                        <div class="d-flex flex-wrap py-5">
+                            <div class="flex-equal me-5">
+                                <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-gray-400">No. Cliente:</td>
+                                            <td class="text-gray-800">
+                                                @(@Model.Id)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Nombre Completo:</td>
+                                            <td class="text-gray-800">
+                                                @(@Model?.Nombre ?? "")
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Correo Electrónico:</td>
+                                            <td class="text-gray-800">@(@Model?.Email ?? "")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">RFC:</td>
+                                            <td class="text-gray-800">@(@Model?.Rfc ?? "")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">País de Nacimiento:</td>
+                                            <td class="text-gray-800">@(@Model?.Pais ?? "")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Fecha de Nacimiento:</td>
+                                            <td class="text-gray-800">@(@Model?.FechaNacimiento?.ToString("dd/MM/yyyy") ?? "")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Género:</td>
+                                            <td class="text-gray-800">@(@Model?.Sexo ?? "")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">CURP:</td>
+                                            <td class="text-gray-800">@(@Model?.Curp ?? "")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Nacionalidad:</td>
+                                            <td class="text-gray-800">@(@Model?.Nacionalidad ?? "")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Télefono:</td>
+                                            <td class="text-gray-800">@(@Model?.Telefono ?? "")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Región:</td>
+                                            <td class="text-gray-800">No aplica</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Observaciones:</td>
+                                            <td class="text-gray-800">@(@Model?.Observaciones ?? "")</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="flex-equal">
+                                <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-gray-400">Colonia:</td>
+                                            <td class="text-gray-800">
+                                                @(@Model?.Colonia ?? "")
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">No. Interior/Exterior:</td>
+                                            <td class="text-gray-800">
+                                                N/A/623
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Alcaldía/Municipio:</td>
+                                            <td class="text-gray-800">
+                                                @(@Model?.DelegacionMunicipio ?? "")
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Ciudad/Estado:</td>
+                                            <td class="text-gray-800">@(@Model?.CiudadEstado ?? "")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Calle:</td>
+                                            <td class="text-gray-800">@(@Model?.Calle ?? "")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Código Postal:</td>
+                                            <td class="text-gray-800">@(@Model?.CodigoPostal ?? "")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Identificación Oficial:</td>
+                                            <td class="text-gray-800">INE</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -13,7 +13,7 @@ namespace Epica.Web.Operacion.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly IUsuariosApiClient _usuariosApiClient;
+    private readonly IClientesApiClient _clientesApiClient;
     private readonly ITransaccionesApiClient _transaccionesApiClient;
     private readonly ICuentaApiClient _cuentaApiClient;
 
@@ -23,12 +23,12 @@ public class HomeController : Controller
     /// <returns>Vista de la pagina de inicio.</returns>
 
     public HomeController(
-        IUsuariosApiClient usuariosApiClient,
+        IClientesApiClient clientesApiClient,
         ITransaccionesApiClient transaccionesApiClient,
         ICuentaApiClient cuentaApiClient
         )
     {
-        _usuariosApiClient = usuariosApiClient;
+        _clientesApiClient = clientesApiClient;
         _transaccionesApiClient = transaccionesApiClient;
         _cuentaApiClient = cuentaApiClient;
     }
@@ -44,7 +44,7 @@ public class HomeController : Controller
 
             HomeIndexViewModel indexViewModel = new HomeIndexViewModel()
             {
-                UsuariosTotal = await _usuariosApiClient.GetTotalUsuariosAsync(),
+                ClientesTotal = await _clientesApiClient.GetTotalClientesAsync(),
                 TransaccionesTotal = await _transaccionesApiClient.GetTotalTransaccionesAsync(),
                 CuentasTotal = await _cuentaApiClient.GetTotalCuentasAsync(),
                 FechaActual = DateTime.Now

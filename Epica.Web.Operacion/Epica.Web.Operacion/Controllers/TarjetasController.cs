@@ -16,13 +16,13 @@ namespace Epica.Web.Operacion.Controllers;
 public class TarjetasController : Controller
 {
     #region "Locales"
-    private readonly IUsuariosApiClient _usuariosApiClient;
+    private readonly IClientesApiClient _clientesApiClient;
     #endregion
 
     #region "Constructores"
-    public TarjetasController(IUsuariosApiClient usuariosApiClient)
+    public TarjetasController(IClientesApiClient clientesApiClient)
     {
-        _usuariosApiClient = usuariosApiClient;
+        _clientesApiClient = clientesApiClient;
     }
     #endregion
 
@@ -34,9 +34,9 @@ public class TarjetasController : Controller
     }
 
     [Authorize]
-    public IActionResult RegistroTarjetaUsuario()
+    public IActionResult RegistroTarjetaCliente()
     {
-        return View("~/Views/Tarjetas/RegistroTarjetaUsuario.cshtml");
+        return View("~/Views/Tarjetas/RegistroTarjetaCliente.cshtml");
     }
     
     [Authorize]

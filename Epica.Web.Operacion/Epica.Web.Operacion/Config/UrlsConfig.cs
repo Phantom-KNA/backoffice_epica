@@ -27,19 +27,19 @@ public class UrlsConfig
         public static string GetCuentas(int numberPage, int TotalRecords) => $"/api/v1/cuentas/cliente_vista?pageNumber={numberPage}&pageSize={TotalRecords}";
         public static string GetCuentasTotal() => $"/api/v1/cuentas/total";
         public static string GetCobranzaReferenciada(int id) => $"/api/v1/transacciones/cobranza_referenciada?id={id}";
-        public static string GetCuentasUsuarios(int id) => $"/api/v1/cuentas/cliente_cuentas?idCliente={id}";
+        public static string GetCuentasClientes(int id) => $"/api/v1/cuentas/cliente_cuentas?idCliente={id}";
     }
 
-    public class UsuariosOperations
+    public class ClientesOperations
     {
-        public static string GetUsuariosTotal() => $"/api/v1/clientes/total";
-        public static string GetUsuario(int id) => $"/api/v1/clientes/cliente?id={id}";
-        public static string GetUsuarioDocumentos(int id) => $"/api/v1/clientes/cliente_documento?idUsuario={id}";
-        public static string GetUsuarioInfo(int pageNumber, int totalRecords) => $"/api/v1/clientes/clientes_info?pageNumber={pageNumber}&pageSize={totalRecords}";
-        public static string GetDocumentosUsuario(int idUsuario) => $"/api/v1/clientes/cliente_documento?idUsuario={idUsuario}";
-        public static string GetBloqueaWebUsuario() => $"/api/v1/clientes/bloque_web";
-        public static string GetBloqueaTotalUsuario() => $"/api/v1/clientes/bloque_total";
-        public static string InsertarUsuarioNuevo() => $"/api/v1/clientes/inserta_cliente";
+        public static string GetClientesTotal() => $"/api/v1/clientes/total";
+        public static string GetCliente(int id) => $"/api/v1/clientes/cliente?id={id}";
+        public static string GetClienteDocumentos(int id) => $"/api/v1/clientes/cliente_documento?idUsuario={id}";
+        public static string GetClienteInfo(int pageNumber, int totalRecords) => $"/api/v1/clientes/clientes_info?pageNumber={pageNumber}&pageSize={totalRecords}";
+        public static string GetDocumentosCliente(int idUsuario) => $"/api/v1/clientes/cliente_documento?idUsuario={idUsuario}";
+        public static string GetBloqueaWebCliente() => $"/api/v1/clientes/bloque_web";
+        public static string GetBloqueaTotalCliente() => $"/api/v1/clientes/bloque_total";
+        public static string InsertarClienteNuevo() => $"/api/v1/clientes/inserta_cliente";
     }
 
     public class LoginOperations
