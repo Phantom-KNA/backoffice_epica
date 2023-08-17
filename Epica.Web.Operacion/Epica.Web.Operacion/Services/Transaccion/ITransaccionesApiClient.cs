@@ -3,9 +3,8 @@
     public interface ITransaccionesApiClient
     {
         Task<List<TransaccionesResponse>> GetTransaccionesAsync(int pageNumber, int recordsTotal);
-
         Task<TransaccionesResponse> GetTransaccionAsync(int idInterno);
         Task<int> GetTotalTransaccionesAsync();
-
+        Task<List<TransaccionesResponse>> GetTransaccionesCuentaAsync(int idCuenta);
     }
 }

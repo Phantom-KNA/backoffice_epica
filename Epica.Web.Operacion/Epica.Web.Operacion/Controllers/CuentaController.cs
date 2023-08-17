@@ -1,5 +1,6 @@
 ﻿using Epica.Web.Operacion.Config;
 using Epica.Web.Operacion.Models.Common;
+using Epica.Web.Operacion.Models.ViewModels;
 using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Services.UserResolver;
 using Epica.Web.Operacion.Utilities;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Text;
+using static Epica.Web.Operacion.Controllers.TransaccionesController;
 
 namespace Epica.Web.Operacion.Controllers;
 
@@ -16,17 +18,22 @@ public class CuentaController : Controller
 {
     #region "Locales"
     private readonly ICuentaApiClient _cuentaApiClient;
+    private readonly IUsuariosApiClient _usuariosApiClient;
+    private readonly ITransaccionesApiClient _transaccionesApiClient;
     #endregion
 
     #region "Constructores"
-    public CuentaController(ICuentaApiClient cuentaApiClient)
+    public CuentaController(ICuentaApiClient cuentaApiClient, IUsuariosApiClient usuariosApiClient, ITransaccionesApiClient transaccionesApiClient)
     {
         _cuentaApiClient = cuentaApiClient;
+        _usuariosApiClient = usuariosApiClient;
+        _transaccionesApiClient = transaccionesApiClient;
     }
     #endregion
 
     #region "Funciones"    
-    
+
+    #region Consulta
     [Authorize]
     public IActionResult Index()
     {
@@ -55,7 +62,7 @@ public class CuentaController : Controller
         var gridData = new ResponseGrid<CuentasResponseGrid>();
         List<CuentasResponse> ListPF = new List<CuentasResponse>();
 
-        ListPF = await _cuentaApiClient.GetCuentasAsync(1,100);
+        ListPF = await _cuentaApiClient.GetCuentasAsync(1, 100);
 
         //Entorno local de pruebas
         //ListPF = GetList();
@@ -132,6 +139,107 @@ public class CuentaController : Controller
 
         return Json(gridData);
     }
+    #endregion
+
+    #region Detalle Cuenta
+    [Authorize]
+    [Route("Cuentas/Detalle/Movimientos")]
+    public async Task<IActionResult> Cuentas(int id)
+    {
+        UserDetailsResponse user = await _usuariosApiClient.GetDetallesCliente(id);
+
+        if (user.value == null)
+        {
+            return RedirectToAction("Index");
+        }
+
+        ViewBag.UrlView = "Movimientos";
+        UsuarioHeaderViewModel header = new UsuarioHeaderViewModel
+        {
+            Id = user.value.IdCliente,
+            NombreCompleto = user.value.NombreCompleto,
+            Telefono = user.value.Telefono,
+            Correo = user.value.Email,
+            Curp = user.value.CURP,
+            Organizacion = user.value.Organizacion,
+            Rfc = user.value.RFC,
+            Sexo = user.value.Sexo
+        };
+        ViewBag.Info = header;
+        ViewBag.Nombre = header.NombreCompleto;
+        ViewBag.AccountID = id;
+        return View("~/Views/Cuenta/DetallesCuenta/Transacciones/DetalleMovimientos.cshtml");
+    }
+
+    [Authorize]
+    [HttpPost]
+    public async Task<JsonResult> ConsultaCuentas(string id)
+    {
+        var request = new RequestList();
+
+        int totalRecord = 0;
+        int filterRecord = 0;
+
+        var draw = Request.Form["draw"].FirstOrDefault();
+        int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
+        int skip = Convert.ToInt32(Request.Form["start"].FirstOrDefault() ?? "0");
+
+        request.Pagina = skip / pageSize + 1;
+        request.Registros = pageSize;
+        request.Busqueda = Request.Form["search[value]"].FirstOrDefault();
+        request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+        request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
+
+        var gridData = new ResponseGrid<ResumenTransaccionResponseGrid>();
+        List<TransaccionesResponse> ListPF = new List<TransaccionesResponse>();
+
+        ListPF = await _transaccionesApiClient.GetTransaccionesCuentaAsync(Convert.ToInt32(id));
+
+        var List = new List<ResumenTransaccionResponseGrid>();
+        foreach (var row in ListPF)
+        {
+            List.Add(new ResumenTransaccionResponseGrid
+            {
+                id = row.id,
+                claveRastreo = row.claveRastreo,
+                nombreOrdenante = row.nombreOrdenante,
+                nombreBeneficiario = row.nombreBeneficiario,
+                monto = row.monto,
+                estatus = row.estatus,
+                concepto = row.concepto,
+                idMedioPago = row.idMedioPago,
+                idCuentaAhorro = row.idCuentaAhorro,
+                fechaAlta = row.fechaAlta
+                //Acciones = await this.RenderViewToStringAsync("~/Views/Cuenta/_Acciones.cshtml", row)
+            });
+        }
+        if (!string.IsNullOrEmpty(request.Busqueda))
+        {
+            List = List.Where(x =>
+            (x.id.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.claveRastreo?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.nombreOrdenante?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.nombreBeneficiario?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.monto.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.estatus.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.concepto?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.idMedioPago.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.idCuentaAhorro.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.fechaAlta.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower())
+            ).ToList();
+        }
+
+        gridData.Data = List;
+        gridData.RecordsTotal = List.Count;
+        gridData.Data = gridData.Data.Skip(skip).Take(pageSize).ToList();
+        filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.Data.Count;
+        gridData.RecordsFiltered = filterRecord;
+        gridData.Draw = draw;
+
+        return Json(gridData);
+    }
+    #endregion
+
 
     [Authorize]
     [HttpPost]

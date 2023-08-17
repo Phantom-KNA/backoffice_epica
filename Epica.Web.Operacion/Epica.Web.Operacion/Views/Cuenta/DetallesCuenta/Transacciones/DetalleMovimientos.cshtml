@@ -17,11 +17,11 @@
         <span class="bullet bg-gray-400 w-5px h-2px"></span>
     </li>
     <li class="breadcrumb-item text-muted">
-        <a class="text-muted" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
+        <a class="text-muted" asp-controller="Usuarios" asp-action="Index">Detalle Cuenta</a>
     </li>
 }
 
-<partial name="~/Views/Usuarios/_PartialUsuarioHeaderDetalles.cshtml" model="@ViewBag.Info" />
+<partial name="~/Views/Cuenta/_PartialCuentaHeaderDetalles.cshtml" model="@ViewBag.Info" />
 
 <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
     <div class="card-header cursor-pointer">
@@ -120,7 +120,7 @@
 </div>
 
 @section Scripts{
-    <script asp-append-version="true" src="~/js/Usuarios/epica.usuarios.cuentas.js"></script>
+    <script asp-append-version="true" src="~/js/Cuentas/epica.cuenta.movimientos.js"></script>
     <script asp-append-version="true" src="~/js/components/accounting.js"></script>
     <script>
         var AccountId = '@ViewBag.AccountID';

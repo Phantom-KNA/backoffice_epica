@@ -11,6 +11,12 @@
         public string concepto { get; set; }
         public int idMedioPago { get; set; }
         public int idCuentaAhorro { get; set; }
-        public DateTime fechaAlta { get; set; }
+        public string fechaAlta { get; set; }
+        public string fechaActualizacion { get; set; }
+    }
+
+    public class TransaccionesResponseGrid : TransaccionesResponse
+    {
+        public string Acciones { get; set; }
     }
 }

@@ -258,9 +258,8 @@ public class UsuariosController : Controller
     }
     #endregion
 
-    [Authorize]
     #region Detalles Cliente
-
+    [Authorize]
     [Route("Usuarios/Detalle/DatosGenerales")]
     public async Task<IActionResult> DatosGenerales(int id)
     {
@@ -675,12 +674,6 @@ public class UsuariosController : Controller
         return NotFound();
 
     }
-
-    [Authorize]
-    [HttpPost]
-    public async Task<JsonResult> Consulta(List<RequestListFilters> filters)
-    {
-        var request = new RequestList();
 
     [Authorize]
     [HttpPost]
