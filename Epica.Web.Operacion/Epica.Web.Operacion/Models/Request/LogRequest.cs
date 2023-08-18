@@ -1,4 +1,6 @@
-﻿namespace Epica.Web.Operacion.Models.Request
+﻿using System.Text.Json.Serialization;
+
+namespace Epica.Web.Operacion.Models.Request
 {
     public class LogRequest
     {
