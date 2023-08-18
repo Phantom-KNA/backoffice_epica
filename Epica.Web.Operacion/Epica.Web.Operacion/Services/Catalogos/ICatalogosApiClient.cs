@@ -7,5 +7,6 @@
         Task<List<DatosCatalogoResponse>> GetPaisesAsync();
         Task<List<DatosCatalogoResponse>> GetOcupacionesAsync();
         Task<List<DatosCatalogoResponse>> GetNacionalidadesAsync();
+        Task<List<DatosCatalogoResponse>> GetRolClienteAsync();
     }
 }
