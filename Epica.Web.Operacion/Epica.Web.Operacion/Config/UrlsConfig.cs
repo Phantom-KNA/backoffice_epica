@@ -57,6 +57,10 @@ public class UrlsConfig
         public static string GetCredentials() => $"/api/v1/authentication/authentication";
     }
 
+    public class LogOperations
+    {
+        public static string InsertarLog() => $"/api/v1/log/insertar_log";
+    }
     public string Authenticate { get; set; }
     public string Transaccion { get; set; }
 }

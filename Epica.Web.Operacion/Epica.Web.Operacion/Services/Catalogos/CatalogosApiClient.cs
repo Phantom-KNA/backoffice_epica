@@ -10,7 +10,7 @@ namespace Epica.Web.Operacion.Services.Catalogos
     {
         public CatalogosApiClient(
         HttpClient httpClient,
-        ILogger<CuentaApiClient> logger,
+        ILogger<CatalogosApiClient> logger,
         IOptions<UrlsConfig> config,
         IHttpContextAccessor httpContext,
         IConfiguration configuration,
