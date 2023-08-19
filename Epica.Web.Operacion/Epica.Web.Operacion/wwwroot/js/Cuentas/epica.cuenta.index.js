@@ -64,16 +64,18 @@ var KTDatatableRemoteAjax = function () {
                 "targets": "_all"
             }],
             columns: [
-                { data: 'idCuenta', name: 'idCuenta', title: 'ID' },
-                { data: 'noCuenta', name: 'NoCuenta', title: 'Numero de Cuenta' },
-                { data: 'nombrePersona', name: 'nombrePersona', title: 'Cliente' },
+/*                { data: 'idCuenta', name: 'idCuenta', title: 'ID' },*/
                 {
-                    data: 'estatus', name: 'Estatus', title: 'Estatus',
+                    data: 'noCuenta', name: 'NoCuenta', title: 'Numero de Cuenta',
                     render: function (data, type, row) {
-                        return data == 1 ?
-                            "<span class='badge badge-light-success' >Activo</span>" : "<span class='badge badge-light-danger' >Desactivado</span>";
+                        var partes = data.split("|"); // Separar la parte entera y decimal
+                        var NumCuenta = partes[0];
+                        var idCuenta = partes[1];
+                        var idCliente = partes[2];
+                        return "<a title='Consultar Movimientos de cuenta' href='/Clientes/Detalle/Movimientos?id=" + idCuenta + "&cliente=" + idCliente + "&noCuenta=" + NumCuenta + "'>" + NumCuenta + "</a>";
                     }
                 },
+                { data: 'nombrePersona', name: 'nombrePersona', title: 'Cliente' },
                 {
                     data: 'saldo', name: 'Saldo', title: 'Saldo',
                     render: function (data, type, row) {
@@ -82,6 +84,13 @@ var KTDatatableRemoteAjax = function () {
                 },
                 {
                     data: 'tipoPersona', name: 'Tipo', title: 'Tipo Persona'
+                },
+                {
+                    data: 'estatus', name: 'Estatus', title: 'Estatus',
+                    render: function (data, type, row) {
+                        return data == 1 ?
+                            "<span class='badge badge-light-danger' >Desactivado</span>" : "<span class='badge badge-light-success' >Activo</span>";
+                    }
                 },
                 {
                     title: '',
@@ -109,7 +118,7 @@ var KTDatatableRemoteAjax = function () {
                     extend: 'excelHtml5',
                     title: documentTitle,
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5]
+                        columns: [0, 1, 2, 3, 4]
                     }
                 }
             ]
@@ -258,6 +267,8 @@ function pruebas(idAccount) {
                 button.classList.remove('active');
             } else {
 
+                toastr.info('Consultando Cobranza Referenciada', "");
+
                 $.ajax({
                     url: siteLocation + 'Cuenta/ConsultarSubCuentas',
                     async: true,
@@ -347,7 +358,7 @@ function GestionarCuenta(AccountID, estatus) {
         success: function (data) {
 
             datatable.ajax.reload();
-            alert("Se ha actualizado la cuenta con exito.");
+            toastr.success('Se ha actualizado el estatus de la cuenta con exito.', "");
         },
         error: function (xhr, status, error) {
             console.log(error);

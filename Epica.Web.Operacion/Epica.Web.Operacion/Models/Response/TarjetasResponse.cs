@@ -9,13 +9,13 @@ namespace Epica.Web.Operacion.Models.Response;
 
 public class TarjetasResponse
 {
-    public int idCuentaAhorro { get; set; }
     public int idCliente { get; set; }
-    public string nombre { get; set; }
-    public string proxyNumber { get; set; }
-    public string clabe { get; set; }
+    public int idCuentaAhorro { get; set; }
+    public string nombreCompleto { get; set; }
     public string tarjeta { get; set; }
-    public int Estatus { get; set; }
+    public string clabe { get; set; }
+    public string proxyNumber { get; set; }
+    //public int Estatus { get; set; }
 }
 
 public class TarjetasResponseGrid : TarjetasResponse

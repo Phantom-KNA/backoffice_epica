@@ -47,6 +47,14 @@
                 </div>
                 <div class="d-flex flex-wrap justify-content-start">
                     <div class="d-flex flex-wrap">
+                        @if (Model.NoCuenta != null) {
+                            <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="fs-4 fw-bold">@Model.NoCuenta</div>
+                                </div>
+                                <div class="fw-semibold fs-6 text-gray-400">Número de Cuenta</div>
+                            </div>
+                        }                       
                         <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                             <div class="d-flex align-items-center">
                                 <div class="fs-4 fw-bold">@Model.Organizacion</div>
@@ -90,11 +98,17 @@
                 </a>
             </li>
 
-@*            <li class="nav-item mt-2">
-                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(ViewBag.UrlView.Contains("Movimientos") ? "active" : "")" asp-action="Cuentas" asp-controller="Cuenta" asp-route-id="@Model.Id">
+            <li class="nav-item mt-2">
+                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(ViewBag.UrlView.Contains("Movimientos") ? "active" : "")" asp-action="Transacciones" asp-controller="Clientes" asp-route-id="@ViewBag.Account" asp-route-cliente="@Model.Id" asp-route-noCuenta="@ViewBag.NumCuenta">
                     MOVIMIENTOS DE CUENTA
                 </a>
-            </li>*@
+            </li>
+
+            <li class="nav-item mt-2">
+                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(ViewBag.UrlView.Contains("Tarjetas") ? "active" : "")" asp-action="Tarjetas" asp-controller="Clientes" asp-route-id="@Model.Id">
+                    TARJETAS
+                </a>
+            </li>
 
         </ul>
     </div>

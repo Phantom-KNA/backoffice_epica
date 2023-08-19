@@ -1,6 +1,7 @@
 ﻿using Epica.Web.Operacion.Config;
 using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Models.Common;
+using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Services.UserResolver;
 using Epica.Web.Operacion.Utilities;
@@ -18,15 +19,18 @@ public class TarjetasController : Controller
 {
     #region "Locales"
     private readonly IClientesApiClient _clientesApiClient;
+    private readonly ITarjetasApiClient _tarjetasApiClient;
     private readonly UserContextService _userContextService;
     #endregion
 
     #region "Constructores"
     public TarjetasController(IClientesApiClient clientesApiClient,
+        ITarjetasApiClient tarjetasApiClient,
         UserContextService userContextService)
     {
         _clientesApiClient = clientesApiClient;
         _userContextService = userContextService;
+        _tarjetasApiClient = tarjetasApiClient;
     }
     #endregion
 
@@ -73,10 +77,10 @@ public class TarjetasController : Controller
         var gridData = new ResponseGrid<TarjetasResponseGrid>();
         List<TarjetasResponse> ListPF = new List<TarjetasResponse>();
 
-        //ListPF = await _usuariosApiClient.GetUsuariosAsync(1,200);
+        ListPF = await _tarjetasApiClient.GetTarjetasAsync(1,200);
 
         //Entorno local de pruebas
-        ListPF = GetList();
+        //ListPF = GetList();
 
         var List = new List<TarjetasResponseGrid>();
         foreach (var row in ListPF)
@@ -85,11 +89,11 @@ public class TarjetasController : Controller
             {
                 idCuentaAhorro = row.idCuentaAhorro,
                 idCliente = row.idCliente,
-                nombre = row.nombre,
+                nombreCompleto = row.nombreCompleto,
                 proxyNumber = row.proxyNumber,
                 clabe = row.clabe,
                 tarjeta = row.tarjeta,
-                Estatus = row.Estatus,
+                //Estatus = row.Estatus,
                 Acciones = await this.RenderViewToStringAsync("~/Views/Tarjetas/_Acciones.cshtml", row)
             });
         }
@@ -98,11 +102,11 @@ public class TarjetasController : Controller
             List = List.Where(x =>
             (x.idCuentaAhorro.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
             (x.idCliente.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-            (x.nombre?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.nombreCompleto?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
             (x.proxyNumber?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
             (x.clabe?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-            (x.tarjeta?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-            (x.Estatus.ToString()?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
+            (x.tarjeta?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) 
+            //(x.Estatus.ToString()?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
             ).ToList();
         }
 
@@ -155,12 +159,24 @@ public class TarjetasController : Controller
     }
 
     [Authorize]
+    [Route("Clientes/Detalle/Tarjetas/RegistrarTarjetas")]
     [HttpPost]
-    public async Task<JsonResult> ConsultarSubCuentas()
+    public async Task<JsonResult> RegistrarTarjetas(RegistrarTarjetaRequest model)
     {
-        //var ListPF = await _usuariosApiClient.GetUsuariosAsync(1,200);
-        var ListPF = GetList();
-        return Json(ListPF);
+        string response = "";
+
+        try
+        {
+
+            response = await _tarjetasApiClient.GetRegistroTarjetaAsync(model);
+
+        }
+        catch (Exception ex)
+        {
+            response = "";
+        }
+
+        return Json(model);
     }
 
     #endregion
@@ -268,11 +284,11 @@ public class TarjetasController : Controller
                 var pf = new TarjetasResponse();
                 pf.idCuentaAhorro = i;
                 pf.idCliente = i+10;
-                pf.nombre = gen.NombreCompleto;
+                pf.nombreCompleto = gen.NombreCompleto;
                 pf.proxyNumber = string.Format("02{0}",i);
                 pf.clabe = string.Format("01232002769794212{0}",i);
                 pf.tarjeta = string.Format("547016034567123{0}", i);
-                pf.Estatus = 1;
+                //pf.Estatus = 1;
 
                 List.Add(pf);
             }

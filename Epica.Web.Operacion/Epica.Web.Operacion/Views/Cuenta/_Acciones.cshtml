@@ -9,29 +9,25 @@
     </a>
     <ul class="dropdown-menu menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4">
         <li class="menu-item px-3">
-            <a data-id="@Model.idCuenta" asp-controller="Transacciones" asp-action="Index" asp-route-AccountID="@Model.idCuenta" title="Consultar Transacciones de la cuenta" class="btnEditar menu-link px-3">
+            <a data-id="@Model.idCuenta" href="/Clientes/Detalle/Movimientos?id=@Model.idCuenta&cliente=@Model.idCliente&noCuenta=@Model.noCuenta" title="Consultar Transacciones de la cuenta" class="btnEditar menu-link px-3">
                 <i class="bi bi-credit-card"></i>&nbsp;
                 Transacciones
             </a>
         </li>
         <li class="menu-item px-3">
-            @if (Model.estatus == 1)
-            {
+            @if (Model.estatus == 1) {
+                <a data-id="@Model.idCuenta" onclick="GestionarCuenta(@Model.idCuenta, 'True')" title="Desbloquear Cuenta" class="btnEditar menu-link px-3">
+                    <i class="bi bi-unlock"></i>&nbsp;
+                    Desbloquear
+                </a>
+            } else {
                 <a data-id="@Model.idCuenta" onclick="GestionarCuenta(@Model.idCuenta, 'False')" title="Bloquear Cuenta" class="btnEditar menu-link px-3">
                     <i class="bi bi-lock"></i>&nbsp;
                     Bloquear
                 </a>
             }
-            else
-            {
-                <a data-id="@Model.idCuenta" onclick="GestionarCuenta(@Model.idCuenta, 'True')" title="Desbloquear Cuenta" class="btnEditar menu-link px-3">
-                    <i class="bi bi-unlock"></i>&nbsp;
-                    Desbloquear
-                </a>
-            }
-
         </li>
-        <li class="menu-item px-3">
+@*        <li class="menu-item px-3">
             <a data-id="@Model.idCuenta" title="Ver más información de esta cuenta" class="btnEditar menu-link px-3">
                 <i class="bi bi-search"></i>&nbsp;
                 Detalles
@@ -42,6 +38,6 @@
                 <i class="bi bi-people"></i>&nbsp;
                 Ver clientes
             </a>
-        </li>
+        </li>*@
     </ul>
 </div>

@@ -6,7 +6,7 @@
             <div class="form-group input-group-sm col-md-12 row">
                 <label class="col-md-3 form-label required">Nombre de Persona Ordenante: &nbsp;</label>
                 <div class="col-md-9">
-                    <input asp-for="NombreOrdenante" class="form-control form-control-sm form-control-solid" id="NombreOrdenante" readonly value="@Model.NombreOrdenante" type="text" autocomplete="off" />
+                    <input asp-for="NombreOrdenante" class="form-control form-control-sm form-control-solid" id="NombreOrdenante" value="@Model.NombreOrdenante" type="text" autocomplete="off" />
                 </div>
             </div>
         </div>
@@ -16,7 +16,17 @@
             <div class="form-group input-group-sm col-md-12 row">
                 <label class="col-md-3 form-label required">Número de Cuenta Ordenante: &nbsp;</label>
                 <div class="col-md-9">
-                    <input asp-for="NoCuentaOrdenante" class="form-control form-control-sm form-control-solid" id="NoCuentaOrdenante" readonly value="@Model.NoCuentaOrdenante" type="text" autocomplete="off" />
+                    <input asp-for="NoCuentaOrdenante" class="form-control form-control-sm form-control-solid" id="NoCuentaOrdenante" value="@Model.NoCuentaOrdenante" type="text" autocomplete="off" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-stack row">
+        <div class="row mb-5 mt-5">
+            <div class="form-group input-group-sm col-md-12 row">
+                <label class="col-md-3 form-label required">Clave de Rastreo: &nbsp;</label>
+                <div class="col-md-9">
+                    <input asp-for="ClaveRastreo" class="form-control form-control-sm form-control-solid" id="NoCuentaOrdenante" value="@Model.ClaveRastreo" type="text" autocomplete="off" />
                 </div>
             </div>
         </div>
@@ -64,9 +74,28 @@
     <div class="d-flex flex-stack row">
         <div class="row mb-5 mt-5">
             <div class="form-group input-group-sm col-md-12 row">
-                <label class="col-md-3 form-label">Concepto: &nbsp;</label>
+                <label class="col-md-3 form-label">Tipo de Operación: &nbsp;</label>
                 <div class="col-md-9">
-                    <input asp-for="Concepto" class="form-control form-control-sm form-control-solid" id="Concepto" type="text" autocomplete="off" />
+                    <select asp-for="tipoOperacion" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción">
+                        <option></option>
+                        <option value="1">IN</option>
+                        <option value="2">OUT</option>
+                        <option value="3">Comisión</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-stack row">
+        <div class="row mb-5 mt-5">
+            <div class="form-group input-group-sm col-md-12 row">
+                <label class="col-md-3 form-label">Comisión: &nbsp;</label>
+                <div class="col-md-9">
+                    <select asp-for="comision" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción">
+                        <option></option>
+                        <option value="0">Sin Comisión</option>
+                        <option value="1">Con Comisión</option>
+                    </select>
                 </div>
             </div>
         </div>

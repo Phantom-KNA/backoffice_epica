@@ -20,5 +20,8 @@ public class RegistrarTransaccionRequest
     public string? NoCuentaBeneficiario { get; set; }
     public string? CuentaDestinoBeneficiario { get; set; }
     public decimal Monto { get; set; }
+    public int tipoOperacion { get; set; }
+    public int medioPago { get; set; }
+    public int comision { get; set; }
 }
 

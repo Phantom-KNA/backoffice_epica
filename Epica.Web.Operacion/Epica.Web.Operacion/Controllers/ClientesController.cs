@@ -22,18 +22,21 @@ public class ClientesController : Controller
     #region "Locales"
     private readonly IClientesApiClient _clientesApiClient;
     private readonly ICuentaApiClient _cuentaApiClient;
+    private readonly ITarjetasApiClient _tarjetasApiClient;
     private readonly UserContextService _userContextService;
     #endregion
 
     #region "Constructores"
     public ClientesController(IClientesApiClient clientesApiClient,
         ICuentaApiClient cuentaApiClient,
+        ITarjetasApiClient tarjetasApiClient,
         UserContextService userContextService
         )
     {
         _clientesApiClient = clientesApiClient;
         _cuentaApiClient = cuentaApiClient;
         _userContextService = userContextService;
+        _tarjetasApiClient = tarjetasApiClient;
     }
     #endregion
 
@@ -310,7 +313,7 @@ public class ClientesController : Controller
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
             {
                 Id = user.value.IdCliente,
-                NombreCompleto = user.value.NombreCompleto,
+                NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
                 Telefono = user.value.Telefono,
                 Correo = user.value.Email,
                 Curp = user.value.CURP,
@@ -343,7 +346,7 @@ public class ClientesController : Controller
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
             {
                 Id = user.value.IdCliente,
-                NombreCompleto = user.value.NombreCompleto,
+                NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
                 Telefono = user.value.Telefono,
                 Correo = user.value.Email,
                 Curp = user.value.CURP,
@@ -440,6 +443,155 @@ public class ClientesController : Controller
         //    recordsFiltered = filterRecord,
         //    data = List
         //};
+
+        return Json(gridData);
+    }
+
+    [Authorize]
+    [Route("Clientes/Detalle/Movimientos")]
+    public async Task<IActionResult> Transacciones(int id, int cliente, string noCuenta)
+    {
+        var loginResponse = _userContextService.GetLoginResponse();
+        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Cuentas" && modulo.Acciones.Contains("Ver")) == true)
+        {
+            ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(cliente);
+
+            if (user.value == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.UrlView = "Movimientos";
+            ClientesHeaderViewModel header = new ClientesHeaderViewModel
+            {
+                Id = user.value.IdCliente,
+                NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
+                Telefono = user.value.Telefono,
+                Correo = user.value.Email,
+                Curp = user.value.CURP,
+                Organizacion = user.value.Organizacion,
+                Rfc = user.value.RFC,
+                Sexo = user.value.Sexo,
+                NoCuenta = noCuenta
+            };
+            ViewBag.Info = header;
+            ViewBag.Nombre = header.NombreCompleto;
+            ViewBag.AccountID = id;
+            ViewBag.NumCuenta = noCuenta;
+
+            RegistrarTransaccionRequest renderInfo = new RegistrarTransaccionRequest
+            {
+                NombreOrdenante = header.NombreCompleto,
+                NoCuentaOrdenante = noCuenta,
+                ClaveRastreo = string.Format("AQPAY1000000{0}", DateTime.Now.ToString("yyyymmddhhmmss"))
+            };
+            ViewBag.DatosRef = renderInfo;
+            return View("~/Views/Clientes/Detalles/Transacciones/DetalleMovimientos.cshtml");
+        }
+
+        return NotFound();
+    }
+
+    [Authorize]
+    [Route("Clientes/Detalle/Tarjetas")]
+    public async Task<IActionResult> Tarjetas(int id)
+    {
+        var loginResponse = _userContextService.GetLoginResponse();
+        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Tarjetas" && modulo.Acciones.Contains("Ver")) == true)
+        {
+            ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(id);
+
+            if (user.value == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.UrlView = "Tarjetas";
+            ClientesHeaderViewModel header = new ClientesHeaderViewModel
+            {
+                Id = user.value.IdCliente,
+                NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
+                Telefono = user.value.Telefono,
+                Correo = user.value.Email,
+                Curp = user.value.CURP,
+                Organizacion = user.value.Organizacion,
+                Rfc = user.value.RFC,
+                Sexo = user.value.Sexo
+            };
+
+            RegistrarTarjetaRequest renderRef = new RegistrarTarjetaRequest
+            {
+                idCliente = id
+            };
+
+            ViewBag.DatosRef = renderRef;
+            ViewBag.Info = header;
+            ViewBag.Nombre = header.NombreCompleto;
+            ViewBag.AccountID = id;
+
+            return View("~/Views/Clientes/Detalles/Tarjetas/DetalleTarjetas.cshtml");
+        }
+
+        return NotFound();
+    }
+
+    [Authorize]
+    [HttpPost]
+    public async Task<JsonResult> ConsultaTarjetas(string id)
+    {
+        var request = new RequestList();
+
+        int totalRecord = 0;
+        int filterRecord = 0;
+
+        var draw = Request.Form["draw"].FirstOrDefault();
+        int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
+        int skip = Convert.ToInt32(Request.Form["start"].FirstOrDefault() ?? "0");
+
+        request.Pagina = skip / pageSize + 1;
+        request.Registros = pageSize;
+        request.Busqueda = Request.Form["search[value]"].FirstOrDefault();
+        request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+        request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
+
+        var gridData = new ResponseGrid<TarjetasResponseGrid>();
+        List<TarjetasResponse> ListPF = new List<TarjetasResponse>();
+
+        ListPF = await _tarjetasApiClient.GetTarjetasClientesAsync(Convert.ToInt32(id));
+
+        var List = new List<TarjetasResponseGrid>();
+        foreach (var row in ListPF)
+        {
+            List.Add(new TarjetasResponseGrid
+            {
+                idCuentaAhorro = row.idCuentaAhorro,
+                idCliente = row.idCliente,
+                nombreCompleto = row.nombreCompleto,
+                proxyNumber = row.proxyNumber,
+                clabe = row.clabe,
+                tarjeta = row.tarjeta,
+                //Estatus = row.Estatus
+                //Acciones = await this.RenderViewToStringAsync("~/Views/Tarjetas/_Acciones.cshtml", row)
+            });
+        }
+        if (!string.IsNullOrEmpty(request.Busqueda))
+        {
+            List = List.Where(x =>
+            (x.idCuentaAhorro.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.idCliente.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.nombreCompleto?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.proxyNumber?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.clabe?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.tarjeta?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) 
+            ).ToList();
+        }
+
+        gridData.Data = List;
+        gridData.RecordsTotal = List.Count;
+        gridData.Data = gridData.Data.Skip(skip).Take(pageSize).ToList();
+        filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.Data.Count;
+        gridData.RecordsFiltered = filterRecord;
+        gridData.Draw = draw;
 
         return Json(gridData);
     }

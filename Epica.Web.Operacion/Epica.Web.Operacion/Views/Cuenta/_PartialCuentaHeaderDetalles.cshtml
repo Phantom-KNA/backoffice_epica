@@ -85,8 +85,14 @@
         <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bold">
 
             <li class="nav-item mt-2">
-                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(ViewBag.UrlView.Contains("Movimientos") ? "active" : "")" asp-action="Cuentas" asp-controller="Cuenta" asp-route-id="@Model.Id">
+                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(ViewBag.UrlView.Contains("Movimientos") ? "active" : "")" asp-action="Cuentas" asp-controller="Cuenta" asp-route-id="@ViewBag.AccountID" asp-route-cliente="@ViewBag.Cliente" asp-route-noCuenta="@ViewBag.NumCuenta">
                     MOVIMIENTOS DE CUENTA
+                </a>
+            </li>
+
+            <li class="nav-item mt-2">
+                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(ViewBag.UrlView.Contains("CobranzaReferenciada") ? "active" : "")" asp-action="CobranzaReferenciada" asp-controller="Cuenta" asp-route-id="@ViewBag.AccountID" asp-route-cliente="@ViewBag.Cliente" asp-route-noCuenta="@ViewBag.NumCuenta">
+                    COBRANZA REFERENCIADA
                 </a>
             </li>
 

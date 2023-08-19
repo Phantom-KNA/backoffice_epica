@@ -43,6 +43,13 @@ public class UrlsConfig
         public static string InsertarClienteNuevo() => $"/api/v1/clientes/inserta_cliente";
     }
 
+    public class TarjetasOperations
+    {
+        public static string GetTarjetasCliente(int idClientes) => $"/api/v1/tarjetas/clientes_tarjetas?idCliente={idClientes}";
+        public static string GetTarjetas(int numberPage, int TotalRecords) => $"/api/v1/tarjetas/view_tarjetas?pageNumber={numberPage}&pageSize={TotalRecords}";
+        public static string GetTarjetasRegistra() => $"/api/v1/tarjetas/add_toka";
+    }
+
     public class LoginOperations
     {
         public static string GetCredentials() => $"/api/v1/authentication/authentication";

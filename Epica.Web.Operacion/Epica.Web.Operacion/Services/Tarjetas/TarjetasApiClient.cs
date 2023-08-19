@@ -1,9 +1,11 @@
 ﻿using Epica.Web.Operacion.Config;
 using Epica.Web.Operacion.Models.Entities;
+using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.UserResolver;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.Json;
 using static Epica.Web.Operacion.Controllers.CuentaController;
 
@@ -20,6 +22,89 @@ namespace Epica.Web.Operacion.Services.Transaccion
             IUserResolver userResolver) : base(httpClient, logger, config, httpContext, configuration, userResolver)
         {
         }
+
+        public async Task<List<TarjetasResponse>> GetTarjetasClientesAsync(int idCliente)
+        {
+
+            List<TarjetasResponse>? listaClientes = new List<TarjetasResponse>();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.TarjetasOperations.GetTarjetasCliente(idCliente);
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    listaClientes = JsonConvert.DeserializeObject<List<TarjetasResponse>>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return listaClientes;
+            }
+
+            return listaClientes;
+        }
+
+        public async Task<List<TarjetasResponse>> GetTarjetasAsync(int pageNumber, int recordsTotal)
+        {
+
+            List<TarjetasResponse>? listaClientes = new List<TarjetasResponse>();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.TarjetasOperations.GetTarjetas(pageNumber, recordsTotal);
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var settings = new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+                    listaClientes = JsonConvert.DeserializeObject<List<TarjetasResponse>>(jsonResponse,settings);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return listaClientes;
+            }
+
+            return listaClientes;
+        }
+
+        public async Task<string> GetRegistroTarjetaAsync(RegistrarTarjetaRequest request)
+        {
+            string respuesta = "";
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.TarjetasOperations.GetTarjetasRegistra();
+                var json = JsonConvert.SerializeObject(request);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await ApiClient.PostAsync(uri, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    respuesta = jsonResponse;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
+
+            return respuesta;
+        }
+
 
     }
 }

@@ -64,17 +64,17 @@ var KTDatatableRemoteAjax = function () {
                 "targets": "_all"
             }],
             columns: [
-                { data: 'nombre', name: 'nombre', title: 'Nombre Titular' },
+                { data: 'nombreCompleto', name: 'nombreCompleto', title: 'Nombre Titular' },
                 { data: 'tarjeta', name: 'tarjeta', title: 'Tarjeta' },
-                { data: 'proxyNumber', name: 'proxyNumber', title: 'Número de Proxy' },
                 { data: 'clabe', name: 'clabe', title: 'Cuenta Clabe' },
-                {
-                    data: 'estatus', name: 'Estatus', title: 'Estatus',
-                    render: function (data, type, row) {
-                        return data == 1 ?
-                            "<span class='badge badge-light-success' >Activo</span>" : "<span class='badge badge-light-danger' >Desactivado</span>";
-                    }
-                },
+                { data: 'proxyNumber', name: 'proxyNumber', title: 'Número de Proxy' },
+                //{
+                //    data: 'estatus', name: 'Estatus', title: 'Estatus',
+                //    render: function (data, type, row) {
+                //        return data == 1 ?
+                //            "<span class='badge badge-light-success' >Activo</span>" : "<span class='badge badge-light-danger' >Desactivado</span>";
+                //    }
+                //},
                 {
                     title: '',
                     orderable: false,

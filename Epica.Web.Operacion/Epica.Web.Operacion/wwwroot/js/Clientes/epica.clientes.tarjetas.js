@@ -37,7 +37,7 @@ var KTDatatableRemoteAjax = function () {
             filter: true,
             ordering: true,
             ajax: {
-                url: siteLocation + 'Clientes/ConsultaCuentas',
+                url: siteLocation + 'Clientes/ConsultaTarjetas',
                 type: 'POST',
                 data: function (d) {
                     d.id = AccountId;
@@ -48,26 +48,10 @@ var KTDatatableRemoteAjax = function () {
                 "targets": "_all",
             }],
             columns: [
-                {
-                    data: 'noCuenta', name: 'noCuenta', title: 'Número Cuenta',
-                    render: function (data, type, row) {
-                        var partes = data.split("|"); // Separar la parte entera y decimal
-                        var NumCuenta = partes[0];
-                        var idCuenta = partes[1];
-                        var idCliente = partes[2];
-                        return "<a href='/Clientes/Detalle/Movimientos?id=" + idCuenta + "&cliente=" + idCliente + "&noCuenta=" + NumCuenta + "'>" + NumCuenta + "</a>";
-                    }
-                },
-                {
-                    data: 'saldo', name: 'saldo', title: 'Saldo',
-                    render: function (data, type, row) {
-                        return accounting.formatMoney(data);
-                    }
-                },
-                { data: 'alias', name: 'Alias', title: 'Alias' },
-                { data: 'nombrePersona', name: 'NombrePersona', title: 'Nombre de Persona' },
-                { data: 'fechaAltaFormat', name: 'fechaAltaFormat', title: 'Fecha de Alta' },
-                { data: 'fechaActualizacionformat', name: 'fechaActualizacionformat', title: 'Fecha de Actualizacion' },
+                { data: "nombreCompleto", name: "nombreCompleto", title: "Nombre de Titular" },
+                { data: "tarjeta", name: "tarjeta", title: "Número de Tarjeta" },
+                { data: "clabe", name: "clabe", title: "Clabe" },
+                { data: "proxyNumber", name: "proxyNumber", title: "Proxy" }
                 //{
                 //    title: '',
                 //    orderable: false,
@@ -86,11 +70,30 @@ var KTDatatableRemoteAjax = function () {
 
     };
 
-    $(document).on('click', '#GuardarCuenta', function (e) {
+    $(document).on('click', '#GuardarTarjetas', function (e) {
 
+        toastr.info('Almacenando Tarjeta...', "");
+
+        var form = $("#TarjetasForm")
+        var valdata = form.serialize();
         
+        $.ajax({
+            url: "Tarjetas/RegistrarTarjetas",
+            type: "POST",
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            data: valdata,
+            success: function (data) {
 
-        toastr.success('Se guardo la informacion de manera exitosa', "");
+                datatable.ajax.reload();
+                toastr.success('Se guardo la informacion de manera exitosa', "");
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+            }
+
+
+        });   
         $("#btnCerrarCuenta").click();
     });
 

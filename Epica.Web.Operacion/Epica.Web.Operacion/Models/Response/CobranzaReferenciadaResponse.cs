@@ -12,7 +12,7 @@ public class CobranzaReferenciadaResponse
     public int idCuentaAhorroPadre { get; set; }
     public string noCuentaPadre { get; set; }
     public string nombre { get; set; }
-    public DateTime fechaAlta { get; set; }
+    public string fechaAlta { get; set; }
     public int idMedioPago { get; set; }
     public string numeroReferencia { get; set; }
     public string estatus { get; set; }

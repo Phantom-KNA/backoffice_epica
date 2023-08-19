@@ -86,7 +86,7 @@ public class CuentaController : Controller
             {
                 idCuenta = row.idCuenta,
                 nombrePersona = row.nombrePersona,
-                noCuenta = row.noCuenta,
+                noCuenta = row.noCuenta + "|" + row.idCuenta.ToString() + "|" + row.idCliente.ToString(),
                 saldo = row.saldo,
                 estatus = row.estatus,
                 tipoPersona = row.tipoPersona,
@@ -105,42 +105,36 @@ public class CuentaController : Controller
             ).ToList();
         }
         //Aplicacion de Filtros temporal, 
-        //var filtroid = filters.FirstOrDefault(x => x.Key == "Id");
-        //var filtronombreCliente = filters.FirstOrDefault(x => x.Key == "NombreCliente");
-        //var filtroNoCuenta = filters.FirstOrDefault(x => x.Key == "noCuenta");
-        //var filtroEstatus = filters.FirstOrDefault(x => x.Key == "estatus");
-        //var filtroSaldo = filters.FirstOrDefault(x => x.Key == "saldo");
-        //var filtroTipo = filters.FirstOrDefault(x => x.Key == "tipo");
+        var filtronombreCliente = filters.FirstOrDefault(x => x.Key == "NombreCliente");
+        var filtroNoCuenta = filters.FirstOrDefault(x => x.Key == "noCuenta");
+        var filtroEstatus = filters.FirstOrDefault(x => x.Key == "estatus");
+        var filtroSaldo = filters.FirstOrDefault(x => x.Key == "saldo");
+        var filtroTipo = filters.FirstOrDefault(x => x.Key == "tipoPersona");
 
-        //if (filtroid.Value != null)
-        //{
-        //    List = List.Where(x => x.Id == Convert.ToInt32(filtroid.Value)).ToList();
-        //}
+        if (filtronombreCliente.Value != null)
+        {
+            List = List.Where(x => x.nombrePersona.Contains(Convert.ToString(filtronombreCliente.Value))).ToList();
+        }
 
-        //if (filtronombreCliente.Value != null)
-        //{
-        //    List = List.Where(x => x.cliente.Contains(Convert.ToString(filtronombreCliente.Value))).ToList();
-        //}
+        if (filtroNoCuenta.Value != null)
+        {
+            List = List.Where(x => x.noCuenta == Convert.ToString(filtroNoCuenta.Value)).ToList();
+        }
 
-        //if (filtroNoCuenta.Value != null)
-        //{
-        //    List = List.Where(x => x.noCuenta == Convert.ToString(filtroNoCuenta.Value)).ToList();
-        //}
+        if (filtroEstatus.Value != null)
+        {
+            List = List.Where(x => x.estatus == Convert.ToInt32(filtroEstatus.Value)).ToList();
+        }
 
-        //if (filtroEstatus.Value != null)
-        //{
-        //    List = List.Where(x => x.estatus == Convert.ToString(filtroEstatus.Value)).ToList();
-        //}
+        if (filtroSaldo.Value != null)
+        {
+            List = List.Where(x => x.saldo == Convert.ToDecimal(filtroSaldo.Value)).ToList();
+        }
 
-        //if (filtroSaldo.Value != null)
-        //{
-        //    List = List.Where(x => x.saldo == Convert.ToString(filtroSaldo.Value)).ToList();
-        //}
-
-        //if (filtroTipo.Value != null)
-        //{
-        //    List = List.Where(x => x.tipo == Convert.ToString(filtroTipo.Value)).ToList();
-        //}
+        if (filtroTipo.Value != null)
+        {
+            List = List.Where(x => x.tipoPersona.Contains(Convert.ToString(filtroTipo.Value))).ToList();
+        }
 
         gridData.Data = List;
         gridData.RecordsTotal = List.Count;
@@ -172,7 +166,7 @@ public class CuentaController : Controller
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
             {
                 Id = user.value.IdCliente,
-                NombreCompleto = user.value.NombreCompleto,
+                NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
                 Telefono = user.value.Telefono,
                 Correo = user.value.Email,
                 Curp = user.value.CURP,
@@ -190,9 +184,48 @@ public class CuentaController : Controller
             {
                 NombreOrdenante = header.NombreCompleto,
                 NoCuentaOrdenante = noCuenta,
-                ClaveRastreo = string.Format("AQPAY100000000{0}{1}", DateTime.Now.ToString("yyyyMMdd"), 1234)
+                ClaveRastreo = string.Format("AQPAY1000000{0}", DateTime.Now.ToString("yyyymmddhhmmss"))
             };
             ViewBag.DatosRef = renderInfo;
+            return View("~/Views/Cuenta/DetallesCuenta/Transacciones/DetalleMovimientos.cshtml");
+        }
+
+        return NotFound();
+    }
+
+    [Authorize]
+    [Route("Cuentas/Detalle/CobranzaReferenciada")]
+    public async Task<IActionResult> CobranzaReferenciada(int id, int cliente, string noCuenta)
+    {
+        var loginResponse = _userContextService.GetLoginResponse();
+        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Cuentas" && modulo.Acciones.Contains("Ver")) == true)
+        {
+            ClienteDetailsResponse user = await _usuariosApiClient.GetDetallesCliente(cliente);
+
+            if (user.value == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.UrlView = "Movimientos";
+            ClientesHeaderViewModel header = new ClientesHeaderViewModel
+            {
+                Id = user.value.IdCliente,
+                NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
+                Telefono = user.value.Telefono,
+                Correo = user.value.Email,
+                Curp = user.value.CURP,
+                Organizacion = user.value.Organizacion,
+                Rfc = user.value.RFC,
+                Sexo = user.value.Sexo,
+                NoCuenta = noCuenta
+            };
+            ViewBag.Info = header;
+            ViewBag.Nombre = header.NombreCompleto;
+            ViewBag.AccountID = id;
+            ViewBag.NumCuenta = noCuenta;
+            ViewBag.Cliente = cliente;
+
             return View("~/Views/Cuenta/DetallesCuenta/Transacciones/DetalleMovimientos.cshtml");
         }
 
@@ -223,6 +256,8 @@ public class CuentaController : Controller
         ListPF = await _transaccionesApiClient.GetTransaccionesCuentaAsync(Convert.ToInt32(id));
 
         var List = new List<ResumenTransaccionResponseGrid>();
+
+        if (ListPF != null) {
         foreach (var row in ListPF)
         {
             List.Add(new ResumenTransaccionResponseGrid
@@ -255,6 +290,8 @@ public class CuentaController : Controller
             (x.fechaAlta.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower())
             ).ToList();
         }
+        }
+
 
         gridData.Data = List;
         gridData.RecordsTotal = List.Count;
@@ -271,18 +308,19 @@ public class CuentaController : Controller
     [HttpPost]
     public async Task<JsonResult> RegistrarTransaccion(RegistrarTransaccionRequest model)
     {
+        RegistrarModificarTransaccionResponse responses = new RegistrarModificarTransaccionResponse();
+
         try
         {
-            model.ClaveRastreo = string.Format("AQPAY100000000{0}{1}", DateTime.Now.ToString("yyyyMMdd"), 1234);
             model.FechaOperacion = DateTime.Now.ToString("dd/mm/yyyy");
             model.CuentaOrigenOrdenante = model.NoCuentaOrdenante;
             model.CuentaDestinoBeneficiario = model.NoCuentaBeneficiario;
 
-            var Response = await _transaccionesApiClient.GetRegistroTransaccion(model);
-
+            responses = await _transaccionesApiClient.GetRegistroTransaccion(model);
 
         } catch (Exception ex) {
-        
+            responses.error = true;
+            responses.detalle = ex.Message;
         }
 
         return Json(model);
@@ -294,7 +332,7 @@ public class CuentaController : Controller
     [HttpPost]
     public async Task<JsonResult> ConsultarSubCuentas(int id)
     {
-        var ListPF = await _cuentaApiClient.GetCobranzaReferenciadaAsync(24);
+        var ListPF = await _cuentaApiClient.GetCobranzaReferenciadaAsync(id);
         //var ListPF = GetList();
         return Json(ListPF);
     }

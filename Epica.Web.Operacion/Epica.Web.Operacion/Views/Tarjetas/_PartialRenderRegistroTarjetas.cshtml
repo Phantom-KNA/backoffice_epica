@@ -1,0 +1,60 @@
+﻿@model Epica.Web.Operacion.Models.Request.RegistrarTarjetaRequest
+
+<form asp-controller="Tarjetas" asp-action="RegistrarTarjetas" id="TarjetasForm" method="post">
+    <div class="d-flex flex-stack row">
+        <div class="row mb-5 mt-5">
+            <div class="form-group input-group-sm col-md-12 row">
+                <label class="col-md-3 form-label required">Número de Tarjeta: &nbsp;</label>
+                <div class="col-md-9">
+                    <input asp-for="idCliente" hidden class="form-control form-control-sm form-control-solid" id="idCliente" readonly value="@Model.idCliente" type="text" autocomplete="off" />
+                    <input asp-for="numeroTarjeta" class="form-control form-control-sm form-control-solid" id="numeroTarjeta" type="text" autocomplete="off" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-stack row">
+        <div class="row mb-5 mt-5">
+            <div class="form-group input-group-sm col-md-12 row">
+                <label class="col-md-3 form-label required">Número de Proxy: &nbsp;</label>
+                <div class="col-md-9">
+                    <input asp-for="proxyNumber" class="form-control form-control-sm form-control-solid" id="proxyNumber" type="number" min="0" autocomplete="off" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex flex-stack row">
+        <div class="row mb-5 mt-5">
+            <div class="form-group input-group-sm col-md-12 row">
+                <label class="col-md-3 form-label">Mes Vigencia: &nbsp;</label>
+                <div class="col-md-9">
+                    <select asp-for="mesVigencia" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción">
+                        <option></option>
+                        <option value="01">Enero</option>
+                        <option value="02">Febrero</option>
+                        <option value="03">Marzo</option>
+                        <option value="04">Abril</option>
+                        <option value="05">Mayo</option>
+                        <option value="06">Junio</option>
+                        <option value="07">Julio</option>
+                        <option value="08">Agosto</option>
+                        <option value="09">Septiembre</option>
+                        <option value="10">Octubre</option>
+                        <option value="11">Noviembre</option>
+                        <option value="12">Diciembre</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-stack row">
+        <div class="row mb-5 mt-5">
+            <div class="form-group input-group-sm col-md-12 row">
+                <label class="col-md-3 form-label">Año Vigencia: &nbsp;</label>
+                <div class="col-md-9">
+                    <input asp-for="yearVigencia" class="form-control form-control-sm form-control-solid" id="yearVigencia" type="number" min="0" autocomplete="off" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

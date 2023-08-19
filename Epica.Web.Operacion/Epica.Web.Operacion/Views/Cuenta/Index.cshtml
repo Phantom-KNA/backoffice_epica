@@ -52,10 +52,10 @@
                             </div>
                             <div class="separator border-gray-200"></div>
                             <div class="px-7 py-5">
-                                <div class="mb-5">
+@*                                <div class="mb-5">
                                     <label class="form-label fs-5 fw-semibold mb-3">Id:</label>
                                     <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="Id" placeholder="id" id="filtro_id" />
-                                </div>
+                                </div>*@
                                 <div class="mb-5">
                                     <label class="form-label fs-5 fw-semibold mb-3">Número de Cuenta:</label>
                                     <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="noCuenta" placeholder="Número de Cuenta" id="filtro_no_cuenta" />
@@ -68,21 +68,17 @@
                                     <label class="form-label fs-5 fw-semibold mb-3">Estatus:</label>
                                     <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatus" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_estatus">
                                         <option></option>
-                                        <option value="Activo">Activo</option>
-                                        <option value="Desactivado">Desactivado</option>
+                                        <option value="0">Activo</option>
+                                        <option value="1">Desactivado</option>
                                     </select>
                                 </div>
                                 <div class="mb-5">
                                     <label class="form-label fs-5 fw-semibold mb-3">Saldo:</label>
-                                    <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="saldo" placeholder="Saldo" id="filtro_saldo" />
+                                    <input class="form-control form-control-sm fw-bold filtro-control" type="number" data-filtrar="saldo" placeholder="Saldo" id="filtro_saldo" />
                                 </div>
                                 <div class="mb-5">
-                                    <label class="form-label fs-5 fw-semibold mb-3">Tipo:</label>
-                                    <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="tipo" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_tipo">
-                                        <option></option>
-                                        <option value="Credito">Credito</option>
-                                        <option value="Debito">Debito</option>
-                                    </select>
+                                    <label class="form-label fs-5 fw-semibold mb-3">Tipo de Persona:</label>
+                                    <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="tipoPersona" placeholder="Tipo de Persona" id="filtro_tipoPersona" />
                                 </div>
                                
                                 <div class="d-flex justify-content-end">
@@ -122,7 +118,7 @@
                 <div class="datatable datatable-bordered datatable-head-custom">
                     <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" id="kt_datatable">
                         <tr data-kt-docs-datatable-subtable="subtable_template" class="d-none">
-                            <td colspan="2" class="text-left">
+                            <td class="text-left">
                                 <div class="text-dark fs-7">Número de Cuenta</div>
                                 <div class="text-muted fs-7 fw-bold" data-kt-docs-datatable-subtable="template_numero_cuenta"></div>
                             </td>
