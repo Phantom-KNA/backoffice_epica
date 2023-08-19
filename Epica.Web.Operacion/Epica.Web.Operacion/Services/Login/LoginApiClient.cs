@@ -15,7 +15,7 @@ namespace Epica.Web.Operacion.Services.Login
     {
         public LoginApiClient(
             HttpClient httpClient,
-            ILogger<CuentaApiClient> logger,
+            ILogger<LoginApiClient> logger,
             IOptions<UrlsConfig> config,
             IHttpContextAccessor httpContext,
             IConfiguration configuration,

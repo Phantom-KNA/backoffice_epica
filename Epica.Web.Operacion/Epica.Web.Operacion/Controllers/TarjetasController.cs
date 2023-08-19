@@ -40,7 +40,7 @@ public class TarjetasController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Tarjetas" && modulo.Acciones.Contains("Ver")) == true)
-            return View();
+            return View(loginResponse);
 
         return NotFound();
     }

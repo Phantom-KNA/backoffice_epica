@@ -43,6 +43,16 @@ public class UrlsConfig
         public static string InsertarClienteNuevo() => $"/api/v1/clientes/inserta_cliente";
     }
 
+    public class CatalogosOperations
+    {
+        public static string GetMediosPago() => $"/api/v1/catalogos/medios_pago";
+        public static string GetEmpresas() => $"/api/v1/catalogos/empresas";
+        public static string GetOcupaciones() => $"/api/v1/catalogos/ocupaciones";
+        public static string GetNacionalidades() => $"/api/v1/catalogos/nacionalidades";
+        public static string GetPaises() => $"/api/v1/catalogos/paises";
+        public static string GetRoles() => $"/api/v1/catalogos/rol_clientes";
+    }
+
     public class TarjetasOperations
     {
         public static string GetTarjetasCliente(int idClientes) => $"/api/v1/tarjetas/clientes_tarjetas?idCliente={idClientes}";
@@ -55,6 +65,10 @@ public class UrlsConfig
         public static string GetCredentials() => $"/api/v1/authentication/authentication";
     }
 
+    public class LogOperations
+    {
+        public static string InsertarLog() => $"/api/v1/log/insertar_log";
+    }
     public string Authenticate { get; set; }
     public string Transaccion { get; set; }
 }

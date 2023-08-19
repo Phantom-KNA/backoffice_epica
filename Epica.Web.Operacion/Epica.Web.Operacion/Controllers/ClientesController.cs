@@ -13,7 +13,7 @@ using System.Text;
 using static Epica.Web.Operacion.Controllers.CuentaController;
 using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Helpers;
-
+using Epica.Web.Operacion.Services.Catalogos;
 
 namespace Epica.Web.Operacion.Controllers;
 
@@ -24,11 +24,14 @@ public class ClientesController : Controller
     private readonly ICuentaApiClient _cuentaApiClient;
     private readonly ITarjetasApiClient _tarjetasApiClient;
     private readonly UserContextService _userContextService;
+    private readonly ICatalogosApiClient _catalogosApiClient;
     #endregion
 
     #region "Constructores"
     public ClientesController(IClientesApiClient clientesApiClient,
         ICuentaApiClient cuentaApiClient,
+        UserContextService userContextService,
+        ICatalogosApiClient catalogosApiClient
         ITarjetasApiClient tarjetasApiClient,
         UserContextService userContextService
         )
@@ -36,6 +39,7 @@ public class ClientesController : Controller
         _clientesApiClient = clientesApiClient;
         _cuentaApiClient = cuentaApiClient;
         _userContextService = userContextService;
+        _catalogosApiClient = catalogosApiClient;
         _tarjetasApiClient = tarjetasApiClient;
     }
     #endregion
@@ -49,7 +53,7 @@ public class ClientesController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Ver")) == true)
-            return View();
+            return View(loginResponse);
 
         return NotFound();
     }
@@ -599,14 +603,30 @@ public class ClientesController : Controller
 
     #region Registro Clientes
     [Authorize]
-    public IActionResult Registro()
+    public async Task<ActionResult> Registro()
     {
         var loginResponse = _userContextService.GetLoginResponse();
         if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Insertar")) == true)
         {
+            var listaEmpresas = await _catalogosApiClient.GetEmpresasAsync();
+            var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
+            var listaOcupaciones = await _catalogosApiClient.GetOcupacionesAsync();
+            var listaPaises = await _catalogosApiClient.GetPaisesAsync();
+            var listaNacionalidades = await _catalogosApiClient.GetNacionalidadesAsync();
+
+            ClientesRegistroViewModel clientesRegistroViewModel = new ClientesRegistroViewModel
+            {
+                ClientesDetalles = new RegistroModificacionClienteRequest(),
+                ListaEmpresas = listaEmpresas,
+                ListaRoles = listaRoles,
+                ListaOcupaciones = listaOcupaciones,
+                ListaPaises = listaPaises,
+                ListaNacionalidades = listaNacionalidades
+            };
+
             ViewData["IsEdit"] = false;
             ViewBag.TituloForm = "Crear nuevo cliente";
-            return View();
+            return View(clientesRegistroViewModel);
         }
 
         return NotFound();
@@ -614,7 +634,7 @@ public class ClientesController : Controller
 
     [Authorize]
     [HttpPost]
-    public async Task<IActionResult> RegistrarCliente(ClientesDetallesViewModel model)
+    public async Task<IActionResult> RegistrarCliente(ClientesRegistroViewModel model)
     {
         var loginResponse = _userContextService.GetLoginResponse();
         if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Insertar")) == true)
@@ -623,42 +643,7 @@ public class ClientesController : Controller
 
             try
             {
-                RegistroModificacionClienteRequest registraCliente = new RegistroModificacionClienteRequest();
-
-                registraCliente.Nombre = model.Nombre;
-                registraCliente.ApellidoPaterno = model.ApellidoPaterno;
-                registraCliente.ApellidoMaterno = model.ApellidoMaterno;
-                registraCliente.Email = model.Email;
-                registraCliente.Curp = model.Curp;
-                registraCliente.RFC = model.Rfc;
-                registraCliente.INE = model.Ine;
-                registraCliente.FechaNacimiento = model.FechaNacimiento;
-                registraCliente.Observaciones = model.Observaciones;
-                registraCliente.PaisNacimiento = model.PaisNacimiento;
-                registraCliente.Sexo = model.Sexo;
-                registraCliente.IdOcupacion = Convert.ToInt32(model.Ocupacion);
-                registraCliente.IdNacionalidad = Convert.ToInt32(model.Nacionalidad);
-                registraCliente.Fiel = model.Fiel;
-                registraCliente.IdPais = Convert.ToInt32(model.Pais);
-                registraCliente.IngresoMensual = Convert.ToString(model.IngresoMensual);
-                registraCliente.MontoMaximo = Convert.ToString(model.MontoMaximo);
-                registraCliente.Telefono = model.Telefono;
-                //registraCliente.TelefonoTipo = model.Telefono;
-                registraCliente.Calle = model.Calle;
-                registraCliente.CalleNumero = model.CalleNumero;
-                registraCliente.EntreCallePrimera = model.PrimeraCalle;
-                registraCliente.EntreCalleSegunda = model.SegundaCalle;
-                registraCliente.Colonia = model.Colonia;
-                registraCliente.DelegacionMunicipio = model.DelegacionMunicipio;
-                registraCliente.CodigoPostal = model.CodigoPostal;
-                registraCliente.CiudadEstado = model.CiudadEstado;
-                registraCliente.NoInterior = model.NoInterior;
-                registraCliente.Puesto = model.Puesto;
-                registraCliente.Empresa = Convert.ToInt32(model.Empresa);
-                registraCliente.ApoderadoLegal = Convert.ToInt32(model.ApoderadoLegal);
-                registraCliente.Rol = model.Rol;
-
-                response = await _clientesApiClient.GetRegistroCliente(registraCliente);
+                response = await _clientesApiClient.GetRegistroCliente(model.ClientesDetalles);
 
                 if (response.codigo == "200")
                 {
@@ -666,7 +651,7 @@ public class ClientesController : Controller
                 }
                 else
                 {
-                    return View();
+                    return RedirectToAction("Registro");
                 }
             }
             catch (Exception ex)
@@ -791,17 +776,17 @@ public class ClientesController : Controller
                 return RedirectToAction("Index");
             }
 
-            ClienteResponse GetDatosCliente = await _clientesApiClient.GetClienteAsync(Convert.ToInt32(AccountID));
+            var GetDatosCliente = await _clientesApiClient.GetClienteAsync(Convert.ToInt32(AccountID));
 
             ViewBag.AccountID = AccountID;
 
-            if (GetDatosCliente.nombreCompleto == null)
+            if (GetDatosCliente.NombreCompleto == null)
             {
                 ViewBag.Nombre = "S/N";
             }
             else
             {
-                ViewBag.Nombre = GetDatosCliente.nombreCompleto;
+                ViewBag.Nombre = GetDatosCliente.NombreCompleto;
             }
 
             return View();
@@ -814,28 +799,52 @@ public class ClientesController : Controller
     public async Task<ActionResult> Modificar(int id)
     {
         var loginResponse = _userContextService.GetLoginResponse();
-        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Insertar")) == true)
+        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Editar")) == true)
         {
             try
             {
-                ClienteResponse user = await _clientesApiClient.GetClienteAsync(id);
-                ClientesDetallesViewModel clientesDetallesViewModel = new ClientesDetallesViewModel
+                var cliente = await _clientesApiClient.GetClienteAsync(id);
+                RegistroModificacionClienteRequest clientesDetalles = new RegistroModificacionClienteRequest
                 {
-                    Id = user.id,
-                    Nombre = user.nombreCompleto,
-                    Telefono = user.telefono,
-                    Email = user.email,
-                    Curp = user.CURP,
-                    Empresa = user.organizacion,
-                    Sexo = user.sexo,
+                    Nombre = cliente.Nombre,
+                    Telefono = cliente.Telefono,
+                    Email = cliente.Email,
+                    Curp = cliente.CURP,
+                    Sexo = cliente.Sexo,
+                    EntreCalleSegunda = cliente.CalleSecundaria2,
+                    EntreCallePrimera = cliente.CalleSecundaria,
+                    INE = cliente.INE,
+                    Calle = cliente.Calle,
+                    ApellidoMaterno = cliente.ApellidoMaterno,
+                    ApellidoPaterno = cliente.ApellidoPaterno,
+                    CodigoPostal = cliente.CodigoPostal,
+                    Colonia= cliente.Colonia,
+                    Observaciones = cliente.Observaciones,
+                    RFC = cliente.RFC,
+                    Fiel = cliente.Fiel,
+                    PaisNacimiento = cliente.PaisNacimiento,
+                    IngresoMensual = cliente.SalarioNetoMensual.ToString(),
+                    ApoderadoLegal = (cliente.AntiguedadLaboral?.ToLower() == "si") ? 1 : 0,
+                    NoInterior = cliente.NoIntExt,
+                    Puesto = cliente.Puesto,
+                    FechaNacimiento =cliente.FechaNacimiento,
+                    DelegacionMunicipio = cliente.Municipio,
+                    TelefonoTipo = cliente.TelefonoRecado,
+                    IdNacionalidad = cliente.IdNacionalida,
+                    IdOcupacion = cliente.IdOcupacion,
+                    CiudadEstado = cliente.Estado
                 };
 
-                if (clientesDetallesViewModel == null)
+                if (clientesDetalles == null)
                 {
                     return RedirectToAction("Error404", "Error");
                 }
 
-                return View("~/Views/Clientes/Registro.cshtml", clientesDetallesViewModel);
+                ClientesRegistroViewModel clientesRegistroViewModel = new ClientesRegistroViewModel
+                {
+                    ClientesDetalles = clientesDetalles
+                };
+                return View("~/Views/Clientes/Registro.cshtml", clientesRegistroViewModel);
             }
             catch (Exception)
             {
