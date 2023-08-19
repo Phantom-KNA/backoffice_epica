@@ -9,6 +9,8 @@ using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Services.Login;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Epica.Web.Operacion.Helpers;
+using Epica.Web.Operacion.Services.Catalogos;
+using Epica.Web.Operacion.Services.Log;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>
@@ -61,6 +63,8 @@ builder.Services.AddScoped<IClientesApiClient, ClientesApiClient>();
 builder.Services.AddScoped<IClientesApiClient, ClientesApiClient>();
 builder.Services.AddTransient<ILoginApiClient, LoginApiClient>();
 builder.Services.AddScoped<ITarjetasApiClient, TarjetasApiClient>();
+builder.Services.AddScoped<ICatalogosApiClient, CatalogosApiClient>();
+builder.Services.AddScoped<ILogsApiClient, LogsApiClient>();
 
 builder.Services.AddSingleton<UserContextService>();
 

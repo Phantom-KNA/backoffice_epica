@@ -22,7 +22,22 @@ var Init = function () {
         });
 
         $(document).on('click', '#btnGuardarCliente', function (e) {
-            toastr.info('Registrando información', "");
+            var requiredFields = document.querySelectorAll('[required]');
+
+            var allFieldsFilled = true;
+
+            requiredFields.forEach(function (field) {
+                if (!field.value) {
+                    allFieldsFilled = false;
+                }
+            });
+
+            if (allFieldsFilled) {
+                $(this).text('Registrando información');
+                toastr.info('Registrando información', "");
+            } else {
+                toastr.error('Por favor, complete todos los campos obligatorios', "");
+            }
         });
     }
     return {

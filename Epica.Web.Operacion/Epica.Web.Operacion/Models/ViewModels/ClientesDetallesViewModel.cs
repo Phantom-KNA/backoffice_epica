@@ -1,9 +1,11 @@
-﻿namespace Epica.Web.Operacion.Models.ViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Epica.Web.Operacion.Models.ViewModels
 {
     public class ClientesDetallesViewModel
     {
         public long Id { get; set; }
-        public string Nombre { get; set; }
+        public string? Nombre { get; set; }
         public string? ApellidoPaterno { get; set; }
         public string? ApellidoMaterno { get; set; }
         public string Email { get; set; }

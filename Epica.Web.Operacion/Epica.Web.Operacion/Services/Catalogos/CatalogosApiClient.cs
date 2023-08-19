@@ -25,7 +25,7 @@ namespace Epica.Web.Operacion.Services.Catalogos
 
             try
             {
-                var uri = Urls.Transaccion + UrlsConfig.CatalagosOperations.GetMediosPago();
+                var uri = Urls.Transaccion + UrlsConfig.CatalogosOperations.GetMediosPago();
                 var response = await ApiClient.GetAsync(uri);
 
                 if (response.IsSuccessStatusCode)
@@ -50,7 +50,7 @@ namespace Epica.Web.Operacion.Services.Catalogos
 
             try
             {
-                var uri = Urls.Transaccion + UrlsConfig.CatalagosOperations.GetEmpresas();
+                var uri = Urls.Transaccion + UrlsConfig.CatalogosOperations.GetEmpresas();
                 var response = await ApiClient.GetAsync(uri);
 
                 if (response.IsSuccessStatusCode)
@@ -75,7 +75,7 @@ namespace Epica.Web.Operacion.Services.Catalogos
 
             try
             {
-                var uri = Urls.Transaccion + UrlsConfig.CatalagosOperations.GetPaises();
+                var uri = Urls.Transaccion + UrlsConfig.CatalogosOperations.GetPaises();
                 var response = await ApiClient.GetAsync(uri);
 
                 if (response.IsSuccessStatusCode)
@@ -100,7 +100,7 @@ namespace Epica.Web.Operacion.Services.Catalogos
 
             try
             {
-                var uri = Urls.Transaccion + UrlsConfig.CatalagosOperations.GetOcupaciones();
+                var uri = Urls.Transaccion + UrlsConfig.CatalogosOperations.GetOcupaciones();
                 var response = await ApiClient.GetAsync(uri);
 
                 if (response.IsSuccessStatusCode)
@@ -125,7 +125,7 @@ namespace Epica.Web.Operacion.Services.Catalogos
 
             try
             {
-                var uri = Urls.Transaccion + UrlsConfig.CatalagosOperations.GetOcupaciones();
+                var uri = Urls.Transaccion + UrlsConfig.CatalogosOperations.GetNacionalidades();
                 var response = await ApiClient.GetAsync(uri);
 
                 if (response.IsSuccessStatusCode)
@@ -150,7 +150,7 @@ namespace Epica.Web.Operacion.Services.Catalogos
 
             try
             {
-                var uri = Urls.Transaccion + UrlsConfig.CatalagosOperations.GetRoles();
+                var uri = Urls.Transaccion + UrlsConfig.CatalogosOperations.GetRoles();
                 var response = await ApiClient.GetAsync(uri);
 
                 if (response.IsSuccessStatusCode)

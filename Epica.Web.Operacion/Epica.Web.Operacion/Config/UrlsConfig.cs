@@ -43,14 +43,14 @@ public class UrlsConfig
         public static string InsertarClienteNuevo() => $"/api/v1/clientes/inserta_cliente";
     }
 
-    public class CatalagosOperations
+    public class CatalogosOperations
     {
         public static string GetMediosPago() => $"/api/v1/catalogos/medios_pago";
         public static string GetEmpresas() => $"/api/v1/catalogos/empresas";
         public static string GetOcupaciones() => $"/api/v1/catalogos/ocupaciones";
         public static string GetNacionalidades() => $"/api/v1/catalogos/nacionalidades";
         public static string GetPaises() => $"/api/v1/catalogos/paises";
-        public static string GetRoles() => $"api/v1/catalogos/rol_clientes";
+        public static string GetRoles() => $"/api/v1/catalogos/rol_clientes";
     }
 
     public class LoginOperations

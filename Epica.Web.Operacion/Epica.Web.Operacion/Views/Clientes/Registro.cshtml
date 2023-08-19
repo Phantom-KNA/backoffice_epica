@@ -1,4 +1,4 @@
-﻿@model Epica.Web.Operacion.Models.ViewModels.ClientesDetallesViewModel
+﻿@model Epica.Web.Operacion.Models.ViewModels.ClientesRegistroViewModel
 @{
     ViewData["Title"] = ViewBag.TituloForm;
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -52,29 +52,29 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Nombre: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="Nombre" class="form-control form-control-sm form-control-solid" id="Nombre" type="text" value="@(Model?.Nombre ?? "")" autocomplete="off" />
-                            <span asp-validation-for="Nombre" class="text-danger"></span>
+                            <input asp-for="@Model.ClientesDetalles.Nombre" class="form-control form-control-sm form-control-solid" id="Nombre" type="text" value="@(Model?.ClientesDetalles.Nombre ?? "")" autocomplete="off" required />
+                            <span asp-validation-for="@Model.ClientesDetalles.Nombre" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-2 fv-row">
                         <label class="form-label required">Apellido paterno: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="ApellidoPaterno" class="form-control form-control-sm form-control-solid" id="ApellidoPaterno" type="text" value="@(Model?.ApellidoPaterno ?? "")" autocomplete="off" />
-                            <span asp-validation-for="ApellidoPaterno" class="text-danger"></span>
+                            <input asp-for="ClientesDetalles.ApellidoPaterno" class="form-control form-control-sm form-control-solid" id="ApellidoPaterno" type="text" value="@(Model?.ClientesDetalles.ApellidoPaterno ?? "")" autocomplete="off" required>
+                            <span asp-validation-for="ClientesDetalles.ApellidoPaterno" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-2 fv-row">
-                        <label class="form-label required">Apellido materno: &nbsp;</label>
+                        <label class="form-label">Apellido materno: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="ApellidoMaterno" class="form-control form-control-sm form-control-solid" id="ApellidoMaterno" type="text" value="@(Model?.ApellidoMaterno ?? "")" autocomplete="off" />
-                            <span asp-validation-for="ApellidoMaterno" class="text-danger"></span>
+                            <input asp-for="ClientesDetalles.ApellidoMaterno" class="form-control form-control-sm form-control-solid" id="ApellidoMaterno" type="text" value="@(Model?.ClientesDetalles.ApellidoMaterno ?? "")" autocomplete="off" />
+                            <span asp-validation-for="ClientesDetalles.ApellidoMaterno" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Email: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="Email" class="form-control form-control-sm form-control-solid" id="Email" type="email" value="@(Model?.Email ?? "")" autocomplete="off" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <input asp-for="ClientesDetalles.Email" class="form-control form-control-sm form-control-solid" id="Email" type="email" value="@(Model?.ClientesDetalles.Email ?? "")" autocomplete="off" required />
+                            <span asp-validation-for="ClientesDetalles.Email" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
@@ -83,22 +83,22 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Curp: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="Curp" class="form-control form-control-sm form-control-solid" id="Curp" type="text" value="@(Model?.Curp ?? "")" autocomplete="off" />
-                            <span asp-validation-for="Curp" class="text-danger"></span>
+                            <input asp-for="ClientesDetalles.Curp" class="form-control form-control-sm form-control-solid" id="Curp" type="text" value="@(Model?.ClientesDetalles.Curp ?? "")" autocomplete="off" required pattern="[A-Z]{4}[0-9]{6}[HM]{1}[A-Z]{5}[0-9]{2}" title="Ingresa una CURP válida" />
+                            <span asp-validation-for="ClientesDetalles.Curp" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">RFC: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="Rfc" class="form-control form-control-sm form-control-solid" id="Rfc" type="text" value="@(Model?.Rfc ?? "")" autocomplete="off" />
-                            <span asp-validation-for="Rfc" class="text-danger"></span>
+                            <input asp-for="ClientesDetalles.RFC" class="form-control form-control-sm form-control-solid" id="Rfc" type="text" value="@(Model?.ClientesDetalles.RFC ?? "")" autocomplete="off" required />
+                            <span asp-validation-for="ClientesDetalles.RFC" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">INE: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="Ine" class="form-control form-control-sm form-control-solid" id="Ine" type="text" value="@(Model?.Ine ?? "")" autocomplete="off" />
-                            <span asp-validation-for="Ine" class="text-danger"></span>
+                            <input asp-for="ClientesDetalles.INE" class="form-control form-control-sm form-control-solid" id="Ine" type="text" value="@(Model?.ClientesDetalles.INE ?? "")" autocomplete="off" required />
+                            <span asp-validation-for="ClientesDetalles.INE" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
@@ -107,35 +107,38 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Fecha Nacimiento: &nbsp;</label>
                         <div class="position-relative">
-                            <input name="FechaNacimiento" class="form-control form-control-sm form-control-solid datepicker-js" type="text" />
+                            @{
+                                var fechaMaxima = DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd");
+                            }
+                            <input asp-for="ClientesDetalles.FechaNacimiento" class="form-control form-control-sm form-control-solid" type="date" max="@fechaMaxima" required />
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label">Observaciones: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="Observaciones" class="form-control form-control-sm form-control-solid" id="Observaciones" type="text" value="@(Model?.Observaciones ?? "")" autocomplete="off" />
-                            <span asp-validation-for="Observaciones" class="text-danger"></span>
+                            <input asp-for="ClientesDetalles.Observaciones" class="form-control form-control-sm form-control-solid" id="Observaciones" type="text" value="@(Model?.ClientesDetalles.Observaciones ?? "")" autocomplete="off" />
+                            <span asp-validation-for="ClientesDetalles.Observaciones" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">País Nacimiento: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="PaisNacimiento" class="form-control form-control-sm form-control-solid" id="PaisNacimiento" type="text" value="@(Model?.PaisNacimiento ?? "")" autocomplete="off" />
-                            <span asp-validation-for="PaisNacimiento" class="text-danger"></span>
+                            <input asp-for="ClientesDetalles.PaisNacimiento" class="form-control form-control-sm form-control-solid" id="PaisNacimiento" type="text" value="@(Model?.ClientesDetalles.PaisNacimiento ?? "")" autocomplete="off" required />
+                            <span asp-validation-for="ClientesDetalles.PaisNacimiento" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
 
                 <div class="d-flex mb-6 mt-6">
                     <div class="py-2 px-4 col-md-4 fv-row">
-                        <label class="form-label">Sexo: &nbsp;</label>
+                        <label class="form-label required">Sexo: &nbsp;</label>
                         <div class="position-relative">
-                            <select asp-for="Sexo" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción">
+                            <select asp-for="ClientesDetalles.Sexo" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción" required>
                                 <option></option>
                                 @{
                                     if (Model != null)
                                     {
-                                        if (Model.Sexo == "M")
+                                        if (Model.ClientesDetalles.Sexo == "M")
                                         {
                                             <option value="M" selected>M</option>
                                         }
@@ -143,7 +146,7 @@
                                         {
                                             <option value="M">M</option>
                                         }
-                                        if (Model.Sexo == "F")
+                                        if (Model.ClientesDetalles.Sexo == "F")
                                         {
                                             <option value="F" selected>F</option>
                                         }
@@ -162,22 +165,26 @@
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
-                        <label class="form-label">Ocupación: &nbsp;</label>
+                        <label class="form-label required">Ocupación: &nbsp;</label>
                         <div class="position-relative">
-                            <select asp-for="Ocupacion" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción">
+                            <select asp-for="ClientesDetalles.IdOcupacion" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required>
                                 <option></option>
-                                <option value="1">Option 1</option>
-                                <option value="2">Option 2</option>
+                                @foreach (var ocupacion in Model.ListaOcupaciones)
+                                {
+                                    <option value="@ocupacion.Id">@ocupacion.Descripcion</option>
+                                }
                             </select>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
-                        <label class="form-label">Nacionalidad: &nbsp;</label>
+                        <label class="form-label required">Nacionalidad: &nbsp;</label>
                         <div class="position-relative">
-                            <select asp-for="Nacionalidad" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción">
+                            <select asp-for="ClientesDetalles.IdNacionalidad" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required>
                                 <option></option>
-                                <option value="1">Option 1</option>
-                                <option value="2">Option 2</option>
+                                @foreach (var nacionalidad in Model.ListaNacionalidades)
+                                {
+                                    <option value="@nacionalidad.Id">@nacionalidad.Descripcion</option>
+                                }
                             </select>
                         </div>
                     </div>
@@ -187,75 +194,77 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label">Fiel: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="Fiel" class="form-control form-control-sm form-control-solid" id="Fiel" type="text" value="@(Model?.Fiel ?? "")" autocomplete="off" />
-                            <span asp-validation-for="Fiel" class="text-danger"></span>
+                            <input asp-for="ClientesDetalles.Fiel" class="form-control form-control-sm form-control-solid" id="Fiel" type="text" value="@(Model?.ClientesDetalles.Fiel ?? "")" autocomplete="off" />
+                            <span asp-validation-for="ClientesDetalles.Fiel" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
-                        <label class="form-label">País: &nbsp;</label>
+                        <label class="form-label required">País: &nbsp;</label>
                         <div class="position-relative">
-                            <select asp-for="Pais" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción">
+                            <select asp-for="ClientesDetalles.IdPais" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required>
                                 <option></option>
-                                <option value="1">Option 1</option>
-                                <option value="2">Option 2</option>
+                                @foreach (var pais in Model.ListaPaises)
+                                {
+                                    <option value="@pais.Id">@pais.Descripcion</option>
+                                }
                             </select>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
-                        <label class="form-label">Ingreso Mensual: &nbsp;</label>
+                        <label class="form-label required">Ingreso Mensual: &nbsp;</label>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon1">$</span>
-                            <input asp-for="IngresoMensual" class="form-control form-control-sm form-control-solid" id="IngresoMensual" type="number" min="0" autocomplete="off" />
-                            <span asp-validation-for="IngresoMensual" class="text-danger"></span>
+                            <input asp-for="ClientesDetalles.IngresoMensual" class="form-control form-control-sm form-control-solid" id="IngresoMensual" type="number" min="0" autocomplete="off" required />
+                            <span asp-validation-for="ClientesDetalles.IngresoMensual" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
 
                 <div class="d-flex mb-6 mt-6">
                     <div class="py-2 px-4 col-md-4 fv-row">
-                        <label class="form-label">Monto Máximo: &nbsp;</label>
+                        <label class="form-label required">Monto Máximo: &nbsp;</label>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon2">$</span>
-                            <input asp-for="MontoMaximo" class="form-control form-control-sm form-control-solid" id="MontoMaximo" type="number" min="0" autocomplete="off" />
-                            <span asp-validation-for="MontoMaximo" class="text-danger"></span>
+                            <input asp-for="ClientesDetalles.MontoMaximo" class="form-control form-control-sm form-control-solid" id="MontoMaximo" type="number" min="0" autocomplete="off" required />
+                            <span asp-validation-for="ClientesDetalles.MontoMaximo" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Teléfono: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="Telefono" class="form-control form-control-sm form-control-solid" id="Telefono" type="text" value="@(Model?.Telefono ?? "")" autocomplete="off" />
-                            <span asp-validation-for="Telefono" class="text-danger"></span>
+                            <input asp-for="ClientesDetalles.Telefono" class="form-control form-control-sm form-control-solid" id="Telefono" type="text" value="@(Model?.ClientesDetalles.Telefono ?? "")" autocomplete="off" required />
+                            <span asp-validation-for="ClientesDetalles.Telefono" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
-                        <label class="form-label required">Calle: &nbsp;</label>
+                        <label class="form-label required">Tipo de teléfono: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="Calle" class="form-control form-control-sm form-control-solid" id="Calle" type="text" value="@(Model?.Calle ?? "")" autocomplete="off" />
-                            <span asp-validation-for="Calle" class="text-danger"></span>
+                            <input asp-for="ClientesDetalles.TelefonoTipo" class="form-control form-control-sm form-control-solid" id="Telefono" type="text" value="@(Model?.ClientesDetalles.TelefonoTipo ?? "")" autocomplete="off" required />
+                            <span asp-validation-for="ClientesDetalles.TelefonoTipo" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
 
                 <div class="d-flex mb-6 mt-6">
                     <div class="py-2 px-4 col-md-4 fv-row">
-                        <label class="form-label">Calle Numero: &nbsp;</label>
+                        <label class="form-label required">Calle: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="CalleNumero" class="form-control form-control-sm form-control-solid" id="CalleNumero" type="text" value="@(Model?.CalleNumero ?? "")" autocomplete="off" />
-                            <span asp-validation-for="CalleNumero" class="text-danger"></span>
+                            <input asp-for="ClientesDetalles.Calle" class="form-control form-control-sm form-control-solid" id="Calle" type="text" value="@(Model?.ClientesDetalles.Calle ?? "")" autocomplete="off" required />
+                            <span asp-validation-for="ClientesDetalles.Calle" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label">Primera Calle: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="PrimeraCalle" class="form-control form-control-sm form-control-solid" id="PrimeraCalle" type="text" value="@(Model?.PrimeraCalle ?? "")" autocomplete="off" />
-                            <span asp-validation-for="PrimeraCalle" class="text-danger"></span>
+                            <input asp-for="ClientesDetalles.EntreCallePrimera" class="form-control form-control-sm form-control-solid" id="PrimeraCalle" type="text" value="@(Model?.ClientesDetalles.EntreCallePrimera ?? "")" autocomplete="off" />
+                            <span asp-validation-for="ClientesDetalles.EntreCallePrimera" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label">Segunda Calle: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="SegundaCalle" class="form-control form-control-sm form-control-solid" id="SegundaCalle" type="text" value="@(Model?.SegundaCalle ?? "")" autocomplete="off" />
-                            <span asp-validation-for="SegundaCalle" class="text-danger"></span>
+                            <input asp-for="ClientesDetalles.EntreCalleSegunda" class="form-control form-control-sm form-control-solid" id="SegundaCalle" type="text" value="@(Model?.ClientesDetalles.EntreCalleSegunda ?? "")" autocomplete="off" />
+                            <span asp-validation-for="ClientesDetalles.EntreCalleSegunda" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
@@ -264,80 +273,114 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Colonia: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="Colonia" class="form-control form-control-sm form-control-solid" id="Colonia" type="text" value="@(Model?.Colonia ?? "")" autocomplete="off" />
-                            <span asp-validation-for="Colonia" class="text-danger"></span>
+                            <input asp-for="ClientesDetalles.Colonia" class="form-control form-control-sm form-control-solid" id="Colonia" type="text" value="@(Model?.ClientesDetalles.Colonia ?? "")" autocomplete="off" required />
+                            <span asp-validation-for="ClientesDetalles.Colonia" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Delegacion/municipio: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="DelegacionMunicipio" class="form-control form-control-sm form-control-solid" id="DelegacionMunicipio" type="text" value="@(Model?.DelegacionMunicipio ?? "")" autocomplete="off" />
-                            <span asp-validation-for="DelegacionMunicipio" class="text-danger"></span>
+                            <input asp-for="ClientesDetalles.DelegacionMunicipio" class="form-control form-control-sm form-control-solid" id="DelegacionMunicipio" type="text" value="@(Model?.ClientesDetalles.DelegacionMunicipio ?? "")" autocomplete="off" required />
+                            <span asp-validation-for="ClientesDetalles.DelegacionMunicipio" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-2 fv-row">
                         <label class="form-label required">Código postal: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="CodigoPostal" class="form-control form-control-sm form-control-solid" id="CodigoPostal" type="text" value="@(Model?.CodigoPostal ?? "")" autocomplete="off" />
-                            <span asp-validation-for="CodigoPostal" class="text-danger"></span>
+                            <input asp-for="ClientesDetalles.CodigoPostal" class="form-control form-control-sm form-control-solid" id="CodigoPostal" type="text" value="@(Model?.ClientesDetalles.CodigoPostal ?? "")" autocomplete="off" required />
+                            <span asp-validation-for="ClientesDetalles.CodigoPostal" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-2 fv-row">
                         <label class="form-label required">No Interior: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="NoInterior" class="form-control form-control-sm form-control-solid" id="NoInterior" type="text" value="@(Model?.NoInterior ?? "")" autocomplete="off" />
-                            <span asp-validation-for="NoInterior" class="text-danger"></span>
+                            <input asp-for="ClientesDetalles.NoInterior" class="form-control form-control-sm form-control-solid" id="NoInterior" type="text" value="@(Model?.ClientesDetalles.NoInterior ?? "")" autocomplete="off" required />
+                            <span asp-validation-for="ClientesDetalles.NoInterior" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
 
                 <div class="d-flex mb-6 mt-6">
                     <div class="py-2 px-4 col-md-4 fv-row">
-                        <label class="form-label">Ciudad estado: &nbsp;</label>
+                        <label class="form-label required">Ciudad estado: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="CiudadEstado" class="form-control form-control-sm form-control-solid" id="CiudadEstado" type="text" value="@(Model?.CiudadEstado ?? "")" autocomplete="off" />
-                            <span asp-validation-for="CiudadEstado" class="text-danger"></span>
+                            <input asp-for="ClientesDetalles.CiudadEstado" class="form-control form-control-sm form-control-solid" id="CiudadEstado" type="text" value="@(Model?.ClientesDetalles.CiudadEstado ?? "")" autocomplete="off" required />
+                            <span asp-validation-for="ClientesDetalles.CiudadEstado" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label">Calle Número: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="CalleNumero" class="form-control form-control-sm form-control-solid" id="CalleNumero" type="text" value="@(Model?.CalleNumero ?? "")" autocomplete="off" />
-                            <span asp-validation-for="CalleNumero" class="text-danger"></span>
+                            <input asp-for="ClientesDetalles.CalleNumero" class="form-control form-control-sm form-control-solid" id="CalleNumero" type="text" value="@(Model?.ClientesDetalles.CalleNumero ?? "")" autocomplete="off" />
+                            <span asp-validation-for="ClientesDetalles.CalleNumero" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
-                        <label class="form-label">Puesto: &nbsp;</label>
+                        <label class="form-label required">Puesto: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="Puesto" class="form-control form-control-sm form-control-solid" id="Puesto" type="text" value="@(Model?.Puesto ?? "")" autocomplete="off" />
-                            <span asp-validation-for="Puesto" class="text-danger"></span>
+                            <input asp-for="ClientesDetalles.Puesto" class="form-control form-control-sm form-control-solid" id="Puesto" type="text" value="@(Model?.ClientesDetalles.Puesto ?? "")" autocomplete="off" required />
+                            <span asp-validation-for="ClientesDetalles.Puesto" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
 
                 <div class="d-flex mb-6 mt-6">
                     <div class="py-2 px-4 col-md-4 fv-row">
-                        <label class="form-label">Empresa: &nbsp;</label>
+                        <label class="form-label required">Empresa: &nbsp;</label>
                         <div class="position-relative">
-                            <select asp-for="Empresa" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción">
+                            <select asp-for="ClientesDetalles.Empresa" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required>
                                 <option></option>
-                                <option value="1">Option 1</option>
-                                <option value="2">Option 2</option>
+                                @foreach (var empresa in Model.ListaEmpresas)
+                                {
+                                    <option value="@empresa.Id">@empresa.Descripcion</option>
+                                }
                             </select>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
-                        <label class="form-label">Apoderado Legal: &nbsp;</label>
+                        <label class="form-label required">Apoderado legal: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="ApoderadoLegal" class="form-control form-control-sm form-control-solid" id="ApoderadoLegal" type="text" value="@(Model?.ApoderadoLegal ?? "")" autocomplete="off" />
-                            <span asp-validation-for="ApoderadoLegal" class="text-danger"></span>
+                            <select asp-for="ClientesDetalles.ApoderadoLegal" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción" required>
+                                <option></option>
+                                @{
+                                    if (Model != null)
+                                    {
+                                        if (Model.ClientesDetalles.ApoderadoLegal == 1)
+                                        {
+                                            <option value=1 selected>Si</option>
+                                        }
+                                        else
+                                        {
+                                            <option value=1>Si</option>
+                                        }
+                                        if (Model.ClientesDetalles.ApoderadoLegal == 0)
+                                        {
+                                            <option value=0 selected>No</option>
+                                        }
+                                        else
+                                        {
+                                            <option value=0>No</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option value=1>Si</option>
+                                        <option value=0>No</option>
+                                    }
+                                }
+                            </select>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
-                        <label class="form-label">Rol: &nbsp;</label>
+                        <label class="form-label required">Rol: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="Rol" class="form-control form-control-sm form-control-solid" id="Rol" type="text" value="@(Model?.Rol ?? "")" autocomplete="off" />
-                            <span asp-validation-for="Rol" class="text-danger"></span>
+                            <select asp-for="ClientesDetalles.Rol" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required>
+                                <option></option>
+                                @foreach (var rol in Model.ListaRoles)
+                                {
+                                    <option value="@rol.Descripcion">@rol.Descripcion</option>
+                                }
+                            </select>
                         </div>
                     </div>
                 </div>
