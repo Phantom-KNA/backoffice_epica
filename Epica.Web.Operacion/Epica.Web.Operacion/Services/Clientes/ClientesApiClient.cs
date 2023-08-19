@@ -71,9 +71,9 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return result;
         }
 
-        public async Task<ClienteResponse> GetClienteAsync(int id)
+        public async Task<DatosClienteResponse> GetClienteAsync(int id)
         {
-            ClienteResponse? cliente = new ClienteResponse();
+            DatosClienteResponse? cliente = new DatosClienteResponse();
             try
             {
                 var uri = Urls.Transaccion + UrlsConfig.ClientesOperations.GetCliente(id);
@@ -83,7 +83,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    cliente = JsonConvert.DeserializeObject<ClienteResponse>(jsonResponse);
+                    cliente = JsonConvert.DeserializeObject<DatosClienteResponse>(jsonResponse);
                 }
 
             }

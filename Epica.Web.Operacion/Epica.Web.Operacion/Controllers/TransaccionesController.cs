@@ -37,7 +37,7 @@ namespace Epica.Web.Operacion.Controllers
             if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Transacciones" && modulo.Acciones.Contains("Ver")) == true)
             {
                 ViewBag.AccountID = AccountID;
-                return View();
+                return View(loginResponse);
             }
 
 

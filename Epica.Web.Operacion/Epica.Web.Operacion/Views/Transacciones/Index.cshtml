@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Epica.Web.Operacion.Models.Response.LoginResponse
+
+@{
     ViewData["Title"] = "Transacciones";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -128,7 +130,7 @@
                                 </div>
                             </div>
                         </div>
-                        @if(ViewBag.UserRole == "Administrador")
+                        @if (Model?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Transacciones" && modulo.Acciones.Contains("Insertar")) == true)
                         {
                             <div id="kt_datatable_buttons" class="d-none"></div>
                             <a asp-action="Registro" asp-controller="Transacciones" class="btn btn-sm btn-primary me-3">

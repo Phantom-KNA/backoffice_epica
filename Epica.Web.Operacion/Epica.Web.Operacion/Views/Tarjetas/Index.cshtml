@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Epica.Web.Operacion.Models.Response.LoginResponse
+
+@{
     ViewData["Title"] = "Tarjetas";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -128,10 +130,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="kt_datatable_buttons" class="d-none"></div>
-                        <a asp-action="RegistroTarjetaCliente" asp-controller="Tarjetas" class="btn btn-sm btn-primary me-3">
-                            <i class="bi bi-plus-lg"></i>&nbsp;Registrar tarjeta con cliente
-                        </a>
+                        @if (Model?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Tarjetas" && modulo.Acciones.Contains("Insertar")) == true)
+                        {
+                            <div id="kt_datatable_buttons" class="d-none"></div>
+                            <a asp-action="RegistroTarjetaCliente" asp-controller="Tarjetas" class="btn btn-sm btn-primary me-3">
+                                <i class="bi bi-plus-lg"></i>&nbsp;Registrar tarjeta con cliente
+                            </a>
+                        }
                     </div>
                 </div>
             </div>

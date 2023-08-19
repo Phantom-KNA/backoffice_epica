@@ -49,7 +49,7 @@ public class ClientesController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Ver")) == true)
-            return View();
+            return View(loginResponse);
 
         return NotFound();
     }
@@ -623,17 +623,17 @@ public class ClientesController : Controller
                 return RedirectToAction("Index");
             }
 
-            ClienteResponse GetDatosCliente = await _clientesApiClient.GetClienteAsync(Convert.ToInt32(AccountID));
+            var GetDatosCliente = await _clientesApiClient.GetClienteAsync(Convert.ToInt32(AccountID));
 
             ViewBag.AccountID = AccountID;
 
-            if (GetDatosCliente.nombreCompleto == null)
+            if (GetDatosCliente.NombreCompleto == null)
             {
                 ViewBag.Nombre = "S/N";
             }
             else
             {
-                ViewBag.Nombre = GetDatosCliente.nombreCompleto;
+                ViewBag.Nombre = GetDatosCliente.NombreCompleto;
             }
 
             return View();
@@ -646,28 +646,52 @@ public class ClientesController : Controller
     public async Task<ActionResult> Modificar(int id)
     {
         var loginResponse = _userContextService.GetLoginResponse();
-        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Insertar")) == true)
+        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Editar")) == true)
         {
             try
             {
-                ClienteResponse user = await _clientesApiClient.GetClienteAsync(id);
-                ClientesDetallesViewModel clientesDetallesViewModel = new ClientesDetallesViewModel
+                var cliente = await _clientesApiClient.GetClienteAsync(id);
+                RegistroModificacionClienteRequest clientesDetalles = new RegistroModificacionClienteRequest
                 {
-                    Id = user.id,
-                    Nombre = user.nombreCompleto,
-                    Telefono = user.telefono,
-                    Email = user.email,
-                    Curp = user.CURP,
-                    Empresa = user.organizacion,
-                    Sexo = user.sexo,
+                    Nombre = cliente.Nombre,
+                    Telefono = cliente.Telefono,
+                    Email = cliente.Email,
+                    Curp = cliente.CURP,
+                    Sexo = cliente.Sexo,
+                    EntreCalleSegunda = cliente.CalleSecundaria2,
+                    EntreCallePrimera = cliente.CalleSecundaria,
+                    INE = cliente.INE,
+                    Calle = cliente.Calle,
+                    ApellidoMaterno = cliente.ApellidoMaterno,
+                    ApellidoPaterno = cliente.ApellidoPaterno,
+                    CodigoPostal = cliente.CodigoPostal,
+                    Colonia= cliente.Colonia,
+                    Observaciones = cliente.Observaciones,
+                    RFC = cliente.RFC,
+                    Fiel = cliente.Fiel,
+                    PaisNacimiento = cliente.PaisNacimiento,
+                    IngresoMensual = cliente.SalarioNetoMensual.ToString(),
+                    ApoderadoLegal = (cliente.AntiguedadLaboral?.ToLower() == "si") ? 1 : 0,
+                    NoInterior = cliente.NoIntExt,
+                    Puesto = cliente.Puesto,
+                    FechaNacimiento =cliente.FechaNacimiento,
+                    DelegacionMunicipio = cliente.Municipio,
+                    TelefonoTipo = cliente.TelefonoRecado,
+                    IdNacionalidad = cliente.IdNacionalida,
+                    IdOcupacion = cliente.IdOcupacion,
+                    CiudadEstado = cliente.Estado
                 };
 
-                if (clientesDetallesViewModel == null)
+                if (clientesDetalles == null)
                 {
                     return RedirectToAction("Error404", "Error");
                 }
 
-                return View("~/Views/Clientes/Registro.cshtml", clientesDetallesViewModel);
+                ClientesRegistroViewModel clientesRegistroViewModel = new ClientesRegistroViewModel
+                {
+                    ClientesDetalles = clientesDetalles
+                };
+                return View("~/Views/Clientes/Registro.cshtml", clientesRegistroViewModel);
             }
             catch (Exception)
             {
