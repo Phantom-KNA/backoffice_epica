@@ -728,6 +728,7 @@ public class ClientesController : Controller
 
         return NotFound();
     }
+
     [Authorize]
     [HttpPost]
     public async Task<JsonResult> ConsultaPermisos(List<RequestListFilters> filters)

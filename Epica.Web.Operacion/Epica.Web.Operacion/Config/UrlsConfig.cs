@@ -21,6 +21,8 @@ public class UrlsConfig
         public static string GetTransaccionesTotal() => $"/api/v1/transacciones/total";
         public static string GetTransaccionesPorCuenta(int idCuenta) => $"/api/v1/cuentas/cuenta_trasacciones?idCuenta={idCuenta}";
         public static string GetRegistraTransaccion() => $"/api/v1/transacciones/insertar";
+        public static string ModificarTransaccion() => $"/api/v1/transacciones/modificar";
+
     }
 
     public class CuentasOperations

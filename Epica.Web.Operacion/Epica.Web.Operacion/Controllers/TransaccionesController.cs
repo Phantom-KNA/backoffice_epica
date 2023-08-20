@@ -1,6 +1,10 @@
 ﻿using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Models.Common;
+using Epica.Web.Operacion.Models.Entities;
 using Epica.Web.Operacion.Models.Request;
+using Epica.Web.Operacion.Models.ViewModels;
+using Epica.Web.Operacion.Services.Catalogos;
+using Epica.Web.Operacion.Services.Log;
 using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Utilities;
 using Microsoft.AspNetCore.Authorization;
@@ -17,15 +21,21 @@ namespace Epica.Web.Operacion.Controllers
         private readonly UserContextService _userContextService;
         #region "Locales"
         private readonly ITransaccionesApiClient _transaccionesApiClient;//Transacciones
+        private readonly ICatalogosApiClient _catalogosApiClient;
+        private readonly ILogsApiClient _logsApiClient;
         #endregion
 
         #region "Constructores"
         public TransaccionesController(ITransaccionesApiClient transaccionesApiClient,
-            UserContextService userContextService
+            UserContextService userContextService,
+            ICatalogosApiClient catalogosApiClient,
+            ILogsApiClient logsApiClient
             )
         {
             _userContextService = userContextService;
             _transaccionesApiClient = transaccionesApiClient;
+            _catalogosApiClient = catalogosApiClient;
+            _logsApiClient = logsApiClient;
         }
         #endregion
 
@@ -45,12 +55,23 @@ namespace Epica.Web.Operacion.Controllers
         }
 
         [Authorize]
-        public IActionResult Registro()
+        public async Task<ActionResult> Registro()
         {
             var loginResponse = _userContextService.GetLoginResponse();
             if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Transacciones" && modulo.Acciones.Contains("Insertar")) == true)
             {
-                return View();
+                var listaMediosPago = await _catalogosApiClient.GetMediosPagoAsync();
+
+                TransaccionesRegistroViewModel transaccionesRegistroViewModel = new TransaccionesRegistroViewModel
+                {
+                    TransacccionDetalles = new RegistrarTransaccionRequest(),
+                    ListaMediosPago = listaMediosPago
+                };
+
+                ViewBag.Accion = "RegistrarTransaccion";
+                ViewBag.TituloForm = "Crear nueva transacción";
+
+                return View(transaccionesRegistroViewModel);
             }
 
 
@@ -204,13 +225,145 @@ namespace Epica.Web.Operacion.Controllers
 
         [Authorize]
         [HttpPost]
-        public JsonResult RegistrarTransaccion(RegistrarTransaccionRequest model)
-        { 
-            return Json(model);
+        public async Task<IActionResult> RegistrarTransaccion(TransaccionesRegistroViewModel model)
+        {
+            var loginResponse = _userContextService.GetLoginResponse();
+            if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Transacciones" && modulo.Acciones.Contains("Insertar")) == true)
+            {
+                RegistrarModificarTransaccionResponse response = new RegistrarModificarTransaccionResponse();
+
+                try
+                {
+                    response = await _transaccionesApiClient.GetRegistroTransaccion(model.TransacccionDetalles);
+
+                    LogRequest logRequest = new LogRequest
+                    {
+                        IdUser = loginResponse.IdUsuario.ToString(),
+                        Modulo = "Transacciones",
+                        Fecha = DateTime.Now,
+                        NombreEquipo = Environment.MachineName,
+                        Accion = "Insertar",
+                        Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                        Envio = JsonConvert.SerializeObject(model.TransacccionDetalles),
+                        Respuesta = response.error.ToString(),
+                        Error = response.error ? JsonConvert.SerializeObject(response.detalle) : string.Empty,
+                        IdRegistro = 0
+                    };
+                    await _logsApiClient.InsertarLogAsync(logRequest);
+
+                    if (response.codigo == "200")
+                    {
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Registro");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return View();
+                }
+            }
+
+            return NotFound();
         }
+
+        [Authorize]
+        public async Task<ActionResult> Modificar(int id)
+        {
+            var loginResponse = _userContextService.GetLoginResponse();
+            if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Transacciones" && modulo.Acciones.Contains("Editar")) == true)
+            {
+                try
+                {
+                    var transaccionResponse = await _transaccionesApiClient.GetTransaccionAsync(id);
+                    RegistrarTransaccionRequest transaccionDetalles = new RegistrarTransaccionRequest()
+                    {
+                        ClaveRastreo = transaccionResponse.claveRastreo,
+                        Concepto = transaccionResponse.concepto,
+                        NombreBeneficiario = transaccionResponse.nombreBeneficiario,
+                        Monto = transaccionResponse.monto,
+                        medioPago = transaccionResponse.idMedioPago,
+                        NombreOrdenante = transaccionResponse.nombreOrdenante,
+                        IdTrasaccion = transaccionResponse.id
+                    };
+                    var listaMediosPago = await _catalogosApiClient.GetMediosPagoAsync();
+
+                    if (listaMediosPago == null)
+                    {
+                        return RedirectToAction("Error404", "Error");
+                    }
+
+                    TransaccionesRegistroViewModel transaccionesRegistroViewModel = new TransaccionesRegistroViewModel
+                    {
+                        TransacccionDetalles = transaccionDetalles,
+                        ListaMediosPago = listaMediosPago
+                    };
+
+                    ViewBag.Accion = "ModificarTransaccion";
+                    ViewBag.TituloForm = "Modificar transacción";
+                    return View("~/Views/Transacciones/Registro.cshtml", transaccionesRegistroViewModel);
+                }
+                catch (Exception)
+                {
+                    return RedirectToAction("Error", "Error");
+                }
+            }
+
+            return NotFound();
+
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> ModificarTransaccion(TransaccionesRegistroViewModel model)
+        {
+            var loginResponse = _userContextService.GetLoginResponse();
+            if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Transacciones" && modulo.Acciones.Contains("Editar")) == true)
+            {
+                RegistrarModificarTransaccionResponse response = new RegistrarModificarTransaccionResponse();
+
+                try
+                {
+                    response = await _transaccionesApiClient.GetModificarTransaccion(model.TransacccionDetalles);
+
+                    LogRequest logRequest = new LogRequest
+                    {
+                        IdUser = loginResponse.IdUsuario.ToString(),
+                        Modulo = "Clientes",
+                        Fecha = DateTime.Now,
+                        NombreEquipo = Environment.MachineName,
+                        Accion = "Editar",
+                        Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                        Envio = JsonConvert.SerializeObject(model.TransacccionDetalles),
+                        Respuesta = response.error.ToString(),
+                        Error = response.error ? JsonConvert.SerializeObject(response.detalle) : string.Empty,
+                        IdRegistro = model.TransacccionDetalles.IdTrasaccion
+                    };
+                    await _logsApiClient.InsertarLogAsync(logRequest);
+
+                    if (response.codigo == "200")
+                    {
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Registro");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return View();
+                }
+            }
+
+            return NotFound();
+        }
+
         #endregion
 
-            #region "Modelos"
+        #region "Modelos"
         public class RequestListFilters
         {
             [JsonProperty("key")]
