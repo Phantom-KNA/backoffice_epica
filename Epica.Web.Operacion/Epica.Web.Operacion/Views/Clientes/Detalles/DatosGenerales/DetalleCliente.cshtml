@@ -34,9 +34,10 @@
                     </div>
                     <div class="card-toolbar">
                         <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-                            <a href="https://stackoverflow.com/" class="btn btn-primary me-3">
-                                <i class="bi bi-pencil"></i>&nbsp;Modificar Cliente
-                            </a>
+                                <div id="kt_datatable_buttons" class="d-none"></div>
+                                <a asp-action="Modificar" asp-controller="Clientes" class="btn btn-sm btn-primary me-3" asp-route-id="@Model.Id">
+                                    <i class="bi bi-plus-lg"></i>&nbsp;Modificar cliente
+                                </a>
                         </div>
                     </div>
                 </div>

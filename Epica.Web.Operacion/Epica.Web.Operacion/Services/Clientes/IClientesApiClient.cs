@@ -14,5 +14,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
         Task<BloqueoTotalResponse> GetBloqueoTotal(BloqueoTotalClienteRequest request);
         Task<RegistrarModificarClienteResponse> GetRegistroCliente(RegistroModificacionClienteRequest request);
         Task<ClienteDetailsResponse> GetDetallesCliente(int id);
+        Task<RegistrarModificarClienteResponse> GetModificarCliente(RegistroModificacionClienteRequest request);
+
     }
 }

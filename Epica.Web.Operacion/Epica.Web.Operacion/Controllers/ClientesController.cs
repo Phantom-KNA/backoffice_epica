@@ -286,7 +286,7 @@ public class ClientesController : Controller
             ClientesDetallesViewModel clientesDetallesViewModel = new ClientesDetallesViewModel
             {
                 Id = user.value.IdCliente,
-                Nombre = user.value.NombreCompleto,
+                Nombre = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
                 Telefono = user.value.Telefono,
                 Email = user.value.Email,
                 Curp = user.value.CURP,
@@ -294,28 +294,27 @@ public class ClientesController : Controller
                 Sexo = user.value.Sexo,
                 Rfc = user.value.RFC,
                 Ine = user.value.INE,
-                FechaNacimiento = user.value.FechaNacimiento,
+                FechaNacimiento = DateTime.Parse(user.value.FechaNacimiento),
                 Observaciones = user.value.Observaciones,
                 PaisNacimiento = user.value.PaisNacimiento,
                 Ocupacion = user.value.IdOcupacion.ToString(),
                 Nacionalidad = user.value.Nacionalidad,
                 Fiel = user.value.Fiel,
                 Pais = user.value.PaisNacimiento,
-                IngresoMensual = Convert.ToDecimal(user.value.SalarioNetoMensual),
-                MontoMaximo = Convert.ToDecimal(user.value.SalarioNetoMensual),
+                IngresoMensual = Convert.ToDecimal(user.value.SalarioMensual),
+                MontoMaximo = Convert.ToDecimal(user.value.SalarioMensual),
                 Calle = user.value.Calle,
-                CalleNumero = user.value.NoIntExt,
+                CalleNumero = user.value.NoInt,
                 PrimeraCalle = user.value.CalleSecundaria,
                 SegundaCalle = user.value.CalleSecundaria2,
                 Colonia = user.value.Colonia,
                 CodigoPostal = user.value.CodigoPostal,
-                NoInterior = user.value.NoIntExt,
-                Puesto = user.value.Puesto
-                //Rol = user.value.rol,
-                //    DelegacionMunicipio = user.value.del;
-                //CiudadEstado = user.value.CiudadEstado
-                //Empresa = Convert.ToInt32(user.value.em),
-                //ApoderadoLegal = Convert.ToInt32(user.value.);
+                NoInterior = user.value.NoInt,
+                Puesto = user.value.Puesto,
+                ApoderadoLegal = user.value.AntiguedadLaboral,
+                CiudadEstado = user.value.Estado,
+                Rol = user.value.Rol,
+                DelegacionMunicipio = user.value.Municipio,
             };
 
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
@@ -629,7 +628,7 @@ public class ClientesController : Controller
                 ListaNacionalidades = listaNacionalidades
             };
 
-            ViewData["IsEdit"] = false;
+            ViewBag.Accion = "RegistrarCliente";
             ViewBag.TituloForm = "Crear nuevo cliente";
             return View(clientesRegistroViewModel);
         }
@@ -660,7 +659,7 @@ public class ClientesController : Controller
                     Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
                     Envio = JsonConvert.SerializeObject(model.ClientesDetalles),
                     Respuesta = response.error.ToString(),
-                    Error = JsonConvert.SerializeObject(response.detalle),
+                    Error = response.error ? JsonConvert.SerializeObject(response.detalle) : string.Empty,
                     IdRegistro = 0
                 };
                 await _logsApiClient.InsertarLogAsync(logRequest);
@@ -684,6 +683,51 @@ public class ClientesController : Controller
     }
     #endregion
 
+    [Authorize]
+    [HttpPost]
+    public async Task<IActionResult> ModificarCliente(ClientesRegistroViewModel model)
+    {
+        var loginResponse = _userContextService.GetLoginResponse();
+        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Editar")) == true)
+        {
+            RegistrarModificarClienteResponse response = new RegistrarModificarClienteResponse();
+
+            try
+            {
+                response = await _clientesApiClient.GetModificarCliente(model.ClientesDetalles);
+
+                LogRequest logRequest = new LogRequest
+                {
+                    IdUser = loginResponse.IdUsuario.ToString(),
+                    Modulo = "Clientes",
+                    Fecha = DateTime.Now,
+                    NombreEquipo = Environment.MachineName,
+                    Accion = "Editar",
+                    Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                    Envio = JsonConvert.SerializeObject(model.ClientesDetalles),
+                    Respuesta = response.error.ToString(),
+                    Error = response.error ? JsonConvert.SerializeObject(response.detalle) : string.Empty,
+                    IdRegistro = model.ClientesDetalles.IdCliente
+                };
+                await _logsApiClient.InsertarLogAsync(logRequest);
+
+                if (response.codigo == "200")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return RedirectToAction("Registro");
+                }
+            }
+            catch (Exception ex)
+            {
+                return View();
+            }
+        }
+
+        return NotFound();
+    }
     [Authorize]
     [HttpPost]
     public async Task<JsonResult> ConsultaPermisos(List<RequestListFilters> filters)
@@ -800,13 +844,15 @@ public class ClientesController : Controller
 
             ViewBag.AccountID = AccountID;
 
-            if (GetDatosCliente.NombreCompleto == null)
+            string nombreCompleto = GetDatosCliente.Nombre + " " + GetDatosCliente.ApellidoPaterno ?? "" + " " + GetDatosCliente.ApellidoMaterno ?? "";
+
+            if (nombreCompleto == null)
             {
                 ViewBag.Nombre = "S/N";
             }
             else
             {
-                ViewBag.Nombre = GetDatosCliente.NombreCompleto;
+                ViewBag.Nombre = nombreCompleto;
             }
 
             return View();
@@ -823,37 +869,49 @@ public class ClientesController : Controller
         {
             try
             {
-                var cliente = await _clientesApiClient.GetClienteAsync(id);
+                ClienteDetailsResponse cliente = await _clientesApiClient.GetDetallesCliente(id);
                 RegistroModificacionClienteRequest clientesDetalles = new RegistroModificacionClienteRequest
                 {
-                    Nombre = cliente.Nombre,
-                    Telefono = cliente.Telefono,
-                    Email = cliente.Email,
-                    Curp = cliente.CURP,
-                    Sexo = cliente.Sexo,
-                    EntreCalleSegunda = cliente.CalleSecundaria2,
-                    EntreCallePrimera = cliente.CalleSecundaria,
-                    INE = cliente.INE,
-                    Calle = cliente.Calle,
-                    ApellidoMaterno = cliente.ApellidoMaterno,
-                    ApellidoPaterno = cliente.ApellidoPaterno,
-                    CodigoPostal = cliente.CodigoPostal,
-                    Colonia= cliente.Colonia,
-                    Observaciones = cliente.Observaciones,
-                    RFC = cliente.RFC,
-                    Fiel = cliente.Fiel,
-                    PaisNacimiento = cliente.PaisNacimiento,
-                    IngresoMensual = cliente.SalarioNetoMensual.ToString(),
-                    ApoderadoLegal = (cliente.AntiguedadLaboral?.ToLower() == "si") ? 1 : 0,
-                    NoInterior = cliente.NoIntExt,
-                    Puesto = cliente.Puesto,
-                    FechaNacimiento =cliente.FechaNacimiento,
-                    DelegacionMunicipio = cliente.Municipio,
-                    TelefonoTipo = cliente.TelefonoRecado,
-                    IdNacionalidad = cliente.IdNacionalida,
-                    IdOcupacion = cliente.IdOcupacion,
-                    CiudadEstado = cliente.Estado
+                    IdCliente = cliente.value.IdCliente,
+                    Nombre = cliente.value.Nombre,
+                    Telefono = cliente.value.Telefono,
+                    Email = cliente.value.Email,
+                    Curp = cliente.value.CURP,
+                    Sexo = cliente.value.Sexo,
+                    EntreCalleSegunda = cliente.value.CalleSecundaria2,
+                    EntreCallePrimera = cliente.value.CalleSecundaria,
+                    INE = cliente.value.INE,
+                    Calle = cliente.value.Calle,
+                    ApellidoMaterno = cliente.value.ApellidoMaterno,
+                    ApellidoPaterno = cliente.value.ApellidoPaterno,
+                    CodigoPostal = cliente.value.CodigoPostal,
+                    Colonia= cliente.value.Colonia,
+                    Observaciones = cliente.value.Observaciones,
+                    RFC = cliente.value.RFC,
+                    Fiel = cliente.value.Fiel,
+                    PaisNacimiento = cliente.value.PaisNacimiento,
+                    IngresoMensual = cliente.value.SalarioMensual.ToString(),
+                    ApoderadoLegal = (cliente.value.AntiguedadLaboral?.ToLower() == "si") ? 1 : 0,
+                    NoInterior = cliente.value.NoInt,
+                    Puesto = cliente.value.Puesto,
+                    FechaNacimiento =DateTime.Parse(cliente.value.FechaNacimiento ?? ""),
+                    DelegacionMunicipio = cliente.value.Municipio,
+                    TelefonoTipo = cliente.value.TelefonoRecado,
+                    IdNacionalidad = cliente.value.IdNacionalidad,
+                    IdOcupacion = cliente.value.IdOcupacion,
+                    CiudadEstado = cliente.value.Estado,
+                    Rol = cliente.value.Rol,
+                    Empresa = cliente.value.Empresa ?? 0,
+                    MontoMaximo = cliente.value.MontoMaximo,
+                    CalleNumero = cliente.value.CalleNumero,
+                    IdPais = cliente.value.Pais ?? 0
                 };
+                var listaEmpresas = await _catalogosApiClient.GetEmpresasAsync();
+                var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
+                var listaOcupaciones = await _catalogosApiClient.GetOcupacionesAsync();
+                //var listaPaises = await _catalogosApiClient.GetPaisesAsync();
+                var listaPaises = Paises.ListaDePaises;
+                var listaNacionalidades = await _catalogosApiClient.GetNacionalidadesAsync();
 
                 if (clientesDetalles == null)
                 {
@@ -862,8 +920,16 @@ public class ClientesController : Controller
 
                 ClientesRegistroViewModel clientesRegistroViewModel = new ClientesRegistroViewModel
                 {
-                    ClientesDetalles = clientesDetalles
+                    ClientesDetalles = clientesDetalles,
+                    ListaEmpresas = listaEmpresas,
+                    ListaNacionalidades = listaNacionalidades,
+                    ListaOcupaciones = listaOcupaciones,
+                    ListaPaises = listaPaises,
+                    ListaRoles = listaRoles
                 };
+
+                ViewBag.Accion = "ModificarCliente";
+                ViewBag.TituloForm = "Modificar cliente";
                 return View("~/Views/Clientes/Registro.cshtml", clientesRegistroViewModel);
             }
             catch (Exception)
