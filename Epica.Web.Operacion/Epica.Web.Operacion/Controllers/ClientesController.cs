@@ -30,8 +30,7 @@ public class ClientesController : Controller
     #region "Constructores"
     public ClientesController(IClientesApiClient clientesApiClient,
         ICuentaApiClient cuentaApiClient,
-        UserContextService userContextService,
-        ICatalogosApiClient catalogosApiClient
+        ICatalogosApiClient catalogosApiClient,
         ITarjetasApiClient tarjetasApiClient,
         UserContextService userContextService
         )
