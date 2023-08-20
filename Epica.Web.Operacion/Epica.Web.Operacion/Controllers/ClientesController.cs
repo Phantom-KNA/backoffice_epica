@@ -610,7 +610,8 @@ public class ClientesController : Controller
             var listaEmpresas = await _catalogosApiClient.GetEmpresasAsync();
             var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
             var listaOcupaciones = await _catalogosApiClient.GetOcupacionesAsync();
-            var listaPaises = await _catalogosApiClient.GetPaisesAsync();
+            //var listaPaises = await _catalogosApiClient.GetPaisesAsync();
+            var listaPaises = Paises.ListaDePaises;
             var listaNacionalidades = await _catalogosApiClient.GetNacionalidadesAsync();
 
             ClientesRegistroViewModel clientesRegistroViewModel = new ClientesRegistroViewModel
