@@ -14,11 +14,14 @@ using static Epica.Web.Operacion.Controllers.CuentaController;
 using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Services.Catalogos;
+using Epica.Web.Operacion.Services.Log;
+using System.Globalization;
 
 namespace Epica.Web.Operacion.Controllers;
 
 public class ClientesController : Controller
 {
+    private readonly ILogsApiClient _logsApiClient;
     #region "Locales"
     private readonly IClientesApiClient _clientesApiClient;
     private readonly ICuentaApiClient _cuentaApiClient;
@@ -32,9 +35,11 @@ public class ClientesController : Controller
         ICuentaApiClient cuentaApiClient,
         ICatalogosApiClient catalogosApiClient,
         ITarjetasApiClient tarjetasApiClient,
-        UserContextService userContextService
+        UserContextService userContextService,
+        ILogsApiClient logsApiClient
         )
     {
+        _logsApiClient = logsApiClient;
         _clientesApiClient = clientesApiClient;
         _cuentaApiClient = cuentaApiClient;
         _userContextService = userContextService;
@@ -644,6 +649,21 @@ public class ClientesController : Controller
             try
             {
                 response = await _clientesApiClient.GetRegistroCliente(model.ClientesDetalles);
+
+                LogRequest logRequest = new LogRequest
+                {
+                    IdUser = loginResponse.IdUsuario.ToString(),
+                    Modulo = "Clientes",
+                    Fecha = DateTime.Now,
+                    NombreEquipo = Environment.MachineName,
+                    Accion = "Insertar",
+                    Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                    Envio = JsonConvert.SerializeObject(model.ClientesDetalles),
+                    Respuesta = response.error.ToString(),
+                    Error = JsonConvert.SerializeObject(response.detalle),
+                    IdRegistro = 0
+                };
+                await _logsApiClient.InsertarLogAsync(logRequest);
 
                 if (response.codigo == "200")
                 {
