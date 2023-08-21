@@ -1,0 +1,112 @@
+﻿@model Epica.Web.Operacion.Models.Response.TransaccionResponse
+
+<div class="modal-content">
+    <div class="modal-body ">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    <div class="col-md-12">
+                        <label for="ClabeRastreo" class="form-label">Clabe Rastreo</label>
+                        <div class="card-body">
+                            <label>@Model.ClaveRastreo</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-12">
+                    <div class="col-md-6">
+                        <label for="NombreOrdenate" class="form-label">Nombre Ordenate</label>
+                        <div class="card-body">
+                            <label>@Model.NombreOrdenate</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="CuentaOrigenOrdenante" class="form-label">Cuenta Origen Ordenante</label>
+                        <div class="card-body">
+                            <label>@Model.CuentaOrigenOrdenante</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-12">
+                    <div class="col-md-6">
+                        <label for="NombreBeneficiario" class="form-label">Nombre Beneficiario</label>
+                        <div class="card-body">
+                            <label>@Model.NombreBeneficiario</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="Cuenta Destino Beneficiario" class="form-label">Cuenta Destino Beneficiario</label>
+                        <div class="card-body">
+                            <label>@Model.CuentaDestinoBeneficiario</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-12">
+                    <div class="col-md-4">
+                        <label for="Monto" class="form-label">Monto</label>
+                        <div class="card-body">
+                            <label>@Model.Monto</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="Concepto" class="form-label">Concepto</label>
+                        <div class="card-body">
+                            <label>@Model.Concepto</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="ConceptoOtro" class="form-label">Concepto Otro</label>
+                        <div class="card-body">
+                            <label>@Model.ConceptoOtro</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-12">
+                    <div class="col-md-4">
+                        <label for="ClabeCobranza" class="form-label">Clabe Cobranza</label>
+                        <div class="card-body">
+                            <label>@Model.ClabeCobranza</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="Estatus" class="form-label">Estatus</label>
+                        <div class="card-body">
+                            <label>@Model.Estatus</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="ConceptoOtro" class="form-label">Concepto Otro</label>
+                        <div class="card-body">
+                            <label>@Model.ConceptoOtro</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-6">
+                    <p><strong>Fecha Alta:</strong></p>
+                    <label>@Model.FechaAlta</label>
+                </div>
+                <div class="col-6">
+                    <p><strong>Fecha de Actualizacion:</strong></p>
+                    <label>@Model.FechaActualizacion</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

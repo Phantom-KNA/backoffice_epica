@@ -168,5 +168,30 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return respuesta;
         }
 
+        public async Task<TransaccionResponse> GetTransaccionDetalleAsync(int idCuenta)
+        {
+            TransaccionResponse? TransaccionDetalle = new TransaccionResponse();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.DetalleTransaccion(idCuenta);
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    TransaccionDetalle = JsonConvert.DeserializeObject<TransaccionResponse>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return TransaccionDetalle;
+            }
+
+            return TransaccionDetalle;
+        }
+
     }
 }

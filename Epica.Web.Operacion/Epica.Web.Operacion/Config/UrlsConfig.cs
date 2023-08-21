@@ -22,7 +22,7 @@ public class UrlsConfig
         public static string GetTransaccionesPorCuenta(int idCuenta) => $"/api/v1/cuentas/cuenta_trasacciones?idCuenta={idCuenta}";
         public static string GetRegistraTransaccion() => $"/api/v1/transacciones/insertar";
         public static string ModificarTransaccion() => $"/api/v1/transacciones/modificar";
-
+        public static string DetalleTransaccion(int idTransaccion) => $"/api/v1/transacciones/detalle_movimiento?idtrasaccion={idTransaccion}";
     }
 
     public class CuentasOperations
@@ -78,7 +78,7 @@ public class UrlsConfig
 
     public class UsuariosOperations
     {
-        public static string GetUsuariosRoles() => $"/api/v1/usuario/usuarios_roles";
+        public static string GetUsuariosRoles() => $"/api/v1/usuario/resumen_permisos";
     }
     public string Authenticate { get; set; }
     public string Transaccion { get; set; }

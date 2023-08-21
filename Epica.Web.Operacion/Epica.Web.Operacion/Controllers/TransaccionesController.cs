@@ -1,4 +1,5 @@
 ﻿using Epica.Web.Operacion.Helpers;
+using Epica.Web.Operacion.Models;
 using Epica.Web.Operacion.Models.Common;
 using Epica.Web.Operacion.Models.Entities;
 using Epica.Web.Operacion.Models.Request;
@@ -351,6 +352,33 @@ namespace Epica.Web.Operacion.Controllers
             return NotFound();
         }
 
+        [Authorize]
+        public async Task<IActionResult> DetalleTransaccion(int Id)
+        {
+            var result = new JsonResultDto();
+            try
+            {
+                var detalleTransaccion = await _transaccionesApiClient.GetTransaccionDetalleAsync(Id);
+
+                if (detalleTransaccion != null)
+                {
+                    result.Error = false;
+                    result.Result = await this.RenderViewToStringAsync("~/Views/Transacciones/_Detalle.cshtml", detalleTransaccion);
+                }
+                else
+                {
+                    result.Error = true;
+                    result.ErrorDescription = "ERROR";
+                    return Json(result);
+                }
+            }
+            catch (Exception)
+            {
+                result.Error = true;
+                result.ErrorDescription = "Error1";
+            }
+            return Json(result);
+        }
         #endregion
 
         #region "Modelos"

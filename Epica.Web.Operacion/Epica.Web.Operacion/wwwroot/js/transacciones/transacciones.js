@@ -187,8 +187,8 @@ $(document).ready(function () {
 //};
 
 $(document).on('click', '.btnDetalle', function (e) {
-    //var id = $(this).data('id');
-    //ModalDetalle.init(id);
+    var id = $(this).data('id');
+    ModalDetalle.init(id);
 });
 
 var ModalDetalle = function () {
@@ -200,7 +200,7 @@ var ModalDetalle = function () {
         $.ajax({
             cache: false,
             type: 'GET',
-            url: siteLocation + "Configuracion/DetalleOnb/" + id,
+            url: siteLocation + "Transacciones/DetalleTransaccion/" + id,
             success: function (result) {
                 if (result.error) {
                     $(window).scrollTop(0);
