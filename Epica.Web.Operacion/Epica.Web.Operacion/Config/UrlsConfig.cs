@@ -44,6 +44,7 @@ public class UrlsConfig
         public static string GetBloqueaTotalCliente() => $"/api/v1/clientes/bloque_total";
         public static string InsertarClienteNuevo() => $"/api/v1/clientes/inserta_cliente";
         public static string ModificarCliente() => $"/api/v1/clientes/modificar_cliente";
+        public static string GetAllClientes() => $"api/v1/clientes/AllClientes";
 
     }
 
