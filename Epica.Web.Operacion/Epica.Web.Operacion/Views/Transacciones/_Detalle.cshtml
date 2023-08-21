@@ -5,92 +5,60 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-12">
-                    <div class="col-md-12">
-                        <label for="ClabeRastreo" class="form-label">Clabe Rastreo</label>
-                        <div class="card-body">
-                            <label>@Model.ClaveRastreo</label>
-                        </div>
-                    </div>
+                    <p><strong>Clabe Rastreo:</strong></p>
+                    <label>@Model.ClaveRastreo</label>
                 </div>
             </div>
             <br />
             <div class="row">
-                <div class="col-12">
-                    <div class="col-md-6">
-                        <label for="NombreOrdenate" class="form-label">Nombre Ordenate</label>
-                        <div class="card-body">
-                            <label>@Model.NombreOrdenate</label>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="CuentaOrigenOrdenante" class="form-label">Cuenta Origen Ordenante</label>
-                        <div class="card-body">
-                            <label>@Model.CuentaOrigenOrdenante</label>
-                        </div>
-                    </div>
+                <div class="col-6">
+                    <p><strong>Nombre Ordenate:</strong></p>
+                    <label>@Model.NombreOrdenate</label>
+                </div>
+                <div class="col-6">
+                    <p><strong>Cuenta Origen Ordenante:</strong></p>
+                    <label>@Model.CuentaOrigenOrdenante</label>
                 </div>
             </div>
             <br />
             <div class="row">
-                <div class="col-12">
-                    <div class="col-md-6">
-                        <label for="NombreBeneficiario" class="form-label">Nombre Beneficiario</label>
-                        <div class="card-body">
-                            <label>@Model.NombreBeneficiario</label>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="Cuenta Destino Beneficiario" class="form-label">Cuenta Destino Beneficiario</label>
-                        <div class="card-body">
-                            <label>@Model.CuentaDestinoBeneficiario</label>
-                        </div>
-                    </div>
+                <div class="col-6">
+                    <p><strong>Cuenta Destino Beneficiario:</strong></p>
+                    <label>@Model.CuentaDestinoBeneficiario</label>
+                </div>
+                <div class="col-6">
+                    <p><strong>Nombre del Beneficiario:</strong></p>
+                    <label>@Model.NombreBeneficiario</label>
                 </div>
             </div>
             <br />
             <div class="row">
-                <div class="col-12">
-                    <div class="col-md-4">
-                        <label for="Monto" class="form-label">Monto</label>
-                        <div class="card-body">
-                            <label>@Model.Monto</label>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="Concepto" class="form-label">Concepto</label>
-                        <div class="card-body">
-                            <label>@Model.Concepto</label>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="ConceptoOtro" class="form-label">Concepto Otro</label>
-                        <div class="card-body">
-                            <label>@Model.ConceptoOtro</label>
-                        </div>
-                    </div>
+                <div class="col-6">
+                    <p><strong>Monto:</strong></p>
+                    <label>@String.Format("{0:C2}", Model.Monto)</label>
+                </div>
+                <div class="col-6">
+                    <p><strong>Clabe de Cobranza:</strong></p>
+                    <label>@Model.ClabeCobranza</label>
                 </div>
             </div>
             <br />
             <div class="row">
-                <div class="col-12">
-                    <div class="col-md-4">
-                        <label for="ClabeCobranza" class="form-label">Clabe Cobranza</label>
-                        <div class="card-body">
-                            <label>@Model.ClabeCobranza</label>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="Estatus" class="form-label">Estatus</label>
-                        <div class="card-body">
-                            <label>@Model.Estatus</label>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="ConceptoOtro" class="form-label">Concepto Otro</label>
-                        <div class="card-body">
-                            <label>@Model.ConceptoOtro</label>
-                        </div>
-                    </div>
+                <div class="col-6">
+                    <p><strong>Concepto:</strong></p>
+                    <label>@Model.Concepto</label>
+                </div>
+                <div class="col-6">
+                    <p><strong>Estatus:</strong></p>
+                    @if(Model.Estatus == 0){
+                        <span class="badge badge-light-info">En Proceso</span>
+                    } else if ((Model.Estatus == 1) || (Model.Estatus == 2)) {
+                        <span class='badge badge-light-warning'>En Tránsito</span>
+                    } else if (Model.Estatus == 4) {
+                        <span class='badge badge-light-success'>Liquidada</span>
+                    } else if (Model.Estatus == 5) {
+                        <span class='badge badge-light-danger'>Devuelto</span>
+                    }
                 </div>
             </div>
             <br />

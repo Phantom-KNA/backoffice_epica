@@ -168,9 +168,9 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return respuesta;
         }
 
-        public async Task<TransaccionResponse> GetTransaccionDetalleAsync(int idCuenta)
+        public async Task<TransaccionDetailsResponse> GetTransaccionDetalleAsync(int idCuenta)
         {
-            TransaccionResponse? TransaccionDetalle = new TransaccionResponse();
+            TransaccionDetailsResponse? TransaccionDetalle = new TransaccionDetailsResponse();
 
             try
             {
@@ -181,7 +181,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    TransaccionDetalle = JsonConvert.DeserializeObject<TransaccionResponse>(jsonResponse);
+                    TransaccionDetalle = JsonConvert.DeserializeObject<TransaccionDetailsResponse>(jsonResponse);
                 }
 
             }

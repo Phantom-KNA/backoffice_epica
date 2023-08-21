@@ -7,6 +7,12 @@ namespace Epica.Web.Operacion.Models.Response;
 /// Clase que representa la respuesta del Api Consultar Tarjetas.
 /// </summary>
 
+public class TransaccionDetailsResponse
+{
+    public string result { get; set; }
+    public TransaccionResponse value { get; set; }
+
+}
 public class TransaccionResponse
 {
     [JsonPropertyName("idCuentaAhorro")]

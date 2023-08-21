@@ -265,7 +265,7 @@ public class CuentaController : Controller
         {
             List.Add(new ResumenTransaccionResponseGrid
             {
-                id = row.id,
+                id = row.idTransaccion,
                 claveRastreo = row.claveRastreo,
                 nombreOrdenante = row.nombreOrdenante,
                 nombreBeneficiario = row.nombreBeneficiario,

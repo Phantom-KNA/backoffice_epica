@@ -2,7 +2,7 @@
 {
     public class TransaccionesResponse
     {
-        public int id { get; set; }
+        public int idTransaccion { get; set; }
         public string claveRastreo { get; set; }
         public string nombreOrdenante { get; set; }
         public string nombreBeneficiario { get; set; }

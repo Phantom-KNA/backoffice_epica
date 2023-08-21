@@ -200,7 +200,8 @@ var ModalDetalle = function () {
         $.ajax({
             cache: false,
             type: 'GET',
-            url: siteLocation + "Transacciones/DetalleTransaccion/" + id,
+            url: siteLocation + "Transacciones/DetalleTransaccion",
+            data: { 'Id': id },
             success: function (result) {
                 if (result.error) {
                     $(window).scrollTop(0);
@@ -209,7 +210,7 @@ var ModalDetalle = function () {
                     setTimeout(function () { $("#DivErrorMessage").hide() }, 3000);
                     $("#ErrorMessage").text(result.errorDescription);
                 } else {
-                    $('#modal_detalle #modalLabelTitle').html('Detalle Onboardign');
+                    $('#modal_detalle #modalLabelTitle').html('Detalle de Transacción');
                     $('#modal_detalle .modal-body').html(result.result);
                     $('#modal_detalle').modal('show');
                 }

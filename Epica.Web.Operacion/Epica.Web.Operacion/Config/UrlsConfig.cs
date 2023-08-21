@@ -29,7 +29,7 @@ public class UrlsConfig
     {
         public static string GetCuentas(int numberPage, int TotalRecords) => $"/api/v1/cuentas/cliente_vista?pageNumber={numberPage}&pageSize={TotalRecords}";
         public static string GetCuentasTotal() => $"/api/v1/cuentas/total";
-        public static string GetCobranzaReferenciada(int id) => $"/api/v1/transacciones/cobranza_referenciada?id={id}";
+        public static string GetCobranzaReferenciada(int id) => $"/api/v1/transacciones/cobranza_referenciada?idCuenta={id}";
         public static string GetCuentasClientes(int id) => $"/api/v1/cuentas/cliente_cuentas?idCliente={id}";
     }
 

@@ -128,7 +128,7 @@ namespace Epica.Web.Operacion.Controllers
             {
                 List.Add(new ResumenTransaccionResponseGrid
                 {
-                    id = row.id,
+                    id = row.idTransaccion,
                     claveRastreo = row.claveRastreo,
                     nombreOrdenante = row.nombreOrdenante,
                     nombreBeneficiario = row.nombreBeneficiario,
@@ -282,7 +282,7 @@ namespace Epica.Web.Operacion.Controllers
                         Monto = transaccionResponse.monto,
                         medioPago = transaccionResponse.idMedioPago,
                         NombreOrdenante = transaccionResponse.nombreOrdenante,
-                        IdTrasaccion = transaccionResponse.id
+                        IdTrasaccion = transaccionResponse.idTransaccion
                     };
                     var listaMediosPago = await _catalogosApiClient.GetMediosPagoAsync();
 
@@ -359,17 +359,17 @@ namespace Epica.Web.Operacion.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> DetalleTransaccion(int Id)
+        public async Task<IActionResult> DetalleTransaccion(string Id)
         {
             var result = new JsonResultDto();
             try
             {
-                var detalleTransaccion = await _transaccionesApiClient.GetTransaccionDetalleAsync(Id);
+                var detalleTransaccion = await _transaccionesApiClient.GetTransaccionDetalleAsync(Convert.ToInt32(Id));
 
                 if (detalleTransaccion != null)
                 {
                     result.Error = false;
-                    result.Result = await this.RenderViewToStringAsync("~/Views/Transacciones/_Detalle.cshtml", detalleTransaccion);
+                    result.Result = await this.RenderViewToStringAsync("~/Views/Transacciones/_Detalle.cshtml", detalleTransaccion.value);
                 }
                 else
                 {
