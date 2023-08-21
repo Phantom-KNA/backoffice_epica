@@ -111,10 +111,7 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Fecha Nacimiento: &nbsp;</label>
                         <div class="position-relative">
-                            @{
-                                var fechaMaxima = DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd");
-                            }
-                            <input asp-for="ClientesDetalles.FechaNacimiento" class="form-control form-control-sm form-control-solid" type="date" max="@fechaMaxima" required />
+                            <input asp-for="ClientesDetalles.FechaNacimiento" class="form-control form-control-sm form-control-solid" type="date" required />
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
