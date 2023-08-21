@@ -73,17 +73,19 @@
                             <span asp-validation-for="@Model.TarjetasDetalles.yearVigencia" class=" text-danger"></span>
                         </div>
                     </div>
-                <div class="py-2 px-4 col-md-4 fv-row">
-                    <label class="form-label">Cliente: &nbsp;</label>
-                    <div class="position-relative">
-                        <select class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione un cliente">
-                            <option></option>
-                            <option value="cliente1">Cliente 1</option>
-                            <option value="cliente2">Cliente 2</option>
-                            <option value="cliente3">Cliente 3</option>
-                        </select>
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Buscar Cliente: &nbsp;</label>
+                        <div class="position-relative">
+                            <input type="text" id="nombreCliente" name="nombreCliente" class="form-control form-control-sm form-control-solid" placeholder="Nombre del cliente" autocomplete="off" />
+                            <button type="button" class="btn btn-sm btn-primary" id="btnBuscarCliente">Buscar</button>
+                        </div>
+                        <div class="position-relative">
+                            <select asp-for="TarjetasDetalles.idCliente" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required id="idCliente">
+                                <option></option>
+                                <!-- Opciones de clientes se agregarán aquí -->
+                            </select>
+                        </div>
                     </div>
-                </div>
             </div>
         </div>
     </div>

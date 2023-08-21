@@ -35,6 +35,7 @@ public class UrlsConfig
 
     public class ClientesOperations
     {
+        public static string GetClientesByNombre(string nombre) => $"/api/v1/clientes/buscar_clientes?nombre={nombre}";
         public static string GetClientesTotal() => $"/api/v1/clientes/total";
         public static string GetCliente(int id) => $"/api/v1/clientes/cliente?id={id}";
         public static string GetClienteDocumentos(int id) => $"/api/v1/clientes/cliente_documento?idUsuario={id}";
