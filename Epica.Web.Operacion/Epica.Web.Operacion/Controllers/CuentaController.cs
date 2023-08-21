@@ -167,7 +167,7 @@ public class CuentaController : Controller
             ViewBag.UrlView = "Movimientos";
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
             {
-                Id = user.value.IdCliente,
+                Id = user.value.idCliente,
                 NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
                 Telefono = user.value.Telefono,
                 Correo = user.value.Email,
@@ -213,7 +213,7 @@ public class CuentaController : Controller
             ViewBag.UrlView = "Movimientos";
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
             {
-                Id = user.value.IdCliente,
+                Id = user.value.idCliente,
                 NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
                 Telefono = user.value.Telefono,
                 Correo = user.value.Email,

@@ -46,6 +46,7 @@ public class UrlsConfig
         public static string ModificarCliente() => $"/api/v1/clientes/modificar_cliente";
         public static string GetAllClientes() => $"api/v1/clientes/AllClientes";
 
+        public static string ModificarClienteNuevo() => $"/api/v1/clientes/modificar_cliente";
     }
 
     public class CatalogosOperations

@@ -89,8 +89,11 @@ var KTDatatableRemoteAjax = function () {
                 {
                     data: 'estatus', name: 'Estatus', title: 'Estatus',
                     render: function (data, type, row) {
-                        return data == 1 ?
-                            "<span class='badge badge-light-success' >Activo</span>" : "<span class='badge badge-light-danger' >Desactivado</span>";
+                        if ((data == 5) || (data == 10))  {
+                            return "<span class='badge badge-light-success' >Activo</span>";
+                        } else if (data == -10) {
+                            return "<span class='badge badge-light-danger' >Bloqueo</span>";
+                        }
                     }
                 },
                 {
@@ -203,7 +206,7 @@ function GestionarClienteWeb(AccountID, estatus) {
         success: function (data) {
 
             datatable.ajax.reload();
-            alert("Se ha actualizado la cuenta con exito.");
+            toastr.success('Se ha actualizado el estatus con exito', "");
         },
         error: function (xhr, status, error) {
             console.log(error);
@@ -221,7 +224,7 @@ function GestionarClienteTotal(AccountID, estatus) {
         success: function (data) {
 
             datatable.ajax.reload();
-            alert("Se ha actualizado la cuenta con exito.");
+            toastr.success('Se ha actualizado el estatus con exito', "");
         },
         error: function (xhr, status, error) {
             console.log(error);

@@ -8,13 +8,14 @@ namespace Epica.Web.Operacion.Services.Transaccion
     {
         Task<List<ClienteResponse>> GetClientesAsync(int pageNumber, int recordsTotal);
         Task<int> GetTotalClientesAsync();
-        Task<DatosClienteResponse> GetClienteAsync(int id);
+        Task<ClienteDetailsResponse> GetClienteAsync(int id);
         Task<List<DocumentosClienteResponse>> GetDocumentosClienteAsync(int id);
         Task<BloqueoWebResponse> GetBloqueoWeb(BloqueoWebClienteRequest request);
         Task<BloqueoTotalResponse> GetBloqueoTotal(BloqueoTotalClienteRequest request);
         Task<RegistrarModificarClienteResponse> GetRegistroCliente(RegistroModificacionClienteRequest request);
         Task<ClienteDetailsResponse> GetDetallesCliente(int id);
         Task<RegistrarModificarClienteResponse> GetModificarCliente(RegistroModificacionClienteRequest request);
+        Task<RegistrarModificarClienteResponse> GetModificaCliente(RegistroModificacionClienteRequest request);
 
     }
 }

@@ -72,11 +72,11 @@ var KTDatatableRemoteAjax = function () {
                     render: function (data, type, row) {
 
                         if (data == 0) {
-                            return "<span class='badge badge-light-success'>Liquidado</span>"
-                        } else if (data == "En Tránsito") {
+                            return "<span class='badge badge-light-info'>En Proceso</span>"
+                        } else if ((data == 1) || (data == 2)) {
                             return "<span class='badge badge-light-warning'>En Tránsito</span>"
-                        } else {
-                            return "<span class='badge badge-light-danger'>" + data + "</span>"
+                        } else if (data == 4) {
+                            return "<span class='badge badge-light-success'>Liquidada</span>"
                         }
                     }
                 }

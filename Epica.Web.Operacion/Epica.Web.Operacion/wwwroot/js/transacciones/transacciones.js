@@ -52,10 +52,10 @@ var KTDatatableTransacciones = (function () {
                 "targets": "_all"
             }],
             columns: [
-                { data: "id", name: "IdInterno", title: "ID" },
                 { data: "claveRastreo", name: "ClaveRastreo", title: "CLAVE DE RASTREO" },
                 { data: "nombreOrdenante", name: "NombreCuenta", title: "NOMBRE ORDENANTE" },
                 { data: "nombreBeneficiario", name: "Institucion", title: "NOMBRE BENEFICIARIO" },
+                { data: "concepto", name: "Concepto", title: "CONCEPTO" },
                 {
                     data: "monto",
                     name: "Monto",
@@ -70,23 +70,21 @@ var KTDatatableTransacciones = (function () {
                         return '<pan style ="color: ' + color + '">' + accounting.formatMoney(data) + '<s/span>';
                     }
                 },
+                { data: "fechaAlta", name: "Fecha", title: "FECHA" },
                 {
                     data: "estatus", name: "Estatus", title: "ESTATUS",
                     render: function (data, type, row) {
-
                         if (data == 0) {
-                            return "<span class='badge badge-light-success'>Liquidado</span>"
-                        } else if (data == "En Tránsito") {
+                            return "<span class='badge badge-light-info'>En Proceso</span>"
+                        } else if ((data == 1) || (data == 2)) {
                             return "<span class='badge badge-light-warning'>En Tránsito</span>"
-                        } else {
-                            return "<span class='badge badge-light-danger'>"+data+"</span>"
+                        } else if (data == 4) {
+                            return "<span class='badge badge-light-success'>Liquidada</span>"
+                        } else if (data == 5) {
+                            return "<span class='badge badge-light-danger'>Devuelto</span>"
                         }
                     }
                 },
-                { data: "concepto", name: "Concepto", title: "CONCEPTO" },
-                { data: "idMedioPago", name: "MedioPago", title: "MEDIO DE PAGO" },    
-                { data: "idCuentaAhorro", name: "Tipo", title: "TIPO CUENTA" },
-                { data: "fechaAlta", name: "Fecha", title: "FECHA" },
                 {
                     title: '',
                     orderable: false,
@@ -119,7 +117,7 @@ var KTDatatableTransacciones = (function () {
                     extend: 'excelHtml5',
                     title: documentTitle,
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7]
                     }
                 }
             ]
@@ -184,8 +182,64 @@ $(document).ready(function () {
     KTDatatableTransacciones.init();
 });
 
-function modalCrearTransaccion() {
-    $('#newTransaccionModal').modal('show');
-};
+//function modalCrearTransaccion() {
+//    $('#newTransaccionModal').modal('show');
+//};
+
+$(document).on('click', '.btnDetalle', function (e) {
+    //var id = $(this).data('id');
+    //ModalDetalle.init(id);
+});
+
+var ModalDetalle = function () {
+
+    var init = function (id) {
+        abrirModal(id);
+    }
+    var abrirModal = function (id) {
+        $.ajax({
+            cache: false,
+            type: 'GET',
+            url: siteLocation + "Configuracion/DetalleOnb/" + id,
+            success: function (result) {
+                if (result.error) {
+                    $(window).scrollTop(0);
+                    $("#DivSuccessMessage").hide();
+                    $("#DivErrorMessage").show();
+                    setTimeout(function () { $("#DivErrorMessage").hide() }, 3000);
+                    $("#ErrorMessage").text(result.errorDescription);
+                } else {
+                    $('#modal_detalle #modalLabelTitle').html('Detalle Onboardign');
+                    $('#modal_detalle .modal-body').html(result.result);
+                    $('#modal_detalle').modal('show');
+                }
+
+                return;
+            },
+            error: function (res) {
+                $("#DivSuccessMessage").hide();
+                $("#DivErrorMessage").show();
+                $("#ErrorMessage").text('Error');
+            }
+        });
+        listeners();
+    }
+    // Inicializa los listeners de los botones relacionados a la ventana modal
+    var listeners = function () {
+
+    }
+    // Cerramos la ventana modal
+    var cerrarModal = function () {
+        $('#btnCancelar').click();
+    }
+    return {
+        init: function (id) {
+            init(id);
+        },
+        cerrarventanamodal: function () {
+            cerrarModal();
+        }
+    }
+}();
 
 

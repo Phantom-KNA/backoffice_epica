@@ -16,7 +16,7 @@ public class ClienteDetailsResponse
 
 public class DatosClienteResponse
 {
-    public int IdCliente { get; set; }
+    public int idCliente { get; set; }
     public string? Nombre { get; set; }
     public string? ApellidoPaterno { get; set; }
     public string? ApellidoMaterno { get; set; }
@@ -50,13 +50,19 @@ public class DatosClienteResponse
     public int TipoVivienda { get; set; }
     public string? TiempoVivienda { get; set; }
     public string? TipoTrabajador { get; set; }
-    public string? Puesto { get; set; }
+    public string? puesto { get; set; }
     public double? SalarioMensual { get; set; }
+    public double? montoMaximo { get; set; }
     public string? AntiguedadLaboral { get; set; }
-    public int Active { get; set; }
     public int? Empresa { get; set; }
     public int? Pais { get; set; }
     public string? MontoMaximo { get; set; }
     public string? Rol { get; set; }
     public int ApoderadoLegal { get; set; }
+    public string? calleNumero { get; set; }
+    public string? rol { get; set; }
+    public int idEmpresa { get; set; }
+    public int idPais { get; set; }
+    public int idNacionalidad { get; set; }
+    public int? Active { get; set; }//= default(bool?);
 }

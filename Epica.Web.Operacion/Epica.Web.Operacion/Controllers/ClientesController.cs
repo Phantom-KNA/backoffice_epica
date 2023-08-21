@@ -110,54 +110,45 @@ public class ClientesController : Controller
         if (!string.IsNullOrEmpty(request.Busqueda))
         {
             List = List.Where(x =>
-            (x.id.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
             (x.nombreCompleto?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
             (x.telefono?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
             (x.email?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
             (x.CURP?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-            (x.organizacion?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-            (x.membresia?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-            (x.sexo?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
+            (x.organizacion?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
             ).ToList();
         }
 
         //Aplicacion de Filtros temporal, 
-        //var filtroid = filters.FirstOrDefault(x => x.Key == "Id");
-        //var filtronombreCliente = filters.FirstOrDefault(x => x.Key == "NombreCliente");
-        //var filtroNoCuenta = filters.FirstOrDefault(x => x.Key == "noCuenta");
-        //var filtroEstatus = filters.FirstOrDefault(x => x.Key == "estatus");
-        //var filtroSaldo = filters.FirstOrDefault(x => x.Key == "saldo");
-        //var filtroTipo = filters.FirstOrDefault(x => x.Key == "tipo");
+        var filtronombreCliente = filters.FirstOrDefault(x => x.Key == "nombreCliente");
+        var filtroTelefono = filters.FirstOrDefault(x => x.Key == "telefono");
+        var filtroCorreoElectronico = filters.FirstOrDefault(x => x.Key == "correoElectronico");
+        var filtroCurp = filters.FirstOrDefault(x => x.Key == "curp");
+        var filtroOrganizacion = filters.FirstOrDefault(x => x.Key == "organizacion");
 
-        //if (filtroid.Value != null)
-        //{
-        //    List = List.Where(x => x.Id == Convert.ToInt32(filtroid.Value)).ToList();
-        //}
+        if (filtronombreCliente.Value != null)
+        {
+            List = List.Where(x => x.nombreCompleto.Contains(Convert.ToString(filtronombreCliente.Value))).ToList();
+        }
 
-        //if (filtronombreCliente.Value != null)
-        //{
-        //    List = List.Where(x => x.cliente.Contains(Convert.ToString(filtronombreCliente.Value))).ToList();
-        //}
+        if (filtroTelefono.Value != null)
+        {
+            List = List.Where(x => x.telefono == Convert.ToString(filtroTelefono.Value)).ToList();
+        }
 
-        //if (filtroNoCuenta.Value != null)
-        //{
-        //    List = List.Where(x => x.noCuenta == Convert.ToString(filtroNoCuenta.Value)).ToList();
-        //}
+        if (filtroCorreoElectronico.Value != null)
+        {
+            List = List.Where(x => x.email == Convert.ToString(filtroCorreoElectronico.Value)).ToList();
+        }
 
-        //if (filtroEstatus.Value != null)
-        //{
-        //    List = List.Where(x => x.estatus == Convert.ToString(filtroEstatus.Value)).ToList();
-        //}
+        if (filtroCurp.Value != null)
+        {
+            List = List.Where(x => x.CURP == Convert.ToString(filtroCurp.Value)).ToList();
+        }
 
-        //if (filtroSaldo.Value != null)
-        //{
-        //    List = List.Where(x => x.saldo == Convert.ToString(filtroSaldo.Value)).ToList();
-        //}
-
-        //if (filtroTipo.Value != null)
-        //{
-        //    List = List.Where(x => x.tipo == Convert.ToString(filtroTipo.Value)).ToList();
-        //}
+        if (filtroOrganizacion.Value != null)
+        {
+            List = List.Where(x => x.organizacion == Convert.ToString(filtroOrganizacion.Value)).ToList();
+        }
 
         gridData.Data = List;
         gridData.RecordsTotal = List.Count;
@@ -287,7 +278,7 @@ public class ClientesController : Controller
 
             ClientesDetallesViewModel clientesDetallesViewModel = new ClientesDetallesViewModel
             {
-                Id = user.value.IdCliente,
+                Id = user.value.idCliente,
                 Nombre = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
                 Telefono = user.value.Telefono,
                 Email = user.value.Email,
@@ -304,7 +295,7 @@ public class ClientesController : Controller
                 Fiel = user.value.Fiel,
                 Pais = user.value.PaisNacimiento,
                 IngresoMensual = Convert.ToDecimal(user.value.SalarioMensual),
-                MontoMaximo = Convert.ToDecimal(user.value.SalarioMensual),
+                MontoMaximo = Convert.ToDecimal(user.value.montoMaximo),
                 Calle = user.value.Calle,
                 CalleNumero = user.value.NoInt,
                 PrimeraCalle = user.value.CalleSecundaria,
@@ -312,7 +303,7 @@ public class ClientesController : Controller
                 Colonia = user.value.Colonia,
                 CodigoPostal = user.value.CodigoPostal,
                 NoInterior = user.value.NoInt,
-                Puesto = user.value.Puesto,
+                Puesto = user.value.puesto,
                 ApoderadoLegal = user.value.AntiguedadLaboral,
                 CiudadEstado = user.value.Estado,
                 Rol = user.value.Rol,
@@ -321,7 +312,7 @@ public class ClientesController : Controller
 
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
             {
-                Id = user.value.IdCliente,
+                Id = user.value.idCliente,
                 NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
                 Telefono = user.value.Telefono,
                 Correo = user.value.Email,
@@ -355,7 +346,7 @@ public class ClientesController : Controller
             ViewBag.UrlView = "Cuentas";
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
             {
-                Id = user.value.IdCliente,
+                Id = user.value.idCliente,
                 NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
                 Telefono = user.value.Telefono,
                 Correo = user.value.Email,
@@ -475,7 +466,7 @@ public class ClientesController : Controller
             ViewBag.UrlView = "Movimientos";
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
             {
-                Id = user.value.IdCliente,
+                Id = user.value.idCliente,
                 NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
                 Telefono = user.value.Telefono,
                 Correo = user.value.Email,
@@ -521,7 +512,7 @@ public class ClientesController : Controller
             ViewBag.UrlView = "Tarjetas";
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
             {
-                Id = user.value.IdCliente,
+                Id = user.value.idCliente,
                 NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
                 Telefono = user.value.Telefono,
                 Correo = user.value.Email,
@@ -621,7 +612,7 @@ public class ClientesController : Controller
             var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
             var listaOcupaciones = await _catalogosApiClient.GetOcupacionesAsync();
             //var listaPaises = await _catalogosApiClient.GetPaisesAsync();
-            var listaPaises = Paises.ListaDePaises;
+            var listaPaises = await _catalogosApiClient.GetPaisesAsync();
             var listaNacionalidades = await _catalogosApiClient.GetNacionalidadesAsync();
 
             ClientesRegistroViewModel clientesRegistroViewModel = new ClientesRegistroViewModel
@@ -836,14 +827,23 @@ public class ClientesController : Controller
         return Json(gridData);
     }
 
-    [Authorize]
+   
     #endregion
+    //[Authorize]
+    //public async Task<IActionResult> GestionarDocumentos(string AccountID = "")
+    //{
+    //    var loginResponse = _userContextService.GetLoginResponse();
+    //    if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Editar")) == true)
+    //    {
+    //        if (AccountID == "")
+    //        {
+    //            return RedirectToAction("Index");
+    //        }
 
     public async Task<IActionResult> GestionarDocumentos(string AccountID = "")
     {
         var loginResponse = _userContextService.GetLoginResponse();
-        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Editar == 0);
-        if (validacion == true || validacion != null)
+        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Editar")) == true)
         {
             if (AccountID == "")
             {
@@ -852,28 +852,36 @@ public class ClientesController : Controller
 
             var GetDatosCliente = await _clientesApiClient.GetClienteAsync(Convert.ToInt32(AccountID));
 
-            ViewBag.AccountID = AccountID;
+    //        ViewBag.AccountID = AccountID;
 
-            string nombreCompleto = GetDatosCliente.Nombre + " " + GetDatosCliente.ApellidoPaterno ?? "" + " " + GetDatosCliente.ApellidoMaterno ?? "";
+    //        if (GetDatosCliente.NombreCompleto == null)
+    //        {
+    //            ViewBag.Nombre = "S/N";
+    //        }
+    //        else
+    //        {
+    //            ViewBag.Nombre = GetDatosCliente.NombreCompleto;
+    //        }
 
-            if (nombreCompleto == null)
-            {
-                ViewBag.Nombre = "S/N";
-            }
-            else
-            {
-                ViewBag.Nombre = nombreCompleto;
-            }
+            //string nombreCompleto = GetDatosCliente.Nombre + " " + GetDatosCliente.ApellidoPaterno ?? "" + " " + GetDatosCliente.ApellidoMaterno ?? "";
 
-            return View();
-        }
+            //if (nombreCompleto == null)
+            //{
+            //    ViewBag.Nombre = "S/N";
+            //}
+            //else
+            //{
+            //    ViewBag.Nombre = nombreCompleto;
+            //}
 
-        return NotFound();
-    }
+    //    return NotFound();
+    //}
 
     [Authorize]
+    [Route("Clientes/Detalle/Modificar")]
     public async Task<ActionResult> Modificar(int id)
     {
+        ViewData["IsEdit"] = true;
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Editar == 0);
         if (validacion == true || validacion != null)
@@ -883,7 +891,7 @@ public class ClientesController : Controller
                 ClienteDetailsResponse cliente = await _clientesApiClient.GetDetallesCliente(id);
                 RegistroModificacionClienteRequest clientesDetalles = new RegistroModificacionClienteRequest
                 {
-                    IdCliente = cliente.value.IdCliente,
+                    IdCliente = cliente.value.idCliente,
                     Nombre = cliente.value.Nombre,
                     Telefono = cliente.value.Telefono,
                     Email = cliente.value.Email,
@@ -904,7 +912,7 @@ public class ClientesController : Controller
                     IngresoMensual = cliente.value.SalarioMensual.ToString(),
                     ApoderadoLegal = (cliente.value.AntiguedadLaboral?.ToLower() == "si") ? 1 : 0,
                     NoInterior = cliente.value.NoInt,
-                    Puesto = cliente.value.Puesto,
+                    Puesto = cliente.value.puesto,
                     FechaNacimiento =DateTime.Parse(cliente.value.FechaNacimiento ?? ""),
                     DelegacionMunicipio = cliente.value.Municipio,
                     TelefonoTipo = cliente.value.TelefonoRecado,
@@ -913,15 +921,21 @@ public class ClientesController : Controller
                     CiudadEstado = cliente.value.Estado,
                     Rol = cliente.value.Rol,
                     Empresa = cliente.value.Empresa ?? 0,
-                    MontoMaximo = cliente.value.MontoMaximo,
+                    MontoMaximo = Convert.ToDecimal(cliente.value.montoMaximo),
                     CalleNumero = cliente.value.CalleNumero,
                     IdPais = cliente.value.Pais ?? 0
                 };
+                //var listaEmpresas = await _catalogosApiClient.GetEmpresasAsync();
+                //var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
+                //var listaOcupaciones = await _catalogosApiClient.GetOcupacionesAsync();
+                ////var listaPaises = await _catalogosApiClient.GetPaisesAsync();
+                //var listaPaises = Paises.ListaDePaises;
+                //var listaNacionalidades = await _catalogosApiClient.GetNacionalidadesAsync();
+
                 var listaEmpresas = await _catalogosApiClient.GetEmpresasAsync();
                 var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
                 var listaOcupaciones = await _catalogosApiClient.GetOcupacionesAsync();
-                //var listaPaises = await _catalogosApiClient.GetPaisesAsync();
-                var listaPaises = Paises.ListaDePaises;
+                var listaPaises = await _catalogosApiClient.GetPaisesAsync();
                 var listaNacionalidades = await _catalogosApiClient.GetNacionalidadesAsync();
 
                 if (clientesDetalles == null)
@@ -952,6 +966,37 @@ public class ClientesController : Controller
         return NotFound();
 
     }
+
+    //[Authorize]
+    //[HttpPost]
+    //public async Task<IActionResult> ModificarCliente(ClientesRegistroViewModel model)
+    //{
+    //    var loginResponse = _userContextService.GetLoginResponse();
+    //    if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Insertar")) == true)
+    //    {
+    //        RegistrarModificarClienteResponse response = new RegistrarModificarClienteResponse();
+
+    //        try
+    //        {
+    //            response = await _clientesApiClient.GetModificaCliente(model.ClientesDetalles);
+
+    //            if (response.codigo == "200")
+    //            {
+    //                return RedirectToAction("Index");
+    //            }
+    //            else
+    //            {
+    //                return RedirectToAction("Registro");
+    //            }
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            return View();
+    //        }
+    //    }
+
+    //    return NotFound();
+    //}
 
     [Authorize]
     [HttpPost]
