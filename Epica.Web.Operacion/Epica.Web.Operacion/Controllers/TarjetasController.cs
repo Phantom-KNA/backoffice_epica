@@ -45,8 +45,8 @@ public class TarjetasController : Controller
     public IActionResult Index()
     {
         var loginResponse = _userContextService.GetLoginResponse();
-        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Tarjetas" && modulo.Acciones.Contains("Ver")) == true)
-            return View(loginResponse);
+        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Tarjetas" && modulo.Ver == 0);
+        if (validacion == true || validacion != null) return View(loginResponse);
 
         return NotFound();
     }
@@ -55,7 +55,8 @@ public class TarjetasController : Controller
     public async Task<ActionResult> RegistroTarjetaCliente()
     {
         var loginResponse = _userContextService.GetLoginResponse();
-        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Tarjetas" && modulo.Acciones.Contains("Insertar")) == true)
+        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Tarjetas" && modulo.Insertar == 0);
+        if (validacion == true || validacion != null)
         {
             TarjetasRegistroTarjetaClienteViewModel taReTarjetaClienteViewModel = new TarjetasRegistroTarjetaClienteViewModel
             {
@@ -75,7 +76,8 @@ public class TarjetasController : Controller
     public async Task<IActionResult> RegistrarTarjetaCliente(TarjetasRegistroTarjetaClienteViewModel model)
     {
         var loginResponse = _userContextService.GetLoginResponse();
-        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Tarjetas" && modulo.Acciones.Contains("Insertar")) == true)
+        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Tarjetas" && modulo.Insertar == 0);
+        if (validacion == true || validacion != null)
         {
             try
             {

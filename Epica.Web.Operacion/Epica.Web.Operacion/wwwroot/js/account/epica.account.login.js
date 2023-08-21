@@ -1,7 +1,7 @@
 ﻿"use strict";
 
 function validar2() {
-    var user = document.getElementById("username").value;
+    var user = document.getElementById("email").value;
     if (user.length <= 0) {
         document.getElementById("messageEmail").innerHTML = "Es necesario ingresar un usuario.";
         document.querySelector("#validacion").disabled = true;

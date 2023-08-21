@@ -46,7 +46,8 @@ public class CuentaController : Controller
     public IActionResult Index()
     {
         var loginResponse = _userContextService.GetLoginResponse();
-        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Cuentas" && modulo.Acciones.Contains("Ver")) == true)
+        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
+        if (validacion == true || validacion != null)
             return View();
 
         return NotFound();
@@ -153,7 +154,8 @@ public class CuentaController : Controller
     public async Task<IActionResult> Cuentas(int id, int cliente, string noCuenta)
     {
         var loginResponse = _userContextService.GetLoginResponse();
-        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Cuentas" && modulo.Acciones.Contains("Ver")) == true)
+        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Cuentas" && modulo.Ver == 0);
+        if (validacion == true || validacion != null)
         {
             ClienteDetailsResponse user = await _usuariosApiClient.GetDetallesCliente(cliente);
 
@@ -198,7 +200,8 @@ public class CuentaController : Controller
     public async Task<IActionResult> CobranzaReferenciada(int id, int cliente, string noCuenta)
     {
         var loginResponse = _userContextService.GetLoginResponse();
-        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Cuentas" && modulo.Acciones.Contains("Ver")) == true)
+        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Cuentas" && modulo.Ver == 0);
+        if (validacion == true || validacion != null)
         {
             ClienteDetailsResponse user = await _usuariosApiClient.GetDetallesCliente(cliente);
 
