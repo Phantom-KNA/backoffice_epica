@@ -73,7 +73,7 @@ namespace Epica.Web.Operacion.Controllers
             //ListPF = await _usuariosApiClient.GetUsuariosAsync(1, 200);
 
             //Entorno local de pruebas
-            ListPF = await _usuariosApiClient.GetUsuariosRolesAsync();
+            //ListPF = await _usuariosApiClient.GetUsuariosRolesAsync();
 
             var List = new List<UserPermissionResponseGrid>();
             foreach (var row in ListPF)
