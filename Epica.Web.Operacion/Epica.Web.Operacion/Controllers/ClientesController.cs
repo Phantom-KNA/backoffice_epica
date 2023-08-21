@@ -287,7 +287,9 @@ public class ClientesController : Controller
                 Sexo = user.value.Sexo,
                 Rfc = user.value.RFC,
                 Ine = user.value.INE,
-                FechaNacimiento = DateTime.Parse(user.value.FechaNacimiento),
+                FechaNacimiento = user.value.FechaNacimiento != null
+? DateTime.ParseExact(user.value.FechaNacimiento, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+    : null,
                 Observaciones = user.value.Observaciones,
                 PaisNacimiento = user.value.PaisNacimiento,
                 Ocupacion = user.value.IdOcupacion.ToString(),
