@@ -5,6 +5,7 @@ using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using static Epica.Web.Operacion.Controllers.CuentaController;
@@ -131,66 +132,55 @@ namespace Epica.Web.Operacion.Controllers
                 ).ToList();
             }
             //Aplicacion de Filtros temporal, 
-            //var filtroid = filters.FirstOrDefault(x => x.Key == "idInterno");
-            //var filtronombreClaveRastreo = filters.FirstOrDefault(x => x.Key == "claveRastreo");
-            //var filtroNombreCuenta = filters.FirstOrDefault(x => x.Key == "nombreCuenta");
-            //var filtroInstitucion = filters.FirstOrDefault(x => x.Key == "institucion");
-            //var filtroMonto = filters.FirstOrDefault(x => x.Key == "monto");
-            //var filtroEstatus = filters.FirstOrDefault(x => x.Key == "estatus");
-            //var filtroConcepto = filters.FirstOrDefault(x => x.Key == "concepto");
-            //var filtroMedioPago = filters.FirstOrDefault(x => x.Key == "medioPago");
-            //var filtroTipo = filters.FirstOrDefault(x => x.Key == "tipo");
-            //var filtroFecha = filters.FirstOrDefault(x => x.Key == "fecha");
+            var filtronombreClaveRastreo = filters.FirstOrDefault(x => x.Key == "claveRastreo");
+            var filtroNombreOrdenante = filters.FirstOrDefault(x => x.Key == "nombreOrdenante");
+            var filtroNombreBeneficiario = filters.FirstOrDefault(x => x.Key == "nombreBeneficiario");
+            var filtroConcepto = filters.FirstOrDefault(x => x.Key == "concepto");
+            var filtroMonto = filters.FirstOrDefault(x => x.Key == "monto");
+            var filtroFecha = filters.FirstOrDefault(x => x.Key == "fecha");
+            var filtroEstatus = filters.FirstOrDefault(x => x.Key == "estatus");
 
-            //if (filtroid.Value != null)
-            //{
-            //    List = List.Where(x => x.IdInterno == Convert.ToInt32(filtroid.Value)).ToList();
-            //}
+            if (filtronombreClaveRastreo.Value != null)
+            {
+                List = List.Where(x => x.claveRastreo.Contains(Convert.ToString(filtronombreClaveRastreo.Value))).ToList();
+            }
 
-            //if (filtronombreClaveRastreo.Value != null)
-            //{
-            //    List = List.Where(x => x.ClaveRastreo.Contains(Convert.ToString(filtronombreClaveRastreo.Value))).ToList();
-            //}
+            if (filtroNombreOrdenante.Value != null)
+            {
+                List = List.Where(x => x.nombreOrdenante == Convert.ToString(filtroNombreOrdenante.Value)).ToList();
+            }
 
-            //if (filtroNombreCuenta.Value != null)
-            //{
-            //    List = List.Where(x => x.NombreCuenta == Convert.ToString(filtroNombreCuenta.Value)).ToList();
-            //}
+            if (filtroNombreBeneficiario.Value != null)
+            {
+                List = List.Where(x => x.nombreBeneficiario == Convert.ToString(filtroNombreBeneficiario.Value)).ToList();
+            }
 
-            //if (filtroInstitucion.Value != null)
-            //{
-            //    List = List.Where(x => x.Institucion == Convert.ToString(filtroInstitucion.Value)).ToList();
-            //}
+            if (filtroConcepto.Value != null)
+            {
+                List = List.Where(x => x.concepto == Convert.ToString(filtroConcepto.Value)).ToList();
+            }
 
-            //if (filtroMonto.Value != null)
-            //{
-            //    List = List.Where(x => x.Monto.ToString() == Convert.ToString(filtroMonto.Value)).ToList();
-            //}
+            if (filtroMonto.Value != null)
+            {
+                List = List.Where(x => x.monto.ToString() == Convert.ToString(filtroMonto.Value)).ToList();
+            }
 
-            //if (filtroEstatus.Value != null)
-            //{
-            //    List = List.Where(x => x.Estatus == Convert.ToString(filtroEstatus.Value)).ToList();
-            //}
+            if (filtroFecha.Value != null)
+            {
+                List = List.Where(x => x.fechaAlta.ToString() == Convert.ToString(filtroFecha.Value)).ToList();
+            }
 
-            //if (filtroConcepto.Value != null)
-            //{
-            //    List = List.Where(x => x.Concepto == Convert.ToString(filtroConcepto.Value)).ToList();
-            //}
+            if (filtroEstatus.Value != null)
+            {
+                if (filtroEstatus.Value == "1") {
 
-            //if (filtroMedioPago.Value != null)
-            //{
-            //    List = List.Where(x => x.MedioPago.ToString() == Convert.ToString(filtroMedioPago.Value)).ToList();
-            //}
+                    var estatusList = new[] { "1", "2" };
+                    List = List.Where(x => estatusList.Contains(Convert.ToString(x.estatus))).ToList();
 
-            //if (filtroTipo.Value != null)
-            //{
-            //    List = List.Where(x => x.Tipo.ToString() == Convert.ToString(filtroTipo.Value)).ToList();
-            //}
-
-            //if (filtroFecha.Value != null)
-            //{
-            //    List = List.Where(x => x.Fecha.ToString() == Convert.ToString(filtroFecha.Value)).ToList();
-            //}
+                } else {
+                    List = List.Where(x => x.estatus == Convert.ToInt32(filtroEstatus.Value)).ToList();
+                }
+            }
 
             gridData.Data = List;
             gridData.RecordsTotal = List.Count;
@@ -210,7 +200,7 @@ namespace Epica.Web.Operacion.Controllers
         }
         #endregion
 
-            #region "Modelos"
+        #region "Modelos"
         public class RequestListFilters
         {
             [JsonProperty("key")]

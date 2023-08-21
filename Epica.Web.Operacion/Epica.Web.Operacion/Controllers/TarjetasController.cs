@@ -111,42 +111,30 @@ public class TarjetasController : Controller
         }
 
         //Aplicacion de Filtros temporal, 
-        //var filtroid = filters.FirstOrDefault(x => x.Key == "Id");
-        //var filtronombreCliente = filters.FirstOrDefault(x => x.Key == "NombreCliente");
-        //var filtroNoCuenta = filters.FirstOrDefault(x => x.Key == "noCuenta");
-        //var filtroEstatus = filters.FirstOrDefault(x => x.Key == "estatus");
-        //var filtroSaldo = filters.FirstOrDefault(x => x.Key == "saldo");
-        //var filtroTipo = filters.FirstOrDefault(x => x.Key == "tipo");
+        var filtronombreTitular = filters.FirstOrDefault(x => x.Key == "nombreTitular");
+        var filtrotarjeta = filters.FirstOrDefault(x => x.Key == "tarjeta");
+        var filtrocuentaClabe = filters.FirstOrDefault(x => x.Key == "cuentaClabe");
+        var filtronumeroProxy = filters.FirstOrDefault(x => x.Key == "numeroProxy");
 
-        //if (filtroid.Value != null)
-        //{
-        //    List = List.Where(x => x.Id == Convert.ToInt32(filtroid.Value)).ToList();
-        //}
+        if (filtronombreTitular.Value != null)
+        {
+            List = List.Where(x => x.nombreCompleto == Convert.ToString(filtronombreTitular.Value)).ToList();
+        }
 
-        //if (filtronombreCliente.Value != null)
-        //{
-        //    List = List.Where(x => x.cliente.Contains(Convert.ToString(filtronombreCliente.Value))).ToList();
-        //}
+        if (filtrotarjeta.Value != null)
+        {
+            List = List.Where(x => x.tarjeta.Contains(Convert.ToString(filtrotarjeta.Value))).ToList();
+        }
 
-        //if (filtroNoCuenta.Value != null)
-        //{
-        //    List = List.Where(x => x.noCuenta == Convert.ToString(filtroNoCuenta.Value)).ToList();
-        //}
+        if (filtrocuentaClabe.Value != null)
+        {
+            List = List.Where(x => x.clabe == Convert.ToString(filtrocuentaClabe.Value)).ToList();
+        }
 
-        //if (filtroEstatus.Value != null)
-        //{
-        //    List = List.Where(x => x.estatus == Convert.ToString(filtroEstatus.Value)).ToList();
-        //}
-
-        //if (filtroSaldo.Value != null)
-        //{
-        //    List = List.Where(x => x.saldo == Convert.ToString(filtroSaldo.Value)).ToList();
-        //}
-
-        //if (filtroTipo.Value != null)
-        //{
-        //    List = List.Where(x => x.tipo == Convert.ToString(filtroTipo.Value)).ToList();
-        //}
+        if (filtronumeroProxy.Value != null)
+        {
+            List = List.Where(x => x.proxyNumber == Convert.ToString(filtronumeroProxy.Value)).ToList();
+        }
 
         gridData.Data = List;
         gridData.RecordsTotal = List.Count;

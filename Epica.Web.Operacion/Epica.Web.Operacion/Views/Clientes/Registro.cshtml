@@ -23,7 +23,7 @@
     </li>
 }
 
-<form asp-controller="Clientes" asp-action="RegistrarCliente" method="post">
+<form asp-controller="Clientes" asp-action="@((bool)(ViewData["IsEdit"] ?? false) ? "ModificarCliente" : "RegistrarCliente")" method="post">
     <div class="col-md-12">
         <div class="card shadow-sm">
             <div class="card-header">
@@ -52,6 +52,7 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Nombre: &nbsp;</label>
                         <div class="position-relative">
+                            <input asp-for="@Model.ClientesDetalles.idCliente" hidden class="form-control form-control-sm form-control-solid" id="idCliente" type="text" value="@(Model?.ClientesDetalles.idCliente ?? 0)" autocomplete="off" required />
                             <input asp-for="@Model.ClientesDetalles.Nombre" class="form-control form-control-sm form-control-solid" id="Nombre" type="text" value="@(Model?.ClientesDetalles.Nombre ?? "")" autocomplete="off" required />
                             <span asp-validation-for="@Model.ClientesDetalles.Nombre" class="text-danger"></span>
                         </div>
@@ -183,7 +184,14 @@
                                 <option></option>
                                 @foreach (var nacionalidad in Model.ListaNacionalidades)
                                 {
-                                    <option value="@nacionalidad.Id">@nacionalidad.Descripcion</option>
+                                    if (nacionalidad.Id == Model.ClientesDetalles.IdNacionalidad)
+                                    {
+                                        <option value="@nacionalidad.Id" selected>@nacionalidad.Descripcion</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@nacionalidad.Id">@nacionalidad.Descripcion</option>
+                                    }                                  
                                 }
                             </select>
                         </div>
@@ -205,7 +213,14 @@
                                 <option></option>
                                 @foreach (var pais in Model.ListaPaises)
                                 {
-                                    <option value="@pais.Id">@pais.Descripcion</option>
+                                    if (pais.Id == Model.ClientesDetalles.IdPais)
+                                    {
+                                        <option value="@pais.Id" selected>@pais.Descripcion</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@pais.Id">@pais.Descripcion</option>
+                                    }
                                 }
                             </select>
                         </div>
@@ -333,6 +348,15 @@
                                 @foreach (var empresa in Model.ListaEmpresas)
                                 {
                                     <option value="@empresa.Id">@empresa.Descripcion</option>
+
+                                    if (empresa.Id == Model.ClientesDetalles.Empresa)
+                                    {
+                                        <option value="@empresa.Id" selected>@empresa.Descripcion</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@empresa.Id">@empresa.Descripcion</option>
+                                    }
                                 }
                             </select>
                         </div>
@@ -378,7 +402,13 @@
                                 <option></option>
                                 @foreach (var rol in Model.ListaRoles)
                                 {
-                                    <option value="@rol.Descripcion">@rol.Descripcion</option>
+                                    if (rol.Descripcion == Model.ClientesDetalles.Rol)
+                                    {
+                                        <option value="@rol.Descripcion" selected>@rol.Descripcion</option>
+                                    } else {
+                                        <option value="@rol.Descripcion">@rol.Descripcion</option>
+                                    }
+
                                 }
                             </select>
                         </div>

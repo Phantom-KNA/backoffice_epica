@@ -5,7 +5,7 @@ namespace Epica.Web.Operacion.Models.Request
     public class RegistroModificacionClienteRequest
     {
         [JsonPropertyName("idCliente")]
-        public int Id { get; set; }
+        public int idCliente { get; set; }
         [JsonPropertyName("nombre")]
         public string? Nombre { get; set; }
         [JsonPropertyName("apellidoPaterno")]
@@ -39,7 +39,7 @@ namespace Epica.Web.Operacion.Models.Request
         [JsonPropertyName("ingresoMensual")]
         public string? IngresoMensual { get; set; }
         [JsonPropertyName("montoMaximo")]
-        public string? MontoMaximo { get; set; }
+        public decimal? MontoMaximo { get; set; }
         [JsonPropertyName("telefono")]
         public string? Telefono { get; set; }
         [JsonPropertyName("telefonoTipo")]

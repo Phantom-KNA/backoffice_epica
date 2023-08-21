@@ -101,7 +101,7 @@ var KTDatatableRemoteAjax = function () {
                     extend: 'excelHtml5',
                     title: documentTitle,
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4]
+                        columns: [0, 1, 2, 3]
                     }
                 }
             ]
