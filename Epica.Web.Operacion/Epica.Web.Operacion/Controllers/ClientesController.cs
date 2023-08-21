@@ -293,7 +293,7 @@ public class ClientesController : Controller
                 Fiel = user.value.Fiel,
                 Pais = user.value.PaisNacimiento,
                 IngresoMensual = Convert.ToDecimal(user.value.SalarioMensual),
-                MontoMaximo = Convert.ToDecimal(user.value.SalarioMensual),
+                MontoMaximo = Convert.ToDecimal(user.value.montoMaximo),
                 Calle = user.value.Calle,
                 CalleNumero = user.value.NoInt,
                 PrimeraCalle = user.value.CalleSecundaria,
@@ -301,7 +301,7 @@ public class ClientesController : Controller
                 Colonia = user.value.Colonia,
                 CodigoPostal = user.value.CodigoPostal,
                 NoInterior = user.value.NoInt,
-                Puesto = user.value.Puesto,
+                Puesto = user.value.puesto,
                 ApoderadoLegal = user.value.AntiguedadLaboral,
                 CiudadEstado = user.value.Estado,
                 Rol = user.value.Rol,
@@ -606,7 +606,7 @@ public class ClientesController : Controller
             var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
             var listaOcupaciones = await _catalogosApiClient.GetOcupacionesAsync();
             //var listaPaises = await _catalogosApiClient.GetPaisesAsync();
-            var listaPaises = Paises.ListaDePaises;
+            var listaPaises = await _catalogosApiClient.GetPaisesAsync();
             var listaNacionalidades = await _catalogosApiClient.GetNacionalidadesAsync();
 
             ClientesRegistroViewModel clientesRegistroViewModel = new ClientesRegistroViewModel
@@ -845,16 +845,16 @@ public class ClientesController : Controller
     //            ViewBag.Nombre = GetDatosCliente.NombreCompleto;
     //        }
 
-            string nombreCompleto = GetDatosCliente.Nombre + " " + GetDatosCliente.ApellidoPaterno ?? "" + " " + GetDatosCliente.ApellidoMaterno ?? "";
+            //string nombreCompleto = GetDatosCliente.Nombre + " " + GetDatosCliente.ApellidoPaterno ?? "" + " " + GetDatosCliente.ApellidoMaterno ?? "";
 
-            if (nombreCompleto == null)
-            {
-                ViewBag.Nombre = "S/N";
-            }
-            else
-            {
-                ViewBag.Nombre = nombreCompleto;
-            }
+            //if (nombreCompleto == null)
+            //{
+            //    ViewBag.Nombre = "S/N";
+            //}
+            //else
+            //{
+            //    ViewBag.Nombre = nombreCompleto;
+            //}
 
     //    return NotFound();
     //}
@@ -872,7 +872,7 @@ public class ClientesController : Controller
                 ClienteDetailsResponse cliente = await _clientesApiClient.GetDetallesCliente(id);
                 RegistroModificacionClienteRequest clientesDetalles = new RegistroModificacionClienteRequest
                 {
-                    IdCliente = cliente.value.IdCliente,
+                    IdCliente = cliente.value.idCliente,
                     Nombre = cliente.value.Nombre,
                     Telefono = cliente.value.Telefono,
                     Email = cliente.value.Email,
@@ -893,7 +893,7 @@ public class ClientesController : Controller
                     IngresoMensual = cliente.value.SalarioMensual.ToString(),
                     ApoderadoLegal = (cliente.value.AntiguedadLaboral?.ToLower() == "si") ? 1 : 0,
                     NoInterior = cliente.value.NoInt,
-                    Puesto = cliente.value.Puesto,
+                    Puesto = cliente.value.puesto,
                     FechaNacimiento =DateTime.Parse(cliente.value.FechaNacimiento ?? ""),
                     DelegacionMunicipio = cliente.value.Municipio,
                     TelefonoTipo = cliente.value.TelefonoRecado,
@@ -902,16 +902,16 @@ public class ClientesController : Controller
                     CiudadEstado = cliente.value.Estado,
                     Rol = cliente.value.Rol,
                     Empresa = cliente.value.Empresa ?? 0,
-                    MontoMaximo = cliente.value.MontoMaximo,
+                    MontoMaximo = Convert.ToDecimal(cliente.value.montoMaximo),
                     CalleNumero = cliente.value.CalleNumero,
                     IdPais = cliente.value.Pais ?? 0
                 };
-                var listaEmpresas = await _catalogosApiClient.GetEmpresasAsync();
-                var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
-                var listaOcupaciones = await _catalogosApiClient.GetOcupacionesAsync();
-                //var listaPaises = await _catalogosApiClient.GetPaisesAsync();
-                var listaPaises = Paises.ListaDePaises;
-                var listaNacionalidades = await _catalogosApiClient.GetNacionalidadesAsync();
+                //var listaEmpresas = await _catalogosApiClient.GetEmpresasAsync();
+                //var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
+                //var listaOcupaciones = await _catalogosApiClient.GetOcupacionesAsync();
+                ////var listaPaises = await _catalogosApiClient.GetPaisesAsync();
+                //var listaPaises = Paises.ListaDePaises;
+                //var listaNacionalidades = await _catalogosApiClient.GetNacionalidadesAsync();
 
                 var listaEmpresas = await _catalogosApiClient.GetEmpresasAsync();
                 var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
@@ -948,36 +948,36 @@ public class ClientesController : Controller
 
     }
 
-    [Authorize]
-    [HttpPost]
-    public async Task<IActionResult> ModificarCliente(ClientesRegistroViewModel model)
-    {
-        var loginResponse = _userContextService.GetLoginResponse();
-        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Insertar")) == true)
-        {
-            RegistrarModificarClienteResponse response = new RegistrarModificarClienteResponse();
+    //[Authorize]
+    //[HttpPost]
+    //public async Task<IActionResult> ModificarCliente(ClientesRegistroViewModel model)
+    //{
+    //    var loginResponse = _userContextService.GetLoginResponse();
+    //    if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Insertar")) == true)
+    //    {
+    //        RegistrarModificarClienteResponse response = new RegistrarModificarClienteResponse();
 
-            try
-            {
-                response = await _clientesApiClient.GetModificaCliente(model.ClientesDetalles);
+    //        try
+    //        {
+    //            response = await _clientesApiClient.GetModificaCliente(model.ClientesDetalles);
 
-                if (response.codigo == "200")
-                {
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    return RedirectToAction("Registro");
-                }
-            }
-            catch (Exception ex)
-            {
-                return View();
-            }
-        }
+    //            if (response.codigo == "200")
+    //            {
+    //                return RedirectToAction("Index");
+    //            }
+    //            else
+    //            {
+    //                return RedirectToAction("Registro");
+    //            }
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            return View();
+    //        }
+    //    }
 
-        return NotFound();
-    }
+    //    return NotFound();
+    //}
 
     [Authorize]
     [HttpPost]

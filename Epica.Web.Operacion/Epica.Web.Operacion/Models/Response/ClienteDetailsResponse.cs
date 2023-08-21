@@ -52,10 +52,8 @@ public class DatosClienteResponse
     public string? TipoTrabajador { get; set; }
     public string? puesto { get; set; }
     public double? SalarioMensual { get; set; }
-    public double? SalarioMensual { get; set; }
     public double? montoMaximo { get; set; }
     public string? AntiguedadLaboral { get; set; }
-    public int Active { get; set; }
     public int? Empresa { get; set; }
     public int? Pais { get; set; }
     public string? MontoMaximo { get; set; }

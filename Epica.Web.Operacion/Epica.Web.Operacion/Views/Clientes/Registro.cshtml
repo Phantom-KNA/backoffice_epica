@@ -55,7 +55,7 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Nombre: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="@Model.ClientesDetalles.idCliente" hidden class="form-control form-control-sm form-control-solid" id="idCliente" type="text" value="@(Model?.ClientesDetalles.idCliente ?? 0)" autocomplete="off" required />
+                            <input asp-for="@Model.ClientesDetalles.IdCliente" hidden class="form-control form-control-sm form-control-solid" id="idCliente" type="text" value="@(Model?.ClientesDetalles.IdCliente ?? 0)" autocomplete="off" required />
                             <input asp-for="@Model.ClientesDetalles.Nombre" class="form-control form-control-sm form-control-solid" id="Nombre" type="text" value="@(Model?.ClientesDetalles.Nombre ?? "")" autocomplete="off" required />
                             <span asp-validation-for="@Model.ClientesDetalles.Nombre" class="text-danger"></span>
                         </div>
@@ -211,8 +211,8 @@
                                 <option></option>
                                 @foreach (var pais in Model.ListaPaises)
                                 {
-                                    var isSelected = (pais.Value == Model.ClientesDetalles.IdPais) ? "selected" : "";
-                                    <option value="@pais.Value" selected="@isSelected">@pais.Text</option>
+@*                                    var isSelected = (Convert.ToInt32(pais.Value) == Model.ClientesDetalles.IdPais) ? "selected" : "";
+                                    <option value="@pais.Value" selected="@isSelected">@pais.Text</option>*@
                                 }
                             </select>
                         </div>
