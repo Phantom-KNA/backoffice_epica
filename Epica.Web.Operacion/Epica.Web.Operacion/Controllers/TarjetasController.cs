@@ -1,7 +1,10 @@
 ﻿using Epica.Web.Operacion.Config;
 using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Models.Common;
+using Epica.Web.Operacion.Models.Entities;
 using Epica.Web.Operacion.Models.Request;
+using Epica.Web.Operacion.Models.ViewModels;
+using Epica.Web.Operacion.Services.Log;
 using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Services.UserResolver;
 using Epica.Web.Operacion.Utilities;
@@ -20,17 +23,20 @@ public class TarjetasController : Controller
     #region "Locales"
     private readonly IClientesApiClient _clientesApiClient;
     private readonly ITarjetasApiClient _tarjetasApiClient;
+    private readonly ILogsApiClient _logsApiClient;
     private readonly UserContextService _userContextService;
     #endregion
 
     #region "Constructores"
     public TarjetasController(IClientesApiClient clientesApiClient,
         ITarjetasApiClient tarjetasApiClient,
-        UserContextService userContextService)
+        UserContextService userContextService,
+        ILogsApiClient logsApiClient)
     {
         _clientesApiClient = clientesApiClient;
         _userContextService = userContextService;
         _tarjetasApiClient = tarjetasApiClient;
+        _logsApiClient = logsApiClient;
     }
     #endregion
 
@@ -46,15 +52,68 @@ public class TarjetasController : Controller
     }
 
     [Authorize]
-    public IActionResult RegistroTarjetaCliente()
+    public async Task<ActionResult> RegistroTarjetaCliente()
     {
         var loginResponse = _userContextService.GetLoginResponse();
         if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Tarjetas" && modulo.Acciones.Contains("Insertar")) == true)
-            return View("~/Views/Tarjetas/RegistroTarjetaCliente.cshtml");
+        {
+            TarjetasRegistroTarjetaClienteViewModel taReTarjetaClienteViewModel = new TarjetasRegistroTarjetaClienteViewModel
+            {
+                TarjetasDetalles = new RegistrarTarjetaRequest()
+            };
+
+            ViewBag.Accion = "RegistrarTarjetaCliente";
+            ViewBag.TituloForm = "Registar tarjeta a cliente";
+            return View(taReTarjetaClienteViewModel);
+        }
 
         return NotFound();
     }
-    
+
+    [Authorize]
+    [HttpPost]
+    public async Task<IActionResult> RegistrarTarjetaCliente(TarjetasRegistroTarjetaClienteViewModel model)
+    {
+        var loginResponse = _userContextService.GetLoginResponse();
+        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Tarjetas" && modulo.Acciones.Contains("Insertar")) == true)
+        {
+            try
+            {
+                var response = await _tarjetasApiClient.GetRegistroTarjetaAsync(model.TarjetasDetalles);
+
+                LogRequest logRequest = new LogRequest
+                {
+                    IdUser = loginResponse.IdUsuario.ToString(),
+                    Modulo = "Tarjetas",
+                    Fecha = DateTime.Now,
+                    NombreEquipo = Environment.MachineName,
+                    Accion = "Insertar",
+                    Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                    Envio = JsonConvert.SerializeObject(model.TarjetasDetalles),
+                    Respuesta = (response == "Exitoso") ? "true" : "false",
+                    Error = response,
+                    IdRegistro = 0
+                };
+                await _logsApiClient.InsertarLogAsync(logRequest);
+
+                if (response == "Exitoso")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return RedirectToAction("RegistroTarjetaCliente");
+                }
+            }
+            catch (Exception ex)
+            {
+                return View();
+            }
+        }
+
+        return NotFound();
+    }
+
     [Authorize]
     [HttpPost]
     public async Task<JsonResult> Consulta(List<RequestListFilters> filters)

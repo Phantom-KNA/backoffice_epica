@@ -14,11 +14,14 @@ using static Epica.Web.Operacion.Controllers.CuentaController;
 using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Services.Catalogos;
+using Epica.Web.Operacion.Services.Log;
+using System.Globalization;
 
 namespace Epica.Web.Operacion.Controllers;
 
 public class ClientesController : Controller
 {
+    private readonly ILogsApiClient _logsApiClient;
     #region "Locales"
     private readonly IClientesApiClient _clientesApiClient;
     private readonly ICuentaApiClient _cuentaApiClient;
@@ -32,9 +35,11 @@ public class ClientesController : Controller
         ICuentaApiClient cuentaApiClient,
         ICatalogosApiClient catalogosApiClient,
         ITarjetasApiClient tarjetasApiClient,
-        UserContextService userContextService
+        UserContextService userContextService,
+        ILogsApiClient logsApiClient
         )
     {
+        _logsApiClient = logsApiClient;
         _clientesApiClient = clientesApiClient;
         _cuentaApiClient = cuentaApiClient;
         _userContextService = userContextService;
@@ -272,7 +277,7 @@ public class ClientesController : Controller
             ClientesDetallesViewModel clientesDetallesViewModel = new ClientesDetallesViewModel
             {
                 Id = user.value.idCliente,
-                Nombre = user.value.NombreCompleto,
+                Nombre = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
                 Telefono = user.value.Telefono,
                 Email = user.value.Email,
                 Curp = user.value.CURP,
@@ -280,23 +285,27 @@ public class ClientesController : Controller
                 Sexo = user.value.Sexo,
                 Rfc = user.value.RFC,
                 Ine = user.value.INE,
-                FechaNacimiento = Convert.ToDateTime(user.value.FechaNacimiento),
+                FechaNacimiento = DateTime.Parse(user.value.FechaNacimiento),
                 Observaciones = user.value.Observaciones,
                 PaisNacimiento = user.value.PaisNacimiento,
                 Ocupacion = user.value.IdOcupacion.ToString(),
                 Nacionalidad = user.value.Nacionalidad,
                 Fiel = user.value.Fiel,
                 Pais = user.value.PaisNacimiento,
-                IngresoMensual = Convert.ToDecimal(user.value.SalarioNetoMensual),
-                MontoMaximo = Convert.ToDecimal(user.value.SalarioNetoMensual),
+                IngresoMensual = Convert.ToDecimal(user.value.SalarioMensual),
+                MontoMaximo = Convert.ToDecimal(user.value.SalarioMensual),
                 Calle = user.value.Calle,
-                CalleNumero = user.value.NoIntExt,
+                CalleNumero = user.value.NoInt,
                 PrimeraCalle = user.value.CalleSecundaria,
                 SegundaCalle = user.value.CalleSecundaria2,
                 Colonia = user.value.Colonia,
                 CodigoPostal = user.value.CodigoPostal,
-                NoInterior = user.value.NoIntExt,
-                Puesto = user.value.puesto
+                NoInterior = user.value.NoInt,
+                Puesto = user.value.Puesto,
+                ApoderadoLegal = user.value.AntiguedadLaboral,
+                CiudadEstado = user.value.Estado,
+                Rol = user.value.Rol,
+                DelegacionMunicipio = user.value.Municipio,
             };
 
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
@@ -596,7 +605,8 @@ public class ClientesController : Controller
             var listaEmpresas = await _catalogosApiClient.GetEmpresasAsync();
             var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
             var listaOcupaciones = await _catalogosApiClient.GetOcupacionesAsync();
-            var listaPaises = await _catalogosApiClient.GetPaisesAsync();
+            //var listaPaises = await _catalogosApiClient.GetPaisesAsync();
+            var listaPaises = Paises.ListaDePaises;
             var listaNacionalidades = await _catalogosApiClient.GetNacionalidadesAsync();
 
             ClientesRegistroViewModel clientesRegistroViewModel = new ClientesRegistroViewModel
@@ -609,7 +619,7 @@ public class ClientesController : Controller
                 ListaNacionalidades = listaNacionalidades
             };
 
-            ViewData["IsEdit"] = false;
+            ViewBag.Accion = "RegistrarCliente";
             ViewBag.TituloForm = "Crear nuevo cliente";
             return View(clientesRegistroViewModel);
         }
@@ -630,6 +640,21 @@ public class ClientesController : Controller
             {
                 response = await _clientesApiClient.GetRegistroCliente(model.ClientesDetalles);
 
+                LogRequest logRequest = new LogRequest
+                {
+                    IdUser = loginResponse.IdUsuario.ToString(),
+                    Modulo = "Clientes",
+                    Fecha = DateTime.Now,
+                    NombreEquipo = Environment.MachineName,
+                    Accion = "Insertar",
+                    Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                    Envio = JsonConvert.SerializeObject(model.ClientesDetalles),
+                    Respuesta = response.error.ToString(),
+                    Error = response.error ? JsonConvert.SerializeObject(response.detalle) : string.Empty,
+                    IdRegistro = 0
+                };
+                await _logsApiClient.InsertarLogAsync(logRequest);
+
                 if (response.codigo == "200")
                 {
                     return RedirectToAction("Index");
@@ -648,6 +673,52 @@ public class ClientesController : Controller
         return NotFound();
     }
     #endregion
+
+    [Authorize]
+    [HttpPost]
+    public async Task<IActionResult> ModificarCliente(ClientesRegistroViewModel model)
+    {
+        var loginResponse = _userContextService.GetLoginResponse();
+        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Editar")) == true)
+        {
+            RegistrarModificarClienteResponse response = new RegistrarModificarClienteResponse();
+
+            try
+            {
+                response = await _clientesApiClient.GetModificarCliente(model.ClientesDetalles);
+
+                LogRequest logRequest = new LogRequest
+                {
+                    IdUser = loginResponse.IdUsuario.ToString(),
+                    Modulo = "Clientes",
+                    Fecha = DateTime.Now,
+                    NombreEquipo = Environment.MachineName,
+                    Accion = "Editar",
+                    Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                    Envio = JsonConvert.SerializeObject(model.ClientesDetalles),
+                    Respuesta = response.error.ToString(),
+                    Error = response.error ? JsonConvert.SerializeObject(response.detalle) : string.Empty,
+                    IdRegistro = model.ClientesDetalles.IdCliente
+                };
+                await _logsApiClient.InsertarLogAsync(logRequest);
+
+                if (response.codigo == "200")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return RedirectToAction("Registro");
+                }
+            }
+            catch (Exception ex)
+            {
+                return View();
+            }
+        }
+
+        return NotFound();
+    }
 
     [Authorize]
     [HttpPost]
@@ -774,8 +845,16 @@ public class ClientesController : Controller
     //            ViewBag.Nombre = GetDatosCliente.NombreCompleto;
     //        }
 
-    //        return View();
-    //    }
+            string nombreCompleto = GetDatosCliente.Nombre + " " + GetDatosCliente.ApellidoPaterno ?? "" + " " + GetDatosCliente.ApellidoMaterno ?? "";
+
+            if (nombreCompleto == null)
+            {
+                ViewBag.Nombre = "S/N";
+            }
+            else
+            {
+                ViewBag.Nombre = nombreCompleto;
+            }
 
     //    return NotFound();
     //}
@@ -790,10 +869,10 @@ public class ClientesController : Controller
         {
             try
             {
-                var cliente = await _clientesApiClient.GetClienteAsync(id);
+                ClienteDetailsResponse cliente = await _clientesApiClient.GetDetallesCliente(id);
                 RegistroModificacionClienteRequest clientesDetalles = new RegistroModificacionClienteRequest
                 {
-                    idCliente = cliente.value.idCliente,
+                    IdCliente = cliente.value.IdCliente,
                     Nombre = cliente.value.Nombre,
                     Telefono = cliente.value.Telefono,
                     Email = cliente.value.Email,
@@ -813,19 +892,26 @@ public class ClientesController : Controller
                     PaisNacimiento = cliente.value.PaisNacimiento,
                     IngresoMensual = cliente.value.SalarioMensual.ToString(),
                     ApoderadoLegal = (cliente.value.AntiguedadLaboral?.ToLower() == "si") ? 1 : 0,
-                    NoInterior = cliente.value.NoIntExt,
-                    Puesto = cliente.value.puesto,
-                    FechaNacimiento = Convert.ToDateTime(cliente.value.FechaNacimiento),
+                    NoInterior = cliente.value.NoInt,
+                    Puesto = cliente.value.Puesto,
+                    FechaNacimiento =DateTime.Parse(cliente.value.FechaNacimiento ?? ""),
                     DelegacionMunicipio = cliente.value.Municipio,
                     TelefonoTipo = cliente.value.TelefonoRecado,
-                    IdNacionalidad = cliente.value.idNacionalidad,
+                    IdNacionalidad = cliente.value.IdNacionalidad,
                     IdOcupacion = cliente.value.IdOcupacion,
                     CiudadEstado = cliente.value.Estado,
-                    MontoMaximo = (decimal?)cliente.value.montoMaximo,
-                    Rol = cliente.value.rol,
-                    Empresa = cliente.value.idEmpresa,
-                    IdPais = cliente.value.idPais
+                    Rol = cliente.value.Rol,
+                    Empresa = cliente.value.Empresa ?? 0,
+                    MontoMaximo = cliente.value.MontoMaximo,
+                    CalleNumero = cliente.value.CalleNumero,
+                    IdPais = cliente.value.Pais ?? 0
                 };
+                var listaEmpresas = await _catalogosApiClient.GetEmpresasAsync();
+                var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
+                var listaOcupaciones = await _catalogosApiClient.GetOcupacionesAsync();
+                //var listaPaises = await _catalogosApiClient.GetPaisesAsync();
+                var listaPaises = Paises.ListaDePaises;
+                var listaNacionalidades = await _catalogosApiClient.GetNacionalidadesAsync();
 
                 var listaEmpresas = await _catalogosApiClient.GetEmpresasAsync();
                 var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
@@ -842,11 +928,14 @@ public class ClientesController : Controller
                 {
                     ClientesDetalles = clientesDetalles,
                     ListaEmpresas = listaEmpresas,
-                    ListaRoles = listaRoles,
+                    ListaNacionalidades = listaNacionalidades,
                     ListaOcupaciones = listaOcupaciones,
                     ListaPaises = listaPaises,
-                    ListaNacionalidades = listaNacionalidades
+                    ListaRoles = listaRoles
                 };
+
+                ViewBag.Accion = "ModificarCliente";
+                ViewBag.TituloForm = "Modificar cliente";
                 return View("~/Views/Clientes/Registro.cshtml", clientesRegistroViewModel);
             }
             catch (Exception)

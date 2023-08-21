@@ -23,7 +23,7 @@
     </li>
 }
 
-<form asp-controller="Clientes" asp-action="@((bool)(ViewData["IsEdit"] ?? false) ? "ModificarCliente" : "RegistrarCliente")" method="post">
+<form asp-controller="Clientes" asp-action= "@ViewBag.Accion" method="post">
     <div class="col-md-12">
         <div class="card shadow-sm">
             <div class="card-header">
@@ -46,6 +46,9 @@
                     }
 
                 </div>
+            </div>
+            <div class="card-body pt-5">
+                <input asp-for="@Model.ClientesDetalles.IdCliente class="form-control form-control-sm form-control-solid" id="IdCliente" type="hidden" value="@(Model?.ClientesDetalles.IdCliente ?? 0)" autocomplete="off" />
             </div>
             <div class="card-body pt-5">
                 <div class="d-flex mb-6 mt-6">
@@ -172,7 +175,8 @@
                                 <option></option>
                                 @foreach (var ocupacion in Model.ListaOcupaciones)
                                 {
-                                    <option value="@ocupacion.Id">@ocupacion.Descripcion</option>
+                                    var isSelected = (ocupacion.Id == Model.ClientesDetalles.IdNacionalidad) ? "selected" : "";
+                                    <option value="@ocupacion.Id" selected="@isSelected">@ocupacion.Descripcion</option>
                                 }
                             </select>
                         </div>
@@ -184,14 +188,8 @@
                                 <option></option>
                                 @foreach (var nacionalidad in Model.ListaNacionalidades)
                                 {
-                                    if (nacionalidad.Id == Model.ClientesDetalles.IdNacionalidad)
-                                    {
-                                        <option value="@nacionalidad.Id" selected>@nacionalidad.Descripcion</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@nacionalidad.Id">@nacionalidad.Descripcion</option>
-                                    }                                  
+                                    var isSelected = (nacionalidad.Id == Model.ClientesDetalles.IdNacionalidad) ? "selected" : "";
+                                    <option value="@nacionalidad.Id" selected="@isSelected">@nacionalidad.Descripcion</option>
                                 }
                             </select>
                         </div>
@@ -213,14 +211,8 @@
                                 <option></option>
                                 @foreach (var pais in Model.ListaPaises)
                                 {
-                                    if (pais.Id == Model.ClientesDetalles.IdPais)
-                                    {
-                                        <option value="@pais.Id" selected>@pais.Descripcion</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@pais.Id">@pais.Descripcion</option>
-                                    }
+                                    var isSelected = (pais.Value == Model.ClientesDetalles.IdPais) ? "selected" : "";
+                                    <option value="@pais.Value" selected="@isSelected">@pais.Text</option>
                                 }
                             </select>
                         </div>
@@ -229,7 +221,7 @@
                         <label class="form-label required">Ingreso Mensual: &nbsp;</label>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon1">$</span>
-                            <input asp-for="ClientesDetalles.IngresoMensual" class="form-control form-control-sm form-control-solid" id="IngresoMensual" type="number" min="0" autocomplete="off" required />
+                            <input asp-for="ClientesDetalles.IngresoMensual" class="form-control form-control-sm form-control-solid" id="IngresoMensual" type="text" autocomplete="off" required />
                             <span asp-validation-for="ClientesDetalles.IngresoMensual" class="text-danger"></span>
                         </div>
                     </div>
@@ -240,7 +232,7 @@
                         <label class="form-label required">Monto Máximo: &nbsp;</label>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon2">$</span>
-                            <input asp-for="ClientesDetalles.MontoMaximo" class="form-control form-control-sm form-control-solid" id="MontoMaximo" type="number" min="0" autocomplete="off" required />
+                            <input asp-for="ClientesDetalles.MontoMaximo" class="form-control form-control-sm form-control-solid" id="MontoMaximo" type="text" autocomplete="off" required />
                             <span asp-validation-for="ClientesDetalles.MontoMaximo" class="text-danger"></span>
                         </div>
                     </div>
@@ -302,7 +294,7 @@
                     <div class="py-2 px-4 col-md-2 fv-row">
                         <label class="form-label required">Código postal: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="ClientesDetalles.CodigoPostal" class="form-control form-control-sm form-control-solid" id="CodigoPostal" type="text" value="@(Model?.ClientesDetalles.CodigoPostal ?? "")" autocomplete="off" required />
+                            <input asp-for="ClientesDetalles.CodigoPostal" class="form-control form-control-sm form-control-solid" id="CodigoPostal" type="number" value="@(Model?.ClientesDetalles.CodigoPostal ?? "")" autocomplete="off" required />
                             <span asp-validation-for="ClientesDetalles.CodigoPostal" class="text-danger"></span>
                         </div>
                     </div>
@@ -347,7 +339,8 @@
                                 <option></option>
                                 @foreach (var empresa in Model.ListaEmpresas)
                                 {
-                                    <option value="@empresa.Id">@empresa.Descripcion</option>
+                                    var isSelected = (empresa.Id == Model.ClientesDetalles.IdNacionalidad) ? "selected" : "";
+                                    <option value="@empresa.Id" selected="@isSelected">@empresa.Descripcion</option>
 
                                     if (empresa.Id == Model.ClientesDetalles.Empresa)
                                     {
@@ -402,13 +395,8 @@
                                 <option></option>
                                 @foreach (var rol in Model.ListaRoles)
                                 {
-                                    if (rol.Descripcion == Model.ClientesDetalles.Rol)
-                                    {
-                                        <option value="@rol.Descripcion" selected>@rol.Descripcion</option>
-                                    } else {
-                                        <option value="@rol.Descripcion">@rol.Descripcion</option>
-                                    }
-
+                                    var isSelected = (rol.Descripcion == Model.ClientesDetalles.Rol) ? "selected" : "";
+                                    <option value="@rol.Descripcion" selected="@isSelected">@rol.Descripcion</option>
                                 }
                             </select>
                         </div>

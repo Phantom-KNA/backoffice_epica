@@ -1,4 +1,7 @@
-﻿@{
+﻿@model Epica.Web.Operacion.Models.ViewModels.TarjetasRegistroTarjetaClienteViewModel
+
+
+@{
     ViewData["Title"] = "Registrar tarjeta con cliente";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -22,6 +25,7 @@
     </li>
 }
 
+<form asp-controller="Tarjetas" asp-action= "@ViewBag.Accion" method="post">
 <div class="col-md-12">
     <div class="card shadow-sm">
         <div class="card-header">
@@ -31,40 +35,44 @@
                 <button href="javascript:void(0)" onclick="history.back();" type="button" class="btn btn-sm btn-light-primary me-2">
                     Cancelar
                 </button>
-                <button type="button" class="btn btn-sm btn-light-primary" id="btnGuardarRegistroTarjeta">
+                <button type="submit" class="btn btn-sm btn-light-primary" id="btnGuardarRegistroTarjeta">
                     Guardar
                 </button>
             </div>
         </div>
         <div class="card-body pt-5">
             <div class="d-flex mb-6 mt-6">
-                <div class="py-2 px-4 col-md-4 fv-row">
-                    <label class="form-label required">Número de tarjeta: &nbsp;</label>
-                    <div class="position-relative">
-                        <input class="form-control form-control-sm form-control-solid" type="text" />
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Número de tarjeta: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="@Model.TarjetasDetalles.numeroTarjeta" class="form-control form-control-sm form-control-solid" id="NumeroTarjeta" type="text" value="@(Model?.TarjetasDetalles.numeroTarjeta ?? "")" autocomplete="off" required />
+                            <span asp-validation-for="@Model.TarjetasDetalles.numeroTarjeta" class="text-danger"></span>
+                        </div>
                     </div>
-                </div>
-                <div class="py-2 px-4 col-md-4 fv-row">
-                    <label class="form-label required">Número proxy: &nbsp;</label>
-                    <div class="position-relative">
-                        <input class="form-control form-control-sm form-control-solid" type="text" />
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Número proxy: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="@Model.TarjetasDetalles.proxyNumber" class="form-control form-control-sm form-control-solid" id="proxyNumber" type="text" value="@(Model?.TarjetasDetalles.proxyNumber ?? "")" autocomplete="off" required />
+                            <span asp-validation-for="@Model.TarjetasDetalles.proxyNumber" class="text-danger"></span>
+                        </div>
                     </div>
-                </div>
-                <div class="py-2 px-4 col-md-4 fv-row">
-                    <label class="form-label required">Mes de vigencia: &nbsp;</label>
-                    <div class="position-relative">
-                        <select id="mesVigencia" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione un mes"></select>
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Mes de vigencia: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="@Model.TarjetasDetalles.mesVigencia" class="form-control form-control-sm form-control-solid" id="proxyNumber" type="text" value="@(Model?.TarjetasDetalles.mesVigencia?? "")" autocomplete="off" required />
+                            <span asp-validation-for="@Model.TarjetasDetalles.mesVigencia" class="text-danger"></span>
+                        </div>
                     </div>
-                </div>
             </div>
 
             <div class="d-flex mb-6 mt-6">
-                <div class="py-2 px-4 col-md-4 fv-row">
-                    <label class="form-label required">Año de vigencia: &nbsp;</label>
-                    <div class="position-relative">
-                        <select id="anioVigencia" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione un año"></select>
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Año de vigencia: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="@Model.TarjetasDetalles.yearVigencia" class="form-control form-control-sm form-control-solid" id="yearVigencia" type="text" value="@(Model?.TarjetasDetalles.yearVigencia?? "")" autocomplete="off" required />
+                            <span asp-validation-for="@Model.TarjetasDetalles.yearVigencia" class=" text-danger"></span>
+                        </div>
                     </div>
-                </div>
                 <div class="py-2 px-4 col-md-4 fv-row">
                     <label class="form-label">Cliente: &nbsp;</label>
                     <div class="position-relative">
@@ -80,6 +88,7 @@
         </div>
     </div>
 </div>
+</form>
 
 @section Scripts{
     <script src="~/js/Tarjetas/epica.tarjetas.registroTarjetaCliente.js" asp-append-version="true"></script>

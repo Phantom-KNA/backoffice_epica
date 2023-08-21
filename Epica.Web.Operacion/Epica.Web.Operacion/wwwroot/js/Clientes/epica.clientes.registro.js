@@ -21,6 +21,11 @@ var Init = function () {
             }
         });
 
+        var telefonoInput = document.getElementById("Telefono");
+        telefonoInput.addEventListener("input", function () {
+            this.value = this.value.replace(/[^0-9]/g, "");
+        });
+
         $(document).on('click', '#btnGuardarCliente', function (e) {
             var requiredFields = document.querySelectorAll('[required]');
 

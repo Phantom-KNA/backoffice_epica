@@ -21,6 +21,8 @@ public class UrlsConfig
         public static string GetTransaccionesTotal() => $"/api/v1/transacciones/total";
         public static string GetTransaccionesPorCuenta(int idCuenta) => $"/api/v1/cuentas/cuenta_trasacciones?idCuenta={idCuenta}";
         public static string GetRegistraTransaccion() => $"/api/v1/transacciones/insertar";
+        public static string ModificarTransaccion() => $"/api/v1/transacciones/modificar";
+
     }
 
     public class CuentasOperations
@@ -41,6 +43,9 @@ public class UrlsConfig
         public static string GetBloqueaWebCliente() => $"/api/v1/clientes/bloque_web";
         public static string GetBloqueaTotalCliente() => $"/api/v1/clientes/bloque_total";
         public static string InsertarClienteNuevo() => $"/api/v1/clientes/inserta_cliente";
+        public static string ModificarCliente() => $"/api/v1/clientes/modificar_cliente";
+        public static string GetAllClientes() => $"api/v1/clientes/AllClientes";
+
         public static string ModificarClienteNuevo() => $"/api/v1/clientes/modificar_cliente";
     }
 
@@ -69,6 +74,11 @@ public class UrlsConfig
     public class LogOperations
     {
         public static string InsertarLog() => $"/api/v1/log/insertar_log";
+    }
+
+    public class UsuariosOperations
+    {
+        public static string GetUsuariosRoles() => $"/api/v1/usuario/usuarios_roles";
     }
     public string Authenticate { get; set; }
     public string Transaccion { get; set; }

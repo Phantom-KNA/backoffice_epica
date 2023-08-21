@@ -5,7 +5,7 @@ namespace Epica.Web.Operacion.Models.Request
     public class RegistroModificacionClienteRequest
     {
         [JsonPropertyName("idCliente")]
-        public int idCliente { get; set; }
+        public int IdCliente { get; set; }
         [JsonPropertyName("nombre")]
         public string? Nombre { get; set; }
         [JsonPropertyName("apellidoPaterno")]

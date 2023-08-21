@@ -85,6 +85,35 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return result;
         }
 
+        public async Task<RegistrarModificarTransaccionResponse> GetModificarTransaccion(RegistrarTransaccionRequest request)
+        {
+            RegistrarModificarTransaccionResponse respuesta = new RegistrarModificarTransaccionResponse();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.ModificarTransaccion();
+                var json = JsonConvert.SerializeObject(request);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await ApiClient.PostAsync(uri, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    respuesta = JsonConvert.DeserializeObject<RegistrarModificarTransaccionResponse>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                respuesta.error = true;
+                respuesta.detalle = ex.Message;
+                return respuesta;
+            }
+
+            return respuesta;
+        }
+
         public async Task<List<TransaccionesResponse>> GetTransaccionesCuentaAsync(int idCuenta)
         {
             List<TransaccionesResponse>? ListaTransacciones = new List<TransaccionesResponse>();

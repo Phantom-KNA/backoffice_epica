@@ -17,7 +17,6 @@ public class ClienteDetailsResponse
 public class DatosClienteResponse
 {
     public int idCliente { get; set; }
-    public string? NombreCompleto { get; set; }
     public string? Nombre { get; set; }
     public string? ApellidoPaterno { get; set; }
     public string? ApellidoMaterno { get; set; }
@@ -28,32 +27,40 @@ public class DatosClienteResponse
     public string? Organizacion { get; set; }
     public string? FechaNacimiento { get; set; }
     public string? EntidadNacimiento { get; set; }
+    public int IdNacionalidad { get; set; }
     public string? Membresia { get; set; }
     public string? Sexo { get; set; }
     public string? INE { get; set; }
     public string? RFC { get; set; }
     public string? PaisNacimiento { get; set; }
     public string? Observaciones { get; set; }
-    public int IdOcupacion { get; set; }
+    public int IdOcupacion { get; set; }    
     public string? Nacionalidad { get; set; }
     public string? Fiel { get; set; }
     public string? NSS { get; set; }
     public string? Colonia { get; set; }
-    public string? NoIntExt { get; set; }
+    public string? CalleNumero { get; set; }
+    public string? NoInt { get; set; }
     public string? Municipio { get; set; }
     public string? Estado { get; set; }
     public string? CodigoPostal { get; set; }
     public string? Calle { get; set; }
     public string? CalleSecundaria { get; set; }
     public string? CalleSecundaria2 { get; set; }
-    public int? TipoVivienda { get; set; }
+    public int TipoVivienda { get; set; }
     public string? TiempoVivienda { get; set; }
     public string? TipoTrabajador { get; set; }
     public string? puesto { get; set; }
-    public double? SalarioNetoMensual { get; set; }
+    public double? SalarioMensual { get; set; }
     public double? SalarioMensual { get; set; }
     public double? montoMaximo { get; set; }
     public string? AntiguedadLaboral { get; set; }
+    public int Active { get; set; }
+    public int? Empresa { get; set; }
+    public int? Pais { get; set; }
+    public string? MontoMaximo { get; set; }
+    public string? Rol { get; set; }
+    public int ApoderadoLegal { get; set; }
     public string? calleNumero { get; set; }
     public string? rol { get; set; }
     public int idEmpresa { get; set; }

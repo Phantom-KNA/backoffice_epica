@@ -3,6 +3,7 @@ using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.UserResolver;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace Epica.Web.Operacion.Services.Log
 {
@@ -25,10 +26,13 @@ namespace Epica.Web.Operacion.Services.Log
             try
             {
                 var uri = Urls.Transaccion + UrlsConfig.LogOperations.InsertarLog();
-                var response = await ApiClient.GetAsync(uri);
+                var json = JsonConvert.SerializeObject(logRequest);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await ApiClient.PostAsync(uri, content);
 
                 if (response.IsSuccessStatusCode)
                 {
+                    response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
                     mensajeResponse = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
                 }
