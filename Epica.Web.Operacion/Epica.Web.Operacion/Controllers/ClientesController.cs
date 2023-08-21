@@ -840,17 +840,17 @@ public class ClientesController : Controller
     //            return RedirectToAction("Index");
     //        }
 
-    public async Task<IActionResult> GestionarDocumentos(string AccountID = "")
-    {
-        var loginResponse = _userContextService.GetLoginResponse();
-        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Editar")) == true)
-        {
-            if (AccountID == "")
-            {
-                return RedirectToAction("Index");
-            }
+    //public async Task<IActionResult> GestionarDocumentos(string AccountID = "")
+    //{
+    //    var loginResponse = _userContextService.GetLoginResponse();
+    //    var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Editar == 0);
+    //    {
+    //        if (AccountID == "")
+    //        {
+    //            return RedirectToAction("Index");
+    //        }
 
-            var GetDatosCliente = await _clientesApiClient.GetClienteAsync(Convert.ToInt32(AccountID));
+    //        var GetDatosCliente = await _clientesApiClient.GetClienteAsync(Convert.ToInt32(AccountID));
 
     //        ViewBag.AccountID = AccountID;
 
