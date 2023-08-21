@@ -17,7 +17,8 @@
         <div id="kt_aside_menu" class="menu menu-rounded menu-column menu-title-gray-600 menu-state-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500 fw-semibold fs-6" data-kt-menu="true">
             <!--begin:Menu item-->
             @{
-                if (Model.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Ver")) == true)
+                var validacion2 = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
+                if (validacion2 == true || validacion2 != null)
                 {
                     <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item py-2">
                         <!--begin:Menu link-->
@@ -49,7 +50,8 @@
              }
 
             @{
-                if (Model.AccionesPorModulo.Any(modulo => modulo.Modulo == "Cuentas" && modulo.Acciones.Contains("Ver")) == true)
+                var validacion = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Cuentas" && modulo.Ver == 0);
+                if (validacion == true || validacion != null)
                 {
                     <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item py-2">
                         <!--begin:Menu link-->
@@ -82,7 +84,8 @@
             }
 
             @{
-                if (Model.AccionesPorModulo.Any(modulo => modulo.Modulo == "Transacciones" && modulo.Acciones.Contains("Ver")) == true)
+                var validacion3 = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Ver == 0);
+                if (validacion3 == true || validacion3 != null)
                 {
                     <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item py-2">
                         <!--begin:Menu link-->
@@ -116,7 +119,8 @@
                 <!--begin:Menu item-->
             }
             @{
-                if (Model.AccionesPorModulo.Any(modulo => modulo.Modulo == "Tarjetas" && modulo.Acciones.Contains("Ver")) == true)
+                var validacion4 = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Tarjetas" && modulo.Ver == 0);
+                if (validacion4 == true || validacion4 != null)
                 {
                     <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item py-2">
                         <!--begin:Menu link-->

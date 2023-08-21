@@ -33,12 +33,14 @@ namespace Epica.Web.Operacion.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Login(string username, string password)
+        public async Task<ActionResult> Login(string email, string password)
         {
-            var loginRequest = new LoginRequest
+            var loginRequest = new LoginRequest()
             {
-                User = username,
-                Password = password
+                Email = email,
+                Password = password,
+                Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                DispositivoAcceso = Environment.MachineName
             };
 
             var loginResponse = await _loginApiClient.GetCredentialsAsync(loginRequest, _userContextService);

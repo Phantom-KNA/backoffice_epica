@@ -46,7 +46,8 @@ namespace Epica.Web.Operacion.Controllers
         public IActionResult Index(string AccountID = "")
         {
             var loginResponse = _userContextService.GetLoginResponse();
-            if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Transacciones" && modulo.Acciones.Contains("Ver")) == true)
+            var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Ver == 0);
+            if (validacion == true || validacion != null)
             {
                 ViewBag.AccountID = AccountID;
                 return View(loginResponse);
@@ -60,7 +61,8 @@ namespace Epica.Web.Operacion.Controllers
         public async Task<ActionResult> Registro()
         {
             var loginResponse = _userContextService.GetLoginResponse();
-            if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Transacciones" && modulo.Acciones.Contains("Insertar")) == true)
+            var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Insertar == 0);
+            if (validacion == true || validacion != null)
             {
                 var listaMediosPago = await _catalogosApiClient.GetMediosPagoAsync();
 
@@ -84,7 +86,8 @@ namespace Epica.Web.Operacion.Controllers
         public async Task<IActionResult> Transacciones()
         {
             var loginResponse = _userContextService.GetLoginResponse();
-            if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Transacciones" && modulo.Acciones.Contains("Ver")) == true)
+            var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Ver == 0);
+            if (validacion == true || validacion != null)
             {
                 var recibir = await _transaccionesApiClient.GetTransaccionesAsync(1, 100);
                 return Json(recibir);
@@ -219,7 +222,8 @@ namespace Epica.Web.Operacion.Controllers
         public async Task<IActionResult> RegistrarTransaccion(TransaccionesRegistroViewModel model)
         {
             var loginResponse = _userContextService.GetLoginResponse();
-            if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Transacciones" && modulo.Acciones.Contains("Insertar")) == true)
+            var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Insertar == 0);
+            if (validacion == true || validacion != null)
             {
                 RegistrarModificarTransaccionResponse response = new RegistrarModificarTransaccionResponse();
 
@@ -264,7 +268,8 @@ namespace Epica.Web.Operacion.Controllers
         public async Task<ActionResult> Modificar(int id)
         {
             var loginResponse = _userContextService.GetLoginResponse();
-            if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Transacciones" && modulo.Acciones.Contains("Editar")) == true)
+            var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Editar == 0);
+            if (validacion == true || validacion != null)
             {
                 try
                 {
@@ -311,7 +316,8 @@ namespace Epica.Web.Operacion.Controllers
         public async Task<IActionResult> ModificarTransaccion(TransaccionesRegistroViewModel model)
         {
             var loginResponse = _userContextService.GetLoginResponse();
-            if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Transacciones" && modulo.Acciones.Contains("Editar")) == true)
+            var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Editar == 0);
+            if (validacion == true || validacion != null)
             {
                 RegistrarModificarTransaccionResponse response = new RegistrarModificarTransaccionResponse();
 

@@ -117,12 +117,15 @@
                                 </div>
                             </div>
                         </div>
-                        @if (Model?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Transacciones" && modulo.Acciones.Contains("Insertar")) == true)
-                        {
-                            <div id="kt_datatable_buttons" class="d-none"></div>
-                            <a asp-action="Registro" asp-controller="Transacciones" class="btn btn-sm btn-primary me-3">
-                                <i class="bi bi-plus-lg"></i>&nbsp;Nueva transacción
-                            </a>
+                        @{
+                            var validacion = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Insertar == 0);
+                            if (validacion == true || validacion != null)
+                            {
+                                <div id="kt_datatable_buttons" class="d-none"></div>
+                                <a asp-action="Registro" asp-controller="Transacciones" class="btn btn-sm btn-primary me-3">
+                                    <i class="bi bi-plus-lg"></i>&nbsp;Nueva transacción
+                                </a>
+                            }
                         }
                     </div>
                 </div>

@@ -56,7 +56,8 @@ public class ClientesController : Controller
     public IActionResult Index()
     {
         var loginResponse = _userContextService.GetLoginResponse();
-        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Ver")) == true)
+        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
+        if (validacion == true || validacion != null)
             return View(loginResponse);
 
         return NotFound();
@@ -265,7 +266,8 @@ public class ClientesController : Controller
     public async Task<IActionResult> DatosGenerales(int id)
     {
         var loginResponse = _userContextService.GetLoginResponse();
-        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Ver")) == true)
+        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
+        if (validacion == true || validacion != null)
         {
             ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(id);
 
@@ -331,7 +333,8 @@ public class ClientesController : Controller
     public async Task<IActionResult> Cuentas(int id)
     {
         var loginResponse = _userContextService.GetLoginResponse();
-        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Ver")) == true)
+        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
+        if (validacion == true || validacion != null)
         {
             ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(id);
 
@@ -450,7 +453,8 @@ public class ClientesController : Controller
     public async Task<IActionResult> Transacciones(int id, int cliente, string noCuenta)
     {
         var loginResponse = _userContextService.GetLoginResponse();
-        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Cuentas" && modulo.Acciones.Contains("Ver")) == true)
+        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
+        if (validacion == true || validacion != null)
         {
             ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(cliente);
 
@@ -495,7 +499,8 @@ public class ClientesController : Controller
     public async Task<IActionResult> Tarjetas(int id)
     {
         var loginResponse = _userContextService.GetLoginResponse();
-        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Tarjetas" && modulo.Acciones.Contains("Ver")) == true)
+        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Tarjetas" && modulo.Ver == 0);
+        if (validacion == true || validacion != null)
         {
             ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(id);
 
@@ -600,7 +605,8 @@ public class ClientesController : Controller
     public async Task<ActionResult> Registro()
     {
         var loginResponse = _userContextService.GetLoginResponse();
-        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Insertar")) == true)
+        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Insertar == 0);
+        if (validacion == true || validacion != null)
         {
             var listaEmpresas = await _catalogosApiClient.GetEmpresasAsync();
             var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
@@ -632,7 +638,8 @@ public class ClientesController : Controller
     public async Task<IActionResult> RegistrarCliente(ClientesRegistroViewModel model)
     {
         var loginResponse = _userContextService.GetLoginResponse();
-        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Insertar")) == true)
+        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Insertar == 0);
+        if (validacion == true || validacion != null)
         {
             RegistrarModificarClienteResponse response = new RegistrarModificarClienteResponse();
 
@@ -679,7 +686,8 @@ public class ClientesController : Controller
     public async Task<IActionResult> ModificarCliente(ClientesRegistroViewModel model)
     {
         var loginResponse = _userContextService.GetLoginResponse();
-        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Editar")) == true)
+        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Editar == 0);
+        if (validacion == true || validacion != null)
         {
             RegistrarModificarClienteResponse response = new RegistrarModificarClienteResponse();
 
@@ -732,6 +740,16 @@ public class ClientesController : Controller
     //            return RedirectToAction("Index");
     //        }
 
+    //public async Task<IActionResult> GestionarDocumentos(string AccountID = "")
+    //{
+    //    var loginResponse = _userContextService.GetLoginResponse();
+    //    var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Editar == 0);
+    //    {
+    //        if (AccountID == "")
+    //        {
+    //            return RedirectToAction("Index");
+    //        }
+
     //        var GetDatosCliente = await _clientesApiClient.GetClienteAsync(Convert.ToInt32(AccountID));
 
     //        ViewBag.AccountID = AccountID;
@@ -765,7 +783,8 @@ public class ClientesController : Controller
     {
         ViewData["IsEdit"] = true;
         var loginResponse = _userContextService.GetLoginResponse();
-        if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Editar")) == true)
+        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Editar == 0);
+        if (validacion == true || validacion != null)
         {
             try
             {
