@@ -127,7 +127,12 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    ListaTransacciones = JsonConvert.DeserializeObject<List<TransaccionesResponse>>(jsonResponse);
+                    var settings = new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+                    ListaTransacciones = JsonConvert.DeserializeObject<List<TransaccionesResponse>>(jsonResponse, settings);
                 }
 
             }
@@ -193,5 +198,29 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return TransaccionDetalle;
         }
 
+        public async Task<TransaccionDetailsResponse> GetTransaccionDetalleByCobranzaAsync(string cobranzaRef)
+        {
+            TransaccionDetailsResponse? TransaccionDetalle = new TransaccionDetailsResponse();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.DetalleTransaccionClaveCobranza(cobranzaRef);
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    TransaccionDetalle = JsonConvert.DeserializeObject<TransaccionDetailsResponse>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return TransaccionDetalle;
+            }
+
+            return TransaccionDetalle;
+        }
     }
 }

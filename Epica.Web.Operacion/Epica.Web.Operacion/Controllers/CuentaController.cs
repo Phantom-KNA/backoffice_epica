@@ -275,8 +275,8 @@ public class CuentaController : Controller
                 concepto = row.concepto,
                 idMedioPago = row.idMedioPago,
                 idCuentaAhorro = row.idCuentaAhorro,
-                fechaAlta = row.fechaAlta
-                //Acciones = await this.RenderViewToStringAsync("~/Views/Cuenta/_Acciones.cshtml", row)
+                fechaAlta = row.fechaAlta,
+                Acciones = await this.RenderViewToStringAsync("~/Views/Clientes/Detalles/Transacciones/_Acciones.cshtml", row)
             });
         }
         if (!string.IsNullOrEmpty(request.Busqueda))

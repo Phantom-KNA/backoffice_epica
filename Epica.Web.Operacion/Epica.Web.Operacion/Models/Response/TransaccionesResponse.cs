@@ -13,6 +13,9 @@
         public int idCuentaAhorro { get; set; }
         public string fechaAlta { get; set; }
         public string fechaActualizacion { get; set; }
+        public string clabeCobranza { get; set; }
+        public string cuetaOrigenOrdenante { get; set; }
+
     }
 
     public class TransaccionesResponseGrid : TransaccionesResponse

@@ -11,6 +11,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
         Task<RegistrarModificarTransaccionResponse> GetRegistroTransaccion(RegistrarTransaccionRequest request);
         Task<RegistrarModificarTransaccionResponse> GetModificarTransaccion(RegistrarTransaccionRequest request);
         Task<TransaccionDetailsResponse> GetTransaccionDetalleAsync(int idCuenta);
+        Task<TransaccionDetailsResponse> GetTransaccionDetalleByCobranzaAsync(string cobranzaRef);
 
     }
 }

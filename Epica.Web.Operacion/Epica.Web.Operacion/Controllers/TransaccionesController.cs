@@ -138,6 +138,8 @@ namespace Epica.Web.Operacion.Controllers
                     idMedioPago = row.idMedioPago,
                     idCuentaAhorro = row.idCuentaAhorro,
                     fechaAlta = row.fechaAlta,
+                    clabeCobranza = row.clabeCobranza,
+                    cuetaOrigenOrdenante = row.cuetaOrigenOrdenante,
                     Acciones = await this.RenderViewToStringAsync("~/Views/Transacciones/_Acciones.cshtml", row)
                 });
             }
@@ -359,12 +361,21 @@ namespace Epica.Web.Operacion.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> DetalleTransaccion(string Id)
+        public async Task<IActionResult> DetalleTransaccion(string Id, string Estatus, string ClabeCobranza)
         {
             var result = new JsonResultDto();
+
+            TransaccionDetailsResponse detalleTransaccion = new TransaccionDetailsResponse();
             try
             {
-                var detalleTransaccion = await _transaccionesApiClient.GetTransaccionDetalleAsync(Convert.ToInt32(Id));
+                if (Estatus == "0")
+                {
+                    detalleTransaccion = await _transaccionesApiClient.GetTransaccionDetalleByCobranzaAsync(ClabeCobranza);
+
+                } else {
+                    detalleTransaccion = await _transaccionesApiClient.GetTransaccionDetalleAsync(Convert.ToInt32(Id));
+                }
+                
 
                 if (detalleTransaccion != null)
                 {
@@ -400,6 +411,8 @@ namespace Epica.Web.Operacion.Controllers
             public int id { get; set; }
             public string claveRastreo { get; set; }
             public string nombreOrdenante { get; set; }
+            public string cuetaOrigenOrdenante { get; set; }
+            public string clabeCobranza { get; set; }
             public string nombreBeneficiario { get; set; }
             public decimal monto { get; set; }
             public int estatus { get; set; }

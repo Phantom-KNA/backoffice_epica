@@ -26,9 +26,9 @@ public class TransaccionResponse
     [JsonPropertyName("idTransaccion")]
     public int? IdTrasaccion { get; set; }
     [JsonPropertyName("nombreOrdenante")]
-    public string? NombreOrdenate { get; set; }
+    public string? nombreOrdenante { get; set; }
     [JsonPropertyName("cuetaOrigenOrdenante")]
-    public string? CuentaOrigenOrdenante { get; set; }
+    public string? cuetaOrigenOrdenante { get; set; }
     [JsonPropertyName("nombreBeneficiario")]
     public string? NombreBeneficiario { get; set; }
     [JsonPropertyName("cuentaDestinoBeneficiario")]

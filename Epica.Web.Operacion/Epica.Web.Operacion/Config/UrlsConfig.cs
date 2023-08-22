@@ -23,6 +23,7 @@ public class UrlsConfig
         public static string GetRegistraTransaccion() => $"/api/v1/transacciones/insertar";
         public static string ModificarTransaccion() => $"/api/v1/transacciones/modificar";
         public static string DetalleTransaccion(int idTransaccion) => $"/api/v1/transacciones/detalle_movimiento?idtrasaccion={idTransaccion}";
+        public static string DetalleTransaccionClaveCobranza(string claveCobranza) => $"/api/v1/transacciones/buscar_claverastro_cobranza?calveRastreoCobranza={claveCobranza}";
     }
 
     public class CuentasOperations

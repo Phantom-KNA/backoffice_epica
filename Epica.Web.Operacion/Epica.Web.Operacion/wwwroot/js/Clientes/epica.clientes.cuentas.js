@@ -68,18 +68,25 @@ var KTDatatableRemoteAjax = function () {
                 { data: 'nombrePersona', name: 'NombrePersona', title: 'Nombre de Persona' },
                 { data: 'fechaAltaFormat', name: 'fechaAltaFormat', title: 'Fecha de Alta' },
                 { data: 'fechaActualizacionformat', name: 'fechaActualizacionformat', title: 'Fecha de Actualizacion' },
-                //{
-                //    title: '',
-                //    orderable: false,
-                //    data: null,
-                //    defaultContent: '',
-                //    render: function (data, type, row) {
-                //        if (type === 'display') {
-                //            var htmlString = row.acciones;
-                //            return htmlString
-                //        }
-                //    }
-                //}
+                {
+                    data: 'estatus', name: 'Estatus', title: 'Estatus',
+                    render: function (data, type, row) {
+                        return data == 1 ?
+                            "<span class='badge badge-light-danger' >Desactivado</span>" : "<span class='badge badge-light-success' >Activo</span>";
+                    }
+                },
+                {
+                    title: '',
+                    orderable: false,
+                    data: null,
+                    defaultContent: '',
+                    render: function (data, type, row) {
+                        if (type === 'display') {
+                            var htmlString = row.acciones;
+                            return htmlString
+                        }
+                    }
+                }
             ],
         });
         $('thead tr').addClass('text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0');
@@ -167,3 +174,61 @@ var KTDatatableRemoteAjax = function () {
 jQuery(document).ready(function () {
     KTDatatableRemoteAjax.init();
 });
+
+
+$(document).on('click', '.btnDetalle', function (e) {
+    var id = $(this).data('id');
+    ModalDetalle.init(id);
+});
+
+var ModalDetalle = function () {
+
+    var init = function (id) {
+        abrirModal(id);
+    }
+    var abrirModal = function (id) {
+        $.ajax({
+            cache: false,
+            type: 'GET',
+            url: siteLocation + "Cuenta/DetalleCuenta",
+            data: { 'numCuenta': id },
+            success: function (result) {
+                if (result.error) {
+                    $(window).scrollTop(0);
+                    $("#DivSuccessMessage").hide();
+                    $("#DivErrorMessage").show();
+                    setTimeout(function () { $("#DivErrorMessage").hide() }, 3000);
+                    $("#ErrorMessage").text(result.errorDescription);
+                } else {
+                    $('#modal_detalle #modalLabelTitle').html('Detalle de Cuenta');
+                    $('#modal_detalle .modal-body').html(result.result);
+                    $('#modal_detalle').modal('show');
+                }
+
+                return;
+            },
+            error: function (res) {
+                $("#DivSuccessMessage").hide();
+                $("#DivErrorMessage").show();
+                $("#ErrorMessage").text('Error');
+            }
+        });
+        listeners();
+    }
+    // Inicializa los listeners de los botones relacionados a la ventana modal
+    var listeners = function () {
+
+    }
+    // Cerramos la ventana modal
+    var cerrarModal = function () {
+        $('#btnCancelar').click();
+    }
+    return {
+        init: function (id) {
+            init(id);
+        },
+        cerrarventanamodal: function () {
+            cerrarModal();
+        }
+    }
+}();

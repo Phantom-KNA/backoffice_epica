@@ -408,8 +408,8 @@ public class ClientesController : Controller
                 fechaActualizacion = row.fechaActualizacion,
                 fechaAlta = row.fechaAlta,
                 fechaActualizacionformat = row.fechaActualizacion.ToString(),
-                fechaAltaFormat = row.fechaAlta.ToString()
-                //Acciones = await this.RenderViewToStringAsync("~/Views/Cuenta/_Acciones.cshtml", row)
+                fechaAltaFormat = row.fechaAlta.ToString(),
+                Acciones = await this.RenderViewToStringAsync("~/Views/Clientes/Detalles/Cuentas/_Acciones.cshtml", row)
             });
         }
         //if (!string.IsNullOrEmpty(request.Busqueda))

@@ -52,6 +52,7 @@ var KTDatatableTransacciones = (function () {
                 "targets": "_all"
             }],
             columns: [
+                { data: "cuetaOrigenOrdenante", name: "cuetaOrigenOrdenante", title: "CUENTA ORDENANTE" },
                 { data: "claveRastreo", name: "ClaveRastreo", title: "CLAVE DE RASTREO" },
                 { data: "nombreOrdenante", name: "NombreCuenta", title: "NOMBRE ORDENANTE" },
                 { data: "nombreBeneficiario", name: "Institucion", title: "NOMBRE BENEFICIARIO" },
@@ -188,20 +189,29 @@ $(document).ready(function () {
 
 $(document).on('click', '.btnDetalle', function (e) {
     var id = $(this).data('id');
-    ModalDetalle.init(id);
+    var estatus = $(this).data('estatus');
+    var claveCobranza = $(this).data('clabecobranza');
+
+    var parametros = id + "|" + claveCobranza + "|" + estatus;
+    ModalDetalle.init(parametros);
 });
 
 var ModalDetalle = function () {
 
-    var init = function (id) {
-        abrirModal(id);
+    var init = function (parametros) {
+        abrirModal(parametros);
     }
-    var abrirModal = function (id) {
+    var abrirModal = function (parametros) {
+        var partes = parametros.split("|");
+        var id = partes[0];
+        var ClaveCobranza = partes[1];
+        var Estatus = partes[2];
+
         $.ajax({
             cache: false,
             type: 'GET',
             url: siteLocation + "Transacciones/DetalleTransaccion",
-            data: { 'Id': id },
+            data: { 'Id': id, 'Estatus': Estatus, 'ClabeCobranza': ClaveCobranza },
             success: function (result) {
                 if (result.error) {
                     $(window).scrollTop(0);
