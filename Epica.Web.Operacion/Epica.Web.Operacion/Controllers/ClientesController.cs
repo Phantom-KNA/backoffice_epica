@@ -534,7 +534,7 @@ public class ClientesController : Controller
             ViewBag.Nombre = header.NombreCompleto;
             ViewBag.AccountID = id;
 
-            return View("~/Views/Clientes/Detalles/Tarjetas/DetalleTarjetas.cshtml");
+            return View("~/Views/Clientes/Detalles/Tarjetas/DetalleTarjetas.cshtml", loginResponse);
         }
 
         return NotFound();

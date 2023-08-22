@@ -24,7 +24,7 @@ namespace Epica.Web.Operacion.Controllers
         public async Task<ActionResult> GestionarPermisos()
         {
             var loginResponse = _userContextService.GetLoginResponse();
-            var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
+            var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Usuarios" && modulo.Ver == 0);
             if (validacion == true)
                 return View();
             return NotFound();
