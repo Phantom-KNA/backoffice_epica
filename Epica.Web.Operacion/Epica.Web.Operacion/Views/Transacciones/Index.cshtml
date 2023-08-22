@@ -119,7 +119,7 @@
                         </div>
                         @{
                             var validacion = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Insertar == 0);
-                            if (validacion == true || validacion != null)
+                            if (validacion == true)
                             {
                                 <div id="kt_datatable_buttons" class="d-none"></div>
                                 <a asp-action="Registro" asp-controller="Transacciones" class="btn btn-sm btn-primary me-3">

@@ -57,7 +57,7 @@ public class ClientesController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
-        if (validacion == true || validacion != null)
+        if (validacion == true)
             return View(loginResponse);
 
         return NotFound();
@@ -267,7 +267,7 @@ public class ClientesController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
-        if (validacion == true || validacion != null)
+        if (validacion == true)
         {
             ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(id);
 
@@ -336,7 +336,7 @@ public class ClientesController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
-        if (validacion == true || validacion != null)
+        if (validacion == true)
         {
             ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(id);
 
@@ -456,7 +456,7 @@ public class ClientesController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
-        if (validacion == true || validacion != null)
+        if (validacion == true)
         {
             ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(cliente);
 
@@ -502,7 +502,7 @@ public class ClientesController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Tarjetas" && modulo.Ver == 0);
-        if (validacion == true || validacion != null)
+        if (validacion == true)
         {
             ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(id);
 
@@ -534,7 +534,7 @@ public class ClientesController : Controller
             ViewBag.Nombre = header.NombreCompleto;
             ViewBag.AccountID = id;
 
-            return View("~/Views/Clientes/Detalles/Tarjetas/DetalleTarjetas.cshtml");
+            return View("~/Views/Clientes/Detalles/Tarjetas/DetalleTarjetas.cshtml", loginResponse);
         }
 
         return NotFound();
@@ -608,13 +608,13 @@ public class ClientesController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Insertar == 0);
-        if (validacion == true || validacion != null)
+        if (validacion == true)
         {
             var listaEmpresas = await _catalogosApiClient.GetEmpresasAsync();
             var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
             var listaOcupaciones = await _catalogosApiClient.GetOcupacionesAsync();
             //var listaPaises = await _catalogosApiClient.GetPaisesAsync();
-            var listaPaises = await _catalogosApiClient.GetPaisesAsync();
+            var listaPaises = Paises.ListaDePaises;
             var listaNacionalidades = await _catalogosApiClient.GetNacionalidadesAsync();
 
             ClientesRegistroViewModel clientesRegistroViewModel = new ClientesRegistroViewModel
@@ -624,7 +624,8 @@ public class ClientesController : Controller
                 ListaRoles = listaRoles,
                 ListaOcupaciones = listaOcupaciones,
                 ListaPaises = listaPaises,
-                ListaNacionalidades = listaNacionalidades
+                ListaNacionalidades = listaNacionalidades,
+                ApoderadoLegalOpciones = ApoderadoLegalOpciones.Opciones
             };
 
             ViewBag.Accion = "RegistrarCliente";
@@ -641,7 +642,7 @@ public class ClientesController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Insertar == 0);
-        if (validacion == true || validacion != null)
+        if (validacion == true)
         {
             RegistrarModificarClienteResponse response = new RegistrarModificarClienteResponse();
 
@@ -689,7 +690,7 @@ public class ClientesController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Editar == 0);
-        if (validacion == true || validacion != null)
+        if (validacion == true)
         {
             RegistrarModificarClienteResponse response = new RegistrarModificarClienteResponse();
 
@@ -786,7 +787,7 @@ public class ClientesController : Controller
         ViewData["IsEdit"] = true;
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Editar == 0);
-        if (validacion == true || validacion != null)
+        if (validacion == true)
         {
             try
             {
@@ -824,22 +825,16 @@ public class ClientesController : Controller
                     IdOcupacion = cliente.value.IdOcupacion,
                     CiudadEstado = cliente.value.Estado,
                     Rol = cliente.value.Rol,
-                    Empresa = cliente.value.Empresa ?? 0,
+                    Empresa = cliente.value.idEmpresa,
                     MontoMaximo = Convert.ToDecimal(cliente.value.montoMaximo),
                     CalleNumero = cliente.value.CalleNumero,
                     IdPais = cliente.value.Pais ?? 0
                 };
-                //var listaEmpresas = await _catalogosApiClient.GetEmpresasAsync();
-                //var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
-                //var listaOcupaciones = await _catalogosApiClient.GetOcupacionesAsync();
-                ////var listaPaises = await _catalogosApiClient.GetPaisesAsync();
-                //var listaPaises = Paises.ListaDePaises;
-                //var listaNacionalidades = await _catalogosApiClient.GetNacionalidadesAsync();
-
                 var listaEmpresas = await _catalogosApiClient.GetEmpresasAsync();
                 var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
                 var listaOcupaciones = await _catalogosApiClient.GetOcupacionesAsync();
-                var listaPaises = await _catalogosApiClient.GetPaisesAsync();
+                //var listaPaises = await _catalogosApiClient.GetPaisesAsync();
+                var listaPaises = Paises.ListaDePaises;
                 var listaNacionalidades = await _catalogosApiClient.GetNacionalidadesAsync();
 
                 if (clientesDetalles == null)
@@ -854,7 +849,8 @@ public class ClientesController : Controller
                     ListaNacionalidades = listaNacionalidades,
                     ListaOcupaciones = listaOcupaciones,
                     ListaPaises = listaPaises,
-                    ListaRoles = listaRoles
+                    ListaRoles = listaRoles,
+                    ApoderadoLegalOpciones = ApoderadoLegalOpciones.Opciones
                 };
 
                 ViewBag.Accion = "ModificarCliente";

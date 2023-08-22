@@ -46,7 +46,8 @@ public class TarjetasController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Tarjetas" && modulo.Ver == 0);
-        if (validacion == true || validacion != null) return View(loginResponse);
+        if (validacion == true)
+            return View(loginResponse);
 
         return NotFound();
     }
@@ -56,7 +57,7 @@ public class TarjetasController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Tarjetas" && modulo.Insertar == 0);
-        if (validacion == true || validacion != null)
+        if (validacion == true)
         {
             TarjetasRegistroTarjetaClienteViewModel taReTarjetaClienteViewModel = new TarjetasRegistroTarjetaClienteViewModel
             {
@@ -85,7 +86,7 @@ public class TarjetasController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Tarjetas" && modulo.Insertar == 0);
-        if (validacion == true || validacion != null)
+        if (validacion == true)
         {
             try
             {

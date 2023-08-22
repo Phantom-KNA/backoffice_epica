@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Epica.Web.Operacion.Models.Response.LoginResponse
+
+@{
     //ViewData["Title"] = "Persona Fisica";
     ViewData["Title"] = "Cuentas";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -37,13 +39,18 @@
                 <input type="text" id="search_input" data-kt-customer-table-filter="search" class="form-control form-control-solid w-250px ps-15" placeholder="Buscar...">
             </div>
         </div>
-        <div class="card-toolbar">
-            <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-                <button data-bs-toggle="modal" data-bs-target="#kt_modal_1" class="btn btn-primary me-3">
-                    <i class="bi bi-plus-lg"></i>&nbsp;Nueva Tarjeta
-                </button>
-            </div>
-        </div>
+        @{
+            var validacion = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Tarjetas" && modulo.Editar == 0);
+            {
+                <div class="card-toolbar">
+                    <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
+                        <button data-bs-toggle="modal" data-bs-target="#kt_modal_1" class="btn btn-primary me-3">
+                            <i class="bi bi-plus-lg"></i>&nbsp;Nueva Tarjeta
+                        </button>
+                    </div>
+                </div>
+            }
+        }
     </div>
     <div class="card-body p-9">
         <div class="bottom-buffer">
