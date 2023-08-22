@@ -73,6 +73,14 @@ public class TarjetasController : Controller
 
     [Authorize]
     [HttpPost]
+    public async Task<ActionResult>BuscarClientes(string cliente)
+    {
+        var listaClientes = await _clientesApiClient.GetClientesbyNombreAsync(cliente);
+        return Json(listaClientes);
+    }
+
+    [Authorize]
+    [HttpPost]
     public async Task<IActionResult> RegistrarTarjetaCliente(TarjetasRegistroTarjetaClienteViewModel model)
     {
         var loginResponse = _userContextService.GetLoginResponse();

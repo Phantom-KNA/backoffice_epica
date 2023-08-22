@@ -287,7 +287,9 @@ public class ClientesController : Controller
                 Sexo = user.value.Sexo,
                 Rfc = user.value.RFC,
                 Ine = user.value.INE,
-                FechaNacimiento = DateTime.Parse(user.value.FechaNacimiento),
+                FechaNacimiento = user.value.FechaNacimiento != null
+? DateTime.ParseExact(user.value.FechaNacimiento, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+    : null,
                 Observaciones = user.value.Observaciones,
                 PaisNacimiento = user.value.PaisNacimiento,
                 Ocupacion = user.value.IdOcupacion.ToString(),
@@ -813,7 +815,9 @@ public class ClientesController : Controller
                     ApoderadoLegal = (cliente.value.AntiguedadLaboral?.ToLower() == "si") ? 1 : 0,
                     NoInterior = cliente.value.NoInt,
                     Puesto = cliente.value.puesto,
-                    FechaNacimiento =DateTime.Parse(cliente.value.FechaNacimiento ?? ""),
+                    FechaNacimiento = cliente.value.FechaNacimiento != null
+? DateTime.ParseExact(cliente.value.FechaNacimiento, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+    : null,
                     DelegacionMunicipio = cliente.value.Municipio,
                     TelefonoTipo = cliente.value.TelefonoRecado,
                     IdNacionalidad = cliente.value.IdNacionalidad,

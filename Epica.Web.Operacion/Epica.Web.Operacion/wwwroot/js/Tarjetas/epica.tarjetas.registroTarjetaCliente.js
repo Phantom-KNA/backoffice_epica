@@ -2,6 +2,8 @@
 
 var Init = function () {
     var init = function () {
+        const inputNombreCliente = document.getElementById('nombreCliente');
+        const selectIdCliente = document.getElementById('idCliente');
         const selectAnioVigencia = document.getElementById('anioVigencia');
 
         const currentYear = new Date().getFullYear();
@@ -26,12 +28,38 @@ var Init = function () {
             toastr.success('Registro guardado exitosamente', "");
         });
     }
-    return {
-        init: function () {
-            init();
-        }
-    };
+
+    $(document).on('click', '#btnBuscarCliente', function () {
+        const nombreCliente = inputNombreCliente.value;
+
+        $.ajax({
+            url: "/Tarjetas/BuscarClientes",
+            type: "POST",
+            data: { nombreCliente: nombreCliente },
+            success: function (result) {
+                selectIdCliente.innerHTML = "";
+
+                result.forEach(function (cliente) {
+                    const option = document.createElement('option');
+                    option.text = cliente.Descripcion;
+                    option.value = cliente.Id;
+                    selectIdCliente.appendChild(option);
+                });
+            },
+            error: function (error) {
+                console.error("Error en la búsqueda de clientes: " + error);
+            }
+        });
+    });
+};
+
+return {
+    init: function () {
+        init();
+    }
+};
 }();
+
 jQuery(document).ready(function () {
     Init.init();
 });
