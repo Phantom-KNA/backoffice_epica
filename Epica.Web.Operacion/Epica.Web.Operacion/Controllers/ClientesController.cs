@@ -57,7 +57,7 @@ public class ClientesController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
-        if (validacion == true || validacion != null)
+        if (validacion == true)
             return View(loginResponse);
 
         return NotFound();
@@ -267,7 +267,7 @@ public class ClientesController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
-        if (validacion == true || validacion != null)
+        if (validacion == true)
         {
             ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(id);
 
@@ -336,7 +336,7 @@ public class ClientesController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
-        if (validacion == true || validacion != null)
+        if (validacion == true)
         {
             ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(id);
 
@@ -456,7 +456,7 @@ public class ClientesController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
-        if (validacion == true || validacion != null)
+        if (validacion == true)
         {
             ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(cliente);
 
@@ -502,7 +502,7 @@ public class ClientesController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Tarjetas" && modulo.Ver == 0);
-        if (validacion == true || validacion != null)
+        if (validacion == true)
         {
             ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(id);
 
@@ -608,7 +608,7 @@ public class ClientesController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Insertar == 0);
-        if (validacion == true || validacion != null)
+        if (validacion == true)
         {
             var listaEmpresas = await _catalogosApiClient.GetEmpresasAsync();
             var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
@@ -642,7 +642,7 @@ public class ClientesController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Insertar == 0);
-        if (validacion == true || validacion != null)
+        if (validacion == true)
         {
             RegistrarModificarClienteResponse response = new RegistrarModificarClienteResponse();
 
@@ -690,7 +690,7 @@ public class ClientesController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Editar == 0);
-        if (validacion == true || validacion != null)
+        if (validacion == true)
         {
             RegistrarModificarClienteResponse response = new RegistrarModificarClienteResponse();
 
@@ -787,7 +787,7 @@ public class ClientesController : Controller
         ViewData["IsEdit"] = true;
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Editar == 0);
-        if (validacion == true || validacion != null)
+        if (validacion == true)
         {
             try
             {

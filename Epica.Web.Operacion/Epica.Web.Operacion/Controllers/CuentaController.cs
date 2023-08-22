@@ -48,7 +48,7 @@ public class CuentaController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
-        if (validacion == true || validacion != null)
+        if (validacion == true)
             return View();
 
         return NotFound();
@@ -156,7 +156,7 @@ public class CuentaController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Cuentas" && modulo.Ver == 0);
-        if (validacion == true || validacion != null)
+        if (validacion == true)
         {
             ClienteDetailsResponse user = await _usuariosApiClient.GetDetallesCliente(cliente);
 
@@ -202,7 +202,7 @@ public class CuentaController : Controller
     {
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Cuentas" && modulo.Ver == 0);
-        if (validacion == true || validacion != null)
+        if (validacion == true)
         {
             ClienteDetailsResponse user = await _usuariosApiClient.GetDetallesCliente(cliente);
 

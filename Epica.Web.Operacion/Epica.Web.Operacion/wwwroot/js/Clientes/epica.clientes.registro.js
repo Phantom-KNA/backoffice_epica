@@ -20,7 +20,6 @@ var Init = function () {
                 weekLabel: "S"
             }
         });
-
         $(document).on('click', '#btnGuardarCliente', function (e) {
             var requiredFields = document.querySelectorAll('[required]');
 
