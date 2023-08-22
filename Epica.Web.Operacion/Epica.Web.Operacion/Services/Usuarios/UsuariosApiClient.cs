@@ -42,5 +42,30 @@ namespace Epica.Web.Operacion.Services.Usuarios
 
             return listaUsuarios;
         }
+
+        public async Task<List<UserRolPermisosResponse>> GetUsuariosRolesVistaAsync()
+        {
+
+            List<UserRolPermisosResponse>? listaUsuarios = new List<UserRolPermisosResponse>();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.UsuariosOperations.GetUsuariosRoles();
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    listaUsuarios = JsonConvert.DeserializeObject<List<UserRolPermisosResponse>>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return listaUsuarios;
+            }
+
+            return listaUsuarios;
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Epica.Web.Operacion.Config;
 using Epica.Web.Operacion.Helpers;
+using Epica.Web.Operacion.Models;
 using Epica.Web.Operacion.Models.Common;
 using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Models.ViewModels;
@@ -338,6 +339,33 @@ public class CuentaController : Controller
         var ListPF = await _cuentaApiClient.GetCobranzaReferenciadaAsync(id);
         //var ListPF = GetList();
         return Json(ListPF);
+    }
+    [Authorize]
+    public async Task<IActionResult> DetalleCuenta(string numCuenta)
+    {
+        var result = new JsonResultDto();
+        try
+        {
+            var detalleTransaccion = await _cuentaApiClient.GetDetalleCuentasAsync(numCuenta);
+
+            if (detalleTransaccion != null)
+            {
+                result.Error = false;
+                result.Result = await this.RenderViewToStringAsync("~/Views/Cuenta/_Detalle.cshtml", detalleTransaccion.First());
+            }
+            else
+            {
+                result.Error = true;
+                result.ErrorDescription = "ERROR";
+                return Json(result);
+            }
+        }
+        catch (Exception)
+        {
+            result.Error = true;
+            result.ErrorDescription = "Error1";
+        }
+        return Json(result);
     }
 
     [Authorize]

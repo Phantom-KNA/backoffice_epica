@@ -31,6 +31,7 @@ public class UrlsConfig
         public static string GetCuentasTotal() => $"/api/v1/cuentas/total";
         public static string GetCobranzaReferenciada(int id) => $"/api/v1/transacciones/cobranza_referenciada?idCuenta={id}";
         public static string GetCuentasClientes(int id) => $"/api/v1/cuentas/cliente_cuentas?idCliente={id}";
+        public static string GetCuentaDetalle(string NoCuenta) => $"/api/v1/cuentas/buscar_cuenta?noCuenta={NoCuenta}";
     }
 
     public class ClientesOperations
@@ -79,6 +80,7 @@ public class UrlsConfig
     public class UsuariosOperations
     {
         public static string GetUsuariosRoles() => $"/api/v1/usuario/resumen_permisos";
+        public static string GetUsuariosVista() => $"/api/v1/usuario/resumen_permisos";
     }
     public string Authenticate { get; set; }
     public string Transaccion { get; set; }

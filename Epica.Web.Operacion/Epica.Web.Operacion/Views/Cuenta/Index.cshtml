@@ -151,7 +151,26 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal_detalle" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header ">
+                <h1 class="modal-title fs-5" id="modalLabelTitle"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer" style="padding:10px">
+                <button type="button" class="btn btn-success btn-sm font-weight-bold" data-bs-dismiss="modal" aria-label="Close" id="btnCerrar">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts{
     <script asp-append-version="true" src="~/js/components/accounting.js"></script>
     <script asp-append-version="true" src="~/js/Cuentas/epica.cuenta.index.js"></script>
+    <script>
+        var TranID = '';
+    </script>
 }

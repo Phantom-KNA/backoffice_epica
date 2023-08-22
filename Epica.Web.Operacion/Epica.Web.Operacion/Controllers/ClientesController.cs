@@ -1140,7 +1140,7 @@ public class ClientesController : Controller
 
                 var pf = new UserPermissionResponse();
                 pf.id = i;
-                pf.nombreCompleto = gen.NombreCompleto;
+                pf.nombreRol = gen.NombreCompleto;
                 pf.listaGen = generarListaPermisos();
                 List.Add(pf);
             }
@@ -1163,7 +1163,7 @@ public class ClientesController : Controller
             var genPermisos = catalogoVista[i];
 
             var pf = new ListUserPermissionResponse();
-            pf.id = i;
+            pf.IdPermiso = i;
             pf.vista = genPermisos;
             pf.Escritura = false;
             pf.Lectura = true;

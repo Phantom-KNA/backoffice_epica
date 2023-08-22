@@ -246,10 +246,9 @@ jQuery(document).ready(function () {
 });
 
 function pruebas(idAccount) {
-
     var dataInfo = []; 
     dataInfo.length = 0;
-
+    TranID = idAccount;
     var buttonsSubTable = document.querySelectorAll('[data-kt-docs-datatable-subtable="expand_row"]');
     buttonsSubTable.forEach((button, index) => {
         button.addEventListener('click', e => {
@@ -274,10 +273,10 @@ function pruebas(idAccount) {
                     async: true,
                     cache: false,
                     type: 'POST',
-                    data: { 'id': idAccount },
+                    data: { 'id': TranID },
                     success: function (data) {
 
-                        console.log(data);
+
                         data.forEach((d, index) => {
                             // Clone template node
                             var newTemplate = template.cloneNode(true);
@@ -366,6 +365,62 @@ function GestionarCuenta(AccountID, estatus) {
     });
 }
 
+$(document).on('click', '.btnDetalle', function (e) {
+    var id = $(this).data('id');
+    ModalDetalle.init(id);
+});
+
+var ModalDetalle = function () {
+
+    var init = function (id) {
+        abrirModal(id);
+    }
+    var abrirModal = function (id) {
+        $.ajax({
+            cache: false,
+            type: 'GET',
+            url: siteLocation + "Cuenta/DetalleCuenta",
+            data: { 'numCuenta': id },
+            success: function (result) {
+                if (result.error) {
+                    $(window).scrollTop(0);
+                    $("#DivSuccessMessage").hide();
+                    $("#DivErrorMessage").show();
+                    setTimeout(function () { $("#DivErrorMessage").hide() }, 3000);
+                    $("#ErrorMessage").text(result.errorDescription);
+                } else {
+                    $('#modal_detalle #modalLabelTitle').html('Detalle de Cuenta');
+                    $('#modal_detalle .modal-body').html(result.result);
+                    $('#modal_detalle').modal('show');
+                }
+
+                return;
+            },
+            error: function (res) {
+                $("#DivSuccessMessage").hide();
+                $("#DivErrorMessage").show();
+                $("#ErrorMessage").text('Error');
+            }
+        });
+        listeners();
+    }
+    // Inicializa los listeners de los botones relacionados a la ventana modal
+    var listeners = function () {
+
+    }
+    // Cerramos la ventana modal
+    var cerrarModal = function () {
+        $('#btnCancelar').click();
+    }
+    return {
+        init: function (id) {
+            init(id);
+        },
+        cerrarventanamodal: function () {
+            cerrarModal();
+        }
+    }
+}();
 
 //function populateTemplate(dataMapper, target){
 //    console.log(dataMapper);

@@ -9,13 +9,14 @@ namespace Epica.Web.Operacion.Models.Response;
 public class UserPermissionResponse
 {
     public long id { get; set; }
-    public string nombreCompleto { get; set; }
+    public string nombreRol { get; set; }
     public List<ListUserPermissionResponse> listaGen { get; set; }
 }
 
 public class ListUserPermissionResponse
 {
-    public long id { get; set; }
+    public int IdPermiso { get; set; }
+    public int IdRol { get; set; }
     public string vista { get; set; }
     public bool Escritura { get; set; }
     public bool Lectura { get; set; }

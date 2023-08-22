@@ -37,7 +37,7 @@ var KTDatatableRemoteAjax = function () {
             filter: true,
             ordering: true,
             ajax: {
-                url: siteLocation + 'Clientes/ConsultaPermisos',
+                url: siteLocation + 'Usuarios/ConsultaPermisos',
                 type: 'POST',
                 data: function (d) {
                     var filtros = [];
@@ -65,7 +65,7 @@ var KTDatatableRemoteAjax = function () {
             }],
             columns: [
                 { data: 'id', name: 'Id', title: 'Id Usuario' },
-                { data: 'nombreCompleto', name: 'NombreCompleto', title: 'Nombre del Cliente' },
+                { data: 'nombreRol', name: 'nombreRol', title: 'Nombre del Rol' },
                 {
                     data: 'listaGen', name: 'Transacciones', title: 'Transacciones',
                     render: function (data, type, row) {
@@ -107,11 +107,11 @@ var KTDatatableRemoteAjax = function () {
                     }
                 },
                 {
-                    data: 'listaGen', name: 'Usuarios', title: 'Usuarios',
+                    data: 'listaGen', name: 'Clientes', title: 'Clientes',
                     render: function (data, type, row) {
                         var renderList = "<ul>";
                         $(data).each(function (entry, value) {
-                            if (value.vista == "Usuarios") {
+                            if (value.vista == "Clientes") {
 
                                 if (value.escritura == true) {
                                     renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Crear Registros</span></label></li>"
@@ -190,6 +190,45 @@ var KTDatatableRemoteAjax = function () {
 
                         $(data).each(function (entry, value) {
                             if (value.vista == "Tarjetas") {
+
+                                if (value.escritura == true) {
+                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Crear Registros</span></label></li>"
+                                } else {
+                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-invalid'><input class='form-check-input' name='communication[]' type='checkbox' value='1'><span class='fw-semibold ps-2 fs-6'>Crear Registros</span></label></li>"
+                                }
+
+                                if (value.lectura == true) {
+                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Consultar Registros</span></label></li>"
+                                } else {
+                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-invalid'><input class='form-check-input' name='communication[]' type='checkbox' value='1'><span class='fw-semibold ps-2 fs-6'>Consultar Registros</span></label></li>"
+                                }
+
+                                if (value.eliminar == true) {
+                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Eliminar Registros</span></label></li>"
+                                } else {
+                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-invalid'><input class='form-check-input' name='communication[]' type='checkbox' value='1'><span class='fw-semibold ps-2 fs-6'>Eliminar Registros</span></label></li>"
+                                }
+
+                                if (value.actualizar == true) {
+                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Modificar Registros</span></label></li>"
+                                } else {
+                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-invalid'><input class='form-check-input' name='communication[]' type='checkbox' value='1'><span class='fw-semibold ps-2 fs-6'>Modificar Registros</span></label></li>"
+                                }
+
+                            }
+                        });
+
+                        renderList += "</ul>";
+                        return renderList;
+                    }
+                },
+                {
+                    data: 'listaGen', name: 'Configuracion', title: 'Configuracion',
+                    render: function (data, type, row) {
+                        var renderList = "<ul>";
+
+                        $(data).each(function (entry, value) {
+                            if (value.vista == "Configuracion") {
 
                                 if (value.escritura == true) {
                                     renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Crear Registros</span></label></li>"

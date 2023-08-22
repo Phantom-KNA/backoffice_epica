@@ -1,9 +1,11 @@
 ﻿@model Epica.Web.Operacion.Models.Response.CuentasResponse
 <div class="dropdown dropdown-inline">
-    <button type="button" class="btn btn-sm btn-icon btn-light btn-active-light-primary me-2" onclick="pruebas(@Model.idCuenta)" title="Ver SubCuentas" data-kt-docs-datatable-subtable="expand_row">
+    <button type="button" class="btn btn-sm btn-icon btn-light btn-active-light-primary me-2 btnCobranzaRef" onclick="pruebas(@Model.idCuenta)" id="@Model.idCuenta" title="Ver SubCuentas" data-kt-docs-datatable-subtable="expand_row">
         <i class="bi bi-plus"></i>
     </button>
-
+    <button type="button" class="btn btn-sm btn-icon btn-light btn-active-light-primary me-2 btnDetalle" data-id="@Model.noCuenta" data-estatus="@Model.estatus" title="Detalles de Cuenta">
+        <i class="bi bi-question-circle"></i>
+    </button>
     <a href="javascript:;" class="btn btn-sm btn-icon btn-light btn-active-light-primary me-2" title="Acciones" data-bs-toggle="dropdown">
         <i class="bi bi-three-dots"></i>
     </a>
