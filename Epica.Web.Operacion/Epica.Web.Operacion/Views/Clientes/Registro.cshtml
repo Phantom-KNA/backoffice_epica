@@ -172,8 +172,7 @@
                                 <option></option>
                                 @foreach (var ocupacion in Model.ListaOcupaciones)
                                 {
-                                    var isSelected = (ocupacion.Id == Model.ClientesDetalles.IdNacionalidad) ? "selected" : "";
-                                    <option value="@ocupacion.Id" selected="@isSelected">@ocupacion.Descripcion</option>
+                                    <option value="@ocupacion.Id">@ocupacion.Descripcion</option>
                                 }
                             </select>
                         </div>
@@ -185,8 +184,7 @@
                                 <option></option>
                                 @foreach (var nacionalidad in Model.ListaNacionalidades)
                                 {
-                                    var isSelected = (nacionalidad.Id == Model.ClientesDetalles.IdNacionalidad) ? "selected" : "";
-                                    <option value="@nacionalidad.Id" selected="@isSelected">@nacionalidad.Descripcion</option>
+                                    <option value="@nacionalidad.Id">@nacionalidad.Descripcion</option>
                                 }
                             </select>
                         </div>
@@ -208,8 +206,7 @@
                                 <option></option>
                                 @foreach (var pais in Model.ListaPaises)
                                 {
-@*                                    var isSelected = (Convert.ToInt32(pais.Value) == Model.ClientesDetalles.IdPais) ? "selected" : "";
-                                    <option value="@pais.Value" selected="@isSelected">@pais.Text</option>*@
+                                    <option value="@pais.Value">@pais.Text</option>
                                 }
                             </select>
                         </div>
@@ -336,17 +333,7 @@
                                 <option></option>
                                 @foreach (var empresa in Model.ListaEmpresas)
                                 {
-                                    var isSelected = (empresa.Id == Model.ClientesDetalles.IdNacionalidad) ? "selected" : "";
-                                    <option value="@empresa.Id" selected="@isSelected">@empresa.Descripcion</option>
-
-                                    if (empresa.Id == Model.ClientesDetalles.Empresa)
-                                    {
-                                        <option value="@empresa.Id" selected>@empresa.Descripcion</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@empresa.Id">@empresa.Descripcion</option>
-                                    }
+                                    <option value="@empresa.Id">@empresa.Descripcion</option>
                                 }
                             </select>
                         </div>
@@ -354,33 +341,11 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Apoderado legal: &nbsp;</label>
                         <div class="position-relative">
-                            <select asp-for="ClientesDetalles.ApoderadoLegal" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción" required>
+                            <select asp-for="ClientesDetalles.ApoderadoLegal" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required>
                                 <option></option>
-                                @{
-                                    if (Model != null)
-                                    {
-                                        if (Model.ClientesDetalles.ApoderadoLegal == 1)
-                                        {
-                                            <option value=1 selected>Si</option>
-                                        }
-                                        else
-                                        {
-                                            <option value=1>Si</option>
-                                        }
-                                        if (Model.ClientesDetalles.ApoderadoLegal == 0)
-                                        {
-                                            <option value=0 selected>No</option>
-                                        }
-                                        else
-                                        {
-                                            <option value=0>No</option>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <option value=1>Si</option>
-                                        <option value=0>No</option>
-                                    }
+                                @foreach (var apoderadoLegal in Model.ApoderadoLegalOpciones)
+                                {
+                                    <option value="@apoderadoLegal.Id">@apoderadoLegal.Descripcion</option>
                                 }
                             </select>
                         </div>
@@ -392,8 +357,7 @@
                                 <option></option>
                                 @foreach (var rol in Model.ListaRoles)
                                 {
-                                    var isSelected = (rol.Descripcion == Model.ClientesDetalles.Rol) ? "selected" : "";
-                                    <option value="@rol.Descripcion" selected="@isSelected">@rol.Descripcion</option>
+                                    <option value="@rol.Id">@rol.Descripcion</option>
                                 }
                             </select>
                         </div>

@@ -614,7 +614,7 @@ public class ClientesController : Controller
             var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
             var listaOcupaciones = await _catalogosApiClient.GetOcupacionesAsync();
             //var listaPaises = await _catalogosApiClient.GetPaisesAsync();
-            var listaPaises = await _catalogosApiClient.GetPaisesAsync();
+            var listaPaises = Paises.ListaDePaises;
             var listaNacionalidades = await _catalogosApiClient.GetNacionalidadesAsync();
 
             ClientesRegistroViewModel clientesRegistroViewModel = new ClientesRegistroViewModel
@@ -624,7 +624,8 @@ public class ClientesController : Controller
                 ListaRoles = listaRoles,
                 ListaOcupaciones = listaOcupaciones,
                 ListaPaises = listaPaises,
-                ListaNacionalidades = listaNacionalidades
+                ListaNacionalidades = listaNacionalidades,
+                ApoderadoLegalOpciones = ApoderadoLegalOpciones.Opciones
             };
 
             ViewBag.Accion = "RegistrarCliente";
@@ -824,22 +825,16 @@ public class ClientesController : Controller
                     IdOcupacion = cliente.value.IdOcupacion,
                     CiudadEstado = cliente.value.Estado,
                     Rol = cliente.value.Rol,
-                    Empresa = cliente.value.Empresa ?? 0,
+                    Empresa = cliente.value.idEmpresa,
                     MontoMaximo = Convert.ToDecimal(cliente.value.montoMaximo),
                     CalleNumero = cliente.value.CalleNumero,
                     IdPais = cliente.value.Pais ?? 0
                 };
-                //var listaEmpresas = await _catalogosApiClient.GetEmpresasAsync();
-                //var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
-                //var listaOcupaciones = await _catalogosApiClient.GetOcupacionesAsync();
-                ////var listaPaises = await _catalogosApiClient.GetPaisesAsync();
-                //var listaPaises = Paises.ListaDePaises;
-                //var listaNacionalidades = await _catalogosApiClient.GetNacionalidadesAsync();
-
                 var listaEmpresas = await _catalogosApiClient.GetEmpresasAsync();
                 var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
                 var listaOcupaciones = await _catalogosApiClient.GetOcupacionesAsync();
-                var listaPaises = await _catalogosApiClient.GetPaisesAsync();
+                //var listaPaises = await _catalogosApiClient.GetPaisesAsync();
+                var listaPaises = Paises.ListaDePaises;
                 var listaNacionalidades = await _catalogosApiClient.GetNacionalidadesAsync();
 
                 if (clientesDetalles == null)
@@ -854,7 +849,8 @@ public class ClientesController : Controller
                     ListaNacionalidades = listaNacionalidades,
                     ListaOcupaciones = listaOcupaciones,
                     ListaPaises = listaPaises,
-                    ListaRoles = listaRoles
+                    ListaRoles = listaRoles,
+                    ApoderadoLegalOpciones = ApoderadoLegalOpciones.Opciones
                 };
 
                 ViewBag.Accion = "ModificarCliente";

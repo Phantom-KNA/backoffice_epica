@@ -6,6 +6,21 @@
         public string Text { get; set; }
     }
 
+    public class ApoderadoLegal
+    {
+        public int Id { get; set; }
+        public string Descripcion { get; set; }
+    }
+
+    public static class ApoderadoLegalOpciones
+    {
+        public static List<ApoderadoLegal> Opciones = new List<ApoderadoLegal>
+        {
+            new ApoderadoLegal {Id = 1, Descripcion = "Si"},
+            new ApoderadoLegal {Id = 0, Descripcion = "No"}
+        };
+    }
+
     public static class Paises
     {
         public static List<Pais> ListaDePaises = new List<Pais>
