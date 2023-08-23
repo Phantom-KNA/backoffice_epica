@@ -686,10 +686,10 @@ public class ClientesController : Controller
         {
             AsignarCuentaResponse asignarCuentaResponse = new AsignarCuentaResponse
             { 
-               IdCliente = model.IdCliente,
-               IdCuenta = model.IdCuenta,
-               Rol = model.Rol,
-               IdEmpresa = model.IdEmpresa
+               idCliente = model.IdCliente,
+               idCuenta = model.IdCuenta,
+               descripcionRol = model.Rol,
+               idEmpresa = model.IdEmpresa
             };
 
             response = await _clientesApiClient.GetRegistroAsignacionCuentaCliente(asignarCuentaResponse);
@@ -715,6 +715,48 @@ public class ClientesController : Controller
         }
 
         return Json(model);
+    }
+
+    [Authorize]
+    [Route("Clientes/Detalle/Cuentas/DesvincularCuenta")]
+    [HttpPost]
+    public async Task<JsonResult> DesvincularCuentaCliente(int idCuenta, int idCliente)
+    {
+        var loginResponse = _userContextService.GetLoginResponse();
+        MensajeResponse response = new MensajeResponse();
+
+        try
+        {
+            DesvincularCuentaResponse asignarCuentaResponse = new DesvincularCuentaResponse
+            {
+                idCliente = idCliente,
+                idCuenta = idCuenta,
+                descripcionRol = "admin", //---> se deja por defecto para desvincular
+            };
+
+            response = await _clientesApiClient.GetRegistroDesvincularCuentaCliente(asignarCuentaResponse);
+
+            LogRequest logRequest = new LogRequest
+            {
+                IdUser = loginResponse.IdUsuario.ToString(),
+                Modulo = "Clientes",
+                Fecha = HoraHelper.GetHoraCiudadMexico(),
+                NombreEquipo = Environment.MachineName,
+                Accion = "Desasignar Cuenta",
+                Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                Envio = JsonConvert.SerializeObject(asignarCuentaResponse),
+                Respuesta = response.Error.ToString(),
+                Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
+                IdRegistro = idCliente
+            };
+            await _logsApiClient.InsertarLogAsync(logRequest);
+        }
+        catch (Exception ex)
+        {
+            response.Detalle = ex.Message;
+        }
+
+        return Json(response);
     }
     #endregion
 

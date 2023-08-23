@@ -52,6 +52,7 @@ public class UrlsConfig
         public static string GetAllClientes() => $"api/v1/clientes/AllClientes";
         public static string ModificarClienteNuevo() => $"/api/v1/clientes/modificar_cliente";
         public static string AsignarCuentaCliente() => $"/api/v1/clientes/asignar_cuenta";
+        public static string DesvincularCuentaCliente() => $"/api/v1/clientes/desasociar_cuenta";
     }
 
     public class CatalogosOperations

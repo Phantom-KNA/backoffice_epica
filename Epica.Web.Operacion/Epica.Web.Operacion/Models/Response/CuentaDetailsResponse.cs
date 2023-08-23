@@ -44,4 +44,5 @@ public class DatosCuentaResponse
     public string? FechaAlta { get; set; }
     [JsonPropertyName("fechaActualizacion")]
     public string? FechaActualizacion { get; set; }
+    public string? descripcionInstitucion { get; set; }
 }

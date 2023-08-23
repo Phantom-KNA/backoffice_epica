@@ -196,45 +196,45 @@ public class CuentaController : Controller
         return NotFound();
     }
 
-    [Authorize]
-    [Route("Cuentas/Detalle/CobranzaReferenciada")]
-    public async Task<IActionResult> CobranzaReferenciada(int id, int cliente, string noCuenta)
-    {
-        var loginResponse = _userContextService.GetLoginResponse();
-        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Cuentas" && modulo.Ver == 0);
-        if (validacion == true)
-        {
-            ClienteDetailsResponse user = await _usuariosApiClient.GetDetallesCliente(cliente);
+    //[Authorize]
+    //[Route("Cuentas/Detalle/CobranzaReferenciada")]
+    //public async Task<IActionResult> CobranzaReferenciada(int id, int cliente, string noCuenta)
+    //{
+    //    var loginResponse = _userContextService.GetLoginResponse();
+    //    var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Cuentas" && modulo.Ver == 0);
+    //    if (validacion == true)
+    //    {
+    //        ClienteDetailsResponse user = await _usuariosApiClient.GetDetallesCliente(cliente);
 
-            if (user.value == null)
-            {
-                return RedirectToAction("Index");
-            }
+    //        if (user.value == null)
+    //        {
+    //            return RedirectToAction("Index");
+    //        }
 
-            ViewBag.UrlView = "Movimientos";
-            ClientesHeaderViewModel header = new ClientesHeaderViewModel
-            {
-                Id = user.value.IdCliente,
-                NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
-                Telefono = user.value.Telefono,
-                Correo = user.value.Email,
-                Curp = user.value.CURP,
-                Organizacion = user.value.Organizacion,
-                Rfc = user.value.RFC,
-                Sexo = user.value.Sexo,
-                NoCuenta = noCuenta
-            };
-            ViewBag.Info = header;
-            ViewBag.Nombre = header.NombreCompleto;
-            ViewBag.AccountID = id;
-            ViewBag.NumCuenta = noCuenta;
-            ViewBag.Cliente = cliente;
+    //        ViewBag.UrlView = "Movimientos";
+    //        ClientesHeaderViewModel header = new ClientesHeaderViewModel
+    //        {
+    //            Id = user.value.IdCliente,
+    //            NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
+    //            Telefono = user.value.Telefono,
+    //            Correo = user.value.Email,
+    //            Curp = user.value.CURP,
+    //            Organizacion = user.value.Organizacion,
+    //            Rfc = user.value.RFC,
+    //            Sexo = user.value.Sexo,
+    //            NoCuenta = noCuenta
+    //        };
+    //        ViewBag.Info = header;
+    //        ViewBag.Nombre = header.NombreCompleto;
+    //        ViewBag.AccountID = id;
+    //        ViewBag.NumCuenta = noCuenta;
+    //        ViewBag.Cliente = cliente;
 
-            return View("~/Views/Cuenta/DetallesCuenta/Transacciones/DetalleMovimientos.cshtml");
-        }
+    //        return View("~/Views/Cuenta/DetallesCuenta/Transacciones/DetalleMovimientos.cshtml");
+    //    }
 
-        return NotFound();
-    }
+    //    return NotFound();
+    //}
 
     [HttpPost]
     public async Task<JsonResult> ConsultaCuentas(string id, string TipoConsulta)

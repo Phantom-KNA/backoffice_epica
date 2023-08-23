@@ -289,7 +289,7 @@ function pruebas(idAccount) {
                             var noreferencia = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_numero_referencia"]');
                             var fechadato = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_fecha"]');
 
-                            console.log(d.estatus);
+                            console.log(d);
                             // Mapeo de Datos
                             numcuenta.innerText = d.noCuentaPadre;
                             cliente.innerText = d.nombre;
@@ -304,7 +304,7 @@ function pruebas(idAccount) {
                                 estatus.innerHTML = "<span class='badge badge-light-danger'>Error</span>"
                             }
                             //estatus.innerHTML = d.estatus == 1 ? "<span class='badge badge-light-success'>Activo</span>" : "<span class='badge badge-light-danger'>Desactivado</span>";
-                            mediopago.innerText = d.idMedioPago;
+                            mediopago.innerText = d.descripcionPago;
                             noreferencia.innerText = d.numeroReferencia;
                             fechadato.innerText = d.fechaAlta;
 
@@ -348,21 +348,26 @@ function pruebas(idAccount) {
 
 
 function GestionarCuenta(AccountID, estatus) {
-    $.ajax({
-        url: siteLocation + 'Cuenta/GestionarEstatusCuentas',
-        async: true,
-        cache: false,
-        type: 'POST',
-        data: { id: AccountID, Estatus: estatus },
-        success: function (data) {
 
-            datatable.ajax.reload();
-            toastr.success('Se ha actualizado el estatus de la cuenta con exito.', "");
-        },
-        error: function (xhr, status, error) {
-            console.log(error);
-        }
-    });
+    if (confirm('Esta seguro que desea bloquear o desbloquear esta cuenta?')) {
+        $.ajax({
+            url: siteLocation + 'Cuenta/GestionarEstatusCuentas',
+            async: true,
+            cache: false,
+            type: 'POST',
+            data: { id: AccountID, Estatus: estatus },
+            success: function (data) {
+
+                datatable.ajax.reload();
+                toastr.success('Se ha actualizado el estatus de la cuenta con exito.', "");
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+            }
+        });
+    }
+
+
 }
 
 $(document).on('click', '.btnDetalle', function (e) {
