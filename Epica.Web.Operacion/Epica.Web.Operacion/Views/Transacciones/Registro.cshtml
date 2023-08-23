@@ -39,9 +39,6 @@
                 </button>
             </div>
         </div>
-            <div class="card-body pt-5">
-                <input asp-for="@Model.TransacccionDetalles.IdTrasaccion class=" form-control form-control-sm form-control-solid" id="IdTrasaccion" type="hidden" value="@(Model?.TransacccionDetalles.IdTrasaccion ?? 0)" autocomplete="off" />
-            </div>
         <div class="card-body pt-5">
             <div class="d-flex mb-6 mt-6">
                     <div class="py-2 px-4 col-md-4 fv-row">
@@ -52,10 +49,10 @@
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
-                        <label class="form-label required">Cuenta ordenante:</label>
+                        <label class="form-label required">Nombre ordenante: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="@Model.TransacccionDetalles.NoCuentaOrdenante" class="form-control form-control-sm form-control-solid" id="NoCuentaOrdenante" type="text" value="@(Model?.TransacccionDetalles.NoCuentaOrdenante ?? "")" autocomplete="off" />
-                            <span asp-validation-for="@Model.TransacccionDetalles.NoCuentaOrdenante" class="text-danger"></span>
+                            <input asp-for="@Model.TransacccionDetalles.NombreOrdenante" class="form-control form-control-sm form-control-solid" id="NombreOrdenante" type="text" value="@(Model?.TransacccionDetalles.NombreOrdenante ?? "")" autocomplete="off" required />
+                            <span asp-validation-for="@Model.TransacccionDetalles.NombreOrdenante" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
@@ -84,12 +81,12 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Tipo de operación: &nbsp;</label>
                         <div class="position-relative">
-                            <select asp-for="@Model.TransacccionDetalles.tipoOperacion" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción" required>
+                            <select asp-for="@Model.TransacccionDetalles.TipoOperacion" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción" required>
                                 <option></option>
                                 @{
                                     if (Model != null)
                                     {
-                                        if (Model.TransacccionDetalles.tipoOperacion == 1)
+                                        if (Model.TransacccionDetalles.TipoOperacion == 1)
                                         {
                                             <option value="1" selected>In</option>
                                         }
@@ -97,7 +94,7 @@
                                         {
                                             <option value="1">In</option>
                                         }
-                                        if (Model.TransacccionDetalles.tipoOperacion == 2)
+                                        if (Model.TransacccionDetalles.TipoOperacion == 2)
                                         {
                                             <option value="2" selected>Out</option>
                                         }
@@ -105,7 +102,7 @@
                                         {
                                             <option value="2">Out</option>
                                         }
-                                        if (Model.TransacccionDetalles.tipoOperacion == 3)
+                                        if (Model.TransacccionDetalles.TipoOperacion == 3)
                                         {
                                             <option value="3" selected>Comisión</option>
                                         }
@@ -135,7 +132,7 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Medio de pago: &nbsp;</label>
                         <div class="position-relative">
-                            <select asp-for="TransacccionDetalles.medioPago" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required>
+                            <select asp-for="TransacccionDetalles.MedioPago" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required>
                                 <option></option>
                                 @foreach (var medioPago in Model.ListaMediosPago)
                                 {
@@ -147,12 +144,12 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Comisión: &nbsp;</label>
                         <div class="position-relative">
-                            <select asp-for="@Model.TransacccionDetalles.comision" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción" required>
+                            <select asp-for="@Model.TransacccionDetalles.Comision" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción" required>
                                 <option></option>
                                 @{
                                     if (Model != null)
                                     {
-                                        if (Model.TransacccionDetalles.comision == 1)
+                                        if (Model.TransacccionDetalles.Comision == 1)
                                         {
                                             <option value="1" selected>Si</option>
                                         }
@@ -160,7 +157,7 @@
                                         {
                                             <option value="1">Si</option>
                                         }
-                                        if (Model.TransacccionDetalles.comision == 0)
+                                        if (Model.TransacccionDetalles.Comision == 0)
                                         {
                                             <option value="0" selected>No</option>
                                         }

@@ -286,16 +286,15 @@ namespace Epica.Web.Operacion.Controllers
                 try
                 {
                     var transaccionResponse = await _transaccionesApiClient.GetTransaccionAsync(id);
-                    RegistrarTransaccionRequest transaccionDetalles = new RegistrarTransaccionRequest()
+                    ModificarTransaccionRequest transaccionDetalles = new ModificarTransaccionRequest()
                     {
                         ClaveRastreo = transaccionResponse.claveRastreo,
                         Concepto = transaccionResponse.concepto,
-                        NombreBeneficiario = transaccionResponse.nombreBeneficiario,
-                        Monto = transaccionResponse.monto,
-                        medioPago = transaccionResponse.idMedioPago,
                         NombreOrdenante = transaccionResponse.nombreOrdenante,
+                        FechaOperacion = transaccionResponse.fechaActualizacion,
+                        CuentaOrigenOrdenante = transaccionResponse.cuetaOrigenOrdenante,
                         IdTrasaccion = transaccionResponse.idTransaccion,
-                        FechaOperacion = transaccionResponse.fechaAlta
+                        NombreBeneficiario = transaccionResponse.nombreBeneficiario
                     };
                     var listaMediosPago = await _catalogosApiClient.GetMediosPagoAsync();
 
@@ -304,7 +303,7 @@ namespace Epica.Web.Operacion.Controllers
                         return RedirectToAction("Error404", "Error");
                     }
 
-                    TransaccionesRegistroViewModel transaccionesRegistroViewModel = new TransaccionesRegistroViewModel
+                    TransaccionEditarViewModel transaccionesEditarViewModel = new TransaccionEditarViewModel
                     {
                         TransacccionDetalles = transaccionDetalles,
                         ListaMediosPago = listaMediosPago
@@ -312,7 +311,7 @@ namespace Epica.Web.Operacion.Controllers
 
                     ViewBag.Accion = "ModificarTransaccion";
                     ViewBag.TituloForm = "Modificar transacción";
-                    return View("~/Views/Transacciones/Registro.cshtml", transaccionesRegistroViewModel);
+                    return View("~/Views/Transacciones/Editar.cshtml", transaccionesEditarViewModel);
                 }
                 catch (Exception)
                 {
@@ -326,7 +325,7 @@ namespace Epica.Web.Operacion.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> ModificarTransaccion(TransaccionesRegistroViewModel model)
+        public async Task<IActionResult> ModificarTransaccion(TransaccionEditarViewModel model)
         {
             var loginResponse = _userContextService.GetLoginResponse();
             var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Editar == 0);

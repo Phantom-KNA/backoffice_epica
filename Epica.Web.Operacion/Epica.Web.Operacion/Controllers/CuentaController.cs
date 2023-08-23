@@ -183,7 +183,7 @@ public class CuentaController : Controller
             ViewBag.AccountID = id;
             ViewBag.NumCuenta = noCuenta;
 
-            RegistrarTransaccionRequest renderInfo = new RegistrarTransaccionRequest
+            ModificarTransaccionRequest renderInfo = new ModificarTransaccionRequest
             {
                 NombreOrdenante = header.NombreCompleto,
                 NoCuentaOrdenante = noCuenta,
@@ -328,8 +328,8 @@ public class CuentaController : Controller
         try
         {
             model.FechaOperacion = DateTime.Now.ToString("dd/mm/yyyy");
-            model.CuentaOrigenOrdenante = model.NoCuentaOrdenante;
-            model.CuentaDestinoBeneficiario = model.NoCuentaBeneficiario;
+            //model.CuentaOrigenOrdenante = model.NoCuentaOrdenante;
+            //model.CuentaDestinoBeneficiario = model.NoCuentaBeneficiario;
 
             responses = await _transaccionesApiClient.GetRegistroTransaccion(model);
 

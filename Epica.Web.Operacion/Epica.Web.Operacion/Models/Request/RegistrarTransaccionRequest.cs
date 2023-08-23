@@ -9,19 +9,23 @@ namespace Epica.Web.Operacion.Models.Request;
 
 public class RegistrarTransaccionRequest
 {
-    public int IdTrasaccion { get; set; }
-    public string? ClaveRastreo { get; set; }
+    [JsonPropertyName("fechaOperacion")]
     public string? FechaOperacion { get; set; }
-    public string? Concepto { get; set; }
-    public string? NombreOrdenante { get; set; }
-    public string? NoCuentaOrdenante { get; set; }
-    public string? CuentaOrigenOrdenante { get; set; }
-    public string? NombreBeneficiario { get; set; }
+    [JsonPropertyName("noCuentaBeneficiario")]
     public string? NoCuentaBeneficiario { get; set; }
-    public string? CuentaDestinoBeneficiario { get; set; }
-    public decimal Monto { get; set; }
-    public int tipoOperacion { get; set; }
-    public int medioPago { get; set; }
-    public int comision { get; set; }
+    [JsonPropertyName("monto")]
+    public double Monto { get; set; }
+    [JsonPropertyName("claveRastreo")]
+    public string? ClaveRastreo { get; set; }
+    [JsonPropertyName("concepto")]
+    public string? Concepto { get; set; }
+    [JsonPropertyName("tipoOperacion")]
+    public int TipoOperacion { get; set; }
+    [JsonPropertyName("medioPago")]
+    public int MedioPago { get; set; }
+    [JsonPropertyName("comision")]
+    public int Comision { get; set; }
+    [JsonPropertyName("nombreOrdenante")]
+    public string? NombreOrdenante { get; set; }
 }
 

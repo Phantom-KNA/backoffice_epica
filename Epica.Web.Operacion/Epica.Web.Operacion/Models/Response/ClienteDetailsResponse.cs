@@ -100,6 +100,6 @@ public class DatosClienteResponse
     public string? MontoMaximo { get; set; }
     [JsonPropertyName("rol")]
     public string? Rol { get; set; }
-    [JsonPropertyName("apoderadoLegal")]
+    [JsonPropertyName("apoderadoLegal")] 
     public int ApoderadoLegal { get; set; }
 }

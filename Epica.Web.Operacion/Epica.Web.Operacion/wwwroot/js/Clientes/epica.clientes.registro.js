@@ -32,8 +32,7 @@ var Init = function () {
             });
 
             if (allFieldsFilled) {
-                $(this).text('Registrando información');
-                toastr.info('Registrando información', "");
+                $('#confirmModal').modal('show');
             } else {
                 toastr.error('Por favor, complete todos los campos obligatorios', "");
             }
@@ -45,6 +44,14 @@ var Init = function () {
         }
     };
 }();
-jQuery(document).ready(function () {
+
+$(document).ready(function () {
     Init.init();
+
+    $('#confirmModal').on('hidden.bs.modal', function () {
+    });
+
+    $('#confirmSave').click(function () {
+        $('#confirmModal').modal('hide');
+    });
 });

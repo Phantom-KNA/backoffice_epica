@@ -506,7 +506,6 @@ public class ClientesController : Controller
             RegistrarTransaccionRequest renderInfo = new RegistrarTransaccionRequest
             {
                 NombreOrdenante = header.NombreCompleto,
-                NoCuentaOrdenante = noCuenta,
                 ClaveRastreo = string.Format("AQPAY1000000{0}", DateTime.Now.ToString("yyyymmddhhmmss"))
             };
             ViewBag.DatosRef = renderInfo;
