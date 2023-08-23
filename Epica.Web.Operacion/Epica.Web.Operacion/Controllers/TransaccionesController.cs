@@ -129,7 +129,8 @@ namespace Epica.Web.Operacion.Controllers
                 List.Add(new ResumenTransaccionResponseGrid
                 {
                     id = row.idTransaccion,
-                    claveRastreo = row.claveRastreo,
+                    idCliente = row.idCliente,
+                    claveRastreo = row.claveRastreo + "|" + row.idCliente.ToString(),
                     nombreOrdenante = row.nombreOrdenante,
                     nombreBeneficiario = row.nombreBeneficiario,
                     monto = row.monto,
@@ -417,6 +418,7 @@ namespace Epica.Web.Operacion.Controllers
         public class ResumenTransaccionResponse
         {
             public int id { get; set; }
+            public int idCliente { get; set; }
             public string claveRastreo { get; set; }
             public string nombreOrdenante { get; set; }
             public string cuetaOrigenOrdenante { get; set; }

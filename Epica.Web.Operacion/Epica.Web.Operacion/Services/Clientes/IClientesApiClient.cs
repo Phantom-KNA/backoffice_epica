@@ -16,6 +16,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
         Task<MensajeResponse> GetRegistroCliente(RegistroModificacionClienteRequest request);
         Task<ClienteDetailsResponse> GetDetallesCliente(int id);
         Task<MensajeResponse> GetModificarCliente(RegistroModificacionClienteRequest request);
+        Task<MensajeResponse> GetRegistroAsignacionCuentaCliente(AsignarCuentaResponse request);
         //Task<RegistrarModificarClienteResponse> GetModificaCliente(RegistroModificacionClienteRequest request);
 
     }

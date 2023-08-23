@@ -340,6 +340,8 @@ public class ClientesController : Controller
         if (validacion == true)
         {
             ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(id);
+            var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
+            var listaEmpresa = await _catalogosApiClient.GetEmpresasAsync();
 
             if (user.value == null)
             {
@@ -358,9 +360,18 @@ public class ClientesController : Controller
                 Rfc = user.value.RFC,
                 Sexo = user.value.Sexo
             };
+
+            AsignarCuentaDetailsResponse asign = new AsignarCuentaDetailsResponse
+            {
+                IdCliente = user.value.IdCliente,
+                ListaRoles = listaRoles,
+                ListaEmpresa = listaEmpresa
+            }; 
+
             ViewBag.Info = header;
             ViewBag.Nombre = header.NombreCompleto;
             ViewBag.AccountID = id;
+            ViewBag.AsignData = asign;
             return View("~/Views/Clientes/Detalles/Cuentas/DetalleCuentas.cshtml");
         }
 
@@ -481,8 +492,16 @@ public class ClientesController : Controller
             };
             ViewBag.Info = header;
             ViewBag.Nombre = header.NombreCompleto;
-            ViewBag.AccountID = id;
+            
             ViewBag.NumCuenta = noCuenta;
+
+            if ((id == 0) && (noCuenta == null)) {
+                ViewBag.TipoConsulta = "IsGeneral";
+                ViewBag.AccountID = cliente;
+            } else {
+                ViewBag.TipoConsulta = "IsEspecific";
+                ViewBag.AccountID = id;
+            }
 
             RegistrarTransaccionRequest renderInfo = new RegistrarTransaccionRequest
             {
@@ -620,7 +639,7 @@ public class ClientesController : Controller
             ViewBag.UrlView = "Documentos";
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
             {
-                Id = user.value.idCliente,
+                Id = user.value.IdCliente,
                 NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
                 Telefono = user.value.Telefono,
                 Correo = user.value.Email,
@@ -644,6 +663,58 @@ public class ClientesController : Controller
         }
 
         return NotFound();
+    }
+
+    [Authorize]
+    [HttpPost]
+    public async Task<ActionResult> BuscarCuenta(string NoCuenta)
+    {
+        var listaClientes = await _cuentaApiClient.GetDetalleCuentasSinAsignarAsync(NoCuenta);
+
+        return Json(listaClientes.First());
+    }
+
+    [Authorize]
+    [Route("Clientes/Detalle/Cuentas/RegistrarAsignacionCuenta")]
+    [HttpPost]
+    public async Task<JsonResult> RegistrarAsignacionCuenta(AsignarCuentaDetailsResponse model)
+    {
+        var loginResponse = _userContextService.GetLoginResponse();
+        MensajeResponse response = new MensajeResponse();
+
+        try
+        {
+            AsignarCuentaResponse asignarCuentaResponse = new AsignarCuentaResponse
+            { 
+               IdCliente = model.IdCliente,
+               IdCuenta = model.IdCuenta,
+               Rol = model.Rol,
+               IdEmpresa = model.IdEmpresa
+            };
+
+            response = await _clientesApiClient.GetRegistroAsignacionCuentaCliente(asignarCuentaResponse);
+
+            LogRequest logRequest = new LogRequest
+            {
+                IdUser = loginResponse.IdUsuario.ToString(),
+                Modulo = "Clientes",
+                Fecha = HoraHelper.GetHoraCiudadMexico(),
+                NombreEquipo = Environment.MachineName,
+                Accion = "Asignar Cuenta",
+                Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                Envio = JsonConvert.SerializeObject(asignarCuentaResponse),
+                Respuesta = response.Error.ToString(),
+                Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
+                IdRegistro = model.IdCliente
+            };
+            await _logsApiClient.InsertarLogAsync(logRequest);
+        }
+        catch (Exception ex)
+        {
+            response.Detalle = ex.Message;
+        }
+
+        return Json(model);
     }
     #endregion
 

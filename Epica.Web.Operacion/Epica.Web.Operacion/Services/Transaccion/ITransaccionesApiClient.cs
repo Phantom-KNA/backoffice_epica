@@ -7,11 +7,12 @@ namespace Epica.Web.Operacion.Services.Transaccion
         Task<List<TransaccionesResponse>> GetTransaccionesAsync(int pageNumber, int recordsTotal);
         Task<TransaccionesResponse> GetTransaccionAsync(int idInterno);
         Task<int> GetTotalTransaccionesAsync();
-        Task<List<TransaccionesResponse>> GetTransaccionesCuentaAsync(int idCuenta);
+        Task<TransaccionesDetailsgeneralResponse> GetTransaccionesCuentaAsync(int idCuenta);
         Task<MensajeResponse> GetRegistroTransaccion(RegistrarTransaccionRequest request);
         Task<MensajeResponse> GetModificarTransaccion(RegistrarTransaccionRequest request);
         Task<TransaccionDetailsResponse> GetTransaccionDetalleAsync(int idCuenta);
         Task<TransaccionDetailsResponse> GetTransaccionDetalleByCobranzaAsync(string cobranzaRef);
+        Task<TransaccionesDetailsgeneralResponse> GetTransaccionesClienteAsync(int idCliente);
 
     }
 }

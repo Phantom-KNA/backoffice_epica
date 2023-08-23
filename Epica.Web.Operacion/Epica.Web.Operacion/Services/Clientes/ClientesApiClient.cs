@@ -327,5 +327,33 @@ namespace Epica.Web.Operacion.Services.Transaccion
         //    return respuesta;
         //}
 
+        public async Task<MensajeResponse> GetRegistroAsignacionCuentaCliente(AsignarCuentaResponse request)
+        {
+            MensajeResponse respuesta = new MensajeResponse();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.ClientesOperations.AsignarCuentaCliente();
+                var json = JsonConvert.SerializeObject(request);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await ApiClient.PostAsync(uri, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                respuesta.Error = true;
+                respuesta.Detalle = ex.Message;
+                return respuesta;
+            }
+
+            return respuesta;
+        }
     }
 }

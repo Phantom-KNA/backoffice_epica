@@ -173,15 +173,15 @@ var KTDatatableRemoteAjax = function () {
 }();
 
 jQuery(document).ready(function () {
-    toastr.success("<br /><br /><button type='button' id='confirmationButtonYes' class='btn clear'>Yes</button><button type='button' id='confirmationButtonYes' class='btn clear'>NO</button>", 'delete item?',
-        {
-            closeButton: false,
-            allowHtml: true,
-            onShown: function (toast) {
-                $("#confirmationButtonYes").click(function () {
-                    console.log('clicked yes');
-                });
-            }
-        });
+    //toastr.success("<br /><br /><button type='button' id='confirmationButtonYes' class='btn clear'>Yes</button><button type='button' id='confirmationButtonYes' class='btn clear'>NO</button>", 'delete item?',
+    //    {
+    //        closeButton: false,
+    //        allowHtml: true,
+    //        onShown: function (toast) {
+    //            $("#confirmationButtonYes").click(function () {
+    //                console.log('clicked yes');
+    //            });
+    //        }
+    //    });
     KTDatatableRemoteAjax.init();
 });

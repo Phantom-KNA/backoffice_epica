@@ -15,7 +15,7 @@ public class TarjetasResponse
     public string tarjeta { get; set; }
     public string clabe { get; set; }
     public string proxyNumber { get; set; }
-    //public int Estatus { get; set; }
+    public int Estatus { get; set; }
 }
 
 public class TarjetasResponseGrid : TarjetasResponse

@@ -237,7 +237,7 @@ public class CuentaController : Controller
     }
 
     [HttpPost]
-    public async Task<JsonResult> ConsultaCuentas(string id)
+    public async Task<JsonResult> ConsultaCuentas(string id, string TipoConsulta)
     {
         var request = new RequestList();
 
@@ -256,8 +256,18 @@ public class CuentaController : Controller
 
         var gridData = new ResponseGrid<ResumenTransaccionResponseGrid>();
         List<TransaccionesResponse> ListPF = new List<TransaccionesResponse>();
+        TransaccionesDetailsgeneralResponse resp = new TransaccionesDetailsgeneralResponse();
 
-        ListPF = await _transaccionesApiClient.GetTransaccionesCuentaAsync(Convert.ToInt32(id));
+        if (TipoConsulta == "IsGeneral") {
+            
+            resp = await _transaccionesApiClient.GetTransaccionesClienteAsync(Convert.ToInt32(id));
+            ListPF = resp.value;
+
+        } else {
+
+            resp = await _transaccionesApiClient.GetTransaccionesCuentaAsync(Convert.ToInt32(id));
+            ListPF = resp.value;
+        }
 
         var List = new List<ResumenTransaccionResponseGrid>();
 
@@ -267,6 +277,7 @@ public class CuentaController : Controller
             List.Add(new ResumenTransaccionResponseGrid
             {
                 id = row.idTransaccion,
+                cuetaOrigenOrdenante = row.cuetaOrigenOrdenante,
                 claveRastreo = row.claveRastreo,
                 nombreOrdenante = row.nombreOrdenante,
                 nombreBeneficiario = row.nombreBeneficiario,

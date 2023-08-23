@@ -3,6 +3,7 @@ using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Models.Common;
 using Epica.Web.Operacion.Models.Entities;
 using Epica.Web.Operacion.Models.Request;
+using Epica.Web.Operacion.Models.Response;
 using Epica.Web.Operacion.Models.ViewModels;
 using Epica.Web.Operacion.Services.Log;
 using Epica.Web.Operacion.Services.Transaccion;
@@ -163,11 +164,11 @@ public class TarjetasController : Controller
             {
                 idCuentaAhorro = row.idCuentaAhorro,
                 idCliente = row.idCliente,
-                nombreCompleto = row.nombreCompleto,
+                nombreCompleto = row.nombreCompleto + "|" + row.idCliente.ToString(),
                 proxyNumber = row.proxyNumber,
                 clabe = row.clabe,
                 tarjeta = row.tarjeta,
-                //Estatus = row.Estatus,
+                Estatus = row.Estatus,
                 Acciones = await this.RenderViewToStringAsync("~/Views/Tarjetas/_Acciones.cshtml", row)
             });
         }
@@ -225,13 +226,27 @@ public class TarjetasController : Controller
     [HttpPost]
     public async Task<JsonResult> RegistrarTarjetas(RegistrarTarjetaRequest model)
     {
+        //var loginResponse = _userContextService.GetLoginResponse();
         MensajeResponse response = new MensajeResponse();
 
         try
         {
-
             response = await _tarjetasApiClient.GetRegistroTarjetaAsync(model);
 
+            //LogRequest logRequest = new LogRequest
+            //{
+            //    IdUser = loginResponse.IdUsuario.ToString(),
+            //    Modulo = "Tarjetas",
+            //    Fecha = HoraHelper.GetHoraCiudadMexico(),
+            //    NombreEquipo = Environment.MachineName,
+            //    Accion = "Insertar",
+            //    Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+            //    Envio = JsonConvert.SerializeObject(model),
+            //    Respuesta = response.Error.ToString(),
+            //    Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
+            //    IdRegistro = idRegistro
+            //};
+            //await _logsApiClient.InsertarLogAsync(logRequest);
         }
         catch (Exception ex)
         {

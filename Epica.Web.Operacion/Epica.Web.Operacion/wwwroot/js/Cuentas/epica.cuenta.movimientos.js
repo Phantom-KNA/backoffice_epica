@@ -40,7 +40,8 @@ var KTDatatableRemoteAjax = function () {
                 url: siteLocation + 'Cuenta/ConsultaCuentas',
                 type: 'POST',
                 data: function (d) {
-                    d.id = AccountId;
+                    d.id = AccountId,
+                    d.TipoConsulta = TipoConsulta;
                 },
             },
             columnDefs: [{
@@ -48,6 +49,7 @@ var KTDatatableRemoteAjax = function () {
                 "targets": "_all",
             }],
             columns: [
+                { data: "cuetaOrigenOrdenante", name: "cuetaOrigenOrdenante", title: "CUENTA ORDENANTE" },
                 { data: "claveRastreo", name: "ClaveRastreo", title: "CLAVE DE RASTREO" },
                 { data: "nombreOrdenante", name: "NombreCuenta", title: "NOMBRE ORDENANTE" },
                 { data: "nombreBeneficiario", name: "Institucion", title: "NOMBRE BENEFICIARIO" },

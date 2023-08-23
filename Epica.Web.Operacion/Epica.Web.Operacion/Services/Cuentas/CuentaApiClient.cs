@@ -154,5 +154,31 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return ListaCuentas;
         }
 
+        public async Task<List<CuentaEspecificaResponse>> GetDetalleCuentasSinAsignarAsync(string NumCuenta)
+        {
+
+            List<CuentaEspecificaResponse>? getcuenta = new List<CuentaEspecificaResponse>();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.CuentasOperations.GetCuentaDetalleSinAsignar(NumCuenta);
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    getcuenta = JsonConvert.DeserializeObject<List<CuentaEspecificaResponse>>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return getcuenta;
+            }
+
+            return getcuenta;
+        }
+
     }
 }

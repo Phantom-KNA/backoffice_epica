@@ -10,5 +10,6 @@ namespace Epica.Web.Operacion.Services.Transaccion
         Task<List<CobranzaReferenciadaResponse>> GetCobranzaReferenciadaAsync(int id);
         Task<List<CuentasResponse>> GetCuentasByClienteAsync(int idCliente);
         Task<List<DatosCuentaResponse>> GetDetalleCuentasAsync(string idCliente);
+        Task<List<CuentaEspecificaResponse>> GetDetalleCuentasSinAsignarAsync(string NumCuenta);
     }
 }

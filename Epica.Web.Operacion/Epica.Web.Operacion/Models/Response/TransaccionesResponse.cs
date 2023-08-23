@@ -1,8 +1,18 @@
-﻿namespace Epica.Web.Operacion.Models.Response
+﻿using System.Collections.Generic;
+
+namespace Epica.Web.Operacion.Models.Response
 {
+    public class TransaccionesDetailsgeneralResponse
+    {
+        public string name { get; set; }
+        public List<TransaccionesResponse>  value { get; set; }
+
+    }
+
     public class TransaccionesResponse
     {
         public int idTransaccion { get; set; }
+        public int idCliente { get; set; }
         public string claveRastreo { get; set; }
         public string nombreOrdenante { get; set; }
         public string nombreBeneficiario { get; set; }

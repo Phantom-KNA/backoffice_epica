@@ -71,6 +71,7 @@ var KTDatatableRemoteAjax = function () {
                 {
                     data: 'estatus', name: 'Estatus', title: 'Estatus',
                     render: function (data, type, row) {
+                        console.log(data);
                         return data == 1 ?
                             "<span class='badge badge-light-danger' >Desactivado</span>" : "<span class='badge badge-light-success' >Activo</span>";
                     }
@@ -232,3 +233,89 @@ var ModalDetalle = function () {
         }
     }
 }();
+
+$(document).on('click', '.btnAsignacion', function (e) {
+    ModalAsignacion.init();
+});
+
+var ModalAsignacion = function () {
+
+    var init = function () {
+        abrirModal();
+    }
+    var abrirModal = function () {
+        $('#modal_asignacion #modalLabelTitle').html('Asignar Cuenta');
+        $('#modal_asignacion').modal('show');
+        listeners();
+    }
+    // Inicializa los listeners de los botones relacionados a la ventana modal
+    var listeners = function () {
+
+    }
+    // Cerramos la ventana modal
+    var cerrarModal = function () {
+        $('#btnCancelar').click();
+    }
+    return {
+        init: function () {
+            init();
+        },
+        cerrarventanamodal: function () {
+            cerrarModal();
+        }
+    }
+}();
+
+$(document).on('click', '#btnBuscarCliente', function () {
+
+    const inputNombreCliente = document.getElementById('nombreCliente');
+    const NoCuenta = inputNombreCliente.value;
+
+    toastr.info("Localizando cuenta.");
+
+    $.ajax({
+        url: "/Clientes/BuscarCuenta",
+        type: "POST",
+        data: { NoCuenta: NoCuenta },
+        success: function (result) {
+            console.log(result);
+
+            const idCuenta = document.getElementById('IdCuenta');
+            const NumCuenta = document.getElementById('numeroCuenta');
+            NumCuenta.value = result.descripcion;
+            idCuenta.value = result.id;
+            toastr.success("Cuenta localizada.");
+        },
+        error: function (error) {
+            toastr.danger("No se pudo localizar la cuenta.");
+        }
+    });
+});
+
+$(document).on('click', '#GuardarAsignacion', function (e) {
+
+    toastr.info('Almacenando Cuenta Asignada...', "");
+
+    var form = $("#AsignacionForm")
+    var valdata = form.serialize();
+
+    $.ajax({
+        url: "Cuentas/RegistrarAsignacionCuenta",
+        type: "POST",
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        data: valdata,
+        success: function (data) {
+
+            $('#modal_asignacion').modal('toggle');
+            datatable.ajax.reload();
+            toastr.success('Se guardo la informacion de manera exitosa', "");
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+        }
+
+
+    });
+    $("#btnCerrarCuenta").click();
+});

@@ -20,6 +20,7 @@ public class UrlsConfig
         public static string GetTransaccion(int idInterno) => $"/api/resumentransaccion?idInterno={idInterno}";
         public static string GetTransaccionesTotal() => $"/api/v1/transacciones/total";
         public static string GetTransaccionesPorCuenta(int idCuenta) => $"/api/v1/cuentas/cuenta_trasacciones?idCuenta={idCuenta}";
+        public static string GetTransaccionesPorCliente(int idCliente) => $"/api/v1/transacciones/movimientos_cliente?idCliente={idCliente}";
         public static string GetRegistraTransaccion() => $"/api/v1/transacciones/insertar";
         public static string ModificarTransaccion() => $"/api/v1/transacciones/modificar";
         public static string DetalleTransaccion(int idTransaccion) => $"/api/v1/transacciones/detalle_movimiento?idtrasaccion={idTransaccion}";
@@ -33,6 +34,7 @@ public class UrlsConfig
         public static string GetCobranzaReferenciada(int id) => $"/api/v1/transacciones/cobranza_referenciada?idCuenta={id}";
         public static string GetCuentasClientes(int id) => $"/api/v1/cuentas/cliente_cuentas?idCliente={id}";
         public static string GetCuentaDetalle(string NoCuenta) => $"/api/v1/cuentas/buscar_cuenta?noCuenta={NoCuenta}";
+        public static string GetCuentaDetalleSinAsignar(string NoCuenta) => $"/api/v1/catalogos/buscar_cuenta_asignar?noCuenta={NoCuenta}";
     }
 
     public class ClientesOperations
@@ -48,8 +50,8 @@ public class UrlsConfig
         public static string InsertarClienteNuevo() => $"/api/v1/clientes/inserta_cliente";
         public static string ModificarCliente() => $"/api/v1/clientes/modificar_cliente";
         public static string GetAllClientes() => $"api/v1/clientes/AllClientes";
-
         public static string ModificarClienteNuevo() => $"/api/v1/clientes/modificar_cliente";
+        public static string AsignarCuentaCliente() => $"/api/v1/clientes/asignar_cuenta";
     }
 
     public class CatalogosOperations

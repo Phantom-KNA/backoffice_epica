@@ -64,7 +64,15 @@ var KTDatatableRemoteAjax = function () {
                 "targets": "_all"
             }],
             columns: [
-                { data: 'nombreCompleto', name: 'nombreCompleto', title: 'Nombre Titular' },
+                {
+                    data: 'nombreCompleto', name: 'nombreCompleto', title: 'Nombre Titular',
+                    render: function (data, type, row) {
+                        var partes = data.split("|"); // Separar la parte entera y decimal
+                        var nombreCompleto = partes[0];
+                        var idCliente = partes[1];
+                        return "<a href='/Clientes/Detalle/Tarjetas?id=" + idCliente + "'>" + nombreCompleto + "</a>";
+                    }
+                },
                 {
                     data: 'tarjeta', name: 'tarjeta', title: 'Tarjeta',                  
                     render: function (data, type, row) {
@@ -73,25 +81,25 @@ var KTDatatableRemoteAjax = function () {
                 },
                 { data: 'clabe', name: 'clabe', title: 'Cuenta Clabe' },
                 { data: 'proxyNumber', name: 'proxyNumber', title: 'Número de Proxy' },
-                //{
-                //    data: 'estatus', name: 'Estatus', title: 'Estatus',
-                //    render: function (data, type, row) {
-                //        return data == 1 ?
-                //            "<span class='badge badge-light-success' >Activo</span>" : "<span class='badge badge-light-danger' >Desactivado</span>";
-                //    }
-                //},
                 {
-                    title: '',
-                    orderable: false,
-                    data: null,
-                    defaultContent: '',
+                    data: 'estatus', name: 'Estatus', title: 'Estatus',
                     render: function (data, type, row) {
-                        if (type === 'display') {
-                            var htmlString = row.acciones;
-                            return htmlString
-                        }
+                        return data == 1 ?
+                            "<span class='badge badge-light-success' >Activo</span>" : "<span class='badge badge-light-danger' >Desactivado</span>";
                     }
-                }
+                },
+                //{
+                //    title: '',
+                //    orderable: false,
+                //    data: null,
+                //    defaultContent: '',
+                //    render: function (data, type, row) {
+                //        if (type === 'display') {
+                //            var htmlString = row.acciones;
+                //            return htmlString
+                //        }
+                //    }
+                //}
             ],
         });
         $('thead tr').addClass('text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0');

@@ -1,5 +1,6 @@
 ﻿using Epica.Web.Operacion.Config;
 using Epica.Web.Operacion.Models.Request;
+using Epica.Web.Operacion.Models.Response;
 using Epica.Web.Operacion.Services.UserResolver;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -114,9 +115,9 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return respuesta;
         }
 
-        public async Task<List<TransaccionesResponse>> GetTransaccionesCuentaAsync(int idCuenta)
+        public async Task<TransaccionesDetailsgeneralResponse> GetTransaccionesCuentaAsync(int idCuenta)
         {
-            List<TransaccionesResponse>? ListaTransacciones = new List<TransaccionesResponse>();
+            TransaccionesDetailsgeneralResponse? ListaTransacciones = new TransaccionesDetailsgeneralResponse();
 
             try
             {
@@ -132,7 +133,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                         NullValueHandling = NullValueHandling.Ignore,
                         MissingMemberHandling = MissingMemberHandling.Ignore
                     };
-                    ListaTransacciones = JsonConvert.DeserializeObject<List<TransaccionesResponse>>(jsonResponse, settings);
+                    ListaTransacciones = JsonConvert.DeserializeObject<TransaccionesDetailsgeneralResponse>(jsonResponse, settings);
                 }
 
             }
@@ -223,6 +224,35 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return TransaccionDetalle;
         }
 
+        public async Task<TransaccionesDetailsgeneralResponse> GetTransaccionesClienteAsync(int idCliente)
+        {
+            TransaccionesDetailsgeneralResponse? ListaTransacciones = new TransaccionesDetailsgeneralResponse();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetTransaccionesPorCliente(idCliente);
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var settings = new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+                    ListaTransacciones = JsonConvert.DeserializeObject<TransaccionesDetailsgeneralResponse>(jsonResponse, settings);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return ListaTransacciones;
+            }
+
+            return ListaTransacciones;
+        }
 
     }
 }
