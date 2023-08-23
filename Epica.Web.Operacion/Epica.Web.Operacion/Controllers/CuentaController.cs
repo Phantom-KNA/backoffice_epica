@@ -312,7 +312,7 @@ public class CuentaController : Controller
     [HttpPost]
     public async Task<JsonResult> RegistrarTransaccion(RegistrarTransaccionRequest model)
     {
-        RegistrarModificarTransaccionResponse responses = new RegistrarModificarTransaccionResponse();
+        MensajeResponse responses = new MensajeResponse();
 
         try
         {
@@ -323,8 +323,8 @@ public class CuentaController : Controller
             responses = await _transaccionesApiClient.GetRegistroTransaccion(model);
 
         } catch (Exception ex) {
-            responses.error = true;
-            responses.detalle = ex.Message;
+            responses.Error = true;
+            responses.Detalle = ex.Message;
         }
 
         return Json(model);

@@ -225,7 +225,7 @@ public class TarjetasController : Controller
     [HttpPost]
     public async Task<JsonResult> RegistrarTarjetas(RegistrarTarjetaRequest model)
     {
-        string response = "";
+        MensajeResponse response = new MensajeResponse();
 
         try
         {
@@ -235,7 +235,7 @@ public class TarjetasController : Controller
         }
         catch (Exception ex)
         {
-            response = "";
+            response.Detalle = ex.Message;
         }
 
         return Json(model);
