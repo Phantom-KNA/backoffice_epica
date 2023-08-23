@@ -39,7 +39,7 @@ namespace Epica.Web.Operacion.Models.Request
         [JsonPropertyName("ingresoMensual")]
         public string? IngresoMensual { get; set; }
         [JsonPropertyName("montoMaximo")]
-        public decimal? MontoMaximo { get; set; }
+        public string? MontoMaximo { get; set; }
         [JsonPropertyName("telefono")]
         public string? Telefono { get; set; }
         [JsonPropertyName("telefonoTipo")]
