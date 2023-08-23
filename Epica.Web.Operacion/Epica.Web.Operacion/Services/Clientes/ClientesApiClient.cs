@@ -106,7 +106,12 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    cliente = JsonConvert.DeserializeObject<ClienteDetailsResponse>(jsonResponse);
+                    var settings = new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+                    cliente = JsonConvert.DeserializeObject<ClienteDetailsResponse>(jsonResponse, settings);
                 }
 
             }
@@ -118,9 +123,9 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return cliente;
         }
 
-        public async Task<List<DocumentosClienteResponse>> GetDocumentosClienteAsync(int id)
+        public async Task<DocumentosClienteDetailsResponse> GetDocumentosClienteAsync(int id)
         {
-            List<DocumentosClienteResponse>? listaDocumentosCliente = new List<DocumentosClienteResponse>();
+            DocumentosClienteDetailsResponse? listaDocumentosCliente = new DocumentosClienteDetailsResponse();
 
             try
             {
@@ -131,11 +136,16 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    listaDocumentosCliente = JsonConvert.DeserializeObject<List<DocumentosClienteResponse>>(jsonResponse);
+                    var settings = new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+                    listaDocumentosCliente = JsonConvert.DeserializeObject<DocumentosClienteDetailsResponse>(jsonResponse, settings);
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return listaDocumentosCliente;
             }

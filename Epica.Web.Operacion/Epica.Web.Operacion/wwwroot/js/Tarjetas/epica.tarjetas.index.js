@@ -65,7 +65,12 @@ var KTDatatableRemoteAjax = function () {
             }],
             columns: [
                 { data: 'nombreCompleto', name: 'nombreCompleto', title: 'Nombre Titular' },
-                { data: 'tarjeta', name: 'tarjeta', title: 'Tarjeta' },
+                {
+                    data: 'tarjeta', name: 'tarjeta', title: 'Tarjeta',                  
+                    render: function (data, type, row) {
+                        return data.replace(/\d(?=\d{4})/g, "*");
+                    }
+                },
                 { data: 'clabe', name: 'clabe', title: 'Cuenta Clabe' },
                 { data: 'proxyNumber', name: 'proxyNumber', title: 'Número de Proxy' },
                 //{

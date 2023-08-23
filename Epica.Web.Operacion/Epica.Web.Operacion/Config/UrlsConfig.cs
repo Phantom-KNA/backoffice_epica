@@ -40,7 +40,7 @@ public class UrlsConfig
         public static string GetClientesByNombre(string nombre) => $"/api/v1/clientes/buscar_clientes?nombre={nombre}";
         public static string GetClientesTotal() => $"/api/v1/clientes/total";
         public static string GetCliente(int id) => $"/api/v1/clientes/cliente?id={id}";
-        public static string GetClienteDocumentos(int id) => $"/api/v1/clientes/cliente_documento?idUsuario={id}";
+        public static string GetClienteDocumentos(int id) => $"/api/v1/clientes/cliente_documentos?idUsuario={id}";
         public static string GetClienteInfo(int pageNumber, int totalRecords) => $"/api/v1/clientes/clientes_info?pageNumber={pageNumber}&pageSize={totalRecords}";
         public static string GetDocumentosCliente(int idUsuario) => $"/api/v1/clientes/cliente_documento?idUsuario={idUsuario}";
         public static string GetBloqueaWebCliente() => $"/api/v1/clientes/bloque_web";

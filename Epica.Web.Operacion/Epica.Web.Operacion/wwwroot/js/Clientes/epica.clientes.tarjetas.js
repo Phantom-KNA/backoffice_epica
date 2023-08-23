@@ -49,7 +49,12 @@ var KTDatatableRemoteAjax = function () {
             }],
             columns: [
                 { data: "nombreCompleto", name: "nombreCompleto", title: "Nombre de Titular" },
-                { data: "tarjeta", name: "tarjeta", title: "Número de Tarjeta" },
+                {
+                    data: "tarjeta", name: "tarjeta", title: "Número de Tarjeta",
+                    render: function (data, type, row) {
+                        return data.replace(/\d(?=\d{4})/g, "*");
+                    }
+                },
                 { data: "clabe", name: "clabe", title: "Clabe" },
                 { data: "proxyNumber", name: "proxyNumber", title: "Proxy" }
                 //{
@@ -168,5 +173,15 @@ var KTDatatableRemoteAjax = function () {
 }();
 
 jQuery(document).ready(function () {
+    toastr.success("<br /><br /><button type='button' id='confirmationButtonYes' class='btn clear'>Yes</button><button type='button' id='confirmationButtonYes' class='btn clear'>NO</button>", 'delete item?',
+        {
+            closeButton: false,
+            allowHtml: true,
+            onShown: function (toast) {
+                $("#confirmationButtonYes").click(function () {
+                    console.log('clicked yes');
+                });
+            }
+        });
     KTDatatableRemoteAjax.init();
 });

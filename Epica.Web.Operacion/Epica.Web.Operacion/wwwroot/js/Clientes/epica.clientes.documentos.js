@@ -5,7 +5,7 @@ var filterAccount;
 var KTDatatableRemoteAjax = function () {
     var table;
     var initDatatable = function () {
-        datatable = $('#kt_datatable_doc').DataTable({
+        datatable = $('#kt_datatable').DataTable({
             "order": [],
             pageLength: 15,
             language: {
@@ -56,25 +56,24 @@ var KTDatatableRemoteAjax = function () {
                 "targets": "_all"
             }],
             columns: [
-                { data: 'idDocApodLeg', name: 'Id', title: 'Id Documento' },
                 { data: 'tipoDocumento', name: 'tipoDocumento', title: 'Tipo de Documento' },
                 { data: 'documento', name: 'tipoDocumento', title: 'Documento' },
                 { data: 'numeroIdentificacion', name: 'numeroIdentificacion', title: 'Numero de Identificación' },
-                { data: 'nombreDocumento', name: 'NombreDocumento', title: 'Nombre del Documento' },
-                {
-                    title: '',
-                    orderable: false,
-                    data: null,
-                    defaultContent: '',
-                    render: function (data, type, row) {
-                        console.log(data);
-                        if (type === 'display') {
-                            var htmlString = row.acciones;
-                            console.log(htmlString);
-                            return htmlString
-                        }
-                    }
-                }
+                { data: 'nombreDocumento', name: 'NombreDocumento', title: 'Nombre del Documento' }
+                //{
+                //    title: '',
+                //    orderable: false,
+                //    data: null,
+                //    defaultContent: '',
+                //    render: function (data, type, row) {
+                //        console.log(data);
+                //        if (type === 'display') {
+                //            var htmlString = row.acciones;
+                //            console.log(htmlString);
+                //            return htmlString
+                //        }
+                //    }
+                //}
             ],
         });
         $('thead tr').addClass('text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0');
@@ -95,7 +94,7 @@ var KTDatatableRemoteAjax = function () {
     return {
         init: function () {
             //init();
-            table = document.querySelector('#kt_datatable_doc');
+            table = document.querySelector('#kt_datatable');
 
             if (!table) {
                 return;

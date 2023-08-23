@@ -110,6 +110,12 @@
                 </a>
             </li>
 
+            <li class="nav-item mt-2">
+                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(ViewBag.UrlView.Contains("Documentos") ? "active" : "")" asp-action="DocumentosCliente" asp-controller="Clientes" asp-route-id="@Model.Id">
+                    DOCUMENTOS
+                </a>
+            </li>
+
         </ul>
     </div>
 </div>

@@ -600,6 +600,50 @@ public class ClientesController : Controller
 
         return Json(gridData);
     }
+
+    [Authorize]
+    [Route("Clientes/Detalle/Documentos")]
+    public async Task<IActionResult> DocumentosCliente(int id)
+    {
+        var loginResponse = _userContextService.GetLoginResponse();
+        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
+        if (validacion == true)
+        {
+            ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(id);
+
+            if (user.value == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.UrlView = "Documentos";
+            ClientesHeaderViewModel header = new ClientesHeaderViewModel
+            {
+                Id = user.value.idCliente,
+                NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
+                Telefono = user.value.Telefono,
+                Correo = user.value.Email,
+                Curp = user.value.CURP,
+                Organizacion = user.value.Organizacion,
+                Rfc = user.value.RFC,
+                Sexo = user.value.Sexo
+            };
+
+            RegistrarTarjetaRequest renderRef = new RegistrarTarjetaRequest
+            {
+                idCliente = id
+            };
+
+            ViewBag.DatosRef = renderRef;
+            ViewBag.Info = header;
+            ViewBag.Nombre = header.NombreCompleto;
+            ViewBag.AccountID = id;
+
+            return View("~/Views/Clientes/Detalles/Documentos/DetalleDocumentos.cshtml", loginResponse);
+        }
+
+        return NotFound();
+    }
     #endregion
 
     #region Registro Clientes
@@ -931,11 +975,11 @@ public class ClientesController : Controller
             request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
             request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
 
-            List<DocumentosClienteResponse> ListPF = new List<DocumentosClienteResponse>();
+            DocumentosClienteDetailsResponse ListPF = new DocumentosClienteDetailsResponse();
             ListPF = await _clientesApiClient.GetDocumentosClienteAsync(Convert.ToInt32(idAccount));
 
             var List = new List<DocumentosClienteResponseGrid>();
-            foreach (var row in ListPF)
+            foreach (var row in ListPF.value)
             {
                 List.Add(new DocumentosClienteResponseGrid
                 {
