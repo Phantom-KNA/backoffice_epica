@@ -826,7 +826,7 @@ public class ClientesController : Controller
                     Fiel = cliente.value.Fiel,
                     PaisNacimiento = cliente.value.PaisNacimiento,
                     IngresoMensual = cliente.value.SalarioMensual.ToString(),
-                    ApoderadoLegal = (cliente.value.AntiguedadLaboral?.ToLower() == "si") ? 1 : 0,
+                    ApoderadoLegal = cliente.value.ApoderadoLegal,
                     NoInterior = cliente.value.NoInt,
                     Puesto = cliente.value.Puesto,
                     FechaNacimiento = cliente.value.FechaNacimiento != null

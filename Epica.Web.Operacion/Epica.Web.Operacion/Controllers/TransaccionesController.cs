@@ -233,18 +233,29 @@ namespace Epica.Web.Operacion.Controllers
                 {
                     response = await _transaccionesApiClient.GetRegistroTransaccion(model.TransacccionDetalles);
 
+                    string detalle = response.detalle;
+                    int idRegistro = 0;
+                    try
+                    {
+                        idRegistro = int.Parse(detalle);
+                    }
+                    catch (FormatException)
+                    {
+                        idRegistro = 0;
+                    }
+
                     LogRequest logRequest = new LogRequest
                     {
                         IdUser = loginResponse.IdUsuario.ToString(),
                         Modulo = "Transacciones",
-                        Fecha = DateTime.Now,
+                        Fecha = HoraHelper.GetHoraCiudadMexico(),
                         NombreEquipo = Environment.MachineName,
                         Accion = "Insertar",
                         Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
                         Envio = JsonConvert.SerializeObject(model.TransacccionDetalles),
                         Respuesta = response.error.ToString(),
                         Error = response.error ? JsonConvert.SerializeObject(response.detalle) : string.Empty,
-                        IdRegistro = 0
+                        IdRegistro = idRegistro
                     };
                     await _logsApiClient.InsertarLogAsync(logRequest);
 
@@ -284,7 +295,8 @@ namespace Epica.Web.Operacion.Controllers
                         Monto = transaccionResponse.monto,
                         medioPago = transaccionResponse.idMedioPago,
                         NombreOrdenante = transaccionResponse.nombreOrdenante,
-                        IdTrasaccion = transaccionResponse.idTransaccion
+                        IdTrasaccion = transaccionResponse.idTransaccion,
+                        FechaOperacion = transaccionResponse.fechaAlta
                     };
                     var listaMediosPago = await _catalogosApiClient.GetMediosPagoAsync();
 
@@ -330,8 +342,8 @@ namespace Epica.Web.Operacion.Controllers
                     LogRequest logRequest = new LogRequest
                     {
                         IdUser = loginResponse.IdUsuario.ToString(),
-                        Modulo = "Clientes",
-                        Fecha = DateTime.Now,
+                        Modulo = "Transacciones",
+                        Fecha = HoraHelper.GetHoraCiudadMexico(),
                         NombreEquipo = Environment.MachineName,
                         Accion = "Editar",
                         Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
