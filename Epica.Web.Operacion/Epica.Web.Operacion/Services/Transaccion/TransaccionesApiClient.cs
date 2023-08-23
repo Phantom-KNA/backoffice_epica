@@ -86,7 +86,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return result;
         }
 
-        public async Task<MensajeResponse> GetModificarTransaccion(RegistrarTransaccionRequest request)
+        public async Task<MensajeResponse> GetModificarTransaccion(ModificarTransaccionRequest request)
         {
             MensajeResponse respuesta = new MensajeResponse();
 
