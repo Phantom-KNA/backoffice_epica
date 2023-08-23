@@ -78,7 +78,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return listaClientes;
         }
 
-        public async Task<string> GetRegistroTarjetaAsync(RegistrarTarjetaRequest request)
+        public async Task<MensajeResponse> GetRegistroTarjetaAsync(RegistrarTarjetaRequest request)
         {
             string respuesta = "";
 

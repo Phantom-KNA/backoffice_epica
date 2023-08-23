@@ -645,13 +645,11 @@ public class ClientesController : Controller
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Insertar == 0);
         if (validacion == true)
         {
-            RegistrarModificarClienteResponse response = new RegistrarModificarClienteResponse();
-
             try
             {
-                response = await _clientesApiClient.GetRegistroCliente(model.ClientesDetalles);
+                var response = await _clientesApiClient.GetRegistroCliente(model.ClientesDetalles);
 
-                string detalle = response.detalle;
+                string detalle = response.Detalle;
                 int idRegistro = 0;
 
                 try
@@ -672,13 +670,13 @@ public class ClientesController : Controller
                     Accion = "Insertar",
                     Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
                     Envio = JsonConvert.SerializeObject(model.ClientesDetalles),
-                    Respuesta = response.error.ToString(),
-                    Error = response.error ? JsonConvert.SerializeObject(response.detalle) : string.Empty,
+                    Respuesta = response.Error.ToString(),
+                    Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
                     IdRegistro = idRegistro
                 };
                 await _logsApiClient.InsertarLogAsync(logRequest);
 
-                if (response.codigo == "200")
+                if (response.Codigo == "200")
                 {
                     return RedirectToAction("Index");
                 }
@@ -699,17 +697,23 @@ public class ClientesController : Controller
 
     [Authorize]
     [HttpPost]
+    public async Task<ActionResult> BuscarClientes(string cliente)
+    {
+        var listaClientes = await _clientesApiClient.GetClientesbyNombreAsync(cliente);
+        return Json(listaClientes);
+    }
+
+    [Authorize]
+    [HttpPost]
     public async Task<IActionResult> ModificarCliente(ClientesRegistroViewModel model)
     {
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Editar == 0);
         if (validacion == true)
         {
-            RegistrarModificarClienteResponse response = new RegistrarModificarClienteResponse();
-
             try
             {
-                response = await _clientesApiClient.GetModificarCliente(model.ClientesDetalles);
+                var response = await _clientesApiClient.GetModificarCliente(model.ClientesDetalles);
 
                 LogRequest logRequest = new LogRequest
                 {
@@ -720,13 +724,13 @@ public class ClientesController : Controller
                     Accion = "Insertar",
                     Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
                     Envio = JsonConvert.SerializeObject(model.ClientesDetalles),
-                    Respuesta = response.error.ToString(),
-                    Error = response.error ? JsonConvert.SerializeObject(response.detalle) : string.Empty,
+                    Respuesta = response.Error.ToString(),
+                    Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
                     IdRegistro = model.ClientesDetalles.IdCliente
                 };
                 await _logsApiClient.InsertarLogAsync(logRequest);
 
-                if (response.codigo == "200")
+                if (response.Codigo == "200")
                 {
                     return RedirectToAction("Index");
                 }

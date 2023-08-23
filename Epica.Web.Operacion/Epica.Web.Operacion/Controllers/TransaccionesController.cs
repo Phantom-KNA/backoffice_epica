@@ -227,13 +227,11 @@ namespace Epica.Web.Operacion.Controllers
             var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Insertar == 0);
             if (validacion == true)
             {
-                RegistrarModificarTransaccionResponse response = new RegistrarModificarTransaccionResponse();
-
                 try
                 {
-                    response = await _transaccionesApiClient.GetRegistroTransaccion(model.TransacccionDetalles);
+                    var response = await _transaccionesApiClient.GetRegistroTransaccion(model.TransacccionDetalles);
 
-                    string detalle = response.detalle;
+                    string detalle = response.Detalle;
                     int idRegistro = 0;
                     try
                     {
@@ -253,13 +251,13 @@ namespace Epica.Web.Operacion.Controllers
                         Accion = "Insertar",
                         Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
                         Envio = JsonConvert.SerializeObject(model.TransacccionDetalles),
-                        Respuesta = response.error.ToString(),
-                        Error = response.error ? JsonConvert.SerializeObject(response.detalle) : string.Empty,
+                        Respuesta = response.Error.ToString(),
+                        Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
                         IdRegistro = idRegistro
                     };
                     await _logsApiClient.InsertarLogAsync(logRequest);
 
-                    if (response.codigo == "200")
+                    if (response.Codigo == "200")
                     {
                         return RedirectToAction("Index");
                     }
@@ -333,11 +331,9 @@ namespace Epica.Web.Operacion.Controllers
             var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Editar == 0);
             if (validacion == true)
             {
-                RegistrarModificarTransaccionResponse response = new RegistrarModificarTransaccionResponse();
-
                 try
                 {
-                    response = await _transaccionesApiClient.GetModificarTransaccion(model.TransacccionDetalles);
+                    var response = await _transaccionesApiClient.GetModificarTransaccion(model.TransacccionDetalles);
 
                     LogRequest logRequest = new LogRequest
                     {
@@ -348,13 +344,13 @@ namespace Epica.Web.Operacion.Controllers
                         Accion = "Editar",
                         Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
                         Envio = JsonConvert.SerializeObject(model.TransacccionDetalles),
-                        Respuesta = response.error.ToString(),
-                        Error = response.error ? JsonConvert.SerializeObject(response.detalle) : string.Empty,
+                        Respuesta = response.Error.ToString(),
+                        Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
                         IdRegistro = model.TransacccionDetalles.IdTrasaccion
                     };
                     await _logsApiClient.InsertarLogAsync(logRequest);
 
-                    if (response.codigo == "200")
+                    if (response.Codigo == "200")
                     {
                         return RedirectToAction("Index");
                     }

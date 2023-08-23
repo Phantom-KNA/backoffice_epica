@@ -74,14 +74,6 @@ public class TarjetasController : Controller
 
     [Authorize]
     [HttpPost]
-    public async Task<ActionResult>BuscarClientes(string cliente)
-    {
-        var listaClientes = await _clientesApiClient.GetClientesbyNombreAsync(cliente);
-        return Json(listaClientes);
-    }
-
-    [Authorize]
-    [HttpPost]
     public async Task<IActionResult> RegistrarTarjetaCliente(TarjetasRegistroTarjetaClienteViewModel model)
     {
         var loginResponse = _userContextService.GetLoginResponse();
@@ -92,22 +84,34 @@ public class TarjetasController : Controller
             {
                 var response = await _tarjetasApiClient.GetRegistroTarjetaAsync(model.TarjetasDetalles);
 
+                string detalle = response.Detalle;
+                int idRegistro = 0;
+
+                try
+                {
+                    idRegistro = int.Parse(detalle);
+                }
+                catch (FormatException)
+                {
+                    idRegistro = 0;
+                }
+
                 LogRequest logRequest = new LogRequest
                 {
                     IdUser = loginResponse.IdUsuario.ToString(),
                     Modulo = "Tarjetas",
-                    Fecha = DateTime.Now,
+                    Fecha = HoraHelper.GetHoraCiudadMexico(),
                     NombreEquipo = Environment.MachineName,
                     Accion = "Insertar",
                     Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
                     Envio = JsonConvert.SerializeObject(model.TarjetasDetalles),
-                    Respuesta = (response == "Exitoso") ? "true" : "false",
-                    Error = response,
-                    IdRegistro = 0
+                    Respuesta = response.Error.ToString(),
+                    Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
+                    IdRegistro = idRegistro
                 };
                 await _logsApiClient.InsertarLogAsync(logRequest);
 
-                if (response == "Exitoso")
+                if (response.Codigo == "200")
                 {
                     return RedirectToAction("Index");
                 }
