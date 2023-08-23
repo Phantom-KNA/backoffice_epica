@@ -168,7 +168,7 @@ public class CuentaController : Controller
             ViewBag.UrlView = "Movimientos";
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
             {
-                Id = user.value.idCliente,
+                Id = user.value.IdCliente,
                 NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
                 Telefono = user.value.Telefono,
                 Correo = user.value.Email,
@@ -214,7 +214,7 @@ public class CuentaController : Controller
             ViewBag.UrlView = "Movimientos";
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
             {
-                Id = user.value.idCliente,
+                Id = user.value.IdCliente,
                 NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
                 Telefono = user.value.Telefono,
                 Correo = user.value.Email,
@@ -312,7 +312,7 @@ public class CuentaController : Controller
     [HttpPost]
     public async Task<JsonResult> RegistrarTransaccion(RegistrarTransaccionRequest model)
     {
-        RegistrarModificarTransaccionResponse responses = new RegistrarModificarTransaccionResponse();
+        MensajeResponse responses = new MensajeResponse();
 
         try
         {
@@ -323,8 +323,8 @@ public class CuentaController : Controller
             responses = await _transaccionesApiClient.GetRegistroTransaccion(model);
 
         } catch (Exception ex) {
-            responses.error = true;
-            responses.detalle = ex.Message;
+            responses.Error = true;
+            responses.Detalle = ex.Message;
         }
 
         return Json(model);

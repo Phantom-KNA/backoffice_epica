@@ -211,9 +211,9 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return respuesta;
         }
 
-        public async Task<RegistrarModificarClienteResponse> GetRegistroCliente(RegistroModificacionClienteRequest request)
+        public async Task<MensajeResponse> GetRegistroCliente(RegistroModificacionClienteRequest request)
         {
-            RegistrarModificarClienteResponse respuesta = new RegistrarModificarClienteResponse();
+            MensajeResponse respuesta = new MensajeResponse();
 
             try
             {
@@ -226,23 +226,23 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    respuesta = JsonConvert.DeserializeObject<RegistrarModificarClienteResponse>(jsonResponse);
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
                 }
 
             }
             catch (Exception ex)
             {
-                respuesta.error = true;
-                respuesta.detalle = ex.Message;
+                respuesta.Error = true;
+                respuesta.Detalle = ex.Message;
                 return respuesta;
             }
 
             return respuesta;
         }
 
-        public async Task<RegistrarModificarClienteResponse> GetModificarCliente(RegistroModificacionClienteRequest request)
+        public async Task<MensajeResponse> GetModificarCliente(RegistroModificacionClienteRequest request)
         {
-            RegistrarModificarClienteResponse respuesta = new RegistrarModificarClienteResponse();
+            MensajeResponse respuesta = new MensajeResponse();
 
             try
             {
@@ -255,14 +255,14 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    respuesta = JsonConvert.DeserializeObject<RegistrarModificarClienteResponse>(jsonResponse);
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
                 }
 
             }
             catch (Exception ex)
             {
-                respuesta.error = true;
-                respuesta.detalle = ex.Message;
+                respuesta.Error = true;
+                respuesta.Detalle = ex.Message;
                 return respuesta;
             }
 
@@ -298,34 +298,34 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return cliente;
         }
 
-        public async Task<RegistrarModificarClienteResponse> GetModificaCliente(RegistroModificacionClienteRequest request)
-        {
-            RegistrarModificarClienteResponse respuesta = new RegistrarModificarClienteResponse();
+        //public async Task<RegistrarModificarClienteResponse> GetModificaCliente(RegistroModificacionClienteRequest request)
+        //{
+        //    RegistrarModificarClienteResponse respuesta = new RegistrarModificarClienteResponse();
 
-            try
-            {
-                var uri = Urls.Transaccion + UrlsConfig.ClientesOperations.ModificarClienteNuevo();
-                var json = JsonConvert.SerializeObject(request);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
+        //    try
+        //    {
+        //        var uri = Urls.Transaccion + UrlsConfig.ClientesOperations.ModificarClienteNuevo();
+        //        var json = JsonConvert.SerializeObject(request);
+        //        var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var response = await ApiClient.PostAsync(uri, content);
-                if (response.IsSuccessStatusCode)
-                {
-                    response.EnsureSuccessStatusCode();
-                    var jsonResponse = await response.Content.ReadAsStringAsync();
-                    respuesta = JsonConvert.DeserializeObject<RegistrarModificarClienteResponse>(jsonResponse);
-                }
+        //        var response = await ApiClient.PostAsync(uri, content);
+        //        if (response.IsSuccessStatusCode)
+        //        {
+        //            response.EnsureSuccessStatusCode();
+        //            var jsonResponse = await response.Content.ReadAsStringAsync();
+        //            respuesta = JsonConvert.DeserializeObject<RegistrarModificarClienteResponse>(jsonResponse);
+        //        }
 
-            }
-            catch (Exception ex)
-            {
-                respuesta.error = true;
-                respuesta.detalle = ex.Message;
-                return respuesta;
-            }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        respuesta.error = true;
+        //        respuesta.detalle = ex.Message;
+        //        return respuesta;
+        //    }
 
-            return respuesta;
-        }
+        //    return respuesta;
+        //}
 
     }
 }

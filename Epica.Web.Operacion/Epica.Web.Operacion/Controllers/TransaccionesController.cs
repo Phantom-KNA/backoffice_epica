@@ -227,28 +227,37 @@ namespace Epica.Web.Operacion.Controllers
             var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Insertar == 0);
             if (validacion == true)
             {
-                RegistrarModificarTransaccionResponse response = new RegistrarModificarTransaccionResponse();
-
                 try
                 {
-                    response = await _transaccionesApiClient.GetRegistroTransaccion(model.TransacccionDetalles);
+                    var response = await _transaccionesApiClient.GetRegistroTransaccion(model.TransacccionDetalles);
+
+                    string detalle = response.Detalle;
+                    int idRegistro = 0;
+                    try
+                    {
+                        idRegistro = int.Parse(detalle);
+                    }
+                    catch (FormatException)
+                    {
+                        idRegistro = 0;
+                    }
 
                     LogRequest logRequest = new LogRequest
                     {
                         IdUser = loginResponse.IdUsuario.ToString(),
                         Modulo = "Transacciones",
-                        Fecha = DateTime.Now,
+                        Fecha = HoraHelper.GetHoraCiudadMexico(),
                         NombreEquipo = Environment.MachineName,
                         Accion = "Insertar",
                         Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
                         Envio = JsonConvert.SerializeObject(model.TransacccionDetalles),
-                        Respuesta = response.error.ToString(),
-                        Error = response.error ? JsonConvert.SerializeObject(response.detalle) : string.Empty,
-                        IdRegistro = 0
+                        Respuesta = response.Error.ToString(),
+                        Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
+                        IdRegistro = idRegistro
                     };
                     await _logsApiClient.InsertarLogAsync(logRequest);
 
-                    if (response.codigo == "200")
+                    if (response.Codigo == "200")
                     {
                         return RedirectToAction("Index");
                     }
@@ -284,7 +293,8 @@ namespace Epica.Web.Operacion.Controllers
                         Monto = transaccionResponse.monto,
                         medioPago = transaccionResponse.idMedioPago,
                         NombreOrdenante = transaccionResponse.nombreOrdenante,
-                        IdTrasaccion = transaccionResponse.idTransaccion
+                        IdTrasaccion = transaccionResponse.idTransaccion,
+                        FechaOperacion = transaccionResponse.fechaAlta
                     };
                     var listaMediosPago = await _catalogosApiClient.GetMediosPagoAsync();
 
@@ -321,28 +331,26 @@ namespace Epica.Web.Operacion.Controllers
             var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Editar == 0);
             if (validacion == true)
             {
-                RegistrarModificarTransaccionResponse response = new RegistrarModificarTransaccionResponse();
-
                 try
                 {
-                    response = await _transaccionesApiClient.GetModificarTransaccion(model.TransacccionDetalles);
+                    var response = await _transaccionesApiClient.GetModificarTransaccion(model.TransacccionDetalles);
 
                     LogRequest logRequest = new LogRequest
                     {
                         IdUser = loginResponse.IdUsuario.ToString(),
-                        Modulo = "Clientes",
-                        Fecha = DateTime.Now,
+                        Modulo = "Transacciones",
+                        Fecha = HoraHelper.GetHoraCiudadMexico(),
                         NombreEquipo = Environment.MachineName,
                         Accion = "Editar",
                         Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
                         Envio = JsonConvert.SerializeObject(model.TransacccionDetalles),
-                        Respuesta = response.error.ToString(),
-                        Error = response.error ? JsonConvert.SerializeObject(response.detalle) : string.Empty,
+                        Respuesta = response.Error.ToString(),
+                        Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
                         IdRegistro = model.TransacccionDetalles.IdTrasaccion
                     };
                     await _logsApiClient.InsertarLogAsync(logRequest);
 
-                    if (response.codigo == "200")
+                    if (response.Codigo == "200")
                     {
                         return RedirectToAction("Index");
                     }

@@ -93,6 +93,7 @@ public class ClientesController : Controller
         var List = new List<ClienteResponseGrid>();
         foreach (var row in ListPF)
         {
+            
             List.Add(new ClienteResponseGrid
             {
                 id = row.id,
@@ -278,43 +279,43 @@ public class ClientesController : Controller
 
             ClientesDetallesViewModel clientesDetallesViewModel = new ClientesDetallesViewModel
             {
-                Id = user.value.idCliente,
+                IdCliente = user.value.IdCliente,
                 Nombre = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
                 Telefono = user.value.Telefono,
                 Email = user.value.Email,
-                Curp = user.value.CURP,
-                Empresa = user.value.Organizacion,
+                CURP = user.value.CURP,
+                Organizacion = user.value.Organizacion,
                 Sexo = user.value.Sexo,
-                Rfc = user.value.RFC,
-                Ine = user.value.INE,
-                FechaNacimiento = user.value.FechaNacimiento != null
-? DateTime.ParseExact(user.value.FechaNacimiento, "dd/MM/yyyy", CultureInfo.InvariantCulture)
-    : null,
+                RFC = user.value.RFC,
+                INE = user.value.INE,
+                FechaNacimiento = user.value.FechaNacimiento,
                 Observaciones = user.value.Observaciones,
                 PaisNacimiento = user.value.PaisNacimiento,
-                Ocupacion = user.value.IdOcupacion.ToString(),
                 Nacionalidad = user.value.Nacionalidad,
                 Fiel = user.value.Fiel,
-                Pais = user.value.PaisNacimiento,
-                IngresoMensual = Convert.ToDecimal(user.value.SalarioMensual),
-                MontoMaximo = Convert.ToDecimal(user.value.montoMaximo),
+                SalarioNetoMensual =user.value.SalarioMensual,
+                MontoMaximo = user.value.MontoMaximo,
                 Calle = user.value.Calle,
-                CalleNumero = user.value.NoInt,
-                PrimeraCalle = user.value.CalleSecundaria,
-                SegundaCalle = user.value.CalleSecundaria2,
+                NoInt = user.value.NoInt,
+                CalleSecundaria = user.value.CalleSecundaria,
+                CalleSecundaria2 = user.value.CalleSecundaria2,
                 Colonia = user.value.Colonia,
                 CodigoPostal = user.value.CodigoPostal,
-                NoInterior = user.value.NoInt,
-                Puesto = user.value.puesto,
-                ApoderadoLegal = user.value.AntiguedadLaboral,
-                CiudadEstado = user.value.Estado,
+                Puesto = user.value.Puesto,
+                AntiguedadLaboral = user.value.AntiguedadLaboral,
+                Estado = user.value.Estado,
                 Rol = user.value.Rol,
-                DelegacionMunicipio = user.value.Municipio,
+                Municipio = user.value.Municipio,
+                NSS = user.value.NSS,
+                Membresia = user.value.Membresia,
+                TipoTrabajador = user.value.TipoTrabajador,
+                EntidadNacimiento = user.value.EntidadNacimiento,
+                CalleNumero = user.value.CalleNumero
             };
 
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
             {
-                Id = user.value.idCliente,
+                Id = user.value.IdCliente,
                 NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
                 Telefono = user.value.Telefono,
                 Correo = user.value.Email,
@@ -348,7 +349,7 @@ public class ClientesController : Controller
             ViewBag.UrlView = "Cuentas";
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
             {
-                Id = user.value.idCliente,
+                Id = user.value.IdCliente,
                 NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
                 Telefono = user.value.Telefono,
                 Correo = user.value.Email,
@@ -468,7 +469,7 @@ public class ClientesController : Controller
             ViewBag.UrlView = "Movimientos";
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
             {
-                Id = user.value.idCliente,
+                Id = user.value.IdCliente,
                 NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
                 Telefono = user.value.Telefono,
                 Correo = user.value.Email,
@@ -514,7 +515,7 @@ public class ClientesController : Controller
             ViewBag.UrlView = "Tarjetas";
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
             {
-                Id = user.value.idCliente,
+                Id = user.value.IdCliente,
                 NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
                 Telefono = user.value.Telefono,
                 Correo = user.value.Email,
@@ -688,28 +689,38 @@ public class ClientesController : Controller
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Insertar == 0);
         if (validacion == true)
         {
-            RegistrarModificarClienteResponse response = new RegistrarModificarClienteResponse();
-
             try
             {
-                response = await _clientesApiClient.GetRegistroCliente(model.ClientesDetalles);
+                var response = await _clientesApiClient.GetRegistroCliente(model.ClientesDetalles);
+
+                string detalle = response.Detalle;
+                int idRegistro = 0;
+
+                try
+                {
+                    idRegistro = int.Parse(detalle);
+                }
+                catch (FormatException)
+                {
+                    idRegistro = 0;
+                }
 
                 LogRequest logRequest = new LogRequest
                 {
                     IdUser = loginResponse.IdUsuario.ToString(),
                     Modulo = "Clientes",
-                    Fecha = DateTime.Now,
+                    Fecha = HoraHelper.GetHoraCiudadMexico(),
                     NombreEquipo = Environment.MachineName,
                     Accion = "Insertar",
                     Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
                     Envio = JsonConvert.SerializeObject(model.ClientesDetalles),
-                    Respuesta = response.error.ToString(),
-                    Error = response.error ? JsonConvert.SerializeObject(response.detalle) : string.Empty,
-                    IdRegistro = 0
+                    Respuesta = response.Error.ToString(),
+                    Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
+                    IdRegistro = idRegistro
                 };
                 await _logsApiClient.InsertarLogAsync(logRequest);
 
-                if (response.codigo == "200")
+                if (response.Codigo == "200")
                 {
                     return RedirectToAction("Index");
                 }
@@ -730,34 +741,40 @@ public class ClientesController : Controller
 
     [Authorize]
     [HttpPost]
+    public async Task<ActionResult> BuscarClientes(string cliente)
+    {
+        var listaClientes = await _clientesApiClient.GetClientesbyNombreAsync(cliente);
+        return Json(listaClientes);
+    }
+
+    [Authorize]
+    [HttpPost]
     public async Task<IActionResult> ModificarCliente(ClientesRegistroViewModel model)
     {
         var loginResponse = _userContextService.GetLoginResponse();
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Editar == 0);
         if (validacion == true)
         {
-            RegistrarModificarClienteResponse response = new RegistrarModificarClienteResponse();
-
             try
             {
-                response = await _clientesApiClient.GetModificarCliente(model.ClientesDetalles);
+                var response = await _clientesApiClient.GetModificarCliente(model.ClientesDetalles);
 
                 LogRequest logRequest = new LogRequest
                 {
                     IdUser = loginResponse.IdUsuario.ToString(),
                     Modulo = "Clientes",
-                    Fecha = DateTime.Now,
+                    Fecha = HoraHelper.GetHoraCiudadMexico(),
                     NombreEquipo = Environment.MachineName,
-                    Accion = "Editar",
+                    Accion = "Insertar",
                     Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
                     Envio = JsonConvert.SerializeObject(model.ClientesDetalles),
-                    Respuesta = response.error.ToString(),
-                    Error = response.error ? JsonConvert.SerializeObject(response.detalle) : string.Empty,
+                    Respuesta = response.Error.ToString(),
+                    Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
                     IdRegistro = model.ClientesDetalles.IdCliente
                 };
                 await _logsApiClient.InsertarLogAsync(logRequest);
 
-                if (response.codigo == "200")
+                if (response.Codigo == "200")
                 {
                     return RedirectToAction("Index");
                 }
@@ -838,7 +855,7 @@ public class ClientesController : Controller
                 ClienteDetailsResponse cliente = await _clientesApiClient.GetDetallesCliente(id);
                 RegistroModificacionClienteRequest clientesDetalles = new RegistroModificacionClienteRequest
                 {
-                    IdCliente = cliente.value.idCliente,
+                    IdCliente = cliente.value.IdCliente,
                     Nombre = cliente.value.Nombre,
                     Telefono = cliente.value.Telefono,
                     Email = cliente.value.Email,
@@ -857,9 +874,9 @@ public class ClientesController : Controller
                     Fiel = cliente.value.Fiel,
                     PaisNacimiento = cliente.value.PaisNacimiento,
                     IngresoMensual = cliente.value.SalarioMensual.ToString(),
-                    ApoderadoLegal = (cliente.value.AntiguedadLaboral?.ToLower() == "si") ? 1 : 0,
+                    ApoderadoLegal = cliente.value.ApoderadoLegal,
                     NoInterior = cliente.value.NoInt,
-                    Puesto = cliente.value.puesto,
+                    Puesto = cliente.value.Puesto,
                     FechaNacimiento = cliente.value.FechaNacimiento != null
 ? DateTime.ParseExact(cliente.value.FechaNacimiento, "dd/MM/yyyy", CultureInfo.InvariantCulture)
     : null,
@@ -869,10 +886,10 @@ public class ClientesController : Controller
                     IdOcupacion = cliente.value.IdOcupacion,
                     CiudadEstado = cliente.value.Estado,
                     Rol = cliente.value.Rol,
-                    Empresa = cliente.value.idEmpresa,
-                    MontoMaximo = Convert.ToDecimal(cliente.value.montoMaximo),
+                    Empresa = cliente.value.IdEmpresa ?? 0,
+                    MontoMaximo = cliente.value.MontoMaximo?.ToString(),
                     CalleNumero = cliente.value.CalleNumero,
-                    IdPais = cliente.value.Pais ?? 0
+                    IdPais = cliente.value.IdPais ?? 0
                 };
                 var listaEmpresas = await _catalogosApiClient.GetEmpresasAsync();
                 var listaRoles = await _catalogosApiClient.GetRolClienteAsync();

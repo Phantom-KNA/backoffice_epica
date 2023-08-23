@@ -1,40 +1,95 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Epica.Web.Operacion.Models.ViewModels
 {
     public class ClientesDetallesViewModel
     {
-        public long Id { get; set; }
+        [JsonPropertyName("idCliente")]
+        public int IdCliente { get; set; }
+        [JsonPropertyName("nombre")]
         public string? Nombre { get; set; }
+        [JsonPropertyName("apellidoPaterno")]
         public string? ApellidoPaterno { get; set; }
+        [JsonPropertyName("apellidoMaterno")]
         public string? ApellidoMaterno { get; set; }
-        public string Email { get; set; }
-        public string Curp { get; set; }
-        public string? Rfc { get; set; }
-        public string? Ine { get; set; }
-        public DateTime? FechaNacimiento { get; set; }
-        public string? Observaciones { get; set; }
-        public string? PaisNacimiento { get; set; }
-        public string Sexo { get; set; }
-        public string? Ocupacion { get; set; }
-        public string? Nacionalidad { get; set; }
-        public string? Fiel { get; set; }
-        public string? Pais { get; set; }
-        public decimal? IngresoMensual { get; set; }
-        public decimal? MontoMaximo { get; set; }
+        [JsonPropertyName("telefono")]
         public string? Telefono { get; set; }
-        public string? Calle { get; set; }
-        public string? CalleNumero { get; set; }
-        public string? PrimeraCalle { get; set; }
-        public string? SegundaCalle { get; set; }
+        [JsonPropertyName("telefonoRecado")]
+        public string? TelefonoRecado { get; set; }
+        [JsonPropertyName("email")]
+        public string? Email { get; set; }
+        [JsonPropertyName("curp")]
+        public string? CURP { get; set; }
+        [JsonPropertyName("organizacion")]
+        public string? Organizacion { get; set; }
+        [JsonPropertyName("fechaNacimiento")]
+        public string? FechaNacimiento { get; set; }
+        [JsonPropertyName("entidadNacimiento")]
+        public string? EntidadNacimiento { get; set; }
+        [JsonPropertyName("idNacionalidad")]
+        public int IdNacionalidad { get; set; }
+        [JsonPropertyName("membresia")]
+        public string? Membresia { get; set; }
+        [JsonPropertyName("sexo")]
+        public string? Sexo { get; set; }
+        [JsonPropertyName("ine")]
+        public string? INE { get; set; }
+        [JsonPropertyName("rfc")]
+        public string? RFC { get; set; }
+        [JsonPropertyName("paisNacimiento")]
+        public string? PaisNacimiento { get; set; }
+        [JsonPropertyName("observaciones")]
+        public string? Observaciones { get; set; }
+        [JsonPropertyName("idOcupacion")]
+        public int IdOcupacion { get; set; }
+        [JsonPropertyName("nacionalidad")]
+        public string? Nacionalidad { get; set; }
+        [JsonPropertyName("fiel")]
+        public string? Fiel { get; set; }
+        [JsonPropertyName("nss")]
+        public string? NSS { get; set; }
+        [JsonPropertyName("colonia")]
         public string? Colonia { get; set; }
-        public string? DelegacionMunicipio { get; set; }
+        [JsonPropertyName("calleNumero")]
+        public string? CalleNumero { get; set; }
+        [JsonPropertyName("noInt")]
+        public string? NoInt { get; set; }
+        [JsonPropertyName("municipio")]
+        public string? Municipio { get; set; }
+        [JsonPropertyName("estado")]
+        public string? Estado { get; set; }
+        [JsonPropertyName("codigoPostal")]
         public string? CodigoPostal { get; set; }
-        public string? CiudadEstado { get; set; }
+        [JsonPropertyName("calle")]
+        public string? Calle { get; set; }
+        [JsonPropertyName("calleSecundaria")]
+        public string? CalleSecundaria { get; set; }
+        [JsonPropertyName("calleSecundaria2")]
+        public string? CalleSecundaria2 { get; set; }
+        [JsonPropertyName("tipoVivienda")]
+        public int TipoVivienda { get; set; }
+        [JsonPropertyName("tiempoVivienda")]
+        public string? TiempoVivienda { get; set; }
+        [JsonPropertyName("tipoTrabajador")]
+        public string? TipoTrabajador { get; set; }
+        [JsonPropertyName("puesto")]
         public string? Puesto { get; set; }
-        public string? ApoderadoLegal { get; set; }
-        public string? Empresa { get; set; }
+        [JsonPropertyName("salarioMensual")]
+        public double? SalarioNetoMensual { get; set; }
+        [JsonPropertyName("antiguedadLaboral")]
+        public string? AntiguedadLaboral { get; set; }
+        [JsonPropertyName("active")]
+        public int Active { get; set; }//= default(bool?);
+        [JsonPropertyName("idEmpresa")]
+        public int? Empresa { get; set; }
+        [JsonPropertyName("idPais")]
+        public int? Pais { get; set; }
+        [JsonPropertyName("montoMaximo")]
+        public string? MontoMaximo { get; set; }
+        [JsonPropertyName("rol")]
         public string? Rol { get; set; }
-        public string? NoInterior { get; set; }
+        [JsonPropertyName("apoderadoLegal")]
+        public int ApoderadoLegal { get; set; }
     }
 }

@@ -78,9 +78,9 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return listaClientes;
         }
 
-        public async Task<string> GetRegistroTarjetaAsync(RegistrarTarjetaRequest request)
+        public async Task<MensajeResponse> GetRegistroTarjetaAsync(RegistrarTarjetaRequest request)
         {
-            string respuesta = "";
+            MensajeResponse respuesta = new MensajeResponse();
 
             try
             {
@@ -93,13 +93,13 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    respuesta = jsonResponse;
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
                 }
 
             }
             catch (Exception ex)
             {
-                return "";
+                return respuesta;
             }
 
             return respuesta;

@@ -8,8 +8,8 @@ namespace Epica.Web.Operacion.Services.Transaccion
         Task<TransaccionesResponse> GetTransaccionAsync(int idInterno);
         Task<int> GetTotalTransaccionesAsync();
         Task<List<TransaccionesResponse>> GetTransaccionesCuentaAsync(int idCuenta);
-        Task<RegistrarModificarTransaccionResponse> GetRegistroTransaccion(RegistrarTransaccionRequest request);
-        Task<RegistrarModificarTransaccionResponse> GetModificarTransaccion(RegistrarTransaccionRequest request);
+        Task<MensajeResponse> GetRegistroTransaccion(RegistrarTransaccionRequest request);
+        Task<MensajeResponse> GetModificarTransaccion(RegistrarTransaccionRequest request);
         Task<TransaccionDetailsResponse> GetTransaccionDetalleAsync(int idCuenta);
         Task<TransaccionDetailsResponse> GetTransaccionDetalleByCobranzaAsync(string cobranzaRef);
 

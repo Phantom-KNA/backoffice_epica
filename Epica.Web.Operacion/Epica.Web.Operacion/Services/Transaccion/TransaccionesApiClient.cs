@@ -85,9 +85,9 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return result;
         }
 
-        public async Task<RegistrarModificarTransaccionResponse> GetModificarTransaccion(RegistrarTransaccionRequest request)
+        public async Task<MensajeResponse> GetModificarTransaccion(RegistrarTransaccionRequest request)
         {
-            RegistrarModificarTransaccionResponse respuesta = new RegistrarModificarTransaccionResponse();
+            MensajeResponse respuesta = new MensajeResponse();
 
             try
             {
@@ -100,14 +100,14 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    respuesta = JsonConvert.DeserializeObject<RegistrarModificarTransaccionResponse>(jsonResponse);
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
                 }
 
             }
             catch (Exception ex)
             {
-                respuesta.error = true;
-                respuesta.detalle = ex.Message;
+                respuesta.Error = true;
+                respuesta.Detalle = ex.Message;
                 return respuesta;
             }
 
@@ -144,9 +144,9 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return ListaTransacciones;
         }
 
-        public async Task<RegistrarModificarTransaccionResponse> GetRegistroTransaccion(RegistrarTransaccionRequest request)
+        public async Task<MensajeResponse> GetRegistroTransaccion(RegistrarTransaccionRequest request)
         {
-            RegistrarModificarTransaccionResponse respuesta = new RegistrarModificarTransaccionResponse();
+            MensajeResponse respuesta = new MensajeResponse();
 
             try
             {
@@ -159,14 +159,14 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    respuesta = JsonConvert.DeserializeObject<RegistrarModificarTransaccionResponse>(jsonResponse);
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
                 }
 
             }
             catch (Exception ex)
             {
-                respuesta.error = true;
-                respuesta.detalle = ex.Message;
+                respuesta.Error = true;
+                respuesta.Detalle = ex.Message;
                 return respuesta;
             }
 
