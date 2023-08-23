@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading;
 using static Epica.Web.Operacion.Controllers.CuentaController;
 
@@ -236,7 +237,9 @@ namespace Epica.Web.Operacion.Controllers
                     int idRegistro = 0;
                     try
                     {
-                        idRegistro = int.Parse(detalle);
+                        string pattern = @"\d+";
+                        Match match = Regex.Match(detalle, pattern);
+                        idRegistro = int.Parse(match.Value);
                     }
                     catch (FormatException)
                     {
@@ -285,17 +288,19 @@ namespace Epica.Web.Operacion.Controllers
             {
                 try
                 {
-                    var transaccionResponse = await _transaccionesApiClient.GetTransaccionAsync(id);
+                    var transaccionResponse = await _transaccionesApiClient.GetTransaccionDetalleAsync(id);
                     ModificarTransaccionRequest transaccionDetalles = new ModificarTransaccionRequest()
                     {
-                        ClaveRastreo = transaccionResponse.claveRastreo,
-                        Concepto = transaccionResponse.concepto,
-                        NombreOrdenante = transaccionResponse.nombreOrdenante,
-                        FechaOperacion = transaccionResponse.fechaActualizacion,
-                        CuentaOrigenOrdenante = transaccionResponse.cuetaOrigenOrdenante,
-                        IdTrasaccion = transaccionResponse.idTransaccion,
-                        NombreBeneficiario = transaccionResponse.nombreBeneficiario
+                        ClaveRastreo = transaccionResponse.value.ClaveRastreo ?? "",
+                        Concepto = transaccionResponse.value.Concepto ?? "",
+                        NombreOrdenante = transaccionResponse.value.nombreOrdenante ?? "",
+                        FechaOperacion = transaccionResponse.value.FechaActualizacion,
+                        CuentaOrigenOrdenante = transaccionResponse.value.cuetaOrigenOrdenante ?? "",
+                        IdTrasaccion = id,
+                        NombreBeneficiario = transaccionResponse.value.NombreBeneficiario ?? "",
+                        CuentaDestinoBeneficiario = transaccionResponse.value.CuentaDestinoBeneficiario ?? "",
                     };
+
                     var listaMediosPago = await _catalogosApiClient.GetMediosPagoAsync();
 
                     if (listaMediosPago == null)
