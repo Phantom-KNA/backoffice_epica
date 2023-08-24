@@ -65,8 +65,9 @@ var KTDatatableRemoteAjax = function () {
             }],
             columns: [
                 {
-                    data: 'nombreCompleto', name: 'nombreCompleto', title: 'Nombre Titular',
+                    data: 'vinculo', name: 'Vinculo', title: 'Nombre Titular',
                     render: function (data, type, row) {
+                        console.log(data);
                         var partes = data.split("|"); // Separar la parte entera y decimal
                         var nombreCompleto = partes[0];
                         var idCliente = partes[1];
