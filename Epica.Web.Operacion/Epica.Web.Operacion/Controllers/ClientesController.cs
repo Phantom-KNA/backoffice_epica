@@ -861,6 +861,14 @@ public class ClientesController : Controller
 
     [Authorize]
     [HttpPost]
+    public async Task<ActionResult> BuscarCoincidenciaNombre(string nombreCompleto)
+    {
+        var listaClientes = await _clientesApiClient.GetDetallesClientesByNombresAsync(nombreCompleto);
+        return Json(listaClientes);
+    }
+
+    [Authorize]
+    [HttpPost]
     public async Task<IActionResult> ModificarCliente(ClientesRegistroViewModel model)
     {
         var loginResponse = _userContextService.GetLoginResponse();

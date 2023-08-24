@@ -50,8 +50,4 @@ $(document).ready(function () {
 
     $('#confirmModal').on('hidden.bs.modal', function () {
     });
-
-    $('#confirmSave').click(function () {
-        $('#confirmModal').modal('hide');
-    });
 });
