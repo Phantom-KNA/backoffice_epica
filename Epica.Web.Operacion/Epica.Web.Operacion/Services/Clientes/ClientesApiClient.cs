@@ -70,6 +70,29 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return listaClientes;
         }
 
+        public async Task<List<DatosClienteEntity>> GetDetallesClientesByNombresAsync(string nombres)
+        {
+            List<DatosClienteEntity> listaClientes = new List<DatosClienteEntity>();
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.ClientesOperations.GetDetallesClientesByNombres(nombres);
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    listaClientes = JsonConvert.DeserializeObject<List<DatosClienteEntity>>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+            return listaClientes;
+        }
+
         public async Task<int> GetTotalClientesAsync()
         {
             int result = 0;
