@@ -361,25 +361,38 @@ function pruebas(idAccount) {
 
 function GestionarCuenta(AccountID, estatus) {
 
-    if (confirm('Esta seguro que desea bloquear o desbloquear esta cuenta?')) {
-        $.ajax({
-            url: siteLocation + 'Cuenta/GestionarEstatusCuentas',
-            async: true,
-            cache: false,
-            type: 'POST',
-            data: { id: AccountID, Estatus: estatus },
-            success: function (data) {
+    Swal.fire({
+        title: 'Bloqueo/Desbloqueo de Cuenta',
+        text: "¿Esta seguro que desea bloquear o desbloquear esta cuenta?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar'
+    }).then((result) => {
+        if (result.isConfirmed) {
 
-                datatable.ajax.reload();
-                toastr.success('Se ha actualizado el estatus de la cuenta con exito.', "");
-            },
-            error: function (xhr, status, error) {
-                console.log(error);
-            }
-        });
-    }
+            $.ajax({
+                url: siteLocation + 'Clientes/GestionarEstatusClienteTotal',
+                async: true,
+                cache: false,
+                type: 'POST',
+                data: { id: AccountID, Estatus: estatus },
+                success: function (data) {
 
-
+                    datatable.ajax.reload();
+                    Swal.fire(
+                        'Estatus Actualizado',
+                        'Se ha actualizado el estatus de la cuenta con exito.',
+                        'success'
+                    )
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+    })
 }
 
 $(document).on('click', '.btnDetalle', function (e) {

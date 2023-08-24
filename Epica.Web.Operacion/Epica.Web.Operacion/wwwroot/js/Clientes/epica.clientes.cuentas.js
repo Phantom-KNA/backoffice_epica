@@ -320,31 +320,41 @@ $(document).on('click', '#GuardarAsignacion', function (e) {
 
 $(document).on('click', '.btnDesasignar', function (e) {
 
-    if (confirm('Esta seguro que desea desasignar esta cuenta del cliente?')) {
-        toastr.info('Desasignando cuenta del cliente...', "");
+    Swal.fire({
+        title: 'Desvincular Cuenta',
+        text: "¿Esta seguro que desea desvincular esta cuenta del cliente?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar'
+    }).then((result) => {
+        if (result.isConfirmed) {
 
-        var idCliente = $(this).data('cliente');
-        var idCuenta = $(this).data('id');
+            var idCliente = $(this).data('cliente');
+            var idCuenta = $(this).data('id');
 
-        $.ajax({
-            url: "Cuentas/DesvincularCuenta",
-            type: "POST",
-            data: { idCuenta: idCuenta, idCliente: idCliente },
-            success: function (data) {
+            $.ajax({
+                url: "Cuentas/DesvincularCuenta",
+                type: "POST",
+                data: { idCuenta: idCuenta, idCliente: idCliente },
+                success: function (data) {
 
-                datatable.ajax.reload();
-                toastr.success('Se desvinculó la cuenta con exitosa', "");
-            },
-            error: function (xhr, status, error) {
-                console.log(error);
-            }
+                    datatable.ajax.reload();
+                    toastr.success('Se desvinculó la cuenta con exitosa', "");
+                    datatable.ajax.reload();
+                    Swal.fire(
+                        'Desvincular Cuenta',
+                        'Se ha desvinculado la cuenta con exito.',
+                        'success'
+                    )
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
 
 
-        });
-
-    } else {
-        toastr.success('Se ha cancelado la acción.', "");
-    }
-
-
+            });
+        }
+    })
 });

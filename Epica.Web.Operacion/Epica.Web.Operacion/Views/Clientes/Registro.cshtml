@@ -1,6 +1,6 @@
 ﻿@model Epica.Web.Operacion.Models.ViewModels.ClientesRegistroViewModel
 @{
-    ViewData["Title"] = ViewBag.TituloForm;
+    ViewData["Title"] = @ViewBag.TituloForm;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -27,8 +27,8 @@
     <div class="col-md-12">
         <div class="card shadow-sm">
             <div class="card-header">
-                <h3 class="card-title">@ViewBag.TituloForm</h3>
-                <div class="separator separator-dashed border-light-secondary my-2"></div>
+                <h3 class="card-title">@ViewData["Title"]</h3>
+                @*<div class="separator separator-dashed border-light-secondary my-2"></div>*@
                 <div class="card-toolbar">
                     <button href="javascript:void(0)" onclick="history.back();" type="button" class="btn btn-sm btn-light-primary me-2">
                         Cancelar
@@ -47,9 +47,9 @@
 
                 </div>
             </div>
-            <div class="card-body pt-5">
-                <input asp-for="@Model.ClientesDetalles.IdCliente class="form-control form-control-sm form-control-solid" id="IdCliente" type="hidden" value="@(Model?.ClientesDetalles.IdCliente ?? 0)" autocomplete="off" />
-            </div>
+
+                <input asp-for="@Model.ClientesDetalles.IdCliente" hidden class="form-control form-control-sm form-control-solid" id="IdCliente" type="hidden" value="@(Model?.ClientesDetalles.IdCliente ?? 0)" autocomplete="off" />
+
             <div class="card-body pt-5">
                 <div class="d-flex mb-6 mt-6">
                     <div class="py-2 px-4 col-md-4 fv-row">
@@ -210,7 +210,7 @@
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
-                        <label class="form-label required">Delegacion/municipio: &nbsp;</label>
+                        <label class="form-label required">Delegación/Municipio: &nbsp;</label>
                         <div class="position-relative">
                             <input asp-for="ClientesDetalles.DelegacionMunicipio" class="form-control form-control-sm form-control-solid" id="DelegacionMunicipio" type="text" value="@(Model?.ClientesDetalles.DelegacionMunicipio ?? "")" autocomplete="off" required />
                             <span asp-validation-for="ClientesDetalles.DelegacionMunicipio" class="text-danger"></span>

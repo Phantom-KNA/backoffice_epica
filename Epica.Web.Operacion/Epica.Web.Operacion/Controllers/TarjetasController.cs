@@ -160,11 +160,13 @@ public class TarjetasController : Controller
         var List = new List<TarjetasResponseGrid>();
         foreach (var row in ListPF)
         {
+            row.nombreCompleto = row.nombreCompleto == null ? "N/A" : row.nombreCompleto;
             List.Add(new TarjetasResponseGrid
             {
                 idCuentaAhorro = row.idCuentaAhorro,
                 idCliente = row.idCliente,
-                nombreCompleto = row.nombreCompleto + "|" + row.idCliente.ToString(),
+                Vinculo = row.nombreCompleto + "|" + row.idCliente.ToString(),
+                nombreCompleto = row.nombreCompleto,
                 proxyNumber = row.proxyNumber,
                 clabe = row.clabe,
                 tarjeta = row.tarjeta,

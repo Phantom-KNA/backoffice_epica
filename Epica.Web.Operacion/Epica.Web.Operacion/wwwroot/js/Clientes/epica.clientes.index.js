@@ -74,10 +74,10 @@ var KTDatatableRemoteAjax = function () {
                         return "<a href='/Clientes/Detalle/DatosGenerales?id="+ID+"'>" + Nombre +"</a>";
                     }
                 },
-                { data: 'telefono', name: 'Telefono', title: 'Telefono' },
+                { data: 'telefono', name: 'Telefono', title: 'Teléfono' },
                 { data: 'email', name: 'Email', title: 'Correo Electrónico' },
                 { data: 'curp', name: 'Curp', title: 'CURP' },
-                { data: 'organizacion', name: 'Organizacion', title: 'Organizacion' },
+                { data: 'organizacion', name: 'Organizacion', title: 'Organización' },
                 //{ data: 'membresia', name: 'membresia', title: 'Tipo Membresia' },
                 //{
                 //    data: 'sexo', name: 'Sexo', title: 'Sexo',
@@ -197,42 +197,74 @@ jQuery(document).ready(function () {
 });
 
 function GestionarClienteWeb(AccountID, estatus) {
-    if (confirm('Esta seguro que desea bloquear o desbloquear la opción web para este cliente?')) {
-        $.ajax({
-            url: siteLocation + 'Clientes/GestionarEstatusClienteWeb',
-            async: true,
-            cache: false,
-            type: 'POST',
-            data: { id: AccountID, Estatus: estatus },
-            success: function (data) {
 
-                datatable.ajax.reload();
-                toastr.success('Se ha actualizado el estatus con exito', "");
-            },
-            error: function (xhr, status, error) {
-                console.log(error);
-            }
-        });
-    }
+    Swal.fire({
+        title: 'Bloqueo Web',
+        text: "¿Esta seguro que desea bloquear o desbloquear la opción web para este cliente?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            $.ajax({
+                url: siteLocation + 'Clientes/GestionarEstatusClienteWeb',
+                async: true,
+                cache: false,
+                type: 'POST',
+                data: { id: AccountID, Estatus: estatus },
+                success: function (data) {
+
+                    datatable.ajax.reload();
+                    Swal.fire(
+                        'Cliente Actualizado',
+                        'Se ha actualizado el estatus con exito.',
+                        'success'
+                    )
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+    })
 }
 
 function GestionarClienteTotal(AccountID, estatus) {
-    if (confirm('Esta seguro que desea bloquear o desbloquear la opción total para este cliente?')) {
-        $.ajax({
-            url: siteLocation + 'Clientes/GestionarEstatusClienteTotal',
-            async: true,
-            cache: false,
-            type: 'POST',
-            data: { id: AccountID, Estatus: estatus },
-            success: function (data) {
 
-                datatable.ajax.reload();
-                toastr.success('Se ha actualizado el estatus con exito', "");
-            },
-            error: function (xhr, status, error) {
-                console.log(error);
-            }
-        });
-    }
+    Swal.fire({
+        title: 'Bloqueo Total',
+        text: "¿Esta seguro que desea bloquear o desbloquear la opción total para este cliente?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            $.ajax({
+                url: siteLocation + 'Clientes/GestionarEstatusClienteTotal',
+                async: true,
+                cache: false,
+                type: 'POST',
+                data: { id: AccountID, Estatus: estatus },
+                success: function (data) {
+
+                    datatable.ajax.reload();
+                    Swal.fire(
+                        'Cliente Actualizado',
+                        'Se ha actualizado el estatus con exito.',
+                        'success'
+                    )
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+    })
 
 }

@@ -74,7 +74,7 @@ namespace Epica.Web.Operacion.Controllers
                 };
 
                 ViewBag.Accion = "RegistrarTransaccion";
-                ViewBag.TituloForm = "Crear nueva transacción";
+                ViewBag.TituloForm = "Registrar Transacción";
 
                 return View(transaccionesRegistroViewModel);
             }
@@ -127,11 +127,13 @@ namespace Epica.Web.Operacion.Controllers
             var List = new List<ResumenTransaccionResponseGrid>();
             foreach (var row in ListPF)
             {
+                row.claveRastreo = row.claveRastreo == null ? "N/A" : row.claveRastreo;
                 List.Add(new ResumenTransaccionResponseGrid
                 {
                     id = row.idTransaccion,
                     idCliente = row.idCliente,
-                    claveRastreo = row.claveRastreo + "|" + row.idCliente.ToString(),
+                    claveRastreo = row.claveRastreo == null ? "N/A" : row.claveRastreo,
+                    vinculo = row.claveRastreo + "|" + row.idCliente.ToString(),
                     nombreOrdenante = row.nombreOrdenante,
                     nombreBeneficiario = row.nombreBeneficiario,
                     monto = row.monto,
@@ -161,6 +163,7 @@ namespace Epica.Web.Operacion.Controllers
                 ).ToList();
             }
             //Aplicacion de Filtros temporal, 
+            var filtroCuentaOrdenante = filters.FirstOrDefault(x => x.Key == "cuentaOrdenante");
             var filtronombreClaveRastreo = filters.FirstOrDefault(x => x.Key == "claveRastreo");
             var filtroNombreOrdenante = filters.FirstOrDefault(x => x.Key == "nombreOrdenante");
             var filtroNombreBeneficiario = filters.FirstOrDefault(x => x.Key == "nombreBeneficiario");
@@ -168,6 +171,11 @@ namespace Epica.Web.Operacion.Controllers
             var filtroMonto = filters.FirstOrDefault(x => x.Key == "monto");
             var filtroFecha = filters.FirstOrDefault(x => x.Key == "fecha");
             var filtroEstatus = filters.FirstOrDefault(x => x.Key == "estatus");
+
+            if (filtroCuentaOrdenante.Value != null)
+            {
+                List = List.Where(x => x.cuetaOrigenOrdenante.Contains(Convert.ToString(filtroCuentaOrdenante.Value))).ToList();
+            }
 
             if (filtronombreClaveRastreo.Value != null)
             {
@@ -315,7 +323,7 @@ namespace Epica.Web.Operacion.Controllers
                     };
 
                     ViewBag.Accion = "ModificarTransaccion";
-                    ViewBag.TituloForm = "Modificar transacción";
+                    ViewBag.TituloForm = "Modificar Transacción";
                     return View("~/Views/Transacciones/Editar.cshtml", transaccionesEditarViewModel);
                 }
                 catch (Exception)
@@ -424,6 +432,7 @@ namespace Epica.Web.Operacion.Controllers
             public int id { get; set; }
             public int idCliente { get; set; }
             public string claveRastreo { get; set; }
+            public string vinculo { get; set; }
             public string nombreOrdenante { get; set; }
             public string cuetaOrigenOrdenante { get; set; }
             public string clabeCobranza { get; set; }

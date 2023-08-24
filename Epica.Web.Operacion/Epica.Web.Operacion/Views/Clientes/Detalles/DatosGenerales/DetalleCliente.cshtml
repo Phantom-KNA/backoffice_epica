@@ -18,7 +18,7 @@
         <span class="bullet bg-gray-400 w-5px h-2px"></span>
     </li>
     <li class="breadcrumb-item text-muted">
-        <a class="text-muted" asp-controller="Clientes" asp-action="Index">Clientes</a>
+        <a class="text-muted" asp-controller="Clientes" asp-action="Index">Datos Generales</a>
     </li>
 }
 
@@ -35,9 +35,9 @@
 
                     <div class="card-toolbar">
                         <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-                            <button data-bs-toggle="modal" data-bs-target="#kt_modal_1" class="btn btn-primary me-3">
-                                <i class="bi bi-pencil"></i>&nbsp;Modificar cliente
-                            </button>
+                            <a href="/Clientes/Detalle/Modificar?id=@Model.IdCliente" class="btn btn-primary">
+                                <i class="bi bi-pencil"></i>&nbsp;Editar cliente
+                            </a>
                         </div>
                     </div>
                 </div>

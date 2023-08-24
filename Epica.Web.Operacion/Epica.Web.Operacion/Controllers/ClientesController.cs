@@ -786,7 +786,7 @@ public class ClientesController : Controller
             };
 
             ViewBag.Accion = "RegistrarCliente";
-            ViewBag.TituloForm = "Crear nuevo cliente";
+            ViewBag.TituloForm = "Registrar Cliente";
             return View(clientesRegistroViewModel);
         }
 
@@ -1035,7 +1035,7 @@ public class ClientesController : Controller
                 };
 
                 ViewBag.Accion = "ModificarCliente";
-                ViewBag.TituloForm = "Modificar cliente";
+                ViewBag.TituloForm = "Modificar Cliente";
                 return View("~/Views/Clientes/Registro.cshtml", clientesRegistroViewModel);
             }
             catch (Exception)

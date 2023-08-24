@@ -54,12 +54,18 @@ var KTDatatableTransacciones = (function () {
             columns: [
                 { data: "cuetaOrigenOrdenante", name: "cuetaOrigenOrdenante", title: "CUENTA ORDENANTE" },
                 {
-                    data: "claveRastreo", name: "ClaveRastreo", title: "CLAVE DE RASTREO",
+                    data: "vinculo", name: "vinculo", title: "CLAVE DE RASTREO",
                     render: function (data, type, row) {
                         var partes = data.split("|"); // Separar la parte entera y decimal
                         var ClaveRastreo = partes[0];
                         var idCliente = partes[1];
-                        return "<a href='/Clientes/Detalle/Movimientos?cliente=" + idCliente + "'>" + ClaveRastreo + "</a>";
+
+                        if (ClaveRastreo == "N/A") {
+                            return ClaveRastreo;
+                        } else {
+                            return "<a href='/Clientes/Detalle/Movimientos?cliente=" + idCliente + "'>" + ClaveRastreo + "</a>";
+                        }
+                        
                     }
                 },
                 { data: "nombreOrdenante", name: "NombreCuenta", title: "NOMBRE ORDENANTE" },

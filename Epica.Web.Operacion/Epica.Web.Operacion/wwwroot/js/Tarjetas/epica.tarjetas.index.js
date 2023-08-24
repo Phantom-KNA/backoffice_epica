@@ -70,7 +70,12 @@ var KTDatatableRemoteAjax = function () {
                         var partes = data.split("|"); // Separar la parte entera y decimal
                         var nombreCompleto = partes[0];
                         var idCliente = partes[1];
-                        return "<a href='/Clientes/Detalle/Tarjetas?id=" + idCliente + "'>" + nombreCompleto + "</a>";
+
+                        if (nombreCompleto == "N/A") {
+                            return nombreCompleto;
+                        } else {
+                            return "<a href='/Clientes/Detalle/Tarjetas?id=" + idCliente + "'>" + nombreCompleto + "</a>";
+                        }
                     }
                 },
                 {
