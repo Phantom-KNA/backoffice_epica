@@ -29,6 +29,38 @@
         .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
             max-width: 100% !important;
         }
+
+        .table.gy-5 td, .table.gy-5 th {
+            padding-top: 0.9rem !important;
+            padding-bottom: 0.9rem !important;
+            font-size: 0.9em;
+        }
+
+        table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control, table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control {
+            padding-left: 0px;
+        }
+
+        .obligatorio {
+            color: var(--kt-danger);
+        }
+
+        .lottie-loader2 {
+            width: 180px !important;
+            height: 180px !important;
+        }
+
+        .modal-header {
+            background-color: var(--kt-app-sidebar-primary-base-bg-color) !important;
+        }
+
+        .dataTable {
+            border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+            border-radius: .475rem !important;
+        }
+
+        .table td:first-child, .table th:first-child, .table tr:first-child {
+            padding-left: 10px !important;
+        }
     </style>
 
     @RenderSection("Styles",false)
