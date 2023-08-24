@@ -292,20 +292,32 @@ function pruebas(idAccount) {
                             console.log(d);
                             // Mapeo de Datos
                             numcuenta.innerText = d.noCuentaPadre;
-                            cliente.innerText = d.nombre;
+
+                            if (d.nombre == "") {
+                                cliente.innerText = "N/A";
+                            } else {
+                                cliente.innerText = d.nombre;
+                            }
+
 
                             if (d.estatus == null) {
-                                estatus.innerHTML = "<span class='badge badge-light-warning'>En Proceso</span>"
+                                estatus.innerHTML = "<br> <span class='badge badge-light-warning'>En Proceso</span>"
                             } else if (d.estatus == 0) {
-                                estatus.innerHTML = "<span class='badge badge-light-success'>Liquidado</span>"
+                                estatus.innerHTML = "<br> <span class='badge badge-light-success'>Liquidado</span>"
                             } else if (d.estatus == 1) {
-                                estatus.innerHTML = "<span class='badge badge-light-danger'>Error</span>"
+                                estatus.innerHTML = "<br> <span class='badge badge-light-danger'>Error</span>"
                             } else {
-                                estatus.innerHTML = "<span class='badge badge-light-danger'>Error</span>"
+                                estatus.innerHTML = "<br> <span class='badge badge-light-danger'>Error</span>"
                             }
                             //estatus.innerHTML = d.estatus == 1 ? "<span class='badge badge-light-success'>Activo</span>" : "<span class='badge badge-light-danger'>Desactivado</span>";
                             mediopago.innerText = d.descripcionPago;
-                            noreferencia.innerText = d.numeroReferencia;
+
+                            if (d.numeroReferencia == null) {
+                                noreferencia.innerText = "N/A";
+                            } else {
+                                noreferencia.innerText = d.numeroReferencia;
+                            }
+
                             fechadato.innerText = d.fechaAlta;
 
                             if (data.length === 1) {
