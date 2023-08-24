@@ -36,7 +36,12 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    listaClientes = JsonConvert.DeserializeObject<List<TarjetasResponse>>(jsonResponse);
+                    var settings = new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+                    listaClientes = JsonConvert.DeserializeObject<List<TarjetasResponse>>(jsonResponse,settings);
                 }
 
             }
