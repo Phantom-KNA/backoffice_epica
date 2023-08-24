@@ -6,6 +6,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
 {
     public interface IClientesApiClient
     {
+        Task<List<DatosClienteEntity>> GetDetallesClientesByNombresAsync(string nombres);
         Task<object> GetClientesbyNombreAsync(string nombreCliente);
         Task<List<ClienteResponse>> GetClientesAsync(int pageNumber, int recordsTotal);
         Task<int> GetTotalClientesAsync();
@@ -17,6 +18,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
         Task<ClienteDetailsResponse> GetDetallesCliente(int id);
         Task<MensajeResponse> GetModificarCliente(RegistroModificacionClienteRequest request);
         Task<MensajeResponse> GetRegistroAsignacionCuentaCliente(AsignarCuentaResponse request);
+        Task<MensajeResponse> GetRegistroDesvincularCuentaCliente(DesvincularCuentaResponse request);
         //Task<RegistrarModificarClienteResponse> GetModificaCliente(RegistroModificacionClienteRequest request);
 
     }

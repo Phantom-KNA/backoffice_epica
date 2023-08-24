@@ -71,7 +71,6 @@ var KTDatatableRemoteAjax = function () {
                 {
                     data: 'estatus', name: 'Estatus', title: 'Estatus',
                     render: function (data, type, row) {
-                        console.log(data);
                         return data == 1 ?
                             "<span class='badge badge-light-danger' >Desactivado</span>" : "<span class='badge badge-light-success' >Activo</span>";
                     }
@@ -278,7 +277,6 @@ $(document).on('click', '#btnBuscarCliente', function () {
         type: "POST",
         data: { NoCuenta: NoCuenta },
         success: function (result) {
-            console.log(result);
 
             const idCuenta = document.getElementById('IdCuenta');
             const NumCuenta = document.getElementById('numeroCuenta');
@@ -318,4 +316,35 @@ $(document).on('click', '#GuardarAsignacion', function (e) {
 
     });
     $("#btnCerrarCuenta").click();
+});
+
+$(document).on('click', '.btnDesasignar', function (e) {
+
+    if (confirm('Esta seguro que desea desasignar esta cuenta del cliente?')) {
+        toastr.info('Desasignando cuenta del cliente...', "");
+
+        var idCliente = $(this).data('cliente');
+        var idCuenta = $(this).data('id');
+
+        $.ajax({
+            url: "Cuentas/DesvincularCuenta",
+            type: "POST",
+            data: { idCuenta: idCuenta, idCliente: idCliente },
+            success: function (data) {
+
+                datatable.ajax.reload();
+                toastr.success('Se desvinculó la cuenta con exitosa', "");
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+            }
+
+
+        });
+
+    } else {
+        toastr.success('Se ha cancelado la acción.', "");
+    }
+
+
 });

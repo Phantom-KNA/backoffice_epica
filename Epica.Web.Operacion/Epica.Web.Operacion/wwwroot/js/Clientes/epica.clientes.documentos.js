@@ -59,21 +59,21 @@ var KTDatatableRemoteAjax = function () {
                 { data: 'tipoDocumento', name: 'tipoDocumento', title: 'Tipo de Documento' },
                 { data: 'documento', name: 'tipoDocumento', title: 'Documento' },
                 { data: 'numeroIdentificacion', name: 'numeroIdentificacion', title: 'Numero de Identificación' },
-                { data: 'nombreDocumento', name: 'NombreDocumento', title: 'Nombre del Documento' }
-                //{
-                //    title: '',
-                //    orderable: false,
-                //    data: null,
-                //    defaultContent: '',
-                //    render: function (data, type, row) {
-                //        console.log(data);
-                //        if (type === 'display') {
-                //            var htmlString = row.acciones;
-                //            console.log(htmlString);
-                //            return htmlString
-                //        }
-                //    }
-                //}
+                { data: 'nombreDocumento', name: 'NombreDocumento', title: 'Nombre del Documento' },
+                {
+                    title: '',
+                    orderable: false,
+                    data: null,
+                    defaultContent: '',
+                    render: function (data, type, row) {
+                        console.log(data);
+                        if (type === 'display') {
+                            var htmlString = row.acciones;
+                            console.log(htmlString);
+                            return htmlString
+                        }
+                    }
+                }
             ],
         });
         $('thead tr').addClass('text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0');

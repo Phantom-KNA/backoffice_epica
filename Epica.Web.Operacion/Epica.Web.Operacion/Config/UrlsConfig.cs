@@ -39,6 +39,7 @@ public class UrlsConfig
 
     public class ClientesOperations
     {
+        public static string GetDetallesClientesByNombres(string nombre) => $"/api/v1/clientes/buscar_coincidencia_nombres?nombre={nombre}";
         public static string GetClientesByNombre(string nombre) => $"/api/v1/clientes/buscar_clientes?nombre={nombre}";
         public static string GetClientesTotal() => $"/api/v1/clientes/total";
         public static string GetCliente(int id) => $"/api/v1/clientes/cliente?id={id}";
@@ -52,6 +53,7 @@ public class UrlsConfig
         public static string GetAllClientes() => $"api/v1/clientes/AllClientes";
         public static string ModificarClienteNuevo() => $"/api/v1/clientes/modificar_cliente";
         public static string AsignarCuentaCliente() => $"/api/v1/clientes/asignar_cuenta";
+        public static string DesvincularCuentaCliente() => $"/api/v1/clientes/desasociar_cuenta";
     }
 
     public class CatalogosOperations

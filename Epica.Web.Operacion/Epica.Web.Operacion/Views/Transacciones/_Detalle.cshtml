@@ -50,7 +50,7 @@
                 </div>
                 <div class="col-6">
                     <p><strong>Estatus:</strong></p>
-                    @if(Model.Estatus == 0){
+                    @if ((Model.Estatus == 0) || (Model.Estatus == null)){
                         <span class="badge badge-light-info">En Proceso</span>
                     } else if ((Model.Estatus == 1) || (Model.Estatus == 2)) {
                         <span class='badge badge-light-warning'>En Tránsito</span>

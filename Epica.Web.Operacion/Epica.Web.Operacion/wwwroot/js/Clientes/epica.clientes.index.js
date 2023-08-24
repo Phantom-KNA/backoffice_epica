@@ -197,37 +197,42 @@ jQuery(document).ready(function () {
 });
 
 function GestionarClienteWeb(AccountID, estatus) {
-    $.ajax({
-        url: siteLocation + 'Clientes/GestionarEstatusClienteWeb',
-        async: true,
-        cache: false,
-        type: 'POST',
-        data: { id: AccountID, Estatus: estatus },
-        success: function (data) {
+    if (confirm('Esta seguro que desea bloquear o desbloquear la opción web para este cliente?')) {
+        $.ajax({
+            url: siteLocation + 'Clientes/GestionarEstatusClienteWeb',
+            async: true,
+            cache: false,
+            type: 'POST',
+            data: { id: AccountID, Estatus: estatus },
+            success: function (data) {
 
-            datatable.ajax.reload();
-            toastr.success('Se ha actualizado el estatus con exito', "");
-        },
-        error: function (xhr, status, error) {
-            console.log(error);
-        }
-    });
+                datatable.ajax.reload();
+                toastr.success('Se ha actualizado el estatus con exito', "");
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+            }
+        });
+    }
 }
 
 function GestionarClienteTotal(AccountID, estatus) {
-    $.ajax({
-        url: siteLocation + 'Clientes/GestionarEstatusClienteTotal',
-        async: true,
-        cache: false,
-        type: 'POST',
-        data: { id: AccountID, Estatus: estatus },
-        success: function (data) {
+    if (confirm('Esta seguro que desea bloquear o desbloquear la opción total para este cliente?')) {
+        $.ajax({
+            url: siteLocation + 'Clientes/GestionarEstatusClienteTotal',
+            async: true,
+            cache: false,
+            type: 'POST',
+            data: { id: AccountID, Estatus: estatus },
+            success: function (data) {
 
-            datatable.ajax.reload();
-            toastr.success('Se ha actualizado el estatus con exito', "");
-        },
-        error: function (xhr, status, error) {
-            console.log(error);
-        }
-    });
+                datatable.ajax.reload();
+                toastr.success('Se ha actualizado el estatus con exito', "");
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+            }
+        });
+    }
+
 }

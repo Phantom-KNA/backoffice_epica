@@ -5,14 +5,12 @@ namespace Epica.Web.Operacion.Models.Response;
 /// Clase que representa la respuesta de un token de autenticación.
 /// </summary>
 
-public class AsignarCuentaResponse
+public class DesvincularCuentaResponse
 {
     [JsonPropertyName("idCliente")]
     public int idCliente { get; set; }
     [JsonPropertyName("idCuenta")]
     public int idCuenta { get; set; }
-    [JsonPropertyName("idEmpresa")]
-    public int idEmpresa { get; set; }
     [JsonPropertyName("descripcionRol")]
     public string? descripcionRol { get; set; }
 }

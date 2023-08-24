@@ -15,6 +15,7 @@ public class CobranzaReferenciadaResponse
     public string fechaAlta { get; set; }
     public int idMedioPago { get; set; }
     public string numeroReferencia { get; set; }
+    public string DescripcionPago { get; set; }
     public string estatus { get; set; }
 }
 
