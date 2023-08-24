@@ -93,18 +93,18 @@ var KTDatatableRemoteAjax = function () {
                             "<span class='badge badge-light-success' >Activo</span>" : "<span class='badge badge-light-danger' >Desactivado</span>";
                     }
                 },
-                //{
-                //    title: '',
-                //    orderable: false,
-                //    data: null,
-                //    defaultContent: '',
-                //    render: function (data, type, row) {
-                //        if (type === 'display') {
-                //            var htmlString = row.acciones;
-                //            return htmlString
-                //        }
-                //    }
-                //}
+                {
+                    title: '',
+                    orderable: false,
+                    data: null,
+                    defaultContent: '',
+                    render: function (data, type, row) {
+                        if (type === 'display') {
+                            var htmlString = row.acciones;
+                            return htmlString
+                        }
+                    }
+                }
             ],
         });
         $('thead tr').addClass('text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0');
@@ -219,4 +219,27 @@ var KTDatatableRemoteAjax = function () {
 jQuery(document).ready(function () {
     KTDatatableRemoteAjax.init();
 });
+
+function GestionarTarjeta(AccountID, estatus) {
+
+    Swal.fire({
+        title: 'Bloqueo/Desbloqueo de Tarjetas',
+        text: "¿Esta seguro que desea bloquear o desbloquear esta tarjeta?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            datatable.ajax.reload();
+            Swal.fire(
+                'Estatus Actualizado',
+                'Se ha actualizado el estatus de la tarjeta con exito.',
+                'success'
+            )
+        }
+    })
+}
 

@@ -9,7 +9,7 @@
                     <label>@Model.NoCuenta</label>
                 </div>
                 <div class="col-6">
-                    <h2 class="fs-2x fw-bold mb-0">Saldo: @String.Format("{0:C2}", Model.Saldo)</h2>
+                    <h2 class="fs-2x fw-bold mb-0">Saldo: $@String.Format("{0:#,#.00}", Model.Saldo)</h2>
                 </div>
             </div>
             <br />
