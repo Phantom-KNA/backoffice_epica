@@ -16,6 +16,7 @@ using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Services.Catalogos;
 using Epica.Web.Operacion.Services.Log;
 using System.Globalization;
+using Epica.Web.Operacion.Models.Response;
 
 namespace Epica.Web.Operacion.Controllers;
 
@@ -85,7 +86,37 @@ public class ClientesController : Controller
         var gridData = new ResponseGrid<ClienteResponseGrid>();
         List<ClienteResponse> ListPF = new List<ClienteResponse>();
 
-        ListPF = await _clientesApiClient.GetClientesAsync(1, 200);
+        var filtronombreCliente = filters.FirstOrDefault(x => x.Key == "nombreCliente");
+
+        if(filtronombreCliente.Value != null)
+        {
+            string nombre = filtronombreCliente.Value;
+            var listPF2 = await _clientesApiClient.GetDetallesClientesByNombresAsync(nombre);
+
+            foreach (var cliente in listPF2)
+            {
+                ClienteResponse clienteResponse = new ClienteResponse
+                {
+                    nombreCompleto = cliente.nombre +" "+ cliente.apellido_paterno + " " +cliente.apellido_materno,
+                    sexo = cliente.sexo,
+                    CURP = cliente.curp,
+                    email = cliente.email,
+                    estatus = cliente.active ?? 0,
+                    id = cliente.id_cliente,
+                    membresia = cliente.membresia,
+                    organizacion = cliente.organizacion,
+                    telefono = cliente.organizacion
+                };
+
+                ListPF.Add(clienteResponse);
+            }
+        }
+        else
+        {
+            ListPF = await _clientesApiClient.GetClientesAsync(1, 200);
+
+        }
+
 
         //Entorno local de pruebas
         //ListPF = GetList();
@@ -97,7 +128,7 @@ public class ClientesController : Controller
             List.Add(new ClienteResponseGrid
             {
                 id = row.id,
-                nombreCompleto = row.nombreCompleto + "|" + row.id.ToString(),
+                nombreCompleto = (row.nombreCompleto + "|" + row.id.ToString()).ToUpper(),
                 telefono = row.telefono,
                 email = row.email,
                 CURP = row.CURP,
@@ -111,7 +142,7 @@ public class ClientesController : Controller
         if (!string.IsNullOrEmpty(request.Busqueda))
         {
             List = List.Where(x =>
-            (x.nombreCompleto?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.nombreCompleto?.ToUpper() ?? "").Contains(request.Busqueda.ToUpper()) ||
             (x.telefono?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
             (x.email?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
             (x.CURP?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
@@ -120,7 +151,6 @@ public class ClientesController : Controller
         }
 
         //Aplicacion de Filtros temporal, 
-        var filtronombreCliente = filters.FirstOrDefault(x => x.Key == "nombreCliente");
         var filtroTelefono = filters.FirstOrDefault(x => x.Key == "telefono");
         var filtroCorreoElectronico = filters.FirstOrDefault(x => x.Key == "correoElectronico");
         var filtroCurp = filters.FirstOrDefault(x => x.Key == "curp");
@@ -128,7 +158,7 @@ public class ClientesController : Controller
 
         if (filtronombreCliente.Value != null)
         {
-            List = List.Where(x => x.nombreCompleto.Contains(Convert.ToString(filtronombreCliente.Value))).ToList();
+            List = List.Where(x => x.nombreCompleto.Contains(Convert.ToString(filtronombreCliente.Value.ToUpper()))).ToList();
         }
 
         if (filtroTelefono.Value != null)

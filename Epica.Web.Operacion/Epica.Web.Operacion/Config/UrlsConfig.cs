@@ -39,7 +39,7 @@ public class UrlsConfig
 
     public class ClientesOperations
     {
-        public static string GetDetallesClientesByNombres(string nombre) => $"/api/v1/clientes/buscar_coincidencia_nombres?nombre={nombre}";
+        public static string GetDetallesClientesByNombres(string NombresApellidos) => $"/api/v1/clientes/buscar_concidencia_nombres?NombresApellidos={NombresApellidos}";
         public static string GetClientesByNombre(string nombre) => $"/api/v1/clientes/buscar_clientes?nombre={nombre}";
         public static string GetClientesTotal() => $"/api/v1/clientes/total";
         public static string GetCliente(int id) => $"/api/v1/clientes/cliente?id={id}";
