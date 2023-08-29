@@ -39,7 +39,7 @@ namespace Epica.Web.Operacion.Controllers
             {
                 Email = email,
                 Password = password,
-                Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                Ip = await PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
                 DispositivoAcceso = Environment.MachineName
             };
 

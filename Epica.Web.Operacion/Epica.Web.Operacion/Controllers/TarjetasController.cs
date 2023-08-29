@@ -104,7 +104,7 @@ public class TarjetasController : Controller
                     Fecha = HoraHelper.GetHoraCiudadMexico(),
                     NombreEquipo = Environment.MachineName,
                     Accion = "Insertar",
-                    Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                    Ip = await PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
                     Envio = JsonConvert.SerializeObject(model.TarjetasDetalles),
                     Respuesta = response.Error.ToString(),
                     Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,

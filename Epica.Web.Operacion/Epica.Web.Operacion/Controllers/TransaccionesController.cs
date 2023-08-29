@@ -11,6 +11,7 @@ using Epica.Web.Operacion.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -261,7 +262,7 @@ namespace Epica.Web.Operacion.Controllers
                         Fecha = HoraHelper.GetHoraCiudadMexico(),
                         NombreEquipo = Environment.MachineName,
                         Accion = "Insertar",
-                        Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                        Ip = await PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
                         Envio = JsonConvert.SerializeObject(model.TransacccionDetalles),
                         Respuesta = response.Error.ToString(),
                         Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
@@ -353,9 +354,9 @@ namespace Epica.Web.Operacion.Controllers
                         IdUser = loginResponse.IdUsuario.ToString(),
                         Modulo = "Transacciones",
                         Fecha = HoraHelper.GetHoraCiudadMexico(),
-                        NombreEquipo = Environment.MachineName,
+                        NombreEquipo = Dns.GetHostName(),
                         Accion = "Editar",
-                        Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                        Ip = await PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
                         Envio = JsonConvert.SerializeObject(model.TransacccionDetalles),
                         Respuesta = response.Error.ToString(),
                         Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
