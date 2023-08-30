@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using static Epica.Web.Operacion.Controllers.CuentaController;
 
 namespace Epica.Web.Operacion.Services.Transaccion
@@ -406,6 +407,92 @@ namespace Epica.Web.Operacion.Services.Transaccion
             }
 
             return respuesta;
+        }
+
+        public async Task<MensajeResponse> GetRestablecerContraseñaCorreo(string correo)
+        {
+            MensajeResponse respuesta = new MensajeResponse();
+
+            try
+            {
+                var uri = Urls.users + UrlsConfig.AuthenticateOperations.RestableceContraseñaCorreo(correo);
+                var json = JsonConvert.SerializeObject(correo);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                TokenResponse responsetoken = await GenTokenAsync();
+                ApiClient.DefaultRequestHeaders.Add("token_type", "Bearer");
+                ApiClient.DefaultRequestHeaders.Add("access_token", responsetoken.AccessToken);
+
+                var response = await ApiClient.PostAsync(uri,content);
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                respuesta.Error = true;
+                respuesta.Detalle = ex.Message;
+                return respuesta;
+            }
+
+            return respuesta;
+        }
+
+        public async Task<MensajeResponse> GetRestablecerContraseñaTelefono(string telefono)
+        {
+            MensajeResponse respuesta = new MensajeResponse();
+
+            try
+            {
+                var uri = Urls.users + UrlsConfig.AuthenticateOperations.RestableceContraseñaTelefono(telefono);
+                var json = JsonConvert.SerializeObject(telefono);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                TokenResponse responsetoken = await GenTokenAsync();
+                ApiClient.DefaultRequestHeaders.Add("token_type", "Bearer");
+                ApiClient.DefaultRequestHeaders.Add("access_token", responsetoken.AccessToken);
+
+                var response = await ApiClient.PostAsync(uri, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                respuesta.Error = true;
+                respuesta.Detalle = ex.Message;
+                return respuesta;
+            }
+
+            return respuesta;
+        }
+
+        private async Task<TokenResponse> GenTokenAsync()
+        {
+            var uri = Urls.Authenticate + UrlsConfig.AuthenticateOperations.PostToken();
+
+            var credentials = new TokenRequest() { Username = "gaelle@demomatic.com", Password = "123456" };
+
+            var content = new StringContent(JsonConvert.SerializeObject(credentials), Encoding.UTF8, "application/json");
+            JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            };
+            var response = await ApiClient.PostAsync(uri, content);
+
+            var stringResponse = await response.Content.ReadAsStringAsync();
+            var result = System.Text.Json.JsonSerializer.Deserialize<TokenResponse>(stringResponse, _serializerOptions);
+
+            return result;
         }
     }
 }

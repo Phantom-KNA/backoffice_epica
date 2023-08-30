@@ -17,6 +17,8 @@ public class CuentasResponse
     public string fechaActualizacion { get; set; }
     public string fechaAltaFormat { get; set; }
     public string fechaActualizacionformat { get; set; }
+    public string email { get; set; }
+    public string telefono { get; set; }
 }
 
 public class CuentasResponseGrid : CuentasResponse

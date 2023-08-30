@@ -12,6 +12,8 @@ public class UrlsConfig
     public class AuthenticateOperations
     {
         public static string PostToken() => $"/api/v1/authenticate/token";
+        public static string RestableceContraseñaCorreo(string Correo) => $"/api/v1/recuperapassword/email?email={Correo}";
+        public static string RestableceContraseñaTelefono(string Telefono) => $"/api/v1/recuperapassword/sms?telefono={Telefono}";
     }
 
     public class TransaccionesOperations
@@ -88,6 +90,7 @@ public class UrlsConfig
         public static string GetUsuariosRoles() => $"/api/v1/usuario/resumen_permisos";
         public static string GetUsuariosVista() => $"/api/v1/usuario/resumen_permisos";
     }
+    public string users { get; set; }
     public string Authenticate { get; set; }
     public string Transaccion { get; set; }
 }

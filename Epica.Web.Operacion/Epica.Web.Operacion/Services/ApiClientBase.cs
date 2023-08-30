@@ -8,6 +8,7 @@ namespace Epica.Web.Operacion.Services;
 public class ApiClientBase
 {
     protected readonly HttpClient ApiClient;
+    //protected readonly HttpClient ApiClientUser;
     protected readonly ILogger Logger;
     protected readonly UrlsConfig Urls;
     protected readonly IHttpContextAccessor HttpContext;
@@ -23,6 +24,7 @@ public class ApiClientBase
     IUserResolver userResolver)
     {
         ApiClient = httpClient;
+        //ApiClientUser = httpClient;
         Logger = logger;
         Urls = config.Value;
         HttpContext = httpContext;

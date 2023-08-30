@@ -42,11 +42,24 @@
                 Detalle
             </a>
         </li>
-@*        <li class="menu-item px-3">
-            <a data-id="@Model.id" asp-controller="Usuarios" asp-action="GestionarDocumentos" asp-route-AccountID="@Model.id" class="btnDetalle menu-link px-3">
-                <i class="bi bi-file-earmark-bar-graph"></i>&nbsp;
-                Documentos
-            </a>
-        </li>*@
+        @if (Model.email != null)
+        {
+            <li class="menu-item px-3">
+                <a data-id="@Model.email" onclick="ResetContrasenaEmail('@Model.email', @Model.id)" title="Restablecer Contraseña por Correo Electrónico" class="btnEditar menu-link px-3">
+                    <i class="bi bi-envelope"></i>&nbsp;
+                    R.P Email
+                </a>
+            </li>
+        }
+
+        @if (Model.telefono != null)
+        {
+            <li class="menu-item px-3">
+                <a data-id="@Model.email" onclick="ResetContrasenaTelefono('@Model.telefono', @Model.id)" title="Restablecer Contraseña por Teléfono" class="btnEditar menu-link px-3">
+                    <i class="bi bi-phone"></i>&nbsp;
+                    R.P Tel.
+                </a>
+            </li>
+        }
     </ul>
 </div>

@@ -105,7 +105,7 @@ public class ClientesController : Controller
                     id = cliente.id_cliente,
                     membresia = cliente.membresia,
                     organizacion = cliente.organizacion,
-                    telefono = cliente.organizacion
+                    telefono = cliente.telefono
                 };
 
                 ListPF.Add(clienteResponse);
@@ -289,6 +289,92 @@ public class ClientesController : Controller
             return Json(BadRequest());
         }
     }
+
+    [Authorize]
+    [HttpPost]
+    public async Task<JsonResult> EnvioContrasenaCorreo(string correo, int id)
+    {
+
+        MensajeResponse response = new MensajeResponse();
+
+        try
+        {
+            var loginResponse = _userContextService.GetLoginResponse();
+            response = await _clientesApiClient.GetRestablecerContraseñaCorreo(correo);
+
+            LogRequest logRequest = new LogRequest
+            {
+                IdUser = loginResponse.IdUsuario.ToString(),
+                Modulo = "Clientes",
+                Fecha = HoraHelper.GetHoraCiudadMexico(),
+                NombreEquipo = Environment.MachineName,
+                Accion = "Restablecer contraseña Email",
+                Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                Envio = JsonConvert.SerializeObject(correo),
+                Respuesta = response.Error.ToString(),
+                Error = response.Error ? JsonConvert.SerializeObject(response.message) : string.Empty,
+                IdRegistro = id
+            };
+            await _logsApiClient.InsertarLogAsync(logRequest);
+
+            if (response.Error == false)
+            {
+                return Json(Ok(response));
+            }
+            else
+            {
+                return Json(BadRequest(response));
+            }
+
+        }
+        catch (Exception ex)
+        {
+            return Json(BadRequest());
+        }
+    }
+
+    [Authorize]
+    [HttpPost]
+    public async Task<JsonResult> EnvioContrasenaTelefono(string telefono, int id)
+    {
+
+        MensajeResponse response = new MensajeResponse();
+
+        try
+        {
+            var loginResponse = _userContextService.GetLoginResponse();
+            response = await _clientesApiClient.GetRestablecerContraseñaTelefono(telefono);
+
+            LogRequest logRequest = new LogRequest
+            {
+                IdUser = loginResponse.IdUsuario.ToString(),
+                Modulo = "Clientes",
+                Fecha = HoraHelper.GetHoraCiudadMexico(),
+                NombreEquipo = Environment.MachineName,
+                Accion = "Restablecer contraseña SMS",
+                Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                Envio = JsonConvert.SerializeObject(telefono),
+                Respuesta = response.Error.ToString(),
+                Error = response.Error ? JsonConvert.SerializeObject(response.message) : string.Empty,
+                IdRegistro = id
+            };
+            await _logsApiClient.InsertarLogAsync(logRequest);
+
+            if (response.Error == false)
+            {
+                return Json(Ok(response));
+            }
+            else
+            {
+                return Json(BadRequest(response));
+            }
+
+        }
+        catch (Exception ex)
+        {
+            return Json(BadRequest());
+        }
+    }
     #endregion
 
     #region Detalles Cliente
@@ -449,6 +535,8 @@ public class ClientesController : Controller
                 alias = row.alias,
                 fechaActualizacion = row.fechaActualizacion,
                 fechaAlta = row.fechaAlta,
+                email = row.email,
+                telefono = row.telefono,
                 fechaActualizacionformat = row.fechaActualizacion.ToString(),
                 fechaAltaFormat = row.fechaAlta.ToString(),
                 Acciones = await this.RenderViewToStringAsync("~/Views/Clientes/Detalles/Cuentas/_Acciones.cshtml", row)

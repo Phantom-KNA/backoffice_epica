@@ -20,6 +20,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
         Task<MensajeResponse> GetRegistroAsignacionCuentaCliente(AsignarCuentaResponse request);
         Task<MensajeResponse> GetRegistroDesvincularCuentaCliente(DesvincularCuentaResponse request);
         //Task<RegistrarModificarClienteResponse> GetModificaCliente(RegistroModificacionClienteRequest request);
-
+        Task<MensajeResponse> GetRestablecerContraseñaCorreo(string correo);
+        Task<MensajeResponse> GetRestablecerContraseñaTelefono(string telefono);
     }
 }

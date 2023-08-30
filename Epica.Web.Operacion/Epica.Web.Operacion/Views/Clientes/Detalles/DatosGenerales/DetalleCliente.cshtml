@@ -35,9 +35,28 @@
 
                     <div class="card-toolbar">
                         <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-                            <a href="/Clientes/Detalle/Modificar?id=@Model.IdCliente" class="btn btn-sm btn-primary">
-                                <i class="bi bi-pencil"></i>&nbsp;Editar cliente
-                            </a>
+                            @if (Model.Email != null)
+                            {
+                                <div class="m-0">
+                                    <button data-bs-toggle="modal" data-bs-target="#kt_modal_1" onclick="ResetContrasenaEmail('@Model.Email', @Model.IdCliente)" title="Restablecer Contraseña por Correo Electrónico" class="btn btn-sm btn-primary me-3">
+                                        <i class="bi bi-envelope"></i>&nbsp;R.P Email
+                                    </button>
+                                </div>                         
+                            }
+                            
+                            @if (Model.Telefono != null)
+                            {
+                                <div class="m-0">
+                                    <button data-bs-toggle="modal" data-bs-target="#kt_modal_1" onclick="ResetContrasenaTelefono('@Model.Telefono', @Model.IdCliente)" title="Restablecer Contraseña por Teléfono" class="btn btn-sm btn-primary me-3">
+                                        <i class="bi bi-phone"></i>&nbsp;R.P Tel.
+                                    </button>
+                                </div>
+                            }
+                            <div class="m-0">
+                                <a href="/Clientes/Detalle/Modificar?id=@Model.IdCliente" class="btn btn-sm btn-primary">
+                                    <i class="bi bi-pencil"></i>&nbsp;Editar cliente
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -152,3 +171,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script asp-append-version="true" src="~/js/Clientes/epica.clientes.detalles.js"></script>
+}

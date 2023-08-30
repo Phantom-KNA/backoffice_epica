@@ -13,5 +13,8 @@ namespace Epica.Web.Operacion.Models.Response
         [JsonPropertyName("codigo")]
         public string? Codigo { get; set; }
 
+        [JsonPropertyName("message")]
+        public string? message { get; set; }
+
     }
 }
