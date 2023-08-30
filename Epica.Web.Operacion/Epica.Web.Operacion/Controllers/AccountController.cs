@@ -35,11 +35,13 @@ namespace Epica.Web.Operacion.Controllers
         [HttpPost]
         public async Task<ActionResult> Login(string email, string password)
         {
+            string connection = HttpContext.Request.Headers["X-Forwarded-For"];
             var loginRequest = new LoginRequest()
             {
                 Email = email,
                 Password = password,
-                Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                Ip = connection,
+                //Ip = await PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
                 DispositivoAcceso = Environment.MachineName
             };
 
