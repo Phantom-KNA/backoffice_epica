@@ -25,6 +25,15 @@ namespace Epica.Web.Operacion.Services.Login
 
         public async Task<LoginResponse> GetCredentialsAsync(LoginRequest loginRequest, UserContextService userContextService)
         {
+            string ipAddress = String.Empty;
+            var connection = HttpContext.HttpContext.Connection;
+            if (connection.RemoteIpAddress != null && connection.RemoteIpAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+            {
+                ipAddress = connection.RemoteIpAddress.ToString();
+            }
+            loginRequest.Ip = ipAddress;
+
+
             LoginResponse loginResponse = new LoginResponse();
 
             try

@@ -35,11 +35,12 @@ namespace Epica.Web.Operacion.Controllers
         [HttpPost]
         public async Task<ActionResult> Login(string email, string password)
         {
+
             var loginRequest = new LoginRequest()
             {
                 Email = email,
                 Password = password,
-                Ip = await PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                //Ip = await PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
                 DispositivoAcceso = Environment.MachineName
             };
 
