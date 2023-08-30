@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Security.Principal;
 
 namespace Epica.Web.Operacion.Controllers
 {
@@ -35,7 +36,7 @@ namespace Epica.Web.Operacion.Controllers
         [HttpPost]
         public async Task<ActionResult> Login(string email, string password)
         {
-            string connection = HttpContext.Request.Headers["X-Forwarded-For"];
+            var connection = Request.HttpContext.Connection.RemoteIpAddress.ToString();
             var loginRequest = new LoginRequest()
             {
                 Email = email,
