@@ -152,7 +152,31 @@ public class TarjetasController : Controller
         var gridData = new ResponseGrid<TarjetasResponseGrid>();
         List<TarjetasResponse> ListPF = new List<TarjetasResponse>();
 
-        ListPF = await _tarjetasApiClient.GetTarjetasAsync(1,200);
+        var filtrotarjeta = filters.FirstOrDefault(x => x.Key == "tarjeta");
+
+        if (filtrotarjeta.Value != null)
+        {
+            string tarjeta = filtrotarjeta.Value;
+            var listPF2 = await _tarjetasApiClient.GetBuscarTarjetasasync(tarjeta);
+
+                TarjetasResponse tarjetasResponse = new TarjetasResponse()
+                {
+                    clabe = listPF2.clabe,
+                    Estatus = listPF2.Estatus ?? 0,
+                    idCliente = listPF2.idCliente ?? 0,
+                    idCuentaAhorro = listPF2.idCuentaAhorro ?? 0,
+                    nombreCompleto = listPF2.nombreCompleto,
+                    proxyNumber = listPF2.proxyNumber,
+                    tarjeta = listPF2.tarjeta               
+                };
+            ListPF.Add(tarjetasResponse);
+        }
+        else
+        {
+            ListPF = await _tarjetasApiClient.GetTarjetasAsync(1, 200);
+
+        }
+
 
         //Entorno local de pruebas
         //ListPF = GetList();
@@ -189,7 +213,6 @@ public class TarjetasController : Controller
 
         //Aplicacion de Filtros temporal, 
         var filtronombreTitular = filters.FirstOrDefault(x => x.Key == "nombreTitular");
-        var filtrotarjeta = filters.FirstOrDefault(x => x.Key == "tarjeta");
         var filtrocuentaClabe = filters.FirstOrDefault(x => x.Key == "cuentaClabe");
         var filtronumeroProxy = filters.FirstOrDefault(x => x.Key == "numeroProxy");
 

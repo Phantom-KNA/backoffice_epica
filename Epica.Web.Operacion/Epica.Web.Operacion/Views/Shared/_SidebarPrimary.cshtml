@@ -152,7 +152,7 @@
                 }
             }
             @{
-                var validacion5 = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Usuarios" && modulo.Ver == 0);
+                var validacion5 = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Configuracion" && modulo.Ver == 0);
                 if (validacion5 == true)
                 {
                     <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item py-2">
@@ -168,7 +168,7 @@
                             <!--begin:Menu item-->
                             <div class="menu-item">
                                 <!--begin:Menu link-->
-                                <a class="menu-link" asp-action="GestionarPermisos2" asp-controller="Usuarios">
+                                <a class="menu-link" asp-action="GestionarPermisos" asp-controller="Usuarios">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>

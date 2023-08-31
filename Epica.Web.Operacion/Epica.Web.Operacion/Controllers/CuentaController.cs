@@ -76,7 +76,38 @@ public class CuentaController : Controller
         var gridData = new ResponseGrid<CuentasResponseGrid>();
         List<CuentasResponse> ListPF = new List<CuentasResponse>();
 
-        ListPF = await _cuentaApiClient.GetCuentasAsync(1, 100);
+        var filtroNoCuenta = filters.FirstOrDefault(x => x.Key == "noCuenta");
+
+        if (filtroNoCuenta.Value != null)
+        {
+            string noCuenta = filtroNoCuenta.Value;
+            var listPF2 = await _cuentaApiClient.GetListaByNumeroCuentaAsync(noCuenta);
+
+            foreach (var cuenta in listPF2)
+            {
+                CuentasResponse cuentasResponse = new CuentasResponse
+                {
+                    idCliente = cuenta.IdCliente,
+                    saldo = decimal.Parse(cuenta.Saldo.ToString()),
+                    alias = cuenta.Alias,
+                    fechaActualizacion = cuenta.FechaActualizacion,
+                    estatus = cuenta.Estatus,
+                    nombrePersona = cuenta.NombrePersona,
+                    fechaAlta = cuenta.FechaAlta,
+                    tipoPersona = cuenta.TipoPersona,
+                    idCuenta = cuenta.IdCuenta,
+                    noCuenta = cuenta.NoCuenta,
+                    fechaAltaFormat = cuenta.FechaAlta,
+                    fechaActualizacionformat = cuenta.FechaActualizacion                };
+
+                ListPF.Add(cuentasResponse);
+            }
+        }
+        else
+        {
+            ListPF = await _cuentaApiClient.GetCuentasAsync(1, 100);
+
+        }
 
         //Entorno local de pruebas
         //ListPF = GetList();
@@ -98,7 +129,7 @@ public class CuentaController : Controller
         if (!string.IsNullOrEmpty(request.Busqueda))
         {
             List = List.Where(x =>
-            (x.idCuenta.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.idCuenta.ToString().ToUpper() ?? "").Contains(request.Busqueda.ToUpper()) ||
             (x.nombrePersona?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
             (x.noCuenta?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
             (x.saldo.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
@@ -108,7 +139,6 @@ public class CuentaController : Controller
         }
         //Aplicacion de Filtros temporal, 
         var filtronombreCliente = filters.FirstOrDefault(x => x.Key == "NombreCliente");
-        var filtroNoCuenta = filters.FirstOrDefault(x => x.Key == "noCuenta");
         var filtroEstatus = filters.FirstOrDefault(x => x.Key == "estatus");
         var filtroSaldo = filters.FirstOrDefault(x => x.Key == "saldo");
         var filtroTipo = filters.FirstOrDefault(x => x.Key == "tipoPersona");
@@ -120,7 +150,10 @@ public class CuentaController : Controller
 
         if (filtroNoCuenta.Value != null)
         {
-            List = List.Where(x => x.noCuenta == Convert.ToString(filtroNoCuenta.Value)).ToList();
+            string filtro = Convert.ToString(filtroNoCuenta.Value).ToUpper();
+            List = List.Where(x => x.noCuenta != null &&
+                                  x.noCuenta.Length >= 16 && 
+                                  x.noCuenta.Substring(0, 16) == filtro).ToList();
         }
 
         if (filtroEstatus.Value != null)

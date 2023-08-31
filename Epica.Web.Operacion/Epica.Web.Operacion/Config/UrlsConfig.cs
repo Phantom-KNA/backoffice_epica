@@ -31,6 +31,7 @@ public class UrlsConfig
 
     public class CuentasOperations
     {
+        public static string GetListaByNumeroCuenta(string noCuenta) => $"/api/v1/cuentas/buscar_cuenta?noCuenta={noCuenta}";
         public static string GetCuentas(int numberPage, int TotalRecords) => $"/api/v1/cuentas/cliente_vista?pageNumber={numberPage}&pageSize={TotalRecords}";
         public static string GetCuentasTotal() => $"/api/v1/cuentas/total";
         public static string GetCobranzaReferenciada(int id) => $"/api/v1/transacciones/cobranza_referenciada?idCuenta={id}";
@@ -71,6 +72,7 @@ public class UrlsConfig
 
     public class TarjetasOperations
     {
+        public static string GetBuscarTarjeta(string noTarjeta) => $"/api/v1/tarjetas/buscar_tarjeta?noTarjeta={noTarjeta}";
         public static string GetTarjetasCliente(int idClientes) => $"/api/v1/tarjetas/clientes_tarjetas?idCliente={idClientes}";
         public static string GetTarjetas(int numberPage, int TotalRecords) => $"/api/v1/tarjetas/view_tarjetas?pageNumber={numberPage}&pageSize={TotalRecords}";
         public static string GetTarjetasRegistra() => $"/api/v1/tarjetas/add_toka";
