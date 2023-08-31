@@ -194,7 +194,7 @@ public class ClientesController : Controller
     [HttpPost]
     public async Task<JsonResult> GestionarEstatusClienteWeb(int id, string Estatus)
     {
-
+        var loginResponse = _userContextService.GetLoginResponse();
         BloqueoWebResponse bloqueoWebResponse = new BloqueoWebResponse();
         try
         {
@@ -207,6 +207,21 @@ public class ClientesController : Controller
 
                 bloqueoWebResponse = await _clientesApiClient.GetBloqueoWeb(bloqueoWebRequest);
 
+                LogRequest logRequest = new LogRequest
+                {
+                    IdUser = loginResponse.IdUsuario.ToString(),
+                    Modulo = "Clientes",
+                    Fecha = HoraHelper.GetHoraCiudadMexico(),
+                    NombreEquipo = Environment.MachineName,
+                    Accion = "Desbloqueo web",
+                    Ip = await PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                    Envio = JsonConvert.SerializeObject(bloqueoWebRequest),
+                    Respuesta = bloqueoWebResponse.error.ToString(),
+                    Error = bloqueoWebResponse.error ? JsonConvert.SerializeObject(bloqueoWebResponse.detalle) : string.Empty,
+                    IdRegistro = id
+                };
+                await _logsApiClient.InsertarLogAsync(logRequest);
+
             }
             else if (Estatus == "False")
             {
@@ -216,6 +231,21 @@ public class ClientesController : Controller
                 bloqueoWebRequest.estatus = 2;
 
                 bloqueoWebResponse = await _clientesApiClient.GetBloqueoWeb(bloqueoWebRequest);
+
+                LogRequest logRequest = new LogRequest
+                {
+                    IdUser = loginResponse.IdUsuario.ToString(),
+                    Modulo = "Clientes",
+                    Fecha = HoraHelper.GetHoraCiudadMexico(),
+                    NombreEquipo = Environment.MachineName,
+                    Accion = "Bloqueo web",
+                    Ip = await PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                    Envio = JsonConvert.SerializeObject(bloqueoWebRequest),
+                    Respuesta = bloqueoWebResponse.error.ToString(),
+                    Error = bloqueoWebResponse.error ? JsonConvert.SerializeObject(bloqueoWebResponse.detalle) : string.Empty,
+                    IdRegistro = id
+                };
+                await _logsApiClient.InsertarLogAsync(logRequest);
 
             }
             else
@@ -233,6 +263,7 @@ public class ClientesController : Controller
                 return Json(BadRequest());
             }
 
+
         }
         catch (Exception ex)
         {
@@ -244,6 +275,7 @@ public class ClientesController : Controller
     [HttpPost]
     public async Task<JsonResult> GestionarEstatusClienteTotal(int id, string Estatus)
     {
+        var loginResponse = _userContextService.GetLoginResponse();
 
         BloqueoTotalResponse bloqueototalResponse = new BloqueoTotalResponse();
         try
@@ -257,6 +289,21 @@ public class ClientesController : Controller
 
                 bloqueototalResponse = await _clientesApiClient.GetBloqueoTotal(bloqueoTotalRequest);
 
+                LogRequest logRequest = new LogRequest
+                {
+                    IdUser = loginResponse.IdUsuario.ToString(),
+                    Modulo = "Clientes",
+                    Fecha = HoraHelper.GetHoraCiudadMexico(),
+                    NombreEquipo = Environment.MachineName,
+                    Accion = "Bloqueo total",
+                    Ip = await PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                    Envio = JsonConvert.SerializeObject(bloqueoTotalRequest),
+                    Respuesta = bloqueototalResponse.error.ToString(),
+                    Error = bloqueototalResponse.error ? JsonConvert.SerializeObject(bloqueototalResponse.detalle) : string.Empty,
+                    IdRegistro = id
+                };
+                await _logsApiClient.InsertarLogAsync(logRequest);
+
             }
             else if (Estatus == "False")
             {
@@ -266,6 +313,21 @@ public class ClientesController : Controller
                 bloqueoTotalRequest.estatus = 2;
 
                 bloqueototalResponse = await _clientesApiClient.GetBloqueoTotal(bloqueoTotalRequest);
+
+                LogRequest logRequest = new LogRequest
+                {
+                    IdUser = loginResponse.IdUsuario.ToString(),
+                    Modulo = "Clientes",
+                    Fecha = HoraHelper.GetHoraCiudadMexico(),
+                    NombreEquipo = Environment.MachineName,
+                    Accion = "Desbloqueo total",
+                    Ip = await PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                    Envio = JsonConvert.SerializeObject(bloqueoTotalRequest),
+                    Respuesta = bloqueototalResponse.error.ToString(),
+                    Error = bloqueototalResponse.error ? JsonConvert.SerializeObject(bloqueototalResponse.detalle) : string.Empty,
+                    IdRegistro = id
+                };
+                await _logsApiClient.InsertarLogAsync(logRequest);
 
             }
             else
