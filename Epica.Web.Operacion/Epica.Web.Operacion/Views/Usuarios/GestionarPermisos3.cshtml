@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Usuarios";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section LogoPage{
+    <i class="bi bi-card fs-1 w-40px"></i>
+}
+@section breadcrumb{
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted">
+        Usuarios
+    </li>
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted">
+        Gestionar Permisos
+    </li>
+}
+
+<div class="col-md-12">
+    <div class="card card-flush h-lg-100">
+        <div class="card-body pt-5">
+            <div class="datatable datatable-bordered datatable-head-custom">
+                <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" id="kt_datatable_users">
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/Usuarios/epica.usuarios.rolesypermisos.js" asp-append-version="true"></script>
+}
