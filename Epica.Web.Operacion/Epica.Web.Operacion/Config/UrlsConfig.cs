@@ -66,6 +66,7 @@ public class UrlsConfig
         public static string GetNacionalidades() => $"/api/v1/catalogos/nacionalidades";
         public static string GetPaises() => $"/api/v1/catalogos/paises";
         public static string GetRoles() => $"/api/v1/catalogos/rol_clientes";
+        public static string GetDocumentos() => $"/api/v1/catalogos/documentos";
     }
 
     public class TarjetasOperations

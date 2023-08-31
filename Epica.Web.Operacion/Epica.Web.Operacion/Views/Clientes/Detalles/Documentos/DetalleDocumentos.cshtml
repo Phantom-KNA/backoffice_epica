@@ -42,13 +42,13 @@
         @{
             var validacion = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Editar == 0);
             {
-                <div class="card-toolbar">
-                    <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-                        <button data-bs-toggle="modal" data-bs-target="#kt_modal_1" class="btn btn-sm btn-primary me-3">
-                            <i class="bi bi-plus-lg"></i>&nbsp;Nuevo Documento
-                        </button>
-                    </div>
-                </div>
+                //<div class="card-toolbar">
+                //    <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
+                //        <button data-bs-toggle="modal" data-bs-target="#kt_modal_Nuevo" class="btn btn-sm btn-primary me-3">
+                //            <i class="bi bi-plus-lg"></i>&nbsp;Nuevo Documento
+                //        </button>
+                //    </div>
+                //</div>
             }
         }
     </div>
@@ -57,6 +57,26 @@
             <div class="datatable datatable-bordered datatable-head-custom">
                 <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" id="kt_datatable">
                 </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="kt_modal_Nuevo">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Registrar Documento</h3>
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <span class="svg-icon svg-icon-1"></span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <partial name="~/Views/Clientes/Detalles/Documentos/_CargarDocumento.cshtml" model="@ViewBag.DatosRef" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal" id="btnCerrarNuevoDoc">Cerrar</button>
+                <button type="button" class="btn btn-light-primary btn-sm btn-primary" id="BtnGuardarDocumento">Guardar</button>
             </div>
         </div>
     </div>

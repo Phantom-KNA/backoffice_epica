@@ -101,6 +101,7 @@ var KTDatatableRemoteAjax = function () {
             }
 
             initDatatable();
+            plugins();
             handleSearchDatatable();
             //handleFilterDatatable();
         },
@@ -114,3 +115,52 @@ jQuery(document).ready(function () {
     KTDatatableRemoteAjax.init();
 });
 
+
+var plugins = () => {
+    $('.form-select2').select2();
+    myDropzone = new Dropzone("#dropfile", {
+        autoProcessQueue: false,
+        url: "/",
+        maxFiles: 1,
+        maxFilesize: 5, // MB
+        addRemoveLinks: true,
+        uploadMultiple: false,
+        acceptedFiles: ".jpeg,.jpg,.png,application/pdf",
+        addedfiles: function (files) {
+            if (files[0].accepted == false) {
+                if (this.files.length >= 1)
+                    toastr.error("Elimine el documento antes de agregar uno nuevo.", "BAK")
+                else
+                    toastr.error("Solo se permiten archivos de 5MB.", "BAK")
+                this.removeFile(files[0])
+            }
+        },
+
+    });
+}
+
+$(document).on('click', '#BtnGuardarDocumento', function (e) {
+
+    toastr.info('Almacenando Documento...', ""); 
+    var form = new FormData($('#CargaDocumentoForm')[0]);
+
+    $.ajax({
+        url: "Documentos/CargarDocumentoCliente",
+        type: "POST",
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        data: form,
+        success: function (data) {
+
+            datatable.ajax.reload();
+            toastr.success('Se guardo la informacion de manera exitosa', "");
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+        }
+
+
+    });
+    $("#btnCerrarCuenta").click();
+});

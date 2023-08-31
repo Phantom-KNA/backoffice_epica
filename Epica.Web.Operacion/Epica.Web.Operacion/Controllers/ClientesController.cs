@@ -747,6 +747,7 @@ public class ClientesController : Controller
         if (validacion == true)
         {
             ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(id);
+            var listaDocumentos = await _catalogosApiClient.GetTipoDocumentosAsync();
 
             if (user.value == null)
             {
@@ -766,9 +767,10 @@ public class ClientesController : Controller
                 Sexo = user.value.Sexo
             };
 
-            RegistrarTarjetaRequest renderRef = new RegistrarTarjetaRequest
+            DocumentosClienteRegistro renderRef = new DocumentosClienteRegistro
             {
-                idCliente = id
+                idCliente = id,
+                listaDocs = listaDocumentos
             };
 
             ViewBag.DatosRef = renderRef;
@@ -781,6 +783,16 @@ public class ClientesController : Controller
 
         return NotFound();
     }
+
+    [Authorize]
+    [Route("Clientes/Detalle/Documentos/CargarDocumentoCliente")]
+    [HttpPost]
+    public async Task<ActionResult> CargarDocumentoCliente(DocumentosClienteRegistro model, IFormFile documento)
+    {
+        var archivo = Request.Form["dropzonejs1"];
+        return Json(model);
+    }
+
 
     [Authorize]
     [HttpPost]

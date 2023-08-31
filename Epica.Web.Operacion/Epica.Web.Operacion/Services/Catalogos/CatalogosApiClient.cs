@@ -167,5 +167,30 @@ namespace Epica.Web.Operacion.Services.Catalogos
 
             return listaRoles;
         }
+
+        public async Task<List<DatosCatalogoResponse>> GetTipoDocumentosAsync()
+        {
+
+            List<DatosCatalogoResponse>? listaDocumentos = new List<DatosCatalogoResponse>();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.CatalogosOperations.GetDocumentos();
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    listaDocumentos = JsonConvert.DeserializeObject<List<DatosCatalogoResponse>>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return listaDocumentos;
+            }
+
+            return listaDocumentos;
+        }
     }
 }
