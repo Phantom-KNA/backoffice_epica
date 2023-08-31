@@ -23,6 +23,28 @@ namespace Epica.Web.Operacion.Services.Transaccion
         {
         }
 
+        public async Task<ResumenTarjetasResponse> GetBuscarTarjetasasync(string noTarjeta)
+        {
+            ResumenTarjetasResponse tarjetaResponse = new ResumenTarjetasResponse();
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.TarjetasOperations.GetBuscarTarjeta(noTarjeta);
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    tarjetaResponse = JsonConvert.DeserializeObject<ResumenTarjetasResponse>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return tarjetaResponse;
+            }
+
+            return tarjetaResponse;
+        }
         public async Task<List<TarjetasResponse>> GetTarjetasClientesAsync(int idCliente)
         {
 
