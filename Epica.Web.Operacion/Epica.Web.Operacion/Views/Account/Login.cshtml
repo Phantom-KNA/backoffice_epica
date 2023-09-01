@@ -204,7 +204,14 @@
 <script>
     var nombreDispositivo = navigator.userAgent;
     document.getElementById('nombreDispositivo').value = nombreDispositivo;
+    
+    fetch("https://ipinfo.io/json")
+        .then(response => response.json())
+        .then(data => {
+            var ipAddress = data.ip;
+            document.getElementById('ipAddress').value = ipAddress;
+        })
+        .catch(error => console.error("Error al obtener la dirección IP: " + error));
 
-    fetch("https://ipinfo.io/json").then(response => response.json()).then(data => { var ipAddress = data.ip; console.log("mi direccion es " + ipAddress); }).catch(error => console.error("Error al obtener la dirección IP: " + error));
 </script>
 
