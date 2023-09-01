@@ -85,7 +85,7 @@ public class TarjetasController : Controller
             {
                 var response = await _tarjetasApiClient.GetRegistroTarjetaAsync(model.TarjetasDetalles);
 
-                string detalle = response.Detalle;
+                string detalle = response.Detalle ?? "";
                 int idRegistro = 0;
 
                 try
@@ -123,7 +123,7 @@ public class TarjetasController : Controller
             }
             catch (Exception ex)
             {
-                return View();
+                return View("RegistroTarjetaCliente");
             }
         }
 

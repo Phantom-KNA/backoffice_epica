@@ -1047,9 +1047,9 @@ public class ClientesController : Controller
 
     [Authorize]
     [HttpPost]
-    public async Task<ActionResult> BuscarClientes(string cliente)
+    public async Task<ActionResult> BuscarClientes(string nombreCliente)
     {
-        var listaClientes = await _clientesApiClient.GetClientesbyNombreAsync(cliente);
+        var listaClientes = await _clientesApiClient.GetClientesbyNombreAsync(nombreCliente);
         return Json(listaClientes);
     }
 

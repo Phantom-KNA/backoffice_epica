@@ -68,22 +68,27 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Año de vigencia: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="@Model.TarjetasDetalles.yearVigencia" class="form-control form-control-sm form-control-solid" id="yearVigencia" type="text" value="@(Model?.TarjetasDetalles.yearVigencia?? "")" autocomplete="off" required />
-                            <span asp-validation-for="@Model.TarjetasDetalles.yearVigencia" class=" text-danger"></span>
+                            <select asp-for="@Model.TarjetasDetalles.yearVigencia" class="form-select form-select-sm form-select-solid" id="yearVigencia" autocomplete="off" required>
+                                <option value="">Seleccione un año</option>
+                                @for (var year = DateTime.Now.Year; year <= DateTime.Now.Year + 20; year++)
+                                {
+                                    <option value="@year">@year</option>
+                                }
+                            </select>
+                            <span asp-validation-for="@Model.TarjetasDetalles.yearVigencia" class="text-danger"></span>
                         </div>
                     </div>
-                    <div class="py-2 px-4 col-md-4 fv-row">
+                    <div class="form-group input-group-sm py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Buscar Cliente: &nbsp;</label>
-                        <div class="position-relative">
-                            <input type="text" id="nombreCliente" name="nombreCliente" class="form-control form-control-sm form-control-solid" placeholder="Nombre del cliente" autocomplete="off" />
-                            <button type="button" class="btn btn-sm btn-primary" id="btnBuscarCliente">Buscar</button>
-                        </div>
-                        <div class="position-relative">
-                            <select asp-for="TarjetasDetalles.idCliente" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required id="idCliente">
-                                <option></option>
-                                <!-- Opciones de clientes se agregarán aquí -->
-                            </select>
-                        </div>
+
+                        <input type="text" id="nombreCliente" name="nombreCliente" class="form-control form-control-sm form-control-solid" placeholder="Clientes coincidentes" autocomplete="off" />
+                        <button type="button" class="btn btn-sm btn-primary align-center" id="btnBuscarCliente">Buscar</button>
+@*                        <select id="selectClientes" class="form-select form-select-sm form-select-solid" autocomplete="off">
+                            <option value="">Seleccione un cliente</option>
+                        </select>*@
+                        <select asp-for="TarjetasDetalles.idCliente" id="selectClientes" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required>
+                            <option value="">Seleccione un cliente</option>
+                        </select>
                     </div>
             </div>
         </div>
@@ -91,6 +96,8 @@
 </div>
 </form>
 
+
 @section Scripts{
     <script src="~/js/Tarjetas/epica.tarjetas.registroTarjetaCliente.js" asp-append-version="true"></script>
 }
+
