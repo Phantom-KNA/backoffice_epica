@@ -9,5 +9,6 @@
         Task<List<DatosCatalogoResponse>> GetNacionalidadesAsync();
         Task<List<DatosCatalogoResponse>> GetRolClienteAsync();
         Task<List<DatosCatalogoResponse>> GetTipoDocumentosAsync();
+        Task<List<DatosCatalogoResponse>> GetRolesUsuarioAsync();
     }
 }

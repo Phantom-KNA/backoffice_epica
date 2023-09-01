@@ -192,5 +192,29 @@ namespace Epica.Web.Operacion.Services.Catalogos
 
             return listaDocumentos;
         }
+        public async Task<List<DatosCatalogoResponse>> GetRolesUsuarioAsync()
+        {
+
+            List<DatosCatalogoResponse>? listaRolesUser = new List<DatosCatalogoResponse>();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.CatalogosOperations.GetRolesUsuario();
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    listaRolesUser = JsonConvert.DeserializeObject<List<DatosCatalogoResponse>>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return listaRolesUser;
+            }
+
+            return listaRolesUser;
+        }
     }
 }

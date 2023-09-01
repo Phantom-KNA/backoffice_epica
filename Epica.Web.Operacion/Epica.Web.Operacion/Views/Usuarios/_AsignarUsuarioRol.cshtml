@@ -1,0 +1,51 @@
+﻿@model Epica.Web.Operacion.Models.Response.AsignarRolUsuario
+
+<form asp-controller="Usuarios" asp-action="AsignarRolUsuario" id="AsignacionForm" method="post">
+<div class="modal-content">
+    <div class="modal-body ">
+        <div class="card-body">
+                <div class="d-flex flex-stack row">
+                    <div class="row mb-5 mt-5">
+                        <div class="form-group input-group-sm col-md-12 row">
+                            <label class="form-label required">Buscar Usuario: &nbsp;</label>
+
+                            <input type="text" id="findnombreUsuario" name="findnombreUsuario" class="form-control form-control-sm form-control-solid" placeholder="Nombre de Usuario" autocomplete="off" />
+                            <button type="button" class="btn btn-sm btn-primary" id="btnBuscarUsuario">Buscar</button>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-stack row">
+                    <div class="row mb-5 mt-5">
+                        <div class="form-group input-group-sm col-md-12 row">
+                            <label class="col-md-3 form-label" required>Nombre de Usuario: &nbsp;</label>
+                            <div class="col-md-9">
+                                <input asp-for="idUsuario" hidden class="form-control form-control-sm form-control-solid" id="idUsuario" readonly type="text" autocomplete="off" />
+                                <input type="text" id="nombreUsuario" name="nombreUsuario" class="form-control form-control-sm form-control-solid" placeholder="Usuario" readonly autocomplete="off" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-stack row">
+                    <div class="row mb-5 mt-5">
+                        <div class="form-group input-group-sm col-md-12 row">
+                            <label class="col-md-3 form-label" required>Rol: &nbsp;</label>
+                            <div class="col-md-9">
+                                <select asp-for="idRol" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción">
+                                    <option></option>
+                                    @foreach (var Roles in Model.ListaRoles)
+                                    {
+                                        <option value="@Roles.Id">@Roles.Descripcion</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+                
+    </div>
+</div>
+</form>
+
+

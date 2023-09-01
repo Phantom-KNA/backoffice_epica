@@ -68,6 +68,7 @@ public class UrlsConfig
         public static string GetPaises() => $"/api/v1/catalogos/paises";
         public static string GetRoles() => $"/api/v1/catalogos/rol_clientes";
         public static string GetDocumentos() => $"/api/v1/catalogos/documentos";
+        public static string GetRolesUsuario() => $"/api/v1/usuario/roles";
     }
 
     public class TarjetasOperations
@@ -91,7 +92,11 @@ public class UrlsConfig
     public class UsuariosOperations
     {
         public static string GetUsuariosRoles() => $"/api/v1/usuario/resumen_permisos";
-        public static string GetUsuariosVista() => $"/api/v1/usuario/resumen_permisos";
+        public static string GetUsuariosVista() => $"/api/v1/usuario/usuarios_roles";
+        public static string GetUsuariosRolesPorVista(int idRol, string vista) => $"/api/v1/usuario/set_permisos?idRol={idRol}&moduloAcceso={vista}";
+        public static string GetAsignarPermisoRolVista() => $"/api/v1/usuario/asignar_permiso_rol";
+        public static string GetUsuarioPorNombre(string nombre) => $"/api/v1/usuario/buscar_usuario?usuario={nombre}";
+        public static string GetUsuariosAsignarRoles(int idRol, int idUsuario) => $"/api/v1/usuario/asignar_rol_usuario?idRol={idRol}&idUsuario={idUsuario}";
     }
     public string users { get; set; }
     public string Authenticate { get; set; }

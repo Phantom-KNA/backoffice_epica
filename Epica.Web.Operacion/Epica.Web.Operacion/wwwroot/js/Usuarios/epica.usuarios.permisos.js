@@ -1,6 +1,7 @@
 var table;
 var datatable;
 var filterAccount;
+var Arreglo;
 
 var KTDatatableRemoteAjax = function () {
     var table;
@@ -40,15 +41,7 @@ var KTDatatableRemoteAjax = function () {
                 url: siteLocation + 'Usuarios/ConsultaPermisos',
                 type: 'POST',
                 data: function (d) {
-                    var filtros = [];
-                    $(".filtro-control").each(function () {
-                        if ($(this).data('filtrar') == undefined) return;
-                        filtros.push({
-                            key: $(this).data('filtrar'),
-                            value: $(this).val()
-                        });
-                    });
-                    d.filters = filtros;
+                    //Arreglo = [];
                 },
             },
             map: function (raw) {
@@ -64,39 +57,39 @@ var KTDatatableRemoteAjax = function () {
                 "targets": "_all"
             }],
             columns: [
-                { data: 'id', name: 'Id', title: 'Id Usuario' },
+                { data: 'id', name: 'Id', title: 'Id Rol' },
                 { data: 'nombreRol', name: 'nombreRol', title: 'Nombre del Rol' },
                 {
                     data: 'listaGen', name: 'Transacciones', title: 'Transacciones',
                     render: function (data, type, row) {
 
                         var renderList = "<ul>";
-
+                        Arreglo = data;
                         $(data).each(function (entry, value) {                           
                             if (value.vista == "Transacciones") {
 
                                 if (value.escritura == true) {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Crear Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(true, "Transacciones", value.idPermiso, value.idRol, "Escritura", "Crear Registros");
                                 } else {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-invalid'><input class='form-check-input' name='communication[]' type='checkbox' value='1'><span class='fw-semibold ps-2 fs-6'>Crear Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(false, "Transacciones", value.idPermiso, value.idRol, "Escritura", "Crear Registros");
                                 }
 
                                 if (value.lectura == true) {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Consultar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(true, "Transacciones", value.idPermiso, value.idRol, "Lectura", "Consultar Registros");
                                 } else {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-invalid'><input class='form-check-input' name='communication[]' type='checkbox' value='1'><span class='fw-semibold ps-2 fs-6'>Consultar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(false, "Transacciones", value.idPermiso, value.idRol, "Lectura", "Consultar Registros");
                                 }
 
                                 if (value.eliminar == true) {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Eliminar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(true, "Transacciones", value.idPermiso, value.idRol, "Eliminar", "Eliminar Registros");
                                 } else {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-invalid'><input class='form-check-input' name='communication[]' type='checkbox' value='1'><span class='fw-semibold ps-2 fs-6'>Eliminar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(false, "Transacciones", value.idPermiso, value.idRol, "Eliminar", "Eliminar Registros");
                                 }
 
                                 if (value.actualizar == true) {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Modificar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(true, "Transacciones", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
                                 } else {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-invalid'><input class='form-check-input' name='communication[]' type='checkbox' value='1'><span class='fw-semibold ps-2 fs-6'>Modificar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(false, "Transacciones", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
                                 }
              
                             }                        
@@ -112,31 +105,29 @@ var KTDatatableRemoteAjax = function () {
                         var renderList = "<ul>";
                         $(data).each(function (entry, value) {
                             if (value.vista == "Clientes") {
-
                                 if (value.escritura == true) {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Crear Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(true, "Clientes", value.idPermiso, value.idRol, "Escritura", "Crear Registros");
                                 } else {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-invalid'><input class='form-check-input' name='communication[]' type='checkbox' value='1'><span class='fw-semibold ps-2 fs-6'>Crear Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(false, "Clientes", value.idPermiso, value.idRol, "Escritura", "Crear Registros");
                                 }
 
                                 if (value.lectura == true) {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Consultar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(true, "Clientes", value.idPermiso, value.idRol, "Lectura", "Consultar Registros");
                                 } else {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-invalid'><input class='form-check-input' name='communication[]' type='checkbox' value='1'><span class='fw-semibold ps-2 fs-6'>Consultar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(false, "Clientes", value.idPermiso, value.idRol, "Lectura", "Consultar Registros");
                                 }
 
                                 if (value.eliminar == true) {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Eliminar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(true, "Clientes", value.idPermiso, value.idRol, "Eliminar", "Eliminar Registros");
                                 } else {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-invalid'><input class='form-check-input' name='communication[]' type='checkbox' value='1'><span class='fw-semibold ps-2 fs-6'>Eliminar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(false, "Clientes", value.idPermiso, value.idRol, "Eliminar", "Eliminar Registros");
                                 }
 
                                 if (value.actualizar == true) {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Modificar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(true, "Clientes", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
                                 } else {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-invalid'><input class='form-check-input' name='communication[]' type='checkbox' value='1'><span class='fw-semibold ps-2 fs-6'>Modificar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(false, "Clientes", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
                                 }
-
                             }
                         });
 
@@ -153,27 +144,27 @@ var KTDatatableRemoteAjax = function () {
                             if (value.vista == "Tarjetas") {
 
                                 if (value.escritura == true) {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Crear Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(true, "Tarjetas", value.idPermiso, value.idRol, "Escritura", "Crear Registros");
                                 } else {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-invalid'><input class='form-check-input' name='communication[]' type='checkbox' value='1'><span class='fw-semibold ps-2 fs-6'>Crear Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(false, "Tarjetas", value.idPermiso, value.idRol, "Escritura", "Crear Registros");
                                 }
 
                                 if (value.lectura == true) {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Consultar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(true, "Tarjetas", value.idPermiso, value.idRol, "Lectura", "Consultar Registros");
                                 } else {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-invalid'><input class='form-check-input' name='communication[]' type='checkbox' value='1'><span class='fw-semibold ps-2 fs-6'>Consultar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(false, "Tarjetas", value.idPermiso, value.idRol, "Lectura", "Consultar Registros");
                                 }
 
                                 if (value.eliminar == true) {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Eliminar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(true, "Tarjetas", value.idPermiso, value.idRol, "Eliminar", "Eliminar Registros");
                                 } else {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-invalid'><input class='form-check-input' name='communication[]' type='checkbox' value='1'><span class='fw-semibold ps-2 fs-6'>Eliminar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(false, "Tarjetas", value.idPermiso, value.idRol, "Eliminar", "Eliminar Registros");
                                 }
 
                                 if (value.actualizar == true) {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Modificar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(true, "Tarjetas", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
                                 } else {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-invalid'><input class='form-check-input' name='communication[]' type='checkbox' value='1'><span class='fw-semibold ps-2 fs-6'>Modificar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(false, "Tarjetas", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
                                 }
 
                             }
@@ -189,30 +180,30 @@ var KTDatatableRemoteAjax = function () {
                         var renderList = "<ul>";
 
                         $(data).each(function (entry, value) {
-                            if (value.vista == "Tarjetas") {
+                            if (value.vista == "Cuentas") {
 
                                 if (value.escritura == true) {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Crear Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(true, "Cuentas", value.idPermiso, value.idRol, "Escritura", "Crear Registros");
                                 } else {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-invalid'><input class='form-check-input' name='communication[]' type='checkbox' value='1'><span class='fw-semibold ps-2 fs-6'>Crear Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(false, "Cuentas", value.idPermiso, value.idRol, "Escritura", "Crear Registros");
                                 }
 
                                 if (value.lectura == true) {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Consultar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(true, "Cuentas", value.idPermiso, value.idRol, "Lectura", "Consultar Registros");
                                 } else {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-invalid'><input class='form-check-input' name='communication[]' type='checkbox' value='1'><span class='fw-semibold ps-2 fs-6'>Consultar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(false, "Cuentas", value.idPermiso, value.idRol, "Lectura", "Consultar Registros");
                                 }
 
                                 if (value.eliminar == true) {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Eliminar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(true, "Cuentas", value.idPermiso, value.idRol, "Eliminar", "Eliminar Registros");
                                 } else {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-invalid'><input class='form-check-input' name='communication[]' type='checkbox' value='1'><span class='fw-semibold ps-2 fs-6'>Eliminar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(false, "Cuentas", value.idPermiso, value.idRol, "Eliminar", "Eliminar Registros");
                                 }
 
                                 if (value.actualizar == true) {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Modificar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(true, "Cuentas", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
                                 } else {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-invalid'><input class='form-check-input' name='communication[]' type='checkbox' value='1'><span class='fw-semibold ps-2 fs-6'>Modificar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(false, "Cuentas", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
                                 }
 
                             }
@@ -231,27 +222,27 @@ var KTDatatableRemoteAjax = function () {
                             if (value.vista == "Configuracion") {
 
                                 if (value.escritura == true) {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Crear Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(true, "Configuracion", value.idPermiso, value.idRol, "Escritura", "Crear Registros");
                                 } else {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-invalid'><input class='form-check-input' name='communication[]' type='checkbox' value='1'><span class='fw-semibold ps-2 fs-6'>Crear Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(false, "Configuracion", value.idPermiso, value.idRol, "Escritura", "Crear Registros");
                                 }
 
                                 if (value.lectura == true) {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Consultar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(true, "Configuracion", value.idPermiso, value.idRol, "Lectura", "Consultar Registros");
                                 } else {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-invalid'><input class='form-check-input' name='communication[]' type='checkbox' value='1'><span class='fw-semibold ps-2 fs-6'>Consultar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(false, "Configuracion", value.idPermiso, value.idRol, "Lectura", "Consultar Registros");
                                 }
 
                                 if (value.eliminar == true) {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Eliminar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(true, "Configuracion", value.idPermiso, value.idRol, "Eliminar", "Eliminar Registros");
                                 } else {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-invalid'><input class='form-check-input' name='communication[]' type='checkbox' value='1'><span class='fw-semibold ps-2 fs-6'>Eliminar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(false, "Configuracion", value.idPermiso, value.idRol, "Eliminar", "Eliminar Registros");
                                 }
 
                                 if (value.actualizar == true) {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'><input class='form-check-input' name='communication[]' type='checkbox' value='1' checked><span class='fw-semibold ps-2 fs-6'>Modificar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(true, "Configuracion", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
                                 } else {
-                                    renderList += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-invalid'><input class='form-check-input' name='communication[]' type='checkbox' value='1'><span class='fw-semibold ps-2 fs-6'>Modificar Registros</span></label></li>"
+                                    renderList += CrearEstructuraCheck(false, "Configuracion", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
                                 }
 
                             }
@@ -377,4 +368,62 @@ function GestionarUsuario(AccountID, estatus) {
             console.log(error);
         }
     });
+}
+
+function GestionarPermisos(event) {
+
+    var formData = new FormData();
+
+    formData.append('vista', $(event).data('vista'));
+    formData.append('permiso', $(event).data('permiso'));
+    formData.append('rol', $(event).data('rol'));
+    formData.append('accion', $(event).data('accion'));
+
+    if ($(event).is(':checked')) {
+        formData.append('activo', true);
+    } else {
+        formData.append('activo', false);
+    }
+
+    $.ajax({
+        url: 'ActualizarPermiso',
+        async: true,
+        cache: false,
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (data) {
+
+            datatable.ajax.reload();
+            Swal.fire(
+                'Asignación de Permisos',
+                'Se ha actualizado el permiso con exito.',
+                'success'
+            )
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+        }
+    });
+}
+
+function CrearEstructuraCheck(Activo, Vista, IdPermiso, idRol, Accion, Label) {
+    var Cadena = "";
+
+    Cadena += "<li><label class='form-check form-check-custom form-check-inline form-check-solid me-5 is-valid'>";
+    Cadena += "<input onchange='GestionarPermisos(this)' ";
+    Cadena += "data-vista='" + Vista + "' ";
+    Cadena += "data-permiso='" + IdPermiso + "' ";
+    Cadena += "data-rol='" + idRol + "' ";
+    Cadena += "data-accion='" + Accion + "' ";
+    if (Activo == true) {
+        Cadena += "class='form-check-input' type='checkbox' checked>";
+    } else {
+        Cadena += "class='form-check-input' type='checkbox'>"
+    }
+    Cadena += "<span class='fw-semibold ps-2 fs-6'>"+Label+"</span>";
+    Cadena += "</label></li>";
+
+    return Cadena;
 }
