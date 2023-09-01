@@ -11,6 +11,7 @@ namespace Epica.Web.Operacion.Models.Response
         public List<UserPermisosResponse>? AccionesPorModulo { get; set; }
         public int Activo { get; set; }
         public bool IsAuthenticated { get; set; }
-
+        public string? NombreDispositivo { get; set; }
+        public string? DireccionIp { get; set; }
     }
 }

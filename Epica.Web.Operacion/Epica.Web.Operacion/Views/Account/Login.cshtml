@@ -202,21 +202,10 @@
 </div>
 
 <script>
-    var nombreDispositivo = "Desconocido";
-
-    if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
-        nombreDispositivo = "Dispositivo móvil";
-    } else if (navigator.userAgent.match(/Windows/i)) {
-        nombreDispositivo = "Windows PC";
-    } else if (navigator.userAgent.match(/Macintosh/i)) {
-        nombreDispositivo = "Mac";
-    } else if (navigator.userAgent.match(/Linux/i)) {
-        nombreDispositivo = "Linux PC";
-    }
+    var nombreDispositivo = navigator.userAgent;
 
     console.log("Nombre del dispositivo: " + nombreDispositivo);
     document.getElementById('nombreDispositivo').value = nombreDispositivo;
-
     
     fetch("https://ipinfo.io/json")
         .then(response => response.json())

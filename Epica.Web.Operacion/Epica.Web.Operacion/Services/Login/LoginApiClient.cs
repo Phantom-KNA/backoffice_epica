@@ -50,6 +50,8 @@ namespace Epica.Web.Operacion.Services.Login
                     loginResponse = JsonConvert.DeserializeObject<LoginResponse>(jsonResponse);
 
                     loginResponse.IsAuthenticated = true;
+                    loginResponse.DireccionIp = loginRequest.Ip;
+                    loginResponse.NombreDispositivo = loginRequest.DispositivoAcceso;
 
                     var claims = new List<Claim>
                     {
