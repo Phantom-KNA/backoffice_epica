@@ -21,6 +21,29 @@ namespace Epica.Web.Operacion.Services.Transaccion
         {
         }
 
+        public async Task<TransaccionDetailsResponse> GetTransaccionRastreoCobranzaAsync(string rastreoCobranza)
+        {
+            TransaccionDetailsResponse transaccionResponse = new TransaccionDetailsResponse();
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetTransaccionRastreoCobranza(rastreoCobranza);
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    transaccionResponse = JsonConvert.DeserializeObject<TransaccionDetailsResponse>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return transaccionResponse;
+            }
+
+            return transaccionResponse;
+        }
+
         public async Task<List<TransaccionesResponse>> GetTransaccionesAsync(int pageNumber, int recordsTotal)
         {
             List<TransaccionesResponse>? ListaTransacciones = new List<TransaccionesResponse>();

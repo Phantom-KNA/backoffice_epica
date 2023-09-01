@@ -18,6 +18,7 @@ public class UrlsConfig
 
     public class TransaccionesOperations
     {
+        public static string GetTransaccionRastreoCobranza(string calveRastreoCobranza) => $"/api/v1/transacciones/buscar_claverastro_cobranza?calveRastreoCobranza={calveRastreoCobranza}";
         public static string GetTransacciones(int numberPage, int TotalRecords) => $"/api/v1/transacciones/movimientos_cta?pageNumber={numberPage}&pageSize={TotalRecords}";
         public static string GetTransaccion(int idInterno) => $"/api/resumentransaccion?idInterno={idInterno}";
         public static string GetTransaccionesTotal() => $"/api/v1/transacciones/total";

@@ -120,7 +120,38 @@ namespace Epica.Web.Operacion.Controllers
             var gridData = new ResponseGrid<ResumenTransaccionResponseGrid>();
             List<TransaccionesResponse> ListPF = new List<TransaccionesResponse>();
 
-            ListPF = await _transaccionesApiClient.GetTransaccionesAsync(1,100);
+            var filtronombreClaveRastreo = filters.FirstOrDefault(x => x.Key == "claveRastreo");
+
+            if (filtronombreClaveRastreo.Value != null)
+            {
+                string transaccion = filtronombreClaveRastreo.Value;
+                var listPF2 = await _transaccionesApiClient.GetTransaccionRastreoCobranzaAsync(transaccion);
+
+                TransaccionesResponse transaccionResponse = new TransaccionesResponse()
+                {
+                    clabeCobranza = listPF2.value.ClabeCobranza,
+                    claveRastreo = listPF2.value.ClaveRastreo,
+                    concepto = listPF2.value.Concepto,
+                    cuetaOrigenOrdenante = listPF2.value.cuetaOrigenOrdenante,
+                    estatus = listPF2.value.Estatus ?? 0,
+                    fechaActualizacion = listPF2.value.FechaActualizacion,
+                    fechaAlta = listPF2.value.FechaAlta,
+                    idCliente = listPF2.value.IdCliente,
+                    idCuentaAhorro = listPF2.value.IdCuentaAhorro,
+                    idMedioPago = listPF2.value.IdMedioPago ?? 0,
+                    idTransaccion = listPF2.value.IdTrasaccion ?? 0,
+                    monto = decimal.Parse(listPF2.value.Monto.ToString()),
+                    nombreBeneficiario = listPF2.value.NombreBeneficiario,
+                    nombreOrdenante = listPF2.value.nombreOrdenante
+                };
+
+                ListPF.Add(transaccionResponse);
+            }
+            else
+            {
+                ListPF = await _transaccionesApiClient.GetTransaccionesAsync(1, 100);
+            }
+
 
             //Entorno local de pruebas
             //ListPF = GetList();
@@ -165,7 +196,6 @@ namespace Epica.Web.Operacion.Controllers
             }
             //Aplicacion de Filtros temporal, 
             var filtroCuentaOrdenante = filters.FirstOrDefault(x => x.Key == "cuentaOrdenante");
-            var filtronombreClaveRastreo = filters.FirstOrDefault(x => x.Key == "claveRastreo");
             var filtroNombreOrdenante = filters.FirstOrDefault(x => x.Key == "nombreOrdenante");
             var filtroNombreBeneficiario = filters.FirstOrDefault(x => x.Key == "nombreBeneficiario");
             var filtroConcepto = filters.FirstOrDefault(x => x.Key == "concepto");
@@ -260,9 +290,9 @@ namespace Epica.Web.Operacion.Controllers
                         IdUser = loginResponse.IdUsuario.ToString(),
                         Modulo = "Transacciones",
                         Fecha = HoraHelper.GetHoraCiudadMexico(),
-                        NombreEquipo = Environment.MachineName,
+                        NombreEquipo = loginResponse.NombreDispositivo,
                         Accion = "Insertar",
-                        Ip = await PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                        Ip = loginResponse.DireccionIp,
                         Envio = JsonConvert.SerializeObject(model.TransacccionDetalles),
                         Respuesta = response.Error.ToString(),
                         Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
@@ -354,9 +384,9 @@ namespace Epica.Web.Operacion.Controllers
                         IdUser = loginResponse.IdUsuario.ToString(),
                         Modulo = "Transacciones",
                         Fecha = HoraHelper.GetHoraCiudadMexico(),
-                        NombreEquipo = Dns.GetHostName(),
+                        NombreEquipo = loginResponse.NombreDispositivo,
                         Accion = "Editar",
-                        Ip = await PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                        Ip = loginResponse.DireccionIp,
                         Envio = JsonConvert.SerializeObject(model.TransacccionDetalles),
                         Respuesta = response.Error.ToString(),
                         Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,

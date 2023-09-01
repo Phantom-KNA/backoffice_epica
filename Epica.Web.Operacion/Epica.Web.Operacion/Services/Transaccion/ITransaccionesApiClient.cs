@@ -4,6 +4,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
 {
     public interface ITransaccionesApiClient
     {
+        Task<TransaccionDetailsResponse> GetTransaccionRastreoCobranzaAsync(string rastreoCobranza);
         Task<List<TransaccionesResponse>> GetTransaccionesAsync(int pageNumber, int recordsTotal);
         Task<TransaccionesResponse> GetTransaccionAsync(int idInterno);
         Task<int> GetTotalTransaccionesAsync();
