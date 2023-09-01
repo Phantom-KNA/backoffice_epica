@@ -205,17 +205,6 @@
     var nombreDispositivo = navigator.userAgent;
     document.getElementById('nombreDispositivo').value = nombreDispositivo;
 
-
-    function getIPv4Address(callback) {
-        fetch('https://ipv4.icanhazip.com/')
-            .then(response => response.text())
-            .then(data => callback(data.trim()))
-            .catch(error => callback(error));
-    }
-    var ipAddress;
-
-    getIPv4Address(function (ipv4) {
-        ipAddress = ipv4;
-    });
+    fetch("https://ipinfo.io/json").then(response => response.json()).then(data => { var ipAddress = data.ip; console.log("mi direccion es " + direccionip); }).catch(error => console.error("Error al obtener la dirección IP: " + error));
 </script>
 
