@@ -3,6 +3,7 @@ using Epica.Web.Operacion.Models.Common;
 using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Models.ViewModels;
 using Epica.Web.Operacion.Services.Catalogos;
+using Epica.Web.Operacion.Services.Log;
 using Epica.Web.Operacion.Services.Usuarios;
 using Epica.Web.Operacion.Utilities;
 using Microsoft.AspNetCore.Authorization;
@@ -18,14 +19,17 @@ namespace Epica.Web.Operacion.Controllers
         private readonly UserContextService _userContextService;
         private readonly IUsuariosApiClient _usuariosApiClient;
         private readonly ICatalogosApiClient _catalogosApiClient;
+        private readonly ILogsApiClient _logsApiClient;
 
         public UsuariosController(UserContextService userContextService,
             IUsuariosApiClient usuariosApiClient,
-            ICatalogosApiClient catalogosApiClient) 
+            ICatalogosApiClient catalogosApiClient,
+            ILogsApiClient logsApiClient) 
         {
             _userContextService = userContextService;
             _usuariosApiClient = usuariosApiClient;
             _catalogosApiClient = catalogosApiClient;
+            _logsApiClient = logsApiClient;
         }
 
         #region Consulta Usuarios
@@ -163,21 +167,21 @@ namespace Epica.Web.Operacion.Controllers
 
                 response = await _usuariosApiClient.GetRegistroAsignacionUsuarioRol(model.idRol,model.idUsuario);
 
-                //LogRequest logRequest = new LogRequest
-                //{
-                //    IdUser = loginResponse.IdUsuario.ToString(),
-                //    Modulo = "Configuracion",
-                //    Fecha = HoraHelper.GetHoraCiudadMexico(),
-                //    NombreEquipo = Environment.MachineName,
-                //    Accion = "Asignar Rol Usuario",
-                //    Ip = await PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
-                //    Envio = JsonConvert.SerializeObject(model),
-                //    Respuesta = response.Error.ToString(),
-                //    Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
-                //    IdRegistro = model.idUsuario
-                //};
+                LogRequest logRequest = new LogRequest
+                {
+                    IdUser = loginResponse.IdUsuario.ToString(),
+                    Modulo = "Configuracion",
+                    Fecha = HoraHelper.GetHoraCiudadMexico(),
+                    NombreEquipo = Environment.MachineName,
+                    Accion = "Asignar Rol Usuario",
+                    Ip = await PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                    Envio = JsonConvert.SerializeObject(model),
+                    Respuesta = response.Error.ToString(),
+                    Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
+                    IdRegistro = model.idUsuario
+                };
 
-                //await _logsApiClient.InsertarLogAsync(logRequest);
+                await _logsApiClient.InsertarLogAsync(logRequest);
             }
             catch (Exception ex)
             {
@@ -199,21 +203,21 @@ namespace Epica.Web.Operacion.Controllers
 
                 response = await _usuariosApiClient.GetDesasignacionUsuarioRol(idUsuario);
 
-                //LogRequest logRequest = new LogRequest
-                //{
-                //    IdUser = loginResponse.IdUsuario.ToString(),
-                //    Modulo = "Configuracion",
-                //    Fecha = HoraHelper.GetHoraCiudadMexico(),
-                //    NombreEquipo = Environment.MachineName,
-                //    Accion = "Asignar Rol Usuario",
-                //    Ip = await PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
-                //    Envio = JsonConvert.SerializeObject(model),
-                //    Respuesta = response.Error.ToString(),
-                //    Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
-                //    IdRegistro = model.idUsuario
-                //};
+                LogRequest logRequest = new LogRequest
+                {
+                    IdUser = loginResponse.IdUsuario.ToString(),
+                    Modulo = "Configuracion",
+                    Fecha = HoraHelper.GetHoraCiudadMexico(),
+                    NombreEquipo = Environment.MachineName,
+                    Accion = "Desasignar Rol Usuario",
+                    Ip = await PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                    Envio = JsonConvert.SerializeObject(idUsuario),
+                    Respuesta = response.Error.ToString(),
+                    Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
+                    IdRegistro = idUsuario
+                };
 
-                //await _logsApiClient.InsertarLogAsync(logRequest);
+                await _logsApiClient.InsertarLogAsync(logRequest);
             }
             catch (Exception ex)
             {
