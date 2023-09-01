@@ -105,7 +105,8 @@ public class ClientesController : Controller
                     id = cliente.id_cliente,
                     membresia = cliente.membresia,
                     organizacion = cliente.organizacion,
-                    telefono = cliente.telefono
+                    telefono = cliente.telefono,
+                    estatusweb = cliente.estatusWeb
                 };
 
                 ListPF.Add(clienteResponse);
@@ -136,6 +137,7 @@ public class ClientesController : Controller
                 membresia = row.membresia,
                 sexo = row.sexo,
                 estatus = row.estatus,
+                estatusweb = row.estatusweb,
                 Acciones = await this.RenderViewToStringAsync("~/Views/Clientes/_Acciones.cshtml", row)
             });
         }

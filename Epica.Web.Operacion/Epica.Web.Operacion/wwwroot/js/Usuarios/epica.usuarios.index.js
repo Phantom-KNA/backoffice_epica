@@ -74,19 +74,19 @@ var KTDatatableRemoteAjax = function () {
                         return data == 1 ?
                             "<span class='badge badge-light-danger' >Desactivado</span>" : "<span class='badge badge-light-success' >Activo</span>";
                     }
+                },
+                {
+                    title: '',
+                    orderable: false,
+                    data: null,
+                    defaultContent: '',
+                    render: function (data, type, row) {
+                        if (type === 'display') {
+                            var htmlString = row.acciones;
+                            return htmlString
+                        }
+                    }
                 }
-                //{
-                //    title: '',
-                //    orderable: false,
-                //    data: null,
-                //    defaultContent: '',
-                //    render: function (data, type, row) {
-                //        if (type === 'display') {
-                //            var htmlString = row.acciones;
-                //            return htmlString
-                //        }
-                //    }
-                //}
             ],
         });
         $('thead tr').addClass('text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0');
@@ -272,3 +272,39 @@ $(document).on('click', '#GuardarAsignacion', function (e) {
     });
     $("#btnCerrarCuenta").click();
 });
+
+function DesAsignarRol(idUser) {
+
+    Swal.fire({
+        title: 'Desasignar Rol a Usuario',
+        text: "¿Esta seguro que desea desasignar este rol?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            $.ajax({
+                url: 'Usuarios/DesasignarUsuario',
+                async: true,
+                cache: false,
+                type: 'POST',
+                data: { idUsuario: idUser },
+                success: function (data) {
+
+                    datatable.ajax.reload();
+                    Swal.fire(
+                        'Usuario Actualizado',
+                        'Se ha actualizado el usuario con exito.',
+                        'success'
+                    )
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+    })
+}

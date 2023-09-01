@@ -46,5 +46,6 @@ namespace Epica.Web.Operacion.Models.Entities
         public string? rol { get; set; }
         public string? monto_maximo { get; set; }
         public int? id_pais { get; set; }
+        public string? estatusWeb { get; set; }
     }
 }

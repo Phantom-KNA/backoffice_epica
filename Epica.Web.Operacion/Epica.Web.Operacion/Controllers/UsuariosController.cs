@@ -88,7 +88,7 @@ namespace Epica.Web.Operacion.Controllers
                     FechaAlta = row.FechaAlta,
                     FechaUltimoAcceso = row.FechaUltimoAcceso,
                     estatus = row.Estatus,
-                    //Acciones = await this.RenderViewToStringAsync("~/Views/Clientes/_Acciones.cshtml", row)
+                    Acciones = await this.RenderViewToStringAsync("~/Views/Usuarios/_Acciones.cshtml", row)
                 });
             }
             if (!string.IsNullOrEmpty(request.Busqueda))
@@ -187,6 +187,41 @@ namespace Epica.Web.Operacion.Controllers
             return Json(response);
         }
 
+        [Authorize]
+        [HttpPost]
+        public async Task<JsonResult> DesasignarUsuario(int idUsuario)
+        {
+            var loginResponse = _userContextService.GetLoginResponse();
+            MensajeResponse response = new MensajeResponse();
+
+            try
+            {
+
+                response = await _usuariosApiClient.GetDesasignacionUsuarioRol(idUsuario);
+
+                //LogRequest logRequest = new LogRequest
+                //{
+                //    IdUser = loginResponse.IdUsuario.ToString(),
+                //    Modulo = "Configuracion",
+                //    Fecha = HoraHelper.GetHoraCiudadMexico(),
+                //    NombreEquipo = Environment.MachineName,
+                //    Accion = "Asignar Rol Usuario",
+                //    Ip = await PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
+                //    Envio = JsonConvert.SerializeObject(model),
+                //    Respuesta = response.Error.ToString(),
+                //    Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
+                //    IdRegistro = model.idUsuario
+                //};
+
+                //await _logsApiClient.InsertarLogAsync(logRequest);
+            }
+            catch (Exception ex)
+            {
+                response.Detalle = ex.Message;
+            }
+
+            return Json(response);
+        }
         #endregion
 
         [Authorize]

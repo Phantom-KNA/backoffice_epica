@@ -78,21 +78,23 @@ var KTDatatableRemoteAjax = function () {
                 { data: 'email', name: 'Email', title: 'Correo Electrónico' },
                 { data: 'curp', name: 'Curp', title: 'CURP' },
                 { data: 'organizacion', name: 'Organizacion', title: 'Organización' },
-                //{ data: 'membresia', name: 'membresia', title: 'Tipo Membresia' },
-                //{
-                //    data: 'sexo', name: 'Sexo', title: 'Sexo',
-                //    render: function (data, type, row) {
-                //        return data == "M" ?
-                //            "Masculino" : "Femenino";
-                //    }
-                //},
                 {
-                    data: 'estatus', name: 'Estatus', title: 'Estatus',
+                    data: 'estatusweb', name: 'estatusweb', title: 'Estatus Web',
+                    render: function (data, type, row) {
+                        if (data == "1") {
+                            return "<span class='badge badge-light-success' >Activo</span>";
+                        } else if (data == "2") {
+                            return "<span class='badge badge-light-danger' >Bloqueo Web</span>";
+                        }
+                    }
+                },
+                {
+                    data: 'estatus', name: 'Estatus', title: 'Estatus Total',
                     render: function (data, type, row) {
                         if ((data == 5) || (data == 10))  {
                             return "<span class='badge badge-light-success' >Activo</span>";
                         } else if (data == -10) {
-                            return "<span class='badge badge-light-danger' >Bloqueo</span>";
+                            return "<span class='badge badge-light-danger' >Bloqueo Total</span>";
                         }
                     }
                 },

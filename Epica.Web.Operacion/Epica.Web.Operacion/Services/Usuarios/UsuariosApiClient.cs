@@ -203,5 +203,32 @@ namespace Epica.Web.Operacion.Services.Usuarios
 
             return respuesta;
         }
+
+        public async Task<MensajeResponse> GetDesasignacionUsuarioRol(int idUsuario)
+        {
+            MensajeResponse respuesta = new MensajeResponse();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.UsuariosOperations.GetUsuariosDesasignarRoles(idUsuario);
+                var response = await ApiClient.DeleteAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                respuesta.Error = true;
+                respuesta.Detalle = ex.Message;
+                return respuesta;
+            }
+
+            return respuesta;
+        }
     }
 }

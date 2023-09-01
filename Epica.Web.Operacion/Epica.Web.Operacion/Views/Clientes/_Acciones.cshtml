@@ -5,7 +5,7 @@
     </a>
     <ul class="dropdown-menu menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4">
         <li class="menu-item px-3">
-            @if ((Model.estatus == 5) || (Model.estatus == 10))
+            @if (Model.estatusweb == "1")
             {
                 <a data-id="@Model.id" onclick="GestionarClienteWeb(@Model.id, 'False')" title="Bloquear Cuenta Web" class="btnEditar menu-link px-3">
                     <i class="bi bi-lock"></i>&nbsp;
@@ -20,6 +20,7 @@
                 </a>
             }
         </li>
+
         <li class="menu-item px-3">
             @if ((Model.estatus == 5) || (Model.estatus == 10))
             {

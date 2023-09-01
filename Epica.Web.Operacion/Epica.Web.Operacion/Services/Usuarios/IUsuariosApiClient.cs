@@ -11,5 +11,6 @@ namespace Epica.Web.Operacion.Services.Usuarios
         Task<List<UsuariosVinculadosResponse>> GetAsignarRolPermisosAsync();
         Task<List<DatosCatalogoResponse>> GetUsuarioPorNombreAsync(string nombre);
         Task<MensajeResponse> GetRegistroAsignacionUsuarioRol(int idRol, int idUsuario);
+        Task<MensajeResponse> GetDesasignacionUsuarioRol(int idUsuario);
     }
 }
