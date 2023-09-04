@@ -9,4 +9,5 @@ public class JsonResultDto
     public string ErrorDescription { get; set; }
     public bool Error { get; set; }
     public object Result { get; set; }
+    public bool permiso { get; set; }
 }

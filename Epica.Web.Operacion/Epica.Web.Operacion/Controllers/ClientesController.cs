@@ -506,6 +506,15 @@ public class ClientesController : Controller
             };
             ViewBag.Info = header;
             ViewBag.UrlView = "DatosGenerales";
+
+            var validacionEdicion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Editar == 0);
+            if (validacionEdicion == true)
+            {
+                ViewBag.ValEdicion = true;
+            } else {
+                ViewBag.ValEdicion = false;
+            }
+
             return View("~/Views/Clientes/Detalles/DatosGenerales/DetalleCliente.cshtml", clientesDetallesViewModel);
         }
         return NotFound();
@@ -694,7 +703,7 @@ public class ClientesController : Controller
             return View("~/Views/Clientes/Detalles/Transacciones/DetalleMovimientos.cshtml");
         }
 
-        return NotFound();
+        return RedirectToAction("Index", "Transacciones");
     }
 
     [Authorize]
@@ -702,7 +711,7 @@ public class ClientesController : Controller
     public async Task<IActionResult> Tarjetas(int id)
     {
         var loginResponse = _userContextService.GetLoginResponse();
-        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Tarjetas" && modulo.Ver == 0);
+        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
         if (validacion == true)
         {
             ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(id);

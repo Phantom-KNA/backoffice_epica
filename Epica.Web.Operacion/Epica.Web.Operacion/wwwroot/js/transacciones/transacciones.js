@@ -237,9 +237,11 @@ var ModalDetalle = function () {
                     $('#modal_detalle #modalLabelTitle').html('Detalle de Transacción');
                     $('#modal_detalle .modal-body').html(result.result);
 
-                    var ruta = "/Transacciones/Modificar?id=" + id;
+                    if (result.permiso == true) {
+                        var ruta = "/Transacciones/Modificar?id=" + id;
+                        $('#modal_detalle .modal-footer').append("<a href='" + ruta + "' class='btn btn-info btn-sm font-weight-bold'><i class='bi bi-pencil'></i>&nbsp;Editar Transacción</a>");
+                    }
 
-                    $('#modal_detalle .modal-footer').append("<a href='" + ruta +"' class='btn btn-info btn-sm font-weight-bold'><i class='bi bi-pencil'></i>&nbsp;Editar cliente</a>");
                     $('#modal_detalle').modal('show');
                 }
 

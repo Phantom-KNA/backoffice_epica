@@ -433,6 +433,12 @@ namespace Epica.Web.Operacion.Controllers
                 {
                     result.Error = false;
                     result.Result = await this.RenderViewToStringAsync("~/Views/Transacciones/_Detalle.cshtml", detalleTransaccion.value);
+
+                    var loginResponse = _userContextService.GetLoginResponse();
+                    var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Editar == 0);
+                    if (validacion == true) { 
+                        result.permiso = true;
+                    }
                 }
                 else
                 {

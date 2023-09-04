@@ -52,11 +52,17 @@
                                     </button>
                                 </div>
                             }
-                            <div class="m-0">
-                                <a href="/Clientes/Detalle/Modificar?id=@Model.IdCliente" class="btn btn-sm btn-primary">
-                                    <i class="bi bi-pencil"></i>&nbsp;Editar cliente
-                                </a>
-                            </div>
+                            @{
+                                if (ViewBag.ValEdicion == true)
+                                {
+                                    <div class="m-0">
+                                        <a href="/Clientes/Detalle/Modificar?id=@Model.IdCliente" class="btn btn-sm btn-primary">
+                                            <i class="bi bi-pencil"></i>&nbsp;Editar cliente
+                                        </a>
+                                    </div>
+
+                                }
+                            }
                         </div>
                     </div>
                 </div>
