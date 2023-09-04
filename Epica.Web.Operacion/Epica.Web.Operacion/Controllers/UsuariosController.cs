@@ -395,6 +395,52 @@ namespace Epica.Web.Operacion.Controllers
             return Json(respuesta);
         }
 
+        [Authorize]
+        [HttpPost]
+        public async Task<JsonResult> CrearNuevoRol(string descripcion)
+        {
+            var loginResponse = _userContextService.GetLoginResponse();
+            MensajeResponse response = new MensajeResponse();
+
+            try
+            {
+
+                int Registro = 0;
+                response = await _usuariosApiClient.GetCrearRol(descripcion);
+
+                if (response.Error != true) {
+                    if (response.Detalle != null) {
+
+                        var value = response.Detalle.Substring(7);
+                        Registro = Convert.ToInt32(value);
+                    }
+                }
+
+                LogRequest logRequest = new LogRequest
+                {
+                    IdUser = loginResponse.IdUsuario.ToString(),
+                    Modulo = "Configuracion",
+                    Fecha = HoraHelper.GetHoraCiudadMexico(),
+                    NombreEquipo = loginResponse.NombreDispositivo,
+                    Accion = "Crear Rol",
+                    Ip = loginResponse.DireccionIp,
+                    Envio = JsonConvert.SerializeObject(descripcion),
+                    Respuesta = response.Error.ToString(),
+                    Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
+                    IdRegistro = Registro
+                };
+
+                await _logsApiClient.InsertarLogAsync(logRequest);
+            }
+            catch (Exception ex)
+            {
+                response.Detalle = ex.Message;
+            }
+
+            return Json(response);
+        }
+
+
         public async Task<List<UserPermissionResponse>> GetListUser()
         {
             var List = new List<UserPermissionResponse>();

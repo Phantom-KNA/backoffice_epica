@@ -362,7 +362,11 @@ function GestionarUsuario(AccountID, estatus) {
         success: function (data) {
 
             datatable.ajax.reload();
-            alert("Se ha actualizado la cuenta con exito.");
+            Swal.fire(
+                'Gestionar Usuario',
+                'Se ha actualizado la cuenta con exito.',
+                'success'
+            )
         },
         error: function (xhr, status, error) {
             console.log(error);
@@ -427,3 +431,49 @@ function CrearEstructuraCheck(Activo, Vista, IdPermiso, idRol, Accion, Label) {
 
     return Cadena;
 }
+
+$("#GuardarRol").click(function () {
+
+    const inputNombreRol = document.getElementById('create_rol');
+    const rol = inputNombreRol.value;
+
+    if ((rol == null) | (rol == "")) {
+        toastr.warning("El valor ingresado, no es válido");
+        return false;
+    } 
+
+    $.ajax({
+        url: 'CrearNuevoRol',
+        async: true,
+        cache: false,
+        type: 'POST',
+        data: { descripcion : rol},
+        success: function (data) {
+
+            $('#nuevoRolModal').modal('toggle');
+            $('#create_rol').val('');
+
+            if (data.error == false) {
+                Swal.fire(
+                    'Crear Nuevo Rol',
+                    'Se ha creado el rol con exito.',
+                    'success'
+                )
+                datatable.ajax.reload();
+            } else {
+                Swal.fire(
+                    'Crear Nuevo Rol',
+                    'Hubo un problema al crear el rol, verifique su existencia.',
+                    'error'
+                )
+            }
+
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+        }
+    });
+
+    datatable.ajax.reload();
+    recargar();
+});

@@ -40,7 +40,11 @@
                 <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
 
                     <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-
+                        <div class="m-0">
+                            <button data-bs-toggle="modal" data-bs-target="#nuevoRolModal" class="btn btn-sm btn-primary me-3">
+                                <i class="bi bi-plus-lg"></i>&nbsp;Crear Nuevo Rol
+                            </button>
+                        </div>
                         <div id="kt_datatable_buttons" class="d-none"></div>
                     </div>
                 </div>
@@ -60,11 +64,11 @@
     </div>
 </div>
 
-<div class="modal fade" tabindex="-1" id="newTransaccionModal">
+<div class="modal fade" tabindex="-1" id="nuevoRolModal">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Crear Transacción</h3>
+                <h3 class="modal-title">Crear Nuevo Rol</h3>
                 <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
                     <span class="svg-icon svg-icon-1"></span>
                 </div>
@@ -72,40 +76,15 @@
             <div class="modal-body">
                 <div class="px-7 py-5">
                     <div class="mb-5">
-                        <label class="form-label fs-5 fw-semibold mb-3">Clave de Rastreo:</label>
-                        <input class="form-control form-control-sm fw-bold crear-control" data-crear="claveRastreo" placeholder="Clave de Rastreo" id="create_clave_rastreo" />
-                    </div>
-                    <div class="mb-5">
-                        <label class="form-label fs-5 fw-semibold mb-3">Nombre de la cuenta:</label>
-                        <input class="form-control form-control-sm fw-bold crear-control" data-crear="nombreCuenta" placeholder="Nombre de la cuenta" id="create_nombre_cuenta" />
-                    </div>
-                    <div class="mb-5">
-                        <label class="form-label fs-5 fw-semibold mb-3">Institución:</label>
-                        <input class="form-control form-control-sm fw-bold crear-control" data-crear="institucion" placeholder="Institución" id="create_institucion" />
-                    </div>
-                    <div class="mb-5">
-                        <label class="form-label fs-5 fw-semibold mb-3">Monto:</label>
-                        <input class="form-control form-control-sm fw-bold crear-control" data-crear="monto" placeholder="Monto" id="create_monto" />
-                    </div>
-                    <div class="mb-5">
-                        <label class="form-label fs-5 fw-semibold mb-3">Concepto:</label>
-                        <input class="form-control form-control-sm fw-bold crear-control" data-crear="concepto" placeholder="Concepto" id="create_concepto" />
-                    </div>
-                    <div class="mb-5">
-                        <label class="form-label fs-5 fw-semibold mb-3">Medio de Pago:</label>
-                        <input class="form-control form-control-sm fw-bold crear-control" data-crear="medioPago" placeholder="Medio de Pago" id="create_medio_pago" />
-                    </div>
-                    <div class="mb-5">
-                        <label class="form-label fs-5 fw-semibold mb-3">Tipo:</label>
-                        <input class="form-control form-control-sm fw-bold crear-control" data-crear="tipo" placeholder="Tipo" id="create_tipo" />
-                    </div>
+                        <label class="form-label fs-5 fw-semibold mb-3">Nombre del Rol:</label>
+                        <input class="form-control form-control-sm fw-bold crear-control" data-crear="descripcionRol" placeholder="Nombre del Rol" id="create_rol" />
+                    </div>                 
                 </div>
-
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal" id="btnCerrarCuenta">Cerrar</button>
-                <button type="button" class="btn btn-light-primary" id="GuardarTransaccion">Guardar Transacción</button>
+                <button type="button" class="btn btn-light-primary" id="GuardarRol">Guardar Rol</button>
             </div>
         </div>
     </div>

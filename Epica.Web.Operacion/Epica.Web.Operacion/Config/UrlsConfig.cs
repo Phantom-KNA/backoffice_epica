@@ -99,6 +99,7 @@ public class UrlsConfig
         public static string GetUsuarioPorNombre(string nombre) => $"/api/v1/usuario/buscar_usuario?usuario={nombre}";
         public static string GetUsuariosAsignarRoles(int idRol, int idUsuario) => $"/api/v1/usuario/asignar_rol_usuario?idRol={idRol}&idUsuario={idUsuario}";
         public static string GetUsuariosDesasignarRoles(int idUsuario) => $"/api/v1/usuario/quitar_rol_usuario{idUsuario}";
+        public static string GetInsertarRol(string nombreRol) => $"/api/v1/usuario/insertar_rol?nombreRol={nombreRol}";
     }
     public string users { get; set; }
     public string Authenticate { get; set; }
