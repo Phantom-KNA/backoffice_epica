@@ -38,11 +38,18 @@
             </div>
         </div>
         <div class="card-toolbar">
-            <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-                <button data-bs-toggle="modal" data-bs-target="#kt_modal_1" class="btn btn-sm btn-primary me-3 btnAsignacion">
-                    <i class="bi bi-plus-lg"></i>&nbsp;Asignar Cuenta
-                </button>
-            </div>
+            @{
+                if (ViewBag.ValEdicion == true)
+                {
+                    <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
+                        <button data-bs-toggle="modal" data-bs-target="#kt_modal_1" class="btn btn-sm btn-primary me-3 btnAsignacion">
+                            <i class="bi bi-plus-lg"></i>&nbsp;Asignar Cuenta
+                        </button>
+                    </div>
+
+                }
+            }
+
         </div>
     </div>
     <div class="card-body p-9">
@@ -83,7 +90,7 @@
             </div>
             <div class="modal-footer" style="padding:10px">
                 <button type="button" class="btn btn-success btn-sm font-weight-bold" data-bs-dismiss="modal" aria-label="Close" id="btnCerrar">Cerrar</button>
-                <button type="button" class="btn btn-light-primary" id="GuardarAsignacion">Guardar</button>
+                <button type="button" class="btn btn-light-primary btn-sm font-weight-bold" id="GuardarAsignacion">Guardar</button>
             </div>
         </div>
     </div>

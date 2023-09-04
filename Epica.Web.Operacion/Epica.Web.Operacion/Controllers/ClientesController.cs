@@ -561,6 +561,17 @@ public class ClientesController : Controller
             ViewBag.Nombre = header.NombreCompleto;
             ViewBag.AccountID = id;
             ViewBag.AsignData = asign;
+
+            var validacionEdicion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Cuentas" && modulo.Editar == 0);
+            if (validacionEdicion == true)
+            {
+                ViewBag.ValEdicion = true;
+            }
+            else
+            {
+                ViewBag.ValEdicion = false;
+            }
+
             return View("~/Views/Clientes/Detalles/Cuentas/DetalleCuentas.cshtml");
         }
 
@@ -571,6 +582,7 @@ public class ClientesController : Controller
     [HttpPost]
     public async Task<JsonResult> ConsultaCuentas(string id)
     {
+        var loginResponse = _userContextService.GetLoginResponse();
         JsonResult result = new JsonResult("");
         //Invoca al método que se encarga de realizar la petición Api
         var request = new RequestList();
@@ -597,6 +609,16 @@ public class ClientesController : Controller
         var List = new List<CuentasResponseGrid>();
         foreach (var row in ListPF)
         {
+            var validacionEdicion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Editar == 0);
+            if (validacionEdicion == true)
+            {
+                row.validarPermiso = true;
+            }
+            else
+            {
+                row.validarPermiso = false;
+            }
+
             List.Add(new CuentasResponseGrid
             {
                 idCuenta = row.idCuenta,
