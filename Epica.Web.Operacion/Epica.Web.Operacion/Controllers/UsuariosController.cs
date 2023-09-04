@@ -1,6 +1,7 @@
 ﻿using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Models.Common;
 using Epica.Web.Operacion.Models.Request;
+using Epica.Web.Operacion.Models.Response;
 using Epica.Web.Operacion.Models.ViewModels;
 using Epica.Web.Operacion.Services.Catalogos;
 using Epica.Web.Operacion.Services.Log;
@@ -60,6 +61,7 @@ namespace Epica.Web.Operacion.Controllers
         [HttpPost]
         public async Task<JsonResult> Consulta(List<RequestListFilters> filters)
         {
+            var loginResponse = _userContextService.GetLoginResponse();
             var request = new RequestList();
 
             int totalRecord = 0;
@@ -83,7 +85,15 @@ namespace Epica.Web.Operacion.Controllers
             var List = new List<UsuariosResponseGrid>();
             foreach (var row in ListPF)
             {
-
+                var validacionEdicion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Configuracion" && modulo.Eliminar == 0);
+                if (validacionEdicion == true)
+                {
+                    row.validarpermiso = true;
+                }
+                else
+                {
+                    row.validarpermiso = false;
+                }
                 List.Add(new UsuariosResponseGrid
                 {
                     IdUser = row.IdUser,

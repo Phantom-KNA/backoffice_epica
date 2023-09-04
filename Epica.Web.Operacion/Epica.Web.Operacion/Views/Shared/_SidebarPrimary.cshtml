@@ -168,18 +168,6 @@
                             <!--begin:Menu item-->
                             <div class="menu-item">
                                 <!--begin:Menu link-->
-                                <a class="menu-link" asp-action="GestionarPermisos" asp-controller="Usuarios">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title">Permisos</span>
-                                </a>
-                                <!--end:Menu link-->
-                            </div>
-                            <!--end:Menu item-->
-                            <!--begin:Menu item-->
-                            <div class="menu-item">
-                                <!--begin:Menu link-->
                                 <a class="menu-link" asp-action="Index" asp-controller="Usuarios">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
@@ -188,6 +176,27 @@
                                 </a>
                                 <!--end:Menu link-->
                             </div>
+
+                            <!--end:Menu item-->
+                            @{
+                                var validacion6 = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Configuracion" && modulo.Insertar == 0);
+                                if (validacion6 == true)
+                                {
+                                    <div class="menu-item">
+                                        <!--begin:Menu link-->
+                                        <a class="menu-link" asp-action="GestionarPermisos" asp-controller="Usuarios">
+                                            <span class="menu-bullet">
+                                                <span class="bullet bullet-dot"></span>
+                                            </span>
+                                            <span class="menu-title">Permisos</span>
+                                        </a>
+                                        <!--end:Menu link-->
+                                    </div>
+                                }
+                            }
+
+                            <!--begin:Menu item-->
+
                             <!--end:Menu item-->
 
                         </div>
