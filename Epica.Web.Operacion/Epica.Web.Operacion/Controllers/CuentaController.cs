@@ -47,7 +47,7 @@ public class CuentaController : Controller
     public IActionResult Index()
     {
         var loginResponse = _userContextService.GetLoginResponse();
-        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
+        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Cuentas" && modulo.Ver == 0);
         if (validacion == true)
             return View();
 

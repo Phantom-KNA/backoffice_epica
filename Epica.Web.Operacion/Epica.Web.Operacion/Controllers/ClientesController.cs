@@ -725,7 +725,7 @@ public class ClientesController : Controller
             return View("~/Views/Clientes/Detalles/Transacciones/DetalleMovimientos.cshtml");
         }
 
-        return RedirectToAction("Index", "Transacciones");
+        return RedirectToAction("Index", "Home");
     }
 
     [Authorize]
@@ -769,7 +769,7 @@ public class ClientesController : Controller
             return View("~/Views/Clientes/Detalles/Tarjetas/DetalleTarjetas.cshtml", loginResponse);
         }
 
-        return NotFound();
+        return RedirectToAction("Index", "Tarjetas");
     }
 
     [Authorize]
