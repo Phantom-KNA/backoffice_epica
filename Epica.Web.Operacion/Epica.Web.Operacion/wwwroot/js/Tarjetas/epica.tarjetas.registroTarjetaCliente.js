@@ -3,6 +3,26 @@
 const selectYearVigencia = document.getElementById('yearVigencia');
 const yearVigencia = selectYearVigencia.value;
 
+$(document).on('click', '#btnGuardarTarjeta', function (e) {
+    var requiredFields = document.querySelectorAll('[required]');
+
+    var allFieldsFilled = true;
+
+    requiredFields.forEach(function (field) {
+        if (!field.value) {
+            allFieldsFilled = false;
+        }
+    });
+
+    if (allFieldsFilled) {
+        $('#confirmModal').modal('show');
+    } else {
+        toastr.error('Por favor, complete todos los campos obligatorios', "");
+    }
+});
+$(document).on('click', '#btnCerrarModal, #btnCerrarModal2, .modal-close', function (e) {
+    $('#confirmModal').modal('hide');
+});
 
 $(document).on('click', '#btnBuscarCliente', function () {
     const inputNombreCliente = document.getElementById('nombreCliente');
