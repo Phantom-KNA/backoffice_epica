@@ -20,7 +20,6 @@ var Init = function () {
                 weekLabel: "S"
             }
         });
-
         $(document).on('click', '#btnGuardarTransaccion', function (e) {
             var requiredFields = document.querySelectorAll('[required]');
 
@@ -33,11 +32,13 @@ var Init = function () {
             });
 
             if (allFieldsFilled) {
-                $(this).text('Registrando información');
-                toastr.info('Registrando información', "");
+                $('#confirmModal').modal('show');
             } else {
                 toastr.error('Por favor, complete todos los campos obligatorios', "");
             }
+        });
+        $(document).on('click', '#btnCerrarModal, #btnCerrarModal2, .modal-close', function (e) {
+            $('#confirmModal').modal('hide');
         });
     }
     return {
@@ -46,6 +47,10 @@ var Init = function () {
         }
     };
 }();
-jQuery(document).ready(function () {
+
+$(document).ready(function () {
     Init.init();
+
+    $('#confirmModal').on('hidden.bs.modal', function () {
+    });
 });
