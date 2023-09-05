@@ -37,6 +37,9 @@ var Init = function () {
                 toastr.error('Por favor, complete todos los campos obligatorios', "");
             }
         });
+        $(document).on('click', '#btnCerrarModal, #btnCerrarModal2, .modal-close', function (e) {
+            $('#confirmModal').modal('hide');
+        });
     }
     return {
         init: function () {
