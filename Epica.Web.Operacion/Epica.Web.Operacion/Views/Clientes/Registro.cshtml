@@ -68,7 +68,7 @@
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
-                        <label class="form-label">Apellido materno: &nbsp;</label>
+                        <label class="form-label required">Apellido materno: &nbsp;</label>
                         <div class="position-relative">
                             <input asp-for="ClientesDetalles.ApellidoMaterno" class="form-control form-control-sm form-control-solid" id="ApellidoMaterno" type="text" value="@(Model?.ClientesDetalles.ApellidoMaterno ?? "")" autocomplete="off" />
                             <span asp-validation-for="ClientesDetalles.ApellidoMaterno" class="text-danger"></span>

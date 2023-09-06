@@ -1110,7 +1110,7 @@ public class ClientesController : Controller
                     Modulo = "Clientes",
                     Fecha = HoraHelper.GetHoraCiudadMexico(),
                     NombreEquipo = loginResponse.NombreDispositivo,
-                    Accion = "Insertar",
+                    Accion = "Editar",
                     Ip = loginResponse.DireccionIp,
                     Envio = JsonConvert.SerializeObject(model.ClientesDetalles),
                     Respuesta = response.Error.ToString(),
@@ -1223,8 +1223,8 @@ public class ClientesController : Controller
                     NoInterior = cliente.value.NoInt,
                     Puesto = cliente.value.Puesto,
                     FechaNacimiento = cliente.value.FechaNacimiento != null
-? DateTime.ParseExact(cliente.value.FechaNacimiento, "dd/MM/yyyy", CultureInfo.InvariantCulture)
-    : null,
+                    ? DateTime.ParseExact(cliente.value.FechaNacimiento, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                    : null,
                     DelegacionMunicipio = cliente.value.Municipio,
                     TelefonoTipo = cliente.value.TelefonoRecado,
                     IdNacionalidad = cliente.value.IdNacionalidad,
