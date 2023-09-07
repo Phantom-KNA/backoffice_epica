@@ -75,7 +75,7 @@ var KTDatatableRemoteAjax = function () {
                         return "<a title='Consultar Movimientos de cuenta' href='/Clientes/Detalle/Movimientos?id=" + idCuenta + "&cliente=" + idCliente + "&noCuenta=" + NumCuenta + "'>" + NumCuenta + "</a>";
                     }
                 },
-                { data: 'nombrePersona', name: 'nombrePersona', title: 'Cliente' },
+                { data: 'nombrePersona', name: 'nombrePersona', title: 'Nombre persona' },
                 {
                     data: 'saldo', name: 'Saldo', title: 'Saldo',
                     render: function (data, type, row) {

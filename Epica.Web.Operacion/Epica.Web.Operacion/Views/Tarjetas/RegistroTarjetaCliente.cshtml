@@ -79,15 +79,15 @@
                         </div>
                     </div>
                     <div class="form-group input-group-sm py-2 px-4 col-md-4 fv-row">
-                        <label class="form-label required">Buscar Cliente: &nbsp;</label>
+                        <label class="form-label required">Buscar Persona: &nbsp;</label>
 
-                        <input type="text" id="nombreCliente" name="nombreCliente" class="form-control form-control-sm form-control-solid" placeholder="Clientes coincidentes" autocomplete="off" />
+                        <input type="text" id="nombreCliente" name="nombreCliente" class="form-control form-control-sm form-control-solid" placeholder="Personas coincidentes" autocomplete="off" />
                         <button type="button" class="btn btn-sm btn-primary align-center" id="btnBuscarCliente">Buscar</button>
 @*                        <select id="selectClientes" class="form-select form-select-sm form-select-solid" autocomplete="off">
                             <option value="">Seleccione un cliente</option>
                         </select>*@
                         <select asp-for="TarjetasDetalles.idCliente" id="selectClientes" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required>
-                            <option value="">Seleccione un cliente</option>
+                            <option value="">Seleccione una persona</option>
                         </select>
                     </div>
             </div>

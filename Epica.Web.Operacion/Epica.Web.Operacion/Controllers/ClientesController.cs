@@ -1011,7 +1011,7 @@ public class ClientesController : Controller
             };
 
             ViewBag.Accion = "RegistrarCliente";
-            ViewBag.TituloForm = "Registrar Cliente";
+            ViewBag.TituloForm = "Registrar Persona física";
             return View(clientesRegistroViewModel);
         }
 
