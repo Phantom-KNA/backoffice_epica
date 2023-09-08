@@ -1,0 +1,38 @@
+﻿@model Epica.Web.Operacion.Models.Response.LoginResponse
+
+@{
+    ViewData["Title"] = "Medios de pago";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var vista = ViewBag.Vista;
+}
+@section LogoPage{
+    <i class="bi bi-card fs-1 w-40px"></i>
+}
+@section breadcrumb{
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted">
+        Medios de pago
+    </li>
+    <li class="breadcrumb-item text-muted">
+        - @ViewBag.medioP
+    </li>
+}
+
+<div class="card mb-5 mb-xl-10">
+    <div class="card-body pt-1 pb-0">
+        <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bold">
+            <li class="nav-item mt-2">
+                <a id="datos-generales-link" class="nav-link text-active-primary ms-0 me-10 py-5" asp-controller="MedioPago" asp-action="Index" asp-route-index="Tarjetas">
+                    TARJETAS
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<partial name= "@vista" />
