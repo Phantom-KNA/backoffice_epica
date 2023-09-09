@@ -288,8 +288,10 @@ function pruebas(idAccount) {
                             var mediopago = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_medio_pago"]');
                             var noreferencia = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_numero_referencia"]');
                             var fechadato = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_fecha"]');
-
-                            console.log(d);
+                            var numcuentaclabe = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_cuenta_clabe"]');
+                            var alias = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_alias"]');
+                            var numerotatarjeta = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_numero_tarjeta"]');
+                            
                             // Mapeo de Datos
                             numcuenta.innerText = d.noCuentaPadre;
 
@@ -319,6 +321,10 @@ function pruebas(idAccount) {
                             }
 
                             fechadato.innerText = d.fechaAlta;
+
+                            numcuentaclabe.innerText = d.cuentaClabe;
+                            alias.innerText = d.alias;
+                            numerotatarjeta.innerText = d.noTarjeta;
 
                             if (data.length === 1) {
                                 let borderClasses = ['rounded', 'rounded-end-0'];
