@@ -9,37 +9,47 @@ using Epica.Web.Operacion.Services.Log;
 using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Utilities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading;
 using static Epica.Web.Operacion.Controllers.CuentaController;
+using ExcelDataReader;
+using System.IO;
+using System.Data;
+using System.Collections.Generic;
 
 namespace Epica.Web.Operacion.Controllers
 {
     [Authorize]
     public class TransaccionesController :  Controller
     {
-        private readonly UserContextService _userContextService;
         #region "Locales"
+        private readonly UserContextService _userContextService;
         private readonly ITransaccionesApiClient _transaccionesApiClient;//Transacciones
         private readonly ICatalogosApiClient _catalogosApiClient;
         private readonly ILogsApiClient _logsApiClient;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         #endregion
 
         #region "Constructores"
         public TransaccionesController(ITransaccionesApiClient transaccionesApiClient,
             UserContextService userContextService,
             ICatalogosApiClient catalogosApiClient,
-            ILogsApiClient logsApiClient
+            ILogsApiClient logsApiClient,
+            IWebHostEnvironment webHostEnvironment
             )
         {
             _userContextService = userContextService;
             _transaccionesApiClient = transaccionesApiClient;
             _catalogosApiClient = catalogosApiClient;
             _logsApiClient = logsApiClient;
+            _webHostEnvironment = webHostEnvironment;
         }
         #endregion
 
@@ -51,6 +61,8 @@ namespace Epica.Web.Operacion.Controllers
             var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Ver == 0);
             if (validacion == true)
             {
+                CargarDocumentoTransaccionesViewModel CargarInfo = new CargarDocumentoTransaccionesViewModel();
+                ViewBag.Carga = CargarInfo;
                 ViewBag.AccountID = AccountID;
                 return View(loginResponse);
             }
@@ -453,6 +465,121 @@ namespace Epica.Web.Operacion.Controllers
                 result.ErrorDescription = "Error1";
             }
             return Json(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CargarDocumentoMasivoTransacciones(CargarDocumentoTransaccionesViewModel model)
+        {
+
+            MensajeResponse response = new MensajeResponse();
+            List<CargaBachRequest> ListaBach = new List<CargaBachRequest>();
+            var loginResponse = _userContextService.GetLoginResponse();
+
+            try
+            {
+                // GET TEMP FILE NAME
+                var filenameTemp = Path.GetFileNameWithoutExtension(Path.GetTempFileName());
+                var extension = Path.GetExtension(model.documento.FileName);
+                var pathTemp = Path.GetTempPath();
+                var FilenameSave = filenameTemp + extension;
+                DataSet resultExcel = new DataSet();
+                DataTable tablaDatos = new DataTable();
+
+                // Uses Path.GetTempFileName to return a full path for a file, including the file name.
+
+                var filePath = pathTemp + "" + FilenameSave;
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.documento.CopyToAsync(stream);
+                    stream.Close();
+                }
+
+                System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+                using (var streamExcel = System.IO.File.Open(filePath, FileMode.Open, FileAccess.Read))
+                {
+                    IExcelDataReader reader = ExcelDataReader.ExcelReaderFactory.CreateOpenXmlReader(streamExcel);
+
+                    resultExcel = reader.AsDataSet(new ExcelDataSetConfiguration());
+                    reader.Close();
+                    tablaDatos = resultExcel.Tables[0];
+                }
+
+                for (var rowCell = 0; rowCell <= tablaDatos.Rows.Count - 1; rowCell++)
+                {
+
+                    var rowData = tablaDatos.Rows[rowCell];
+
+                    if (rowCell < 1)
+                    {
+                        continue;
+                    }
+
+                    try
+                    {
+
+                        CargaBachRequest RegistrarTransaccion = new CargaBachRequest();
+
+                        if (rowData.ItemArray[0].ToString().ToLower() == "in") {
+                            RegistrarTransaccion.TipoOperacion = 1;
+                            RegistrarTransaccion.Comision = 0;
+                        } else if (rowData.ItemArray[0].ToString().ToLower() == "out") {
+                            RegistrarTransaccion.TipoOperacion = 2;
+                            RegistrarTransaccion.Comision = 0;
+                        } else {
+                            RegistrarTransaccion.TipoOperacion = 3;
+                            RegistrarTransaccion.Comision = 1;
+                        }
+
+                        RegistrarTransaccion.FechaOperacion = Convert.ToDateTime(rowData.ItemArray[4]);
+                        RegistrarTransaccion.CuentaBeneficiario = rowData.ItemArray[1].ToString();
+                        RegistrarTransaccion.Monto = Convert.ToDouble(rowData.ItemArray[2]);
+                        RegistrarTransaccion.ConceptoPago = rowData.ItemArray[3].ToString();
+                        RegistrarTransaccion.MedioPago = Convert.ToInt32(rowData.ItemArray[6]);
+                        RegistrarTransaccion.Ordenante = rowData.ItemArray[7].ToString();
+                        RegistrarTransaccion.ClaveRastreo = rowData.ItemArray[5].ToString();
+                        RegistrarTransaccion.IdUsuario = Convert.ToInt32(loginResponse.IdUsuario.ToString());
+
+                        ListaBach.Add(RegistrarTransaccion);
+
+                    } catch (Exception ex) {
+                        continue;
+                    }
+
+                }
+
+                MensajeResponse respuestaEnvio = new MensajeResponse();
+                respuestaEnvio = await _transaccionesApiClient.GetInsertaTransaccionesBatchAsync(ListaBach);
+
+                //foreach (CargaBachRequest enviadatos in ListaBach)
+                //{
+                //MensajeResponse respuestaEnvio = new MensajeResponse();
+                //    respuestaEnvio = await _transaccionesApiClient.GetInsertaTransaccionesBatchAsync(enviadatos);
+                //}
+
+                return RedirectToAction("Index");
+
+            } catch (Exception ex) {
+
+            }
+
+            //return response;
+            return View();
+        }
+
+        public IActionResult GetBlobDownloadFormat()
+        {
+            var net = new System.Net.WebClient();
+
+            string webRootPath = _webHostEnvironment.WebRootPath;
+            string path = Path.Combine(webRootPath, "Formatos");
+
+            string FolderPath = Path.Combine(path, "Formato_Carga_Masiva_Transacciones.xlsx"); // <-- Error here
+            var data = net.DownloadData(FolderPath);
+            var content = new System.IO.MemoryStream(data);
+            var contentType = "APPLICATION/octet-stream";
+            var fileName = "Formato_Carga_Masiva_Transacciones.xlsx";
+            return File(content, contentType, fileName);
         }
         #endregion
 

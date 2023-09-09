@@ -277,5 +277,31 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return ListaTransacciones;
         }
 
+        public async Task<MensajeResponse> GetInsertaTransaccionesBatchAsync(List<CargaBachRequest> request)
+        {
+            MensajeResponse? respuesta = new MensajeResponse();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.InsertarBatchTransaccion();
+                var json = JsonConvert.SerializeObject(request);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await ApiClient.PostAsync(uri, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return respuesta;
+            }
+
+            return respuesta;
+        }
     }
 }

@@ -28,6 +28,7 @@ public class UrlsConfig
         public static string ModificarTransaccion() => $"/api/v1/transacciones/modificar";
         public static string DetalleTransaccion(int idTransaccion) => $"/api/v1/transacciones/detalle_movimiento?idtrasaccion={idTransaccion}";
         public static string DetalleTransaccionClaveCobranza(string claveCobranza) => $"/api/v1/transacciones/buscar_claverastro_cobranza?calveRastreoCobranza={claveCobranza}";
+        public static string InsertarBatchTransaccion() => $"/api/v1/cargabach/inserta_temp";
     }
 
     public class CuentasOperations

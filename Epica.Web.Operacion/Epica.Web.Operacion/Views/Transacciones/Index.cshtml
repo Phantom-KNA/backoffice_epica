@@ -110,10 +110,18 @@
                                 var validacion = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Insertar == 0);
                                 if (validacion == true)
                                 {
-                                    <a class="btn btn-sm btn-primary" href="/Transacciones/Registro">
-                                        <i class="bi bi-plus-lg"></i>&nbsp;Registrar Transacción
-                                    </a>
+                                    <div class="m-0">
+                                        <a class="btn btn-sm btn-primary me-3" href="/Transacciones/Registro">
+                                            <i class="bi bi-plus-lg"></i>&nbsp;Registrar Transacción
+                                        </a>
+                                    </div>
 
+                                    <div class="m-0">
+                                        <button data-bs-toggle="modal" data-bs-target="#CargaMasivaTransaccion" class="btn btn-sm btn-info me-3">
+                                            <i class="bi bi-cloud-upload"></i>&nbsp;Cargar Transacciones
+                                        </button>
+                                    </div>       
+                                    
                                 }
                             }
                         </div>
@@ -216,8 +224,30 @@
     </div>
 </div>
 
+<div class="modal fade" tabindex="-1" id="CargaMasivaTransaccion">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Crear Nueva Transacción</h3>
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <span class="svg-icon svg-icon-1"></span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <partial name="~/Views/Transacciones/_CargaMasivaTransacciones.cshtml" model="@ViewBag.Carga" />
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal" id="btnCerrarCuenta">Cerrar</button>
+                <button type="button" class="btn btn-light-primary" id="GuardarDocumento">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts{
     <script asp-append-version="true" src="~/js/components/accounting.js"></script>
+    <script asp-append-version="true" src="~/js/components/jquery.filer.min.js"></script>
     <script src="~/js/transacciones/transacciones.js" asp-append-version="true"></script>
     <script>
         var AccountId = '@ViewBag.AccountID';

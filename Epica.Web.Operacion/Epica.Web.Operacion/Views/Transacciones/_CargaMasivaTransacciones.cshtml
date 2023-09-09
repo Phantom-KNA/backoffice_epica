@@ -1,0 +1,36 @@
+﻿@model Epica.Web.Operacion.Models.ViewModels.CargarDocumentoTransaccionesViewModel
+
+<form asp-controller="Transacciones" asp-action="CargarDocumentoMasivoTransacciones" id="CargaDocumentoForm" method="post" enctype="multipart/form-data">
+    
+    <div class="d-flex flex-stack row">
+        <div class="row mb-5 mt-5">
+            <div class="form-group input-group-sm col-md-12 row">
+                <label class="col-md-4 form-label">Descargar Formato Excel &nbsp;</label>
+                <div class="col-md-8">
+                    <div class="fv-row">
+                        <a class="btn btn-sm btn-primary" href="/Transacciones/GetBlobDownloadFormat">
+                            <i class="bi bi-cloud-download"></i>&nbsp;Descargar Formato
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="d-flex flex-stack row">
+        <div class="row mb-5 mt-5">
+            <div class="form-group input-group-sm col-md-12 row">
+                <label class="col-md-4 form-label required">Archivo: &nbsp;</label>
+                <div class="col-md-8">
+                    <div class="fv-row">
+                        <input asp-for="documento" hidden class="form-control form-control-sm form-control-solid" id="documento" type="file" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+

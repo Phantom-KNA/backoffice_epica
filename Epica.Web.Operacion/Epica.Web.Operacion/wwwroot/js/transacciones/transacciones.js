@@ -184,6 +184,7 @@ var KTDatatableTransacciones = (function () {
                 return;
             }
             init();
+            plugins();
             handleSearchDatatable();
             exportButtons();
 
@@ -197,9 +198,27 @@ $(document).ready(function () {
     KTDatatableTransacciones.init();
 });
 
-//function modalCrearTransaccion() {
-//    $('#newTransaccionModal').modal('show');
-//};
+var plugins = () => {
+
+    $('#documento').filer({
+        addMore: true,
+        limit: 1,
+        maxSize: 30,
+        extensions: ["xlsx"],
+        showThumbs: true,
+        captions: {
+            button: "Cargar Archivo",
+            feedback: "Cargar Documento Excel",
+            feedback2: "Archivos Agregados",
+            removeConfirmation: "Esta seguro que desea eliminar este documento?",
+            errors: {
+                filesLimit: "Unicamente se pueden cargar {{fi-limit}} archivos.",
+                filesType: "El formato del documento, no es valido.",
+                filesSize: "{{fi-name}} supera el limite permitido! El tamaño permitido es de {{fi-maxSize}} MB."
+            }
+        }
+    });
+}
 
 $(document).on('click', '.btnDetalle', function (e) {
     var id = $(this).data('id');
@@ -208,6 +227,11 @@ $(document).on('click', '.btnDetalle', function (e) {
 
     var parametros = id + "|" + claveCobranza + "|" + estatus;
     ModalDetalle.init(parametros);
+});
+
+$(document).on('click', '#GuardarDocumento', function (e) {
+
+    $('#CargaDocumentoForm').submit();
 });
 
 var ModalDetalle = function () {
