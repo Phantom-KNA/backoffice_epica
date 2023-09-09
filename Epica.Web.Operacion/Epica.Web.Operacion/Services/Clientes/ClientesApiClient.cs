@@ -2,14 +2,11 @@
 using Epica.Web.Operacion.Models.Entities;
 using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.UserResolver;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Text;
-using System.Text.Json;
 using System.Text.Json.Serialization;
-using static Epica.Web.Operacion.Controllers.CuentaController;
 
 namespace Epica.Web.Operacion.Services.Transaccion
 {
@@ -477,9 +474,9 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
         private async Task<TokenResponse> GenTokenAsync()
         {
-            var uri = Urls.Authenticate + UrlsConfig.AuthenticateOperations.PostToken();
+            var uri = UrlApi + UrlsConfig.AuthenticateOperations.PostToken();
 
-            var credentials = new TokenRequest() { Username = "gaelle@demomatic.com", Password = "123456" };
+            var credentials = new TokenRequest() { Username = UsernameApi, Password = PasswordApi };
 
             var content = new StringContent(JsonConvert.SerializeObject(credentials), Encoding.UTF8, "application/json");
             JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
