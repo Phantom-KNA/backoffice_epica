@@ -14,8 +14,10 @@ public class ApiClientBase
     protected readonly IHttpContextAccessor HttpContext;
     protected readonly JsonSerializerOptions SerializerOptions;
     protected readonly IUserResolver UserResolver;
-    protected readonly string _apiKey;
-
+    protected readonly string? _apiKey;
+    protected readonly string? UsernameApi;
+    protected readonly string? PasswordApi;
+    protected readonly string? UrlApi;
     public ApiClientBase(HttpClient httpClient,
     ILogger logger,
     IOptions<UrlsConfig> config,
@@ -24,7 +26,6 @@ public class ApiClientBase
     IUserResolver userResolver)
     {
         ApiClient = httpClient;
-        //ApiClientUser = httpClient;
         Logger = logger;
         Urls = config.Value;
         HttpContext = httpContext;
@@ -36,5 +37,8 @@ public class ApiClientBase
         UserResolver = userResolver;
         _apiKey = configuration.GetValue<string>("credential:ApiKey");
         ApiClient.DefaultRequestHeaders.Add("Api-Key", _apiKey);
+        UsernameApi = configuration.GetValue<string>("CredentialsApi:Username");
+        PasswordApi = configuration.GetValue<string>("CredentialsApi:Password");
+        UrlApi = configuration.GetValue<string>("CredentialsApi:Url");
     }
 }
