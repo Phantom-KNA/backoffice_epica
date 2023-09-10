@@ -938,7 +938,7 @@ public class ClientesController : Controller
             response.Detalle = ex.Message;
         }
 
-        return Json(model);
+        return Json(response);
     }
 
     [Authorize]

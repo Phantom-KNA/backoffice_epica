@@ -51,7 +51,7 @@ namespace Epica.Web.Operacion.Controllers
 
                 ViewBag.AsignarRol = renderAsign;
 
-                return View();
+                return View(loginResponse);
             }
 
             return NotFound();

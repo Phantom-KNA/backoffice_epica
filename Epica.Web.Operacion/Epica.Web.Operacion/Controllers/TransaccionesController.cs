@@ -432,10 +432,8 @@ namespace Epica.Web.Operacion.Controllers
             TransaccionDetailsResponse detalleTransaccion = new TransaccionDetailsResponse();
             try
             {
-                if (Estatus == "0")
-                {
+                if (Estatus == "0") {
                     detalleTransaccion = await _transaccionesApiClient.GetTransaccionDetalleByCobranzaAsync(ClabeCobranza);
-
                 } else {
                     detalleTransaccion = await _transaccionesApiClient.GetTransaccionDetalleAsync(Convert.ToInt32(Id));
                 }
@@ -468,25 +466,22 @@ namespace Epica.Web.Operacion.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CargarDocumentoMasivoTransacciones(CargarDocumentoTransaccionesViewModel model)
+        public async Task<JsonResult> CargarDocumentoMasivoTransacciones(CargarDocumentoTransaccionesViewModel model)
         {
 
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             MensajeResponse response = new MensajeResponse();
             List<CargaBachRequest> ListaBach = new List<CargaBachRequest>();
             var loginResponse = _userContextService.GetLoginResponse();
 
             try
             {
-                // GET TEMP FILE NAME
                 var filenameTemp = Path.GetFileNameWithoutExtension(Path.GetTempFileName());
                 var extension = Path.GetExtension(model.documento.FileName);
                 var pathTemp = Path.GetTempPath();
                 var FilenameSave = filenameTemp + extension;
                 DataSet resultExcel = new DataSet();
                 DataTable tablaDatos = new DataTable();
-
-                // Uses Path.GetTempFileName to return a full path for a file, including the file name.
-
                 var filePath = pathTemp + "" + FilenameSave;
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
@@ -494,12 +489,10 @@ namespace Epica.Web.Operacion.Controllers
                     await model.documento.CopyToAsync(stream);
                     stream.Close();
                 }
-
-                System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+         
                 using (var streamExcel = System.IO.File.Open(filePath, FileMode.Open, FileAccess.Read))
                 {
                     IExcelDataReader reader = ExcelDataReader.ExcelReaderFactory.CreateOpenXmlReader(streamExcel);
-
                     resultExcel = reader.AsDataSet(new ExcelDataSetConfiguration());
                     reader.Close();
                     tablaDatos = resultExcel.Tables[0];
@@ -507,17 +500,15 @@ namespace Epica.Web.Operacion.Controllers
 
                 for (var rowCell = 0; rowCell <= tablaDatos.Rows.Count - 1; rowCell++)
                 {
-
                     var rowData = tablaDatos.Rows[rowCell];
 
-                    if (rowCell < 1)
-                    {
+                    //Remover Encabezado
+                    if (rowCell < 1) {
                         continue;
                     }
 
                     try
                     {
-
                         CargaBachRequest RegistrarTransaccion = new CargaBachRequest();
 
                         if (rowData.ItemArray[0].ToString().ToLower() == "in") {
@@ -545,26 +536,15 @@ namespace Epica.Web.Operacion.Controllers
                     } catch (Exception ex) {
                         continue;
                     }
-
                 }
 
-                MensajeResponse respuestaEnvio = new MensajeResponse();
-                respuestaEnvio = await _transaccionesApiClient.GetInsertaTransaccionesBatchAsync(ListaBach);
-
-                //foreach (CargaBachRequest enviadatos in ListaBach)
-                //{
-                //MensajeResponse respuestaEnvio = new MensajeResponse();
-                //    respuestaEnvio = await _transaccionesApiClient.GetInsertaTransaccionesBatchAsync(enviadatos);
-                //}
-
-                return RedirectToAction("Index");
+                response = await _transaccionesApiClient.GetInsertaTransaccionesBatchAsync(ListaBach);
 
             } catch (Exception ex) {
-
+                response.Error = true;
             }
 
-            //return response;
-            return View();
+            return Json(response);
         }
 
         public IActionResult GetBlobDownloadFormat()

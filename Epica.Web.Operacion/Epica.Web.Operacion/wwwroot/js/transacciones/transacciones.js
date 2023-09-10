@@ -231,7 +231,53 @@ $(document).on('click', '.btnDetalle', function (e) {
 
 $(document).on('click', '#GuardarDocumento', function (e) {
 
-    $('#CargaDocumentoForm').submit();
+    Swal.fire({
+        title: 'Cargar Masiva Transacciones',
+        text: "¿Está seguro de que desea cargar este documento?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            toastr.info('Cargando Documento...', "");
+            var form = new FormData($('#CargaDocumentoForm')[0]);
+
+            $.ajax({
+                url: "Transacciones/CargarDocumentoMasivoTransacciones",
+                type: "POST",
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                data: form,
+                success: function (data) {
+
+                    if (data.error == true) {
+                        Swal.fire(
+                            'Cargar Masiva Transacciones',
+                            'Hubo un problema al cargar las transacciones, verifique que el documento sea válido.',
+                            'error'
+                        )
+                    } else {
+                        Swal.fire(
+                            'Cargar Masiva Transacciones',
+                            'Se han cargado las transacciones de forma exitosa.',
+                            'success'
+                        )
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+
+
+            });
+        }
+    })
+
+   
 });
 
 var ModalDetalle = function () {

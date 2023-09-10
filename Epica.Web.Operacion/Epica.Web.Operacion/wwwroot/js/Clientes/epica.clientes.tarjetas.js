@@ -90,8 +90,20 @@ var KTDatatableRemoteAjax = function () {
             data: valdata,
             success: function (data) {
 
-                datatable.ajax.reload();
-                toastr.success('Se guardo la informacion de manera exitosa', "");
+                if (data.error == true) {
+                    Swal.fire(
+                        'Agregar Tarjeta Toka',
+                        'Hubo un problema al agregar esta tarjeta, verifique su existencia o Inténtelo más tarde.',
+                        'error'
+                    )
+                } else {
+                    datatable.ajax.reload();
+                    Swal.fire(
+                        'Desvincular Cuenta',
+                        'Se guardo la información de manera exitosa.',
+                        'success'
+                    )
+                }
             },
             error: function (xhr, status, error) {
                 console.log(error);

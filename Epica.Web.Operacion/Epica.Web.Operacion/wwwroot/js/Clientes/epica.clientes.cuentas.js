@@ -306,8 +306,21 @@ $(document).on('click', '#GuardarAsignacion', function (e) {
         success: function (data) {
 
             $('#modal_asignacion').modal('toggle');
-            datatable.ajax.reload();
-            toastr.success('Se guardo la informacion de manera exitosa', "");
+
+            if (data.error == true) {
+                Swal.fire(
+                    'Asignar Cuenta',
+                    'Hubo un problema al asignar la cuenta, verifique su existencia o Inténtelo más tarde.',
+                    'error'
+                )
+            } else {
+                datatable.ajax.reload();
+                Swal.fire(
+                    'Asignar Cuenta',
+                    'Se guardo la información de manera exitosa.',
+                    'success'
+                )
+            }
         },
         error: function (xhr, status, error) {
             console.log(error);
@@ -322,7 +335,7 @@ $(document).on('click', '.btnDesasignar', function (e) {
 
     Swal.fire({
         title: 'Desvincular Cuenta',
-        text: "¿Esta seguro que desea desvincular esta cuenta del cliente?",
+        text: "¿Está seguro de que desea desvincular esta cuenta del cliente?",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -340,14 +353,21 @@ $(document).on('click', '.btnDesasignar', function (e) {
                 data: { idCuenta: idCuenta, idCliente: idCliente },
                 success: function (data) {
 
-                    datatable.ajax.reload();
-                    toastr.success('Se desvinculó la cuenta con exitosa', "");
-                    datatable.ajax.reload();
-                    Swal.fire(
-                        'Desvincular Cuenta',
-                        'Se ha desvinculado la cuenta con exito.',
-                        'success'
-                    )
+                    if (data.error == true) {
+                        Swal.fire(
+                            'Desvincular Cuenta',
+                            'Hubo un problema al desvincular la cuenta, verifique su existencia o Inténtelo más tarde.',
+                            'error'
+                        )
+                    } else {
+                        datatable.ajax.reload();
+                        Swal.fire(
+                            'Desvincular Cuenta',
+                            'Se ha desvinculado la cuenta con éxito.',
+                            'success'
+                        )
+                    }
+
                 },
                 error: function (xhr, status, error) {
                     console.log(error);
