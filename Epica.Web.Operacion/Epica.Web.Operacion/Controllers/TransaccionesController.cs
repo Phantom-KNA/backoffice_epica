@@ -561,6 +561,147 @@ namespace Epica.Web.Operacion.Controllers
             var fileName = "Formato_Carga_Masiva_Transacciones.xlsx";
             return File(content, contentType, fileName);
         }
+
+
+        #region Devoluciones
+
+        [Authorize]
+        public IActionResult Devoluciones()
+        {
+            var loginResponse = _userContextService.GetLoginResponse();
+            var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Ver == 0);
+            if (validacion == true)
+            {
+                return View(loginResponse);
+            }
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ConsultaDevoluciones(List<RequestListFilters> filters)
+        {
+            var request = new RequestList();
+
+            int totalRecord = 0;
+            int filterRecord = 0;
+
+            var draw = Request.Form["draw"].FirstOrDefault();
+            int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
+            int skip = Convert.ToInt32(Request.Form["start"].FirstOrDefault() ?? "0");
+
+            request.Pagina = skip / pageSize + 1;
+            request.Registros = pageSize;
+            request.Busqueda = Request.Form["search[value]"].FirstOrDefault();
+            request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+            request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
+
+            var gridData = new ResponseGrid<DevolucionesResponseGrid>();
+            List<DevolucionesResponse> ListPF = new List<DevolucionesResponse>();
+
+            ListPF = QAGetListDevoluciones();
+
+            var List = new List<DevolucionesResponseGrid>();
+            foreach (var row in ListPF)
+            {
+                List.Add(new DevolucionesResponseGrid
+                {
+                    idTransaccion = row.idTransaccion,
+                    ClaveRastreo = row.ClaveRastreo,
+                    CuentaOrigen = row.CuentaOrigen,
+                    Monto = row.Monto,
+                    Concepto = row.Concepto,
+                    FechaAlta = row.FechaAlta,
+                    CuentaDestino = row.CuentaDestino,
+                    BancoTxt = row.BancoTxt,
+                    Acciones = await this.RenderViewToStringAsync("~/Views/Transacciones/_AccionesDevoluciones.cshtml", row)
+                });
+            }
+            if (!string.IsNullOrEmpty(request.Busqueda))
+            {
+                List = List.Where(x =>
+                (x.idTransaccion.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.ClaveRastreo?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.CuentaOrigen?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.Monto.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.Concepto?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.FechaAlta?.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.CuentaDestino?.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.BancoTxt?.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower())
+                ).ToList();
+            }
+            //Aplicacion de Filtros temporal, 
+            //var filtroCuentaOrdenante = filters.FirstOrDefault(x => x.Key == "cuentaOrdenante");
+            //var filtroNombreOrdenante = filters.FirstOrDefault(x => x.Key == "nombreOrdenante");
+            //var filtroNombreBeneficiario = filters.FirstOrDefault(x => x.Key == "nombreBeneficiario");
+            //var filtroConcepto = filters.FirstOrDefault(x => x.Key == "concepto");
+            //var filtroMonto = filters.FirstOrDefault(x => x.Key == "monto");
+            //var filtroFecha = filters.FirstOrDefault(x => x.Key == "fecha");
+            //var filtroEstatus = filters.FirstOrDefault(x => x.Key == "estatus");
+
+            //if (filtroCuentaOrdenante.Value != null)
+            //{
+            //    List = List.Where(x => x.cuetaOrigenOrdenante.Contains(Convert.ToString(filtroCuentaOrdenante.Value))).ToList();
+            //}
+
+            //if (filtronombreClaveRastreo.Value != null)
+            //{
+            //    List = List.Where(x => x.claveRastreo.Contains(Convert.ToString(filtronombreClaveRastreo.Value))).ToList();
+            //}
+
+            //if (filtroNombreOrdenante.Value != null)
+            //{
+            //    List = List.Where(x => x.nombreOrdenante == Convert.ToString(filtroNombreOrdenante.Value)).ToList();
+            //}
+
+            //if (filtroNombreBeneficiario.Value != null)
+            //{
+            //    List = List.Where(x => x.nombreBeneficiario == Convert.ToString(filtroNombreBeneficiario.Value)).ToList();
+            //}
+
+            //if (filtroConcepto.Value != null)
+            //{
+            //    List = List.Where(x => x.concepto == Convert.ToString(filtroConcepto.Value)).ToList();
+            //}
+
+            //if (filtroMonto.Value != null)
+            //{
+            //    List = List.Where(x => x.monto.ToString() == Convert.ToString(filtroMonto.Value)).ToList();
+            //}
+
+            //if (filtroFecha.Value != null)
+            //{
+            //    List = List.Where(x => x.fechaAlta.ToString() == Convert.ToString(filtroFecha.Value)).ToList();
+            //}
+
+            //if (filtroEstatus.Value != null)
+            //{
+            //    if (filtroEstatus.Value == "1")
+            //    {
+
+            //        var estatusList = new[] { "1", "2" };
+            //        List = List.Where(x => estatusList.Contains(Convert.ToString(x.estatus))).ToList();
+
+            //    }
+            //    else
+            //    {
+            //        List = List.Where(x => x.estatus == Convert.ToInt32(filtroEstatus.Value)).ToList();
+            //    }
+            //}
+
+            gridData.Data = List;
+            gridData.RecordsTotal = List.Count;
+            gridData.Data = gridData.Data.Skip(skip).Take(pageSize).ToList();
+            filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.Data.Count;
+            gridData.RecordsFiltered = filterRecord;
+            gridData.Draw = draw;
+
+            return Json(gridData);
+        }
+
+        #endregion
+
+
         #endregion
 
         #region "Modelos"
@@ -592,6 +733,60 @@ namespace Epica.Web.Operacion.Controllers
         public class ResumenTransaccionResponseGrid : ResumenTransaccionResponse
         {
             public string Acciones { get; set; }
+        }
+        #endregion
+
+        #region "Funciones Auxiliares"
+
+        private string generarnombreBanco(int i)
+        {
+            Random rnd = new Random((int)DateTime.Now.Ticks);
+
+            i = i - 1;
+
+            String[] nombres = { "BBVA", "BANAMEX", "BANCOPPEL", "SANTANDER", "NU", "FARABELA", "PALACIO DE HIERRO", "JP MORGAN", "HSBC", "BANREGIO" };
+
+            var genNombre = nombres[i];
+
+            return genNombre;
+        }
+
+        public List<DevolucionesResponse> QAGetListDevoluciones()
+        {
+
+
+            var List = new List<DevolucionesResponse>();
+            Random rnd = new Random();
+            const string characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+            String[] characters2 = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
+
+            try
+            {
+                for (int i = 1; i <= 10; i++)
+                {
+                    var gen = generarnombreBanco(i);
+
+                    var pf = new DevolucionesResponse();
+                    pf.idTransaccion = i;
+                    pf.ClaveRastreo = string.Format("AQPAY0000{0}{1}", DateTime.Now.ToString("yyyyMMdd"), i);
+                    pf.CuentaOrigen = string.Format("46000047896324{0}", i);
+                    pf.Monto = Convert.ToDecimal(rnd.Next(0001, 99999));
+                    pf.Concepto = string.Format("Test De Transacciones {0}", i);
+                    pf.FechaAlta = DateTime.Now.ToString();
+                    pf.CuentaDestino = string.Format("112311234324{0}", i);
+                    pf.CanDevolver = true;
+                    pf.BancoTxt = gen;
+
+                    List.Add(pf);
+                }
+            }
+            catch (Exception e)
+            {
+                List = new List<DevolucionesResponse>();
+            }
+
+            return List;
         }
         #endregion
     }

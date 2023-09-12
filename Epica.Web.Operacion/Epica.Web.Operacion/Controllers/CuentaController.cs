@@ -98,7 +98,8 @@ public class CuentaController : Controller
                     idCuenta = cuenta.IdCuenta,
                     noCuenta = cuenta.NoCuenta,
                     fechaAltaFormat = cuenta.FechaAlta,
-                    fechaActualizacionformat = cuenta.FechaActualizacion                };
+                    fechaActualizacionformat = cuenta.FechaActualizacion
+                };
 
                 ListPF.Add(cuentasResponse);
             }
@@ -152,7 +153,7 @@ public class CuentaController : Controller
         {
             string filtro = Convert.ToString(filtroNoCuenta.Value).ToUpper();
             List = List.Where(x => x.noCuenta != null &&
-                                  x.noCuenta.Length >= 16 && 
+                                  x.noCuenta.Length >= 16 &&
                                   x.noCuenta.Substring(0, 16) == filtro).ToList();
         }
 
