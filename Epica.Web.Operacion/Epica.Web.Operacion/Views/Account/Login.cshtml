@@ -203,8 +203,6 @@
 
 <script>
     var nombreDispositivo = navigator.userAgent;
-
-    console.log("Nombre del dispositivo: " + nombreDispositivo);
     document.getElementById('nombreDispositivo').value = nombreDispositivo;
     
     fetch("https://ipinfo.io/json")
@@ -213,7 +211,7 @@
             var ipAddress = data.ip;
             document.getElementById('ipAddress').value = ipAddress;
         })
-        .catch(error => console.error("Error al obtener la dirección IP: " + error));
+        .catch(error);
 
 </script>
 
