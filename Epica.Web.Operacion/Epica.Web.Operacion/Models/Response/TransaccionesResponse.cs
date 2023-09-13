@@ -25,7 +25,8 @@ namespace Epica.Web.Operacion.Models.Response
         public string fechaActualizacion { get; set; }
         public string clabeCobranza { get; set; }
         public string cuetaOrigenOrdenante { get; set; }
-
+        public string fechaInstruccion { get; set; }
+        public string fechaAutorizacion { get; set; }
     }
 
     public class TransaccionesResponseGrid : TransaccionesResponse

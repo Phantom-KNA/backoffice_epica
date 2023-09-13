@@ -85,7 +85,9 @@ var KTDatatableTransacciones = (function () {
                         return '<pan style ="color: ' + color + '">' + accounting.formatMoney(data) + '<s/span>';
                     }
                 },
-                { data: "fechaAlta", name: "Fecha", title: "FECHA" },
+                //{ data: "fechaAlta", name: "Fecha", title: "FECHA" },
+                { data: "fechaInstruccion", name: "FechaInstruccion", title: "FECHA INSTRUCCIÓN" },
+                { data: "fechaAutorizacion", name: "FechaAutorizacion", title: "FECHA AUTORIZACIÓN" },
                 {
                     data: "estatus", name: "Estatus", title: "ESTATUS",
                     render: function (data, type, row) {

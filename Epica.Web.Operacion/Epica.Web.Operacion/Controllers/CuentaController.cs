@@ -321,6 +321,8 @@ public class CuentaController : Controller
                 idMedioPago = row.idMedioPago,
                 idCuentaAhorro = row.idCuentaAhorro,
                 fechaAlta = row.fechaAlta,
+                fechaInstruccion = row.fechaInstruccion,
+                fechaAutorizacion = row.fechaAutorizacion,
                 Acciones = await this.RenderViewToStringAsync("~/Views/Clientes/Detalles/Transacciones/_Acciones.cshtml", row)
             });
         }
