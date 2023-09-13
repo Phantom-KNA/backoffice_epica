@@ -309,9 +309,9 @@ var ModalDetalle = function () {
                     $('#modal_detalle #modalLabelTitle').html('Detalle de Transacción');
                     $('#modal_detalle .modal-body').html(result.result);
 
-                    if (result.permiso == true) {
+                    if (result.permiso == true && $('#modal_detalle .modal-footer a.btn-editar').length === 0) {
                         var ruta = "/Transacciones/Modificar?id=" + id;
-                        $('#modal_detalle .modal-footer').append("<a href='" + ruta + "' class='btn btn-info btn-sm font-weight-bold'><i class='bi bi-pencil'></i>&nbsp;Editar Transacción</a>");
+                        $('#modal_detalle .modal-footer').append("<a href='" + ruta + "' class='btn btn-info btn-sm font-weight-bold btn-editar'><i class='bi bi-pencil'></i>&nbsp;Editar Transacción</a>");
                     }
 
                     $('#modal_detalle').modal('show');
