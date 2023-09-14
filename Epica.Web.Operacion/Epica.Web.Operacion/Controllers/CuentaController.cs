@@ -124,6 +124,7 @@ public class CuentaController : Controller
                 saldo = row.saldo,
                 estatus = row.estatus,
                 tipoPersona = row.tipoPersona,
+                alias = "",
                 Acciones = await this.RenderViewToStringAsync("~/Views/Cuenta/_Acciones.cshtml", row)
             });
         }
