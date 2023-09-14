@@ -23,8 +23,9 @@ namespace Epica.Web.Operacion.Controllers
             {
                 if (index == null)
                 {
+                    index = "Tarjetas";
                     ViewBag.medioP = index;
-                    ViewBag.Vista = $"~/Views/mediopago/tarjetas/_Index.cshtml";
+                    ViewBag.Vista = $"~/Views/mediopago/{index}/_Index.cshtml";
                 }
                 else
                 {

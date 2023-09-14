@@ -34,6 +34,17 @@
             <br />
             <div class="row">
                 <div class="col-6">
+                    <p><strong>Alias:</strong></p>
+                    <label>@Model.Alias</label>
+                </div>
+                <div class="col-6">
+                    <p><strong>Medio de pago:</strong></p>
+                    <label>@Model.DescripcionMedioPago</label>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-6">
                     <p><strong>Monto:</strong></p>
                     <label>$@String.Format("{0:#,#.00}", Model.Monto)</label>
                 </div>
@@ -70,6 +81,17 @@
                 <div class="col-6">
                     <p><strong>Fecha de Actualizacion:</strong></p>
                     <label>@Model.FechaActualizacion</label>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-6">
+                    <p><strong>Fecha Instrucción:</strong></p>
+                    <label>@Model.FechaInstruccion</label>
+                </div>
+                <div class="col-6">
+                    <p><strong>Fecha Autorización:</strong></p>
+                    <label>@Model.FechaAutorizacion</label>
                 </div>
             </div>
         </div>

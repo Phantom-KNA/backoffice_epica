@@ -75,12 +75,21 @@ var KTDatatableRemoteAjax = function () {
                         return "<a title='Consultar Movimientos de cuenta' href='/Clientes/Detalle/Movimientos?id=" + idCuenta + "&cliente=" + idCliente + "&noCuenta=" + NumCuenta + "'>" + NumCuenta + "</a>";
                     }
                 },
+                {
+                    data: 'alias', name: 'Alias', title: ''
+                },
                 { data: 'nombrePersona', name: 'nombrePersona', title: 'Nombre persona' },
+                {
+                    data: 'alias', name: 'Alias', title: ''
+                },
                 {
                     data: 'saldo', name: 'Saldo', title: 'Saldo',
                     render: function (data, type, row) {
                         return accounting.formatMoney(data);
                     }
+                },
+                {
+                    data: 'alias', name: 'Alias', title: ''
                 },
                 {
                     data: 'tipoPersona', name: 'Tipo', title: 'Tipo Persona'
@@ -102,7 +111,7 @@ var KTDatatableRemoteAjax = function () {
                             var htmlString = row.acciones;
                             return htmlString
                         }
-                    }
+                    },
                 }
             ],
         });
