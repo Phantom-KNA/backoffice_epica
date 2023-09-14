@@ -156,7 +156,9 @@ namespace Epica.Web.Operacion.Controllers
                     nombreBeneficiario = listPF2.value.NombreBeneficiario,
                     nombreOrdenante = listPF2.value.nombreOrdenante,
                     fechaAutorizacion = listPF2.value.FechaAutorizacion,
-                    fechaInstruccion = listPF2.value.FechaInstruccion
+                    fechaInstruccion = listPF2.value.FechaInstruccion,
+                    alias = listPF2.value.Alias,
+                    descripcionMedioPago = listPF2.value.DescripcionMedioPago
                 };
 
                 ListPF.Add(transaccionResponse);
@@ -190,8 +192,10 @@ namespace Epica.Web.Operacion.Controllers
                     //fechaAlta = row.fechaAlta,
                     fechaInstruccion = row.fechaInstruccion,
                     fechaAutorizacion = row.fechaAutorizacion,
+                    alias= row.alias,
                     clabeCobranza = row.clabeCobranza,
                     cuetaOrigenOrdenante = row.cuetaOrigenOrdenante,
+                    descripcionMedioPago = row.descripcionMedioPago,
                     Acciones = await this.RenderViewToStringAsync("~/Views/Transacciones/_Acciones.cshtml", row)
                 });
             }
@@ -735,6 +739,8 @@ namespace Epica.Web.Operacion.Controllers
             public string fechaActualizacion { get; set; }
             public string fechaInstruccion { get; set; }
             public string fechaAutorizacion { get; set; }
+            public string alias { get; set; }
+            public string descripcionMedioPago { get; set; }
 
         }
         public class ResumenTransaccionResponseGrid : ResumenTransaccionResponse

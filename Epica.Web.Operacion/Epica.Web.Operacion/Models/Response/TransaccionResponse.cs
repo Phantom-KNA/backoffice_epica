@@ -55,4 +55,7 @@ public class TransaccionResponse
     public string? FechaActualizacion { get; set; }
     public string? FechaInstruccion { get; set; }
     public string? FechaAutorizacion { get; set; }
+    public string? Alias { get; set; }
+    public string? DescripcionMedioPago { get; set; }
+
 }
