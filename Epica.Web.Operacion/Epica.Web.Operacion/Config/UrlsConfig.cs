@@ -20,6 +20,7 @@ public class UrlsConfig
     {
         public static string GetTransaccionRastreoCobranza(string calveRastreoCobranza) => $"/api/v1/transacciones/buscar_claverastro_cobranza?calveRastreoCobranza={calveRastreoCobranza}";
         public static string GetTransacciones(int numberPage, int TotalRecords) => $"/api/v1/transacciones/movimientos_cta?pageNumber={numberPage}&pageSize={TotalRecords}";
+        public static string GetTransaccionesMasiva(int numberPage, int TotalRecords, int idUsuario) => $"/api/v1/cargabach/cargar_temp?pagina={numberPage}&registrosPagina={TotalRecords}&idusuario={idUsuario}";
         public static string GetTransaccion(int idInterno) => $"/api/resumentransaccion?idInterno={idInterno}";
         public static string GetTransaccionesTotal() => $"/api/v1/transacciones/total";
         public static string GetTransaccionesPorCuenta(int idCuenta) => $"/api/v1/cuentas/cuenta_trasacciones?idCuenta={idCuenta}";
@@ -29,6 +30,8 @@ public class UrlsConfig
         public static string DetalleTransaccion(int idTransaccion) => $"/api/v1/transacciones/detalle_movimiento?idtrasaccion={idTransaccion}";
         public static string DetalleTransaccionClaveCobranza(string claveCobranza) => $"/api/v1/transacciones/buscar_claverastro_cobranza?calveRastreoCobranza={claveCobranza}";
         public static string InsertarBatchTransaccion() => $"/api/v1/cargabach/inserta_temp";
+        public static string GetEliminarTransaccionBatch(int idRegistro) => $"/api/v1/cargabach/remover_registro{idRegistro}";
+        public static string GetTransaccionBatch(int idRegistro) => $"/api/v1/cargabach/buscar_registro?idRegistro={idRegistro}";
     }
 
     public class CuentasOperations

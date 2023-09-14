@@ -1,7 +1,7 @@
 ﻿@model Epica.Web.Operacion.Models.Response.LoginResponse
 
 @{
-    ViewData["Title"] = "Transacciones";
+    ViewData["Title"] = "Consultar Carga Masiva Transacciones";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section LogoPage{
@@ -13,6 +13,12 @@
     </li>
     <li class="breadcrumb-item text-muted">
         Transacciones
+    </li>
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted">
+        <a class="text-muted" asp-controller="Transacciones" asp-action="Index">Consultar Carga Masiva Transacciones</a>
     </li>
 }
 
@@ -110,17 +116,13 @@
                                 var validacion = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Insertar == 0);
                                 if (validacion == true)
                                 {
+
                                     <div class="m-0">
-                                        <a class="btn btn-sm btn-primary me-3" href="/Transacciones/Registro">
-                                            <i class="bi bi-plus-lg"></i>&nbsp;Registrar Transacción
-                                        </a>
+                                        <button data-bs-toggle="modal" data-bs-target="#CargaMasivaTransaccion" class="btn btn-sm btn-info me-3">
+                                            <i class="bi bi-cloud-upload"></i>&nbsp;Cargar Transacciones
+                                        </button>
                                     </div>
 
-                                    // <div class="m-0">
-                                    //     <button data-bs-toggle="modal" data-bs-target="#CargaMasivaTransaccion" class="btn btn-sm btn-info me-3">
-                                    //         <i class="bi bi-cloud-upload"></i>&nbsp;Cargar Transacciones
-                                    //     </button>
-                                    // </div>
                                 }
                             }
                         </div>
@@ -142,88 +144,7 @@
     </div>
 </div>
 
-<div class="modal fade" tabindex="-1" id="newTransaccionModal">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Crear Transacción</h3>
-                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
-                    <span class="svg-icon svg-icon-1"></span>
-                </div>
-            </div>
-            <div class="modal-body">
-                <div class="px-7 py-5">
-                    <div class="mb-5">
-                        <label class="form-label fs-5 fw-semibold mb-3">Clave de Rastreo:</label>
-                        <input class="form-control form-control-sm fw-bold crear-control" data-crear="claveRastreo" placeholder="Clave de Rastreo" id="create_clave_rastreo" />
-                    </div>
-                    <div class="mb-5">
-                        <label class="form-label fs-5 fw-semibold mb-3">Cuenta Ordenante:</label>
-                        <input type="number" class="form-control form-control-sm fw-bold crear-control" min="0" data-crear="cuentaOrdenante" placeholder="Cuenta Ordenante" id="create_cuenta_ordenante" />
-                    </div>
-                    <div class="mb-5">
-                        <label class="form-label fs-5 fw-semibold mb-3">Cuenta Beneficiario:</label>
-                        <input type="number" class="form-control form-control-sm fw-bold crear-control" min="0" data-crear="cuentaBeneficiario" placeholder="Cuenta Beneficiario" id="create_cuenta_beneficiario" />
-                    </div>
-                    <div class="mb-5">
-                        <label class="form-label fs-5 fw-semibold mb-3">Monto:</label>
-                        <input type="number" class="form-control form-control-sm fw-bold crear-control" min="0" data-crear="monto" placeholder="Monto Transacción" id="create_monto" />
-                    </div>
-                    <div class="mb-5">
-                        <label class="form-label fs-5 fw-semibold mb-3">Concepto:</label>
-                        <input class="form-control form-control-sm fw-bold crear-control" data-crear="concepto" placeholder="Concepto" id="create_concepto" />
-                    </div>
-                    <div class="mb-5">
-                        <label class="form-label fs-5 fw-semibold mb-3">Tipo de Operación:</label>
-                        <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-crear="tipoOperacion" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="create_tipo_Operacion">
-                            <option></option>
-                            <option value="1">IN</option>
-                            <option value="2">OUT</option>
-                            <option value="3">Comisión</option>
-                        </select>
-                    </div>
-                    <div class="mb-5">
-                        <label class="form-label fs-5 fw-semibold mb-3">Medio de Pago:</label>
-                        <input class="form-control form-control-sm fw-bold crear-control" data-crear="medioPago" placeholder="Medio de Pago" id="create_medio_pago" />
-                    </div>
-                    <div class="mb-5">
-                        <label class="form-label fs-5 fw-semibold mb-3">Comisión:</label>
-                        <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-crear="comision" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="create_comision">
-                            <option></option>
-                            <option value="0">Sin Comisión</option>
-                            <option value="1">Con Comisión</option>
-                        </select>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal" id="btnCerrarCuenta">Cerrar</button>
-                <button type="button" class="btn btn-light-primary" id="GuardarTransaccion">Guardar Transacción</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="modal_detalle" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header ">
-                <h1 class="modal-title fs-5" id="modalLabelTitle"></h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer" style="padding:10px">
-                
-                <button type="button" class="btn btn-success btn-sm font-weight-bold" data-bs-dismiss="modal" aria-label="Close" id="btnCerrar">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-@* <div class="modal fade" tabindex="-1" id="CargaMasivaTransaccion">
+<div class="modal fade" tabindex="-1" id="CargaMasivaTransaccion">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -242,13 +163,27 @@
             </div>
         </div>
     </div>
-</div> *@
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="EditarTransaccion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content modal-lg">
+            <div class="modal-header ">
+                <h1 class="modal-title fs-5" id="modalLabelTitle"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer" style="padding:10px">
+
+                <button type="button" class="btn btn-success btn-sm font-weight-bold" data-bs-dismiss="modal" aria-label="Close" id="btnCerrar">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts{
     <script asp-append-version="true" src="~/js/components/accounting.js"></script>
     <script asp-append-version="true" src="~/js/components/jquery.filer.min.js"></script>
-    <script src="~/js/transacciones/transacciones.js" asp-append-version="true"></script>
-    <script>
-        var AccountId = '@ViewBag.AccountID';
-    </script>
+    <script asp-append-version="true" src="~/js/transacciones/epica.transacciones.CargaMasiva.js"></script>
 }

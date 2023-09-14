@@ -1,15 +1,14 @@
 ﻿"use strict";
-var datatable_myAccounts;
+var datatable_transaccion;
 
 //Agregar la tabla de transacciones
 var KTDatatableTransacciones = (function () {
     var table;
 
     var init = function () {
-        datatable_myAccounts = $("#kt_datatable_movements").DataTable({
+        datatable_transaccion = $("#kt_datatable_movements").DataTable({
             // Configuraciones de la tabla...
             "order": [],
-            pageLength: 20,
             language: {
                 "emptyTable": "No hay información",
                 "info": "Mostrando _END_ de _TOTAL_ entradas",
@@ -26,14 +25,14 @@ var KTDatatableTransacciones = (function () {
             responsive: true,
             pagingType: 'simple_numbers',
             searching: true,
-            lengthMenu: [10, 15, 20, 25, 50, 100],
+            lengthMenu: [10, 15, 25, 50, 100],
             processing: true,
             serverSide: true,
             filter: true,
             ordering: true,
             // Configuración de la fuente de datos AJAX
             ajax: {
-                url: "Transacciones/Consulta",
+                url: "ConsultaCargaMasiva",
                 type: "POST",
                 data: function (d) {
                     var filtros = [];
@@ -53,54 +52,19 @@ var KTDatatableTransacciones = (function () {
                 "targets": "_all"
             }],
             columns: [
-                { data: "cuetaOrigenOrdenante", name: "cuetaOrigenOrdenante", title: "CUENTA ORDENANTE" },
+                { data: "claveRastreo", name: "claveRastreo", title: "Clave de Rastreo" },
+                { data: "ordenante", name: "Ordenante", title: "Cuenta Ordenante" },
+                { data: "cuentaBeneficiario", name: "CuentaBeneficiario", title: "Cuenta Beneficiario" },
                 {
-                    data: "vinculo", name: "vinculo", title: "CLAVE DE RASTREO",
+                    data: "monto", name: "Monto", title: "Monto",
                     render: function (data, type, row) {
-                        var partes = data.split("|"); // Separar la parte entera y decimal
-                        var ClaveRastreo = partes[0];
-                        var idCliente = partes[1];
-
-                        if (ClaveRastreo == "N/A") {
-                            return ClaveRastreo;
-                        } else {
-                            return "<a href='/Clientes/Detalle/Movimientos?cliente=" + idCliente + "'>" + ClaveRastreo + "</a>";
-                        }
-                        
+                        return accounting.formatMoney(data);
                     }
                 },
-                { data: "nombreOrdenante", name: "NombreCuenta", title: "NOMBRE ORDENANTE" },
-                { data: "nombreBeneficiario", name: "Institucion", title: "NOMBRE BENEFICIARIO" },
-                { data: "concepto", name: "Concepto", title: "CONCEPTO" },
-                {
-                    data: "monto",
-                    name: "Monto",
-                    title: "MONTO",
-                    render: function (data, type, row) {
-                        var color = 'black';//Color por defecto
-                        if (row.monto > 0) {
-                            color = 'green';//Color verde si es mayor a 0 
-                        } else if (row.monto < 0) {
-                            color = 'red';//Color rojo si es menor a 0
-                        }
-                        return '<pan style ="color: ' + color + '">' + accounting.formatMoney(data) + '<s/span>';
-                    }
-                },
-                { data: "fechaAlta", name: "Fecha", title: "FECHA" },
-                {
-                    data: "estatus", name: "Estatus", title: "ESTATUS",
-                    render: function (data, type, row) {
-                        if (data == 0) {
-                            return "<span class='badge badge-light-info'>En Proceso</span>"
-                        } else if ((data == 1) || (data == 2)) {
-                            return "<span class='badge badge-light-warning'>En Tránsito</span>"
-                        } else if (data == 4) {
-                            return "<span class='badge badge-light-success'>Liquidada</span>"
-                        } else if (data == 5) {
-                            return "<span class='badge badge-light-danger'>Devuelto</span>"
-                        }
-                    }
-                },
+                { data: "conceptoPago", name: "ConceptoPago", title: "Concepto" },
+                { data: "fechaOperacion", name: "FechaOperacion", title: "Fecha Operación" },
+                { data: "descripcionOperacion", name: "TipoOperacion", title: "Tipo de Operación" },
+                { data: "descripcionMedioPago", name: "MedioPago", title: "Medio de Pago" },
                 {
                     title: '',
                     orderable: false,
@@ -121,7 +85,7 @@ var KTDatatableTransacciones = (function () {
     var handleSearchDatatable = function () {
         var filterSearch = document.getElementById('search_input');
         filterSearch.addEventListener('keyup', function (e) {
-            datatable_myAccounts.search(e.target.value).draw();
+            datatable_transaccion.search(e.target.value).draw();
         });
     }
 
@@ -169,7 +133,7 @@ var KTDatatableTransacciones = (function () {
 
     // Función de recarga
     var reload = function () {
-        datatable_myAccounts.ajax.reload();
+        datatable_transaccion.ajax.reload();
     };
 
     return {
@@ -185,7 +149,7 @@ var KTDatatableTransacciones = (function () {
                 return;
             }
             init();
-            //plugins();
+            plugins();
             handleSearchDatatable();
             exportButtons();
 
@@ -221,15 +185,6 @@ var plugins = () => {
     });
 }
 
-$(document).on('click', '.btnDetalle', function (e) {
-    var id = $(this).data('id');
-    var estatus = $(this).data('estatus');
-    var claveCobranza = $(this).data('clabecobranza');
-
-    var parametros = id + "|" + claveCobranza + "|" + estatus;
-    ModalDetalle.init(parametros);
-});
-
 $(document).on('click', '#GuardarDocumento', function (e) {
 
     Swal.fire({
@@ -247,7 +202,7 @@ $(document).on('click', '#GuardarDocumento', function (e) {
             var form = new FormData($('#CargaDocumentoForm')[0]);
 
             $.ajax({
-                url: "Transacciones/CargarDocumentoMasivoTransacciones",
+                url: "CargarDocumentoMasivoTransacciones",
                 type: "POST",
                 dataType: 'json',
                 contentType: false,
@@ -278,70 +233,83 @@ $(document).on('click', '#GuardarDocumento', function (e) {
         }
     })
 
-   
+
 });
 
-var ModalDetalle = function () {
+function EliminarTransaccionBatch(idRegistro) {
 
-    var init = function (parametros) {
-        abrirModal(parametros);
-    }
-    var abrirModal = function (parametros) {
-        var partes = parametros.split("|");
-        var id = partes[0];
-        var ClaveCobranza = partes[1];
-        var Estatus = partes[2];
+    Swal.fire({
+        title: 'Eliminar Transacción',
+        text: "¿Esta seguro que desea eliminar esta transacción?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar'
+    }).then((result) => {
+        if (result.isConfirmed) {
 
-        $.ajax({
-            cache: false,
-            type: 'GET',
-            url: siteLocation + "Transacciones/DetalleTransaccion",
-            data: { 'Id': id, 'Estatus': Estatus, 'ClabeCobranza': ClaveCobranza },
-            success: function (result) {
-                if (result.error) {
-                    $(window).scrollTop(0);
-                    $("#DivSuccessMessage").hide();
-                    $("#DivErrorMessage").show();
-                    setTimeout(function () { $("#DivErrorMessage").hide() }, 3000);
-                    $("#ErrorMessage").text(result.errorDescription);
-                } else {
-                    $('#modal_detalle #modalLabelTitle').html('Detalle de Transacción');
-                    $('#modal_detalle .modal-body').html(result.result);
+            $.ajax({
+                url: 'EliminarTransaccionBatch',
+                async: true,
+                cache: false,
+                type: 'POST',
+                data: { idRegistrio: idRegistro },
+                success: function (data) {
 
-                    if (result.permiso == true) {
-                        var ruta = "/Transacciones/Modificar?id=" + id;
-                        $('#modal_detalle .modal-footer').append("<a href='" + ruta + "' class='btn btn-info btn-sm font-weight-bold'><i class='bi bi-pencil'></i>&nbsp;Editar Transacción</a>");
+                    if (data.error == true) {
+                        Swal.fire(
+                            'Eliminar Transacción',
+                            'Hubo un problema al eliminar esta transacción, inténtelo mas tarde o verifique su existencia.',
+                            'error'
+                        )
+                    } else {
+                        datatable_transaccion.ajax.reload();
+                        Swal.fire(
+                            'Eliminar Transacción',
+                            'Se ha eliminado la transacción con exito.',
+                            'success'
+                        )
                     }
-
-                    $('#modal_detalle').modal('show');
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
                 }
+            });
+        }
+    })
+}
 
-                return;
-            },
-            error: function (res) {
+function EditarTransaccionBatch(idRegistro) {
+
+    $.ajax({
+        cache: false,
+        type: 'GET',
+        url: "EditarTransaccionBatch",
+        data: { 'idRegistro': idRegistro },
+        success: function (result) {
+            if (result.error) {
+                $(window).scrollTop(0);
                 $("#DivSuccessMessage").hide();
                 $("#DivErrorMessage").show();
-                $("#ErrorMessage").text('Error');
-            }
-        });
-        listeners();
-    }
-    // Inicializa los listeners de los botones relacionados a la ventana modal
-    var listeners = function () {
+                setTimeout(function () { $("#DivErrorMessage").hide() }, 3000);
+                $("#ErrorMessage").text(result.errorDescription);
+            } else {
+                $('#EditarTransaccion #modalLabelTitle').html('Editar Transacción');
+                $('#EditarTransaccion .modal-body').html(result.result);
 
-    }
-    // Cerramos la ventana modal
-    var cerrarModal = function () {
-        $('#btnCancelar').click();
-    }
-    return {
-        init: function (id) {
-            init(id);
+                $('#EditarTransaccion .modal-footer').append("<button type='button' class='btn btn-info btn-sm font-weight-bold' data-bs-dismiss='modal' aria-label='Close' id='btnGuardarModificaciones'>Guardar Modificaciones</button>");
+                $('#EditarTransaccion').modal('show');
+            }
+
+            return;
         },
-        cerrarventanamodal: function () {
-            cerrarModal();
+        error: function (res) {
+            $("#DivSuccessMessage").hide();
+            $("#DivErrorMessage").show();
+            $("#ErrorMessage").text('Error');
         }
-    }
-}();
+    });
+}
 
 

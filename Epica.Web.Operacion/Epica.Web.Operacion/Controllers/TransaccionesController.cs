@@ -27,7 +27,7 @@ using System.Collections.Generic;
 namespace Epica.Web.Operacion.Controllers
 {
     [Authorize]
-    public class TransaccionesController :  Controller
+    public class TransaccionesController : Controller
     {
         #region "Locales"
         private readonly UserContextService _userContextService;
@@ -118,6 +118,7 @@ namespace Epica.Web.Operacion.Controllers
 
             int totalRecord = 0;
             int filterRecord = 0;
+            int paginacion = 0;
 
             var draw = Request.Form["draw"].FirstOrDefault();
             int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
@@ -161,12 +162,8 @@ namespace Epica.Web.Operacion.Controllers
             }
             else
             {
-                ListPF = await _transaccionesApiClient.GetTransaccionesAsync(1, 100);
+                (ListPF, paginacion) = await _transaccionesApiClient.GetTransaccionesAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros));
             }
-
-
-            //Entorno local de pruebas
-            //ListPF = GetList();
 
             var List = new List<ResumenTransaccionResponseGrid>();
             foreach (var row in ListPF)
@@ -203,7 +200,7 @@ namespace Epica.Web.Operacion.Controllers
                 (x.concepto?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
                 (x.idMedioPago.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
                 (x.idCuentaAhorro.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-                (x.fechaAlta.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) 
+                (x.fechaAlta.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower())
                 ).ToList();
             }
             //Aplicacion de Filtros temporal, 
@@ -263,10 +260,8 @@ namespace Epica.Web.Operacion.Controllers
             }
 
             gridData.Data = List;
-            gridData.RecordsTotal = List.Count;
-            gridData.Data = gridData.Data.Skip(skip).Take(pageSize).ToList();
-            filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.Data.Count;
-            gridData.RecordsFiltered = filterRecord;
+            gridData.RecordsTotal = paginacion;
+            gridData.RecordsFiltered = paginacion;
             gridData.Draw = draw;
 
             return Json(gridData);
@@ -437,7 +432,7 @@ namespace Epica.Web.Operacion.Controllers
                 } else {
                     detalleTransaccion = await _transaccionesApiClient.GetTransaccionDetalleAsync(Convert.ToInt32(Id));
                 }
-                
+
 
                 if (detalleTransaccion != null)
                 {
@@ -446,7 +441,7 @@ namespace Epica.Web.Operacion.Controllers
 
                     var loginResponse = _userContextService.GetLoginResponse();
                     var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Editar == 0);
-                    if (validacion == true) { 
+                    if (validacion == true) {
                         result.permiso = true;
                     }
                 }
@@ -489,7 +484,7 @@ namespace Epica.Web.Operacion.Controllers
                     await model.documento.CopyToAsync(stream);
                     stream.Close();
                 }
-         
+
                 using (var streamExcel = System.IO.File.Open(filePath, FileMode.Open, FileAccess.Read))
                 {
                     IExcelDataReader reader = ExcelDataReader.ExcelReaderFactory.CreateOpenXmlReader(streamExcel);
@@ -699,6 +694,195 @@ namespace Epica.Web.Operacion.Controllers
             return Json(gridData);
         }
 
+        #endregion
+
+        #region Carga Masiva
+
+        [Authorize]
+        public IActionResult ConsultarCargaMasiva()
+        {
+            var loginResponse = _userContextService.GetLoginResponse();
+            var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Ver == 0);
+            if (validacion == true)
+            {
+                return View(loginResponse);
+            }
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ConsultaCargaMasiva(List<RequestListFilters> filters)
+        {
+            var request = new RequestList();
+            var loginResponse = _userContextService.GetLoginResponse();
+
+            int totalRecord = 0;
+            int filterRecord = 0;
+
+            var draw = Request.Form["draw"].FirstOrDefault();
+            int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
+            int skip = Convert.ToInt32(Request.Form["start"].FirstOrDefault() ?? "0");
+
+            request.Pagina = skip / pageSize + 1;
+            request.Registros = pageSize;
+            request.Busqueda = Request.Form["search[value]"].FirstOrDefault();
+            request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+            request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
+
+            var gridData = new ResponseGrid<CargaBachRequestGrid>();
+            List<CargaBachRequest> ListPF = new List<CargaBachRequest>();
+
+            ListPF = await _transaccionesApiClient.GetTransaccionesMasivaAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), loginResponse.IdUsuario);
+
+            var List = new List<CargaBachRequestGrid>();
+            foreach (var row in ListPF)
+            {
+                List.Add(new CargaBachRequestGrid
+                {
+                    Id = row.Id,
+                    ClaveRastreo = row.ClaveRastreo,
+                    FechaOperacion = row.FechaOperacion,
+                    Monto = row.Monto,
+                    CuentaBeneficiario = row.CuentaBeneficiario,
+                    ConceptoPago = row.ConceptoPago,
+                    descripcionOperacion = row.descripcionOperacion,
+                    descripcionMedioPago = row.descripcionMedioPago,
+                    Comision = row.Comision,
+                    Ordenante = row.Ordenante,
+                    Acciones = await this.RenderViewToStringAsync("~/Views/Transacciones/_AccionesCargaMasiva.cshtml", row)
+                });
+            }
+            //if (!string.IsNullOrEmpty(request.Busqueda))
+            //{
+            //    List = List.Where(x =>
+            //    (x.idTransaccion.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            //    (x.ClaveRastreo?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            //    (x.CuentaOrigen?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            //    (x.Monto.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            //    (x.Concepto?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            //    (x.FechaAlta?.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            //    (x.CuentaDestino?.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            //    (x.BancoTxt?.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower())
+            //    ).ToList();
+            //}
+
+            //var filtroCuentaOrdenante = filters.FirstOrDefault(x => x.Key == "cuentaOrdenante");
+            //var filtroNombreOrdenante = filters.FirstOrDefault(x => x.Key == "nombreOrdenante");
+            //var filtroNombreBeneficiario = filters.FirstOrDefault(x => x.Key == "nombreBeneficiario");
+            //var filtroConcepto = filters.FirstOrDefault(x => x.Key == "concepto");
+            //var filtroMonto = filters.FirstOrDefault(x => x.Key == "monto");
+            //var filtroFecha = filters.FirstOrDefault(x => x.Key == "fecha");
+            //var filtroEstatus = filters.FirstOrDefault(x => x.Key == "estatus");
+
+            //if (filtroCuentaOrdenante.Value != null)
+            //{
+            //    List = List.Where(x => x.cuetaOrigenOrdenante.Contains(Convert.ToString(filtroCuentaOrdenante.Value))).ToList();
+            //}
+
+            //if (filtronombreClaveRastreo.Value != null)
+            //{
+            //    List = List.Where(x => x.claveRastreo.Contains(Convert.ToString(filtronombreClaveRastreo.Value))).ToList();
+            //}
+
+            //if (filtroNombreOrdenante.Value != null)
+            //{
+            //    List = List.Where(x => x.nombreOrdenante == Convert.ToString(filtroNombreOrdenante.Value)).ToList();
+            //}
+
+            //if (filtroNombreBeneficiario.Value != null)
+            //{
+            //    List = List.Where(x => x.nombreBeneficiario == Convert.ToString(filtroNombreBeneficiario.Value)).ToList();
+            //}
+
+            //if (filtroConcepto.Value != null)
+            //{
+            //    List = List.Where(x => x.concepto == Convert.ToString(filtroConcepto.Value)).ToList();
+            //}
+
+            //if (filtroMonto.Value != null)
+            //{
+            //    List = List.Where(x => x.monto.ToString() == Convert.ToString(filtroMonto.Value)).ToList();
+            //}
+
+            //if (filtroFecha.Value != null)
+            //{
+            //    List = List.Where(x => x.fechaAlta.ToString() == Convert.ToString(filtroFecha.Value)).ToList();
+            //}
+
+            //if (filtroEstatus.Value != null)
+            //{
+            //    if (filtroEstatus.Value == "1")
+            //    {
+
+            //        var estatusList = new[] { "1", "2" };
+            //        List = List.Where(x => estatusList.Contains(Convert.ToString(x.estatus))).ToList();
+
+            //    }
+            //    else
+            //    {
+            //        List = List.Where(x => x.estatus == Convert.ToInt32(filtroEstatus.Value)).ToList();
+            //    }
+            //}
+
+            gridData.Data = List;
+            gridData.RecordsTotal = List.Count;
+            filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.Data.Count;
+            gridData.RecordsFiltered = filterRecord;
+            gridData.Draw = draw;
+
+            return Json(gridData);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> EliminarTransaccionBatch(int idRegistrio)
+        {
+            //var loginResponse = _userContextService.GetLoginResponse();
+            MensajeResponse response = new MensajeResponse();
+
+            try
+            {
+                response = await _transaccionesApiClient.GetEliminarTransaccionBatchAsync(idRegistrio);
+            }
+            catch (Exception ex)
+            {
+                response.Detalle = ex.Message;
+            }
+
+            return Json(response);
+        }
+
+        public async Task<IActionResult> EditarTransaccionBatch(int idRegistro)
+        {
+            var result = new JsonResultDto();
+
+            CargaBachRequest detalleTransaccion = new CargaBachRequest();
+
+            try
+            {
+                var listaMediosPago = await _catalogosApiClient.GetMediosPagoAsync();
+                detalleTransaccion = await _transaccionesApiClient.GetTransaccionBatchAsync(idRegistro);
+
+                detalleTransaccion.ListaMediosPago = listaMediosPago;
+                if (detalleTransaccion != null)
+                {
+                    result.Error = false;
+                    result.Result = await this.RenderViewToStringAsync("~/Views/Transacciones/_EditarTransaccionMasiva.cshtml", detalleTransaccion);
+                }
+                else
+                {
+                    result.Error = true;
+                    result.ErrorDescription = "ERROR";
+                    return Json(result);
+                }
+            }
+            catch (Exception)
+            {
+                result.Error = true;
+                result.ErrorDescription = "Error1";
+            }
+            return Json(result);
+        }
         #endregion
 
 

@@ -44,9 +44,41 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return transaccionResponse;
         }
 
-        public async Task<List<TransaccionesResponse>> GetTransaccionesAsync(int pageNumber, int recordsTotal)
+        public async Task<List<CargaBachRequest>> GetTransaccionesMasivaAsync(int pageNumber, int recordsTotal, int idUsuario)
+        {
+            List<CargaBachRequest>? ListaTransacciones = new List<CargaBachRequest>();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetTransaccionesMasiva(pageNumber, recordsTotal,idUsuario);
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var settings = new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+                    ListaTransacciones = JsonConvert.DeserializeObject<List<CargaBachRequest>>(jsonResponse, settings);
+                    //var paginacion = int.Parse(response.Headers.GetValues("x-totalRecord").FirstOrDefault()?.ToString());
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return ListaTransacciones;
+            }
+
+            return ListaTransacciones;
+        }
+
+        public async Task<(List<TransaccionesResponse>, int)> GetTransaccionesAsync(int pageNumber, int recordsTotal)
         {
             List<TransaccionesResponse>? ListaTransacciones = new List<TransaccionesResponse>();
+            int paginacion = 0;
 
             try
             {
@@ -63,13 +95,17 @@ namespace Epica.Web.Operacion.Services.Transaccion
                         MissingMemberHandling = MissingMemberHandling.Ignore
                     };
                     ListaTransacciones = JsonConvert.DeserializeObject<List<TransaccionesResponse>>(jsonResponse, settings);
+                    paginacion = int.Parse(response.Headers.GetValues("x-totalRecord").FirstOrDefault()?.ToString());
+                    return (JsonConvert.DeserializeObject<List<TransaccionesResponse>>(jsonResponse), paginacion);
                 }
 
-            } catch (Exception ex) {
-                return ListaTransacciones;
+            }
+            catch (Exception ex)
+            {
+                return (ListaTransacciones, paginacion);
             }
 
-            return ListaTransacciones;
+            return (ListaTransacciones, paginacion);
         }
 
         public async Task<TransaccionesResponse> GetTransaccionAsync(int idInterno)
@@ -302,6 +338,58 @@ namespace Epica.Web.Operacion.Services.Transaccion
             }
 
             return respuesta;
+        }
+
+        public async Task<MensajeResponse> GetEliminarTransaccionBatchAsync(int idRegistro)
+        {
+            MensajeResponse respuesta = new MensajeResponse();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetEliminarTransaccionBatch(idRegistro);
+                var response = await ApiClient.DeleteAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                respuesta.Error = true;
+                respuesta.Detalle = ex.Message;
+                return respuesta;
+            }
+
+            return respuesta;
+        }
+
+        public async Task<CargaBachRequest> GetTransaccionBatchAsync(int idRegistro)
+        {
+            CargaBachRequest? TransaccionBatch = new CargaBachRequest();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetTransaccionBatch(idRegistro);
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    TransaccionBatch = JsonConvert.DeserializeObject<CargaBachRequest>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return TransaccionBatch;
+            }
+
+            return TransaccionBatch;
         }
     }
 }
