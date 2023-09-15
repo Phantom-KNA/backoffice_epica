@@ -88,9 +88,9 @@ var KTDatatableRemoteAjax = function () {
                         return accounting.formatMoney(data);
                     }
                 },
-                {
-                    data: 'alias', name: 'Alias', title: ''
-                },
+                //{
+                //    data: 'alias', name: 'Alias', title: ''
+                //},
                 {
                     data: 'tipoPersona', name: 'Tipo', title: 'Tipo Persona'
                 },

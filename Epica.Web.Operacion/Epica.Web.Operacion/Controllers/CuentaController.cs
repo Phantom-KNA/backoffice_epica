@@ -142,7 +142,7 @@ public class CuentaController : Controller
         //Aplicacion de Filtros temporal, 
         var filtronombreCliente = filters.FirstOrDefault(x => x.Key == "NombreCliente");
         var filtroEstatus = filters.FirstOrDefault(x => x.Key == "estatus");
-        var filtroSaldo = filters.FirstOrDefault(x => x.Key == "saldo");
+        //var filtroSaldo = filters.FirstOrDefault(x => x.Key == "saldo");
         var filtroTipo = filters.FirstOrDefault(x => x.Key == "tipoPersona");
 
         if (filtronombreCliente.Value != null)
@@ -163,10 +163,10 @@ public class CuentaController : Controller
             List = List.Where(x => x.estatus == Convert.ToInt32(filtroEstatus.Value)).ToList();
         }
 
-        if (filtroSaldo.Value != null)
-        {
-            List = List.Where(x => x.saldo == Convert.ToDecimal(filtroSaldo.Value)).ToList();
-        }
+        //if (filtroSaldo.Value != null)
+        //{
+        //    List = List.Where(x => x.saldo == Convert.ToDecimal(filtroSaldo.Value)).ToList();
+        //}
 
         if (filtroTipo.Value != null)
         {
