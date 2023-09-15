@@ -359,6 +359,57 @@ function GestionarClienteTotal(AccountID, estatus) {
     });
 }
 
+function Registro() {
+    Swal.fire({
+        title: '<span class="swal-title-custom"><b>Valida tu identidad</b></span>',
+        text: 'Por favor, ingrese su token y código de seguridad:',
+        html:
+            '<label for="swal-input1" class="swal-label"><b>Token:</b></label>' +
+            '<input id="swal-input1" class="swal2-input" style="font-size:14px;width:250px"  placeholder="Token">' +
+            '<div style="margin-top: 20px;"></div>' +
+            '<label for="swal-input2" class="swal-label"><b>Código de Seguridad:</b></label>' +
+            '<input id="swal-input2" class="swal2-input" style="font-size:14px;width:250px" type="password" placeholder="Código de Seguridad">',
+        showCancelButton: true,
+        confirmButtonColor: '#0493a8',
+        confirmButtonText: 'Aceptar',
+        cancelButtonText: 'Cancelar',
+        preConfirm: () => {
+            const swalInput1 = Swal.getPopup().querySelector('#swal-input1').value;
+            const swalInput2 = Swal.getPopup().querySelector('#swal-input2').value;
+            return [swalInput1, swalInput2];
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const [tokenInput, codigoInput] = result.value;
+
+            // Realiza la validación del token y código de seguridad
+            $.ajax({
+                url: '/Autenticacion/ValidarTokenYCodigo',
+                async: true,
+                cache: false,
+                type: 'POST',
+                data: { token: tokenInput, codigo: codigoInput },
+                success: function (validationResult) {
+                    if (validationResult.mensaje === true) {
+                        // Redirige a la vista "clientes/registro"
+                        window.location.href = '/clientes/registro'; // Cambia la URL según tu configuración
+                    } else {
+                        // Token o código de seguridad incorrectos, muestra un mensaje de error
+                        Swal.fire(
+                            'Error',
+                            'Token o código de seguridad incorrectos. Inténtalo de nuevo.',
+                            'error'
+                        );
+                    }
+                },
+                error: function () {
+                    // Maneja el error de la solicitud AJAX
+                }
+            });
+        }
+    });
+}
+
 function ResetContrasenaEmail(Email, ID) {
     Swal.fire({
         title: '<span class="swal-title-custom"><b>Valida tu identidad</b></span>',
