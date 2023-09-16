@@ -21,4 +21,5 @@ public class TokenResponse
 
     [JsonPropertyName("refresh_token")]
     public string RefreshToken { get; set; }
+    public int IdCliente { get; set; }
 }

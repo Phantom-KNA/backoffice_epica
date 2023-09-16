@@ -1,4 +1,8 @@
-﻿using Epica.Web.Operacion.Services.AuthenticationTokenCodigo;
+﻿using Epica.Web.Operacion.Helpers;
+using Epica.Web.Operacion.Models.Request;
+using Epica.Web.Operacion.Services.Authentication;
+using Epica.Web.Operacion.Services.AuthenticationTokenCodigo;
+using Epica.Web.Operacion.Services.Transaccion;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Win32;
 
@@ -6,21 +10,30 @@ namespace Epica.Web.Operacion.Controllers
 {
     public class AutenticacionController : Controller
     {
-        private readonly IAuthenticationTokenCodigo _authenticationTokenCodigo;
+        private readonly IServiceAuth _serviceAuth;
 
-        public AutenticacionController(IAuthenticationTokenCodigo authenticationTokenCodigo)
+        public AutenticacionController(
+            IServiceAuth serviceAuth
+            )
         {
-            _authenticationTokenCodigo = authenticationTokenCodigo;
+            _serviceAuth = serviceAuth; 
         }
 
         [HttpPost]
-        public ActionResult ValidarTokenYCodigo(string token, string codigo)
+        public async Task<ActionResult> ValidarTokenYCodigo(string token, string codigo)
         {
-            var respuestaToken = _authenticationTokenCodigo.GetValidarToken(token);
-            var respuestaCodigo = _authenticationTokenCodigo.GetValidarCodigo(codigo);
-            if (respuestaToken == true && respuestaCodigo == true)
+            VerificarAccesoRequest request = new VerificarAccesoRequest()
+            {
+                Nip = codigo,
+                Token = token
+            };
+
+            var response = await _serviceAuth.GetVerificarAccesoAsync(request);
+
+            if(response.message == "Acceso correcto.")
             {
                 return Ok(new { mensaje = true });
+
             }
             else
             {

@@ -64,11 +64,11 @@ namespace Epica.Web.Operacion.Controllers
         public async Task<IActionResult> Logout()
         {
             await _loginApiClient.LogoutAsync(_httpContextAccessor.HttpContext);
-
             HttpContext.Session.Clear();
             HttpContext.Response.Clear();
             await _httpContextAccessor.HttpContext.SignOutAsync("EpicaWebEsquema");
-
+            Response.Cookies.Delete(".AspNetCore.Session");
+            Response.Cookies.Delete(".AspNetCore.Antiforgery.J");
             return RedirectToAction("Login", "Account");
         }
     }

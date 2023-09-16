@@ -3,26 +3,26 @@
     public class UserContextService
     {
         private LoginResponse _loginResponse;
-        private int _userId;
+        private TokenResponse _tokenResponse;
 
         public void SetLoginResponse(LoginResponse loginResponse)
         {
             _loginResponse = loginResponse;
         }
 
-        public void SetUserId(int userId)
+        public void SetTokenResponse(TokenResponse tokenResponse)
         {
-            _userId = userId;
+            _tokenResponse = tokenResponse;
         }
 
         public LoginResponse GetLoginResponse()
         {
             return _loginResponse;
         }
-
-        public int GetUserId()
+        public TokenResponse GetTokenResponse()
         {
-            return _userId;
+            return _tokenResponse;
         }
+
     }
 }
