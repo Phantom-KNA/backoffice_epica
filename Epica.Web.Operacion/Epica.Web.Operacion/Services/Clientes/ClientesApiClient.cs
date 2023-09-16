@@ -1,4 +1,5 @@
 ﻿using Epica.Web.Operacion.Config;
+using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Models.Entities;
 using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.UserResolver;
@@ -12,14 +13,18 @@ namespace Epica.Web.Operacion.Services.Transaccion
 {
     public class ClientesApiClient : ApiClientBase, IClientesApiClient
     {
+        private readonly UserContextService _userContextService;
+
         public ClientesApiClient(
             HttpClient httpClient, 
             ILogger<CuentaApiClient> logger, 
             IOptions<UrlsConfig> config, 
             IHttpContextAccessor httpContext, 
             IConfiguration configuration, 
+            UserContextService userContextService,
             IUserResolver userResolver) : base(httpClient, logger, config, httpContext, configuration, userResolver)
         {
+            _userContextService = userContextService;
         }
 
         public async Task<List<ClienteResponse>> GetClientesAsync(int pageNumber, int recordsTotal)
@@ -412,13 +417,15 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
             try
             {
-                var uri = Urls.users + UrlsConfig.AuthenticateOperations.RestableceContraseñaCorreo(correo);
+                var uri = UrlApi + UrlsConfig.AuthenticateOperations.RestableceContraseñaCorreo(correo);
                 var json = JsonConvert.SerializeObject(correo);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                TokenResponse responsetoken = await GenTokenAsync();
+                var responseToken = _userContextService.GetTokenResponse();
+                //TokenResponse responsetoken = await GenTokenAsync();
+                ApiClient.DefaultRequestHeaders.Clear();
                 ApiClient.DefaultRequestHeaders.Add("token_type", "Bearer");
-                ApiClient.DefaultRequestHeaders.Add("access_token", responsetoken.AccessToken);
+                ApiClient.DefaultRequestHeaders.Add("access_token", responseToken.AccessToken);
 
                 var response = await ApiClient.PostAsync(uri,content);
                 if (response.IsSuccessStatusCode)
@@ -445,13 +452,14 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
             try
             {
-                var uri = Urls.users + UrlsConfig.AuthenticateOperations.RestableceContraseñaTelefono(telefono);
+                var uri = UrlApi + UrlsConfig.AuthenticateOperations.RestableceContraseñaTelefono(telefono);
                 var json = JsonConvert.SerializeObject(telefono);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                TokenResponse responsetoken = await GenTokenAsync();
+                var responseToken = _userContextService.GetTokenResponse();
+                //TokenResponse responsetoken = await GenTokenAsync();
+                ApiClient.DefaultRequestHeaders.Clear();
                 ApiClient.DefaultRequestHeaders.Add("token_type", "Bearer");
-                ApiClient.DefaultRequestHeaders.Add("access_token", responsetoken.AccessToken);
+                ApiClient.DefaultRequestHeaders.Add("access_token", responseToken.AccessToken);
 
                 var response = await ApiClient.PostAsync(uri, content);
                 if (response.IsSuccessStatusCode)
@@ -472,24 +480,24 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return respuesta;
         }
 
-        private async Task<TokenResponse> GenTokenAsync()
-        {
-            var uri = UrlApi + UrlsConfig.AuthenticateOperations.PostToken();
+        //private async Task<TokenResponse> GenTokenAsync()
+        //{
+        //    var uri = ApiClient + UrlsConfig.AuthenticateOperations.PostToken();
 
-            var credentials = new TokenRequest() { Username = UsernameApi, Password = PasswordApi };
+        //    var credentials = new TokenRequest() { Username = UsernameApi, Password = PasswordApi };
 
-            var content = new StringContent(JsonConvert.SerializeObject(credentials), Encoding.UTF8, "application/json");
-            JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-            };
-            var response = await ApiClient.PostAsync(uri, content);
+        //    var content = new StringContent(JsonConvert.SerializeObject(credentials), Encoding.UTF8, "application/json");
+        //    JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
+        //    {
+        //        PropertyNameCaseInsensitive = true,
+        //        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        //    };
+        //    var response = await ApiClient.PostAsync(uri, content);
 
-            var stringResponse = await response.Content.ReadAsStringAsync();
-            var result = System.Text.Json.JsonSerializer.Deserialize<TokenResponse>(stringResponse, _serializerOptions);
+        //    var stringResponse = await response.Content.ReadAsStringAsync();
+        //    var result = System.Text.Json.JsonSerializer.Deserialize<TokenResponse>(stringResponse, _serializerOptions);
 
-            return result;
-        }
+        //    return result;
+        //}
     }
 }
