@@ -23,6 +23,7 @@ using ExcelDataReader;
 using System.IO;
 using System.Data;
 using System.Collections.Generic;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Epica.Web.Operacion.Controllers
 {
@@ -118,7 +119,7 @@ namespace Epica.Web.Operacion.Controllers
 
             int totalRecord = 0;
             int filterRecord = 0;
-            int paginacion = 0;
+            int paginacion = Convert.ToInt32(HttpContext.Session.GetInt32("TotalTransacciones"));
 
             var draw = Request.Form["draw"].FirstOrDefault();
             int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
@@ -727,6 +728,7 @@ namespace Epica.Web.Operacion.Controllers
 
             int totalRecord = 0;
             int filterRecord = 0;
+            int paginacion = 0;
 
             var draw = Request.Form["draw"].FirstOrDefault();
             int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
@@ -741,7 +743,7 @@ namespace Epica.Web.Operacion.Controllers
             var gridData = new ResponseGrid<CargaBachRequestGrid>();
             List<CargaBachRequest> ListPF = new List<CargaBachRequest>();
 
-            ListPF = await _transaccionesApiClient.GetTransaccionesMasivaAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), loginResponse.IdUsuario);
+            (ListPF, paginacion) = await _transaccionesApiClient.GetTransaccionesMasivaAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), loginResponse.IdUsuario);
 
             var List = new List<CargaBachRequestGrid>();
             foreach (var row in ListPF)
@@ -758,6 +760,7 @@ namespace Epica.Web.Operacion.Controllers
                     descripcionMedioPago = row.descripcionMedioPago,
                     Comision = row.Comision,
                     Ordenante = row.Ordenante,
+                    observaciones = row.observaciones,
                     Acciones = await this.RenderViewToStringAsync("~/Views/Transacciones/_AccionesCargaMasiva.cshtml", row)
                 });
             }
@@ -834,7 +837,7 @@ namespace Epica.Web.Operacion.Controllers
             //}
 
             gridData.Data = List;
-            gridData.RecordsTotal = List.Count;
+            gridData.RecordsTotal = paginacion;
             filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.Data.Count;
             gridData.RecordsFiltered = filterRecord;
             gridData.Draw = draw;
@@ -891,6 +894,74 @@ namespace Epica.Web.Operacion.Controllers
             }
             return Json(result);
         }
+
+        [HttpPost]
+        public async Task<JsonResult> EditarTransaccionBatch(CargaBachRequest model)
+        {
+            //var loginResponse = _userContextService.GetLoginResponse();
+            string response = "";
+            MensajeResponse respuesta = new MensajeResponse();
+            try
+            {
+                response = await _transaccionesApiClient.GetModificaTransaccionBatchAsync(model);
+
+                if (response == "EXITO")
+                {
+                    respuesta.Error = false;
+                } else
+                {
+                    respuesta.Error = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta.Error = true;
+            }
+
+            return Json(respuesta);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ProcesarTransaccionesMasiva(int pagina, int registros)
+        {
+            var loginResponse = _userContextService.GetLoginResponse();
+            string response = "";
+            int paginacion = 0;
+            MensajeResponse respuesta = new MensajeResponse();
+            try
+            {
+                List<CargaBachRequest> ListPF = new List<CargaBachRequest>();
+
+                (ListPF, paginacion) = await _transaccionesApiClient.GetTransaccionesMasivaAsync(Convert.ToInt32(pagina), Convert.ToInt32(registros), loginResponse.IdUsuario);
+
+                var List = new List<InsertarTransaccionRequest>();
+                foreach (var row in ListPF)
+                {
+                    List.Add(new InsertarTransaccionRequest
+                    {
+                        Id = row.Id,
+                        ClaveRastreo = row.ClaveRastreo,
+                        FechaOperacion = row.FechaOperacion.ToString("yyyy-MM-dd HH:mm:ss"),
+                        NoCuentaBeneficiario = row.CuentaBeneficiario,
+                        Monto = row.Monto,
+                        Concepto = row.ConceptoPago,
+                        TipoOperacion = row.TipoOperacion,
+                        MedioPago = row.MedioPago,
+                        Comision = row.Comision,
+                        CuentaOrdenante = row.Ordenante,                     
+                        IdUsuario = loginResponse.IdUsuario
+                    });
+                }
+
+                respuesta = await _transaccionesApiClient.GetProcesaTransaccion(List);
+            }
+            catch (Exception ex)
+            {
+                respuesta.Error = true;
+            }
+
+            return Json(respuesta);
+        }
         #endregion
 
 
@@ -941,7 +1012,7 @@ namespace Epica.Web.Operacion.Controllers
 
             i = i - 1;
 
-            String[] nombres = { "BBVA", "BANAMEX", "BANCOPPEL", "SANTANDER", "NU", "FARABELA", "PALACIO DE HIERRO", "JP MORGAN", "HSBC", "BANREGIO" };
+            System.String[] nombres = { "BBVA", "BANAMEX", "BANCOPPEL", "SANTANDER", "NU", "FARABELA", "PALACIO DE HIERRO", "JP MORGAN", "HSBC", "BANREGIO" };
 
             var genNombre = nombres[i];
 
@@ -956,7 +1027,7 @@ namespace Epica.Web.Operacion.Controllers
             Random rnd = new Random();
             const string characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-            String[] characters2 = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
+            System.String[] characters2 = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
 
             try
             {

@@ -1,6 +1,7 @@
 ﻿@model Epica.Web.Operacion.Models.Request.CargaBachRequest
 
-<form asp-controller="Transacciones" asp-action="EditarTransaccionBatch" method="post">
+<form asp-controller="Transacciones" asp-action="EditarTransaccionBatch" method="post" id="EditTransaccionBatchForm">
+    <input asp-for="@Model.Id" hidden class="form-control form-control-sm form-control-solid" id="idCliente" readonly value="@Model.Id" type="text" autocomplete="off" />
     <div class="modal-content">
         <div class="modal-body ">
             <div class="card-body">
@@ -69,7 +70,7 @@
                             <label class="col-md-3 form-label"><p><strong>Fecha de Operación:</strong></p> &nbsp;</label>
                             <div class="col-md-9">
                                 <div class="fv-row">
-                                    <input asp-for="@Model.FechaOperacion" class="form-control form-control-sm form-control-solid" type="date" value="@Model.FechaOperacion" required />
+                                    <input asp-for="@Model.FechaOperacion" class="form-control form-control-sm form-control-solid" type="datetime-local" value="@Model.FechaOperacion" required />
                                 </div>
                             </div>
                         </div>

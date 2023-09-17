@@ -32,6 +32,9 @@ public class UrlsConfig
         public static string InsertarBatchTransaccion() => $"/api/v1/cargabach/inserta_temp";
         public static string GetEliminarTransaccionBatch(int idRegistro) => $"/api/v1/cargabach/remover_registro{idRegistro}";
         public static string GetTransaccionBatch(int idRegistro) => $"/api/v1/cargabach/buscar_registro?idRegistro={idRegistro}";
+        public static string GetTransaccionEditBatch() => $"/api/v1/cargabach/modificar_registro";
+        public static string GetProcesarTransaccion() => $"/api/v1/cargabach/inserta_multiple_transacciones";
+
     }
 
     public class CuentasOperations

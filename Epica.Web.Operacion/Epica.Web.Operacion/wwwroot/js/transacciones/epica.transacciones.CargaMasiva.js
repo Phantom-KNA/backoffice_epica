@@ -65,6 +65,7 @@ var KTDatatableTransacciones = (function () {
                 { data: "fechaOperacion", name: "FechaOperacion", title: "Fecha Operación" },
                 { data: "descripcionOperacion", name: "TipoOperacion", title: "Tipo de Operación" },
                 { data: "descripcionMedioPago", name: "MedioPago", title: "Medio de Pago" },
+                { data: "observaciones", name: "observaciones", title: "Observaciones" },
                 {
                     title: '',
                     orderable: false,
@@ -217,6 +218,7 @@ $(document).on('click', '#GuardarDocumento', function (e) {
                             'error'
                         )
                     } else {
+                        datatable_transaccion.ajax.reload();
                         Swal.fire(
                             'Cargar Masiva Transacciones',
                             'Se han cargado las transacciones de forma exitosa.',
@@ -298,7 +300,7 @@ function EditarTransaccionBatch(idRegistro) {
                 $('#EditarTransaccion #modalLabelTitle').html('Editar Transacción');
                 $('#EditarTransaccion .modal-body').html(result.result);
 
-                $('#EditarTransaccion .modal-footer').append("<button type='button' class='btn btn-info btn-sm font-weight-bold' data-bs-dismiss='modal' aria-label='Close' id='btnGuardarModificaciones'>Guardar Modificaciones</button>");
+                $('#EditarTransaccion .modal-footer').html("<button type='button' class='btn btn-success btn-sm font-weight-bold' data-bs-dismiss='modal' aria-label='Close' id='btnCerrar'>Cerrar</button> <button type='button' class='btn btn-info btn-sm font-weight-bold' data-bs-dismiss='modal' aria-label='Close' id='btnGuardarModificaciones'>Guardar Modificaciones</button>");
                 $('#EditarTransaccion').modal('show');
             }
 
@@ -312,4 +314,97 @@ function EditarTransaccionBatch(idRegistro) {
     });
 }
 
+$(document).on('click', '#btnGuardarModificaciones', function (e) {
 
+    Swal.fire({
+        title: 'Almacenar Cambios Transacción',
+        text: "¿Está seguro de que desea almacenar estos cambios?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            toastr.info('Modificando Transacción...', "");
+            var form = new FormData($('#EditTransaccionBatchForm')[0]);
+
+            $.ajax({
+                url: "EditarTransaccionBatch",
+                type: "POST",
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                data: form,
+                success: function (data) {
+
+                    if (data.error == true) {
+                        Swal.fire(
+                            'Cargar Masiva Transacciones',
+                            'Hubo un problema al cargar las transacciones, verifique que el documento sea válido.',
+                            'error'
+                        )
+                    } else {
+                        datatable_transaccion.ajax.reload();
+                        Swal.fire(
+                            'Cargar Masiva Transacciones',
+                            'Se han cargado las transacciones de forma exitosa.',
+                            'success'
+                        )
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+    })
+});
+
+$(document).on('click', '#btnAlmacenarTransacciones', function (e) {
+
+    Swal.fire({
+        title: 'Almacenar Cambios Transacción',
+        text: "¿Está seguro de que desea almacenar estos cambios?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var infoTabla = datatable_transaccion.page.info();
+
+            var numPagina = infoTabla.start / infoTabla.length + 1; // calcular el número de página
+            var Size = infoTabla.length; // número de registros por página
+
+            $.ajax({
+                url: "ProcesarTransaccionesMasiva",
+                type: "POST",
+                dataType: 'json',
+                data: { 'pagina': numPagina, 'registros': Size },
+                success: function (data) {
+
+                    if (data.error == true) {
+                        Swal.fire(
+                            'Cargar Masiva Transacciones',
+                            'Hubo un problema al cargar las transacciones, verifique que el documento sea válido.',
+                            'error'
+                        )
+                    } else {
+                        datatable_transaccion.ajax.reload();
+                        Swal.fire(
+                            'Cargar Masiva Transacciones',
+                            'Se han cargado las transacciones de forma exitosa.',
+                            'success'
+                        )
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+    })
+});

@@ -2,6 +2,7 @@
 using Epica.Web.Operacion.Models.ViewModels;
 using Epica.Web.Operacion.Services.Transaccion;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using System.Collections.Generic;
@@ -49,7 +50,7 @@ public class HomeController : Controller
                 CuentasTotal = await _cuentaApiClient.GetTotalCuentasAsync(),
                 FechaActual = DateTime.Now
 
-        };
+            }; 
 
             return View(indexViewModel);
         }

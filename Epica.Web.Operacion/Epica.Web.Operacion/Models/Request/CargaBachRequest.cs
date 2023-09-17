@@ -29,6 +29,7 @@ namespace Epica.Web.Operacion.Models.Request
         public string descripcionOperacion { get; set; }
         public string descripcionMedioPago { get; set; }
         public List<DatosCatalogoResponse>? ListaMediosPago { get; set; }
+        public string observaciones { get; set; }
         //public List<DatosCatalogoResponse>? ListaTipoTransaccion { get; set; }
     }
     public class CargaBachRequestGrid : CargaBachRequest
