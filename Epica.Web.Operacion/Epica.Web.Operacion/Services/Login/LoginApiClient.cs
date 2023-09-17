@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Epica.Web.Operacion.Services.Login
 {
@@ -25,15 +26,6 @@ namespace Epica.Web.Operacion.Services.Login
 
         public async Task<LoginResponse> GetCredentialsAsync(LoginRequest loginRequest, UserContextService userContextService)
         {
-            //string ipAddress = String.Empty;
-            //var connection = HttpContext.HttpContext.Connection;
-            //if (connection.RemoteIpAddress != null && connection.RemoteIpAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-            //{
-            //    ipAddress = connection.RemoteIpAddress.ToString();
-            //}
-            //loginRequest.Ip = ipAddress;
-
-
             LoginResponse loginResponse = new LoginResponse();
 
             try
@@ -62,7 +54,15 @@ namespace Epica.Web.Operacion.Services.Login
 
                     await HttpContext.HttpContext.SignInAsync("EpicaWebEsquema", new ClaimsPrincipal(claimsIdentity));
                     userContextService.SetLoginResponse(loginResponse);
-                    userContextService.SetUserId(loginResponse.IdUsuario);
+                    try
+                    {
+                        var token = await GenTokenAsync();
+                        userContextService.SetTokenResponse(token);
+                    }
+                    catch(Exception)
+                    {
+
+                    }
 
                 }
                 else
@@ -81,6 +81,25 @@ namespace Epica.Web.Operacion.Services.Login
             return loginResponse;
         }
 
+        public async Task<TokenResponse> GenTokenAsync()
+        {
+            var uri = UrlApi + UrlsConfig.AuthenticateOperations.PostToken();
+
+            var credentials = new TokenRequest() { Username = UsernameApi, Password = PasswordApi, IdDispositivo = "", ModeloDispositivo = "" };
+
+            var content = new StringContent(JsonConvert.SerializeObject(credentials), Encoding.UTF8, "application/json");
+            JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            };
+            var response = await ApiClient.PostAsync(uri, content);
+
+            var stringResponse = await response.Content.ReadAsStringAsync();
+            var result = System.Text.Json.JsonSerializer.Deserialize<TokenResponse>(stringResponse, _serializerOptions);
+
+            return result;
+        }
         public async Task LogoutAsync(HttpContext httpContext)
         {
             await httpContext.SignOutAsync("EpicaWebEsquema");

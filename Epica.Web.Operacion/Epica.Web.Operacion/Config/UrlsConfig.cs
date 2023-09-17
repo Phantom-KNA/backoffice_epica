@@ -14,6 +14,7 @@ public class UrlsConfig
         public static string PostToken() => $"/api/v1/authenticate/token";
         public static string RestableceContraseñaCorreo(string Correo) => $"/api/v1/recuperapassword/email?email={Correo}";
         public static string RestableceContraseñaTelefono(string Telefono) => $"/api/v1/recuperapassword/sms?telefono={Telefono}";
+        public static string VerificarAcceso() => $"/api/v1/authenticate/verificaacceso";
     }
 
     public class TransaccionesOperations
