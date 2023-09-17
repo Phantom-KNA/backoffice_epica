@@ -124,16 +124,15 @@ namespace Epica.Web.Operacion.Services
 
             try
             {
-                var tokenResponse = _userContextService.GetTokenResponse();
-                request.IdCliente = tokenResponse.IdCliente.ToString();
+                var tokenResponse = _userContextService.GetLoginResponse();
+                request.IdCliente = "1996";
                 var uri = UrlApi + UrlsConfig.AuthenticateOperations.VerificarAcceso();
                 var json = JsonConvert.SerializeObject(request);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var tokenType = tokenResponse.TokenType;
-                var accessToken = tokenResponse.AccessToken;
+                var accessToken = tokenResponse.Token;
                 _apiClient.DefaultRequestHeaders.Clear();
-                _apiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(tokenType, accessToken);
+                _apiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
                 var response = await ApiClient.PostAsync(uri, content);
                 if (response.IsSuccessStatusCode)
