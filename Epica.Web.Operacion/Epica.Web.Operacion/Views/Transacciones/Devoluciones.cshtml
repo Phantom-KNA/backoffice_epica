@@ -112,21 +112,21 @@
                             </div>
 
                             <div id="kt_datatable_buttons" class="d-none"></div>
+
+                            <div class="m-0">
+                                <button class="btn btn-sm btn-info me-3 btn_devolver_transacciones">
+                                    <i class="bi bi-arrow-left-square"></i>&nbsp;Devolver Seleccionados
+                                </button>
+                            </div>
+                            <div class="m-0">
+                                <button class="btn btn-sm btn-primary me-3 btn_reenviar_transacciones">
+                                    <i class="bi bi-arrow-repeat"></i>&nbsp;Reintentar Seleccionados
+                                </button>
+                            </div>
 @*                             @{
                                 var validacion = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Insertar == 0);
                                 if (validacion == true)
                                 {
-                                    <div class="m-0">
-                                        <a class="btn btn-sm btn-primary me-3" href="/Transacciones/Registro">
-                                            <i class="bi bi-plus-lg"></i>&nbsp;Registrar Transacción
-                                        </a>
-                                    </div>
-
-                                    <div class="m-0">
-                                        <button data-bs-toggle="modal" data-bs-target="#CargaMasivaTransaccion" class="btn btn-sm btn-info me-3">
-                                            <i class="bi bi-cloud-upload"></i>&nbsp;Cargar Transacciones
-                                        </button>
-                                    </div>
 
                                 }
                             } *@

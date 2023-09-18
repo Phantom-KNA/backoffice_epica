@@ -703,6 +703,14 @@ namespace Epica.Web.Operacion.Controllers
             return Json(gridData);
         }
 
+        [HttpPost]
+        public async Task<JsonResult> ReenviarTransacciones(List<string> clavesRastreo)
+        {
+            //Pendiente de pasar claves a servicio
+
+            return Json(true);
+        }
+
         #endregion
 
         #region Carga Masiva

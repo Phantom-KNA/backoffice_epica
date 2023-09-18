@@ -480,6 +480,34 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return respuesta;
         }
 
+        public async Task<DocumentosClienteDetailsResponse> GetVisualizarDocumentosClienteAsync(string url)
+        {
+            DocumentosClienteDetailsResponse? listaDocumentosCliente = new DocumentosClienteDetailsResponse();
+
+            try
+            {
+                var response = await ApiClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var settings = new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+                    listaDocumentosCliente = JsonConvert.DeserializeObject<DocumentosClienteDetailsResponse>(jsonResponse, settings);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return listaDocumentosCliente;
+            }
+
+            return listaDocumentosCliente;
+        }
         //private async Task<TokenResponse> GenTokenAsync()
         //{
         //    var uri = ApiClient + UrlsConfig.AuthenticateOperations.PostToken();

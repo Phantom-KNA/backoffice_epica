@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Epica.Web.Operacion.Models.Response;
 
@@ -14,12 +15,29 @@ public class DocumentosClienteDetailsResponse
 }
 public class DocumentosClienteResponse
 {
-    public int idCliente { get; set; }
-    public int idDocApodLeg { get; set; }
-    public int tipoDocumento { get; set; }
-    public string documento { get; set; }
-    public string numeroIdentificacion { get; set; }
-    public string nombreDocumento { get; set; }
+    [JsonPropertyName("idDocumento")]
+    public int IdDocumento { get; set; }
+    [JsonPropertyName("idCliente")]
+    public int IdCliente { get; set; }
+    [JsonPropertyName("tipoDocumento")]
+    public int TipoDocumento { get; set; }
+    [JsonPropertyName("descripcionDocumento")]
+    public string? DescripcionDocumento { get; set; }
+    [JsonPropertyName("ruta")]
+    public string? Ruta { get; set; }
+    [JsonPropertyName("observaciones")]
+    public string? Observaciones { get; set; }
+    [JsonPropertyName("urlImagen")]
+    public string? UrlImagen { get; set; }
+    [JsonPropertyName("idUsuarioAlta")]
+    public int IdUsuarioAlta { get; set; }
+    [JsonPropertyName("fechaUsuarioAlta")]
+    public DateTime? FechaUsuarioAlta { get; set; }
+
+    [JsonPropertyName("idUsuarioActualizacion")]
+    public int IdUsuarioActualizacion { get; set; }
+    [JsonPropertyName("fechaUsuarioActualizacion")]
+    public DateTime? FechaUsuarioActualizacion { get; set; }
 }
 
 public class DocumentosClienteResponseGrid : DocumentosClienteResponse

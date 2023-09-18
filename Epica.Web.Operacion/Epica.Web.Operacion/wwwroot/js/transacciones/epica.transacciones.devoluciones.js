@@ -167,4 +167,64 @@ $(document).ready(function () {
     KTDatatableTransacciones.init();
 });
 
+$(document).on('click', '.btn_reenviar_transacciones', function () {
+    var selected = [];
+    $('.reenviarCb:checkbox:checked').each(function () {
+        var claveRastreo = $(this).attr('data-claveRastreo');
+        selected.push(claveRastreo);
+    });
+    if (selected.length <= 0) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Selecciona al menos una transferencia para reenviar',
+            showConfirmButton: true,
+        });
+    }
+
+    Swal.fire({
+        title: 'Reenviar Transacciones',
+        text: "¿Estas seguro que deseas reenviar las " + selected.length + " transferencias seleccionadas?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            toastr.info('Reenviando Transacciones...', "");
+
+            $.ajax({
+                url: 'ReenviarTransacciones',
+                async: true,
+                cache: false,
+                type: 'POST',
+                data: { clavesRastreo: selected },
+                success: function (data) {
+
+                    if (data.error == true) {
+                        Swal.fire(
+                            'Eliminar Transacción',
+                            'Hubo un problema al eliminar esta transacción, inténtelo mas tarde o verifique su existencia.',
+                            'error'
+                        )
+                    } else {
+                        datatable_transaccion.ajax.reload();
+                        Swal.fire(
+                            'Eliminar Transacción',
+                            'Se ha eliminado la transacción con exito.',
+                            'success'
+                        )
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+    })
+
+});
+
+
 

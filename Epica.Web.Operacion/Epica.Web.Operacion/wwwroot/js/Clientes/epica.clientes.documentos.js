@@ -56,10 +56,11 @@ var KTDatatableRemoteAjax = function () {
                 "targets": "_all"
             }],
             columns: [
-                { data: 'tipoDocumento', name: 'tipoDocumento', title: 'Tipo de Documento' },
-                { data: 'documento', name: 'tipoDocumento', title: 'Documento' },
+                { data: 'descripcionDocumento', name: 'DescripcionDocumento', title: 'Documento' },
                 { data: 'numeroIdentificacion', name: 'numeroIdentificacion', title: 'Numero de Identificación' },
                 { data: 'nombreDocumento', name: 'NombreDocumento', title: 'Nombre del Documento' },
+                { data: 'fechaUsuarioAlta', name: 'FechaUsuarioAlta', title: 'Fecha de Registro' },
+                { data: 'fechaUsuarioActualizacion', name: 'FechaUsuarioActualizacion', title: 'Fecha de Actialización' },
                 {
                     title: '',
                     orderable: false,

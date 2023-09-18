@@ -1345,12 +1345,12 @@ public class ClientesController : Controller
             {
                 List.Add(new DocumentosClienteResponseGrid
                 {
-                    idCliente = row.idCliente,
-                    idDocApodLeg = row.idDocApodLeg,
-                    tipoDocumento = row.tipoDocumento,
-                    documento = row.documento,
-                    numeroIdentificacion = row.numeroIdentificacion,
-                    nombreDocumento = row.nombreDocumento,
+                    IdCliente = row.IdCliente,
+                    DescripcionDocumento = row.DescripcionDocumento,
+                    TipoDocumento = row.TipoDocumento,
+                    FechaUsuarioAlta = row.FechaUsuarioAlta,
+                    FechaUsuarioActualizacion = row.FechaUsuarioActualizacion,
+                    Observaciones = row.Observaciones,
                     Acciones = await this.RenderViewToStringAsync("~/Views/Clientes/_AccionesDocumentos.cshtml", row)
                 });
             }
@@ -1367,6 +1367,14 @@ public class ClientesController : Controller
         }
 
         return Json(gridData);
+    }
+
+    public IActionResult suntest()
+    {
+        var url = "https://demomatic.alquimiadigital.mx/cpanel/index.php/api/v1/imagen/20764";
+
+
+        return View();
     }
 
     #region "Modelos"
