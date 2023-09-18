@@ -231,7 +231,6 @@ function GestionarClienteWeb(AccountID, estatus) {
                 data: { token: tokenInput, codigo: codigoInput },
                 success: function (validationResult) {
                     if (validationResult.mensaje === true) {
-                        // Si la validación es exitosa, procede a gestionar el cliente web
                         Swal.fire({
                             title: 'Bloqueo Web',
                             text: '¿Está seguro que desea bloquear o desbloquear la opción web para este cliente?',
@@ -242,7 +241,6 @@ function GestionarClienteWeb(AccountID, estatus) {
                             confirmButtonText: 'Aceptar'
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                // Realiza la acción de gestionar el cliente web
                                 $.ajax({
                                     url: siteLocation + 'Clientes/GestionarEstatusClienteWeb',
                                     async: true,
@@ -392,7 +390,7 @@ function Registro() {
                 success: function (validationResult) {
                     if (validationResult.mensaje === true) {
                         // Redirige a la vista "clientes/registro"
-                        window.location.href = '/clientes/registro'; // Cambia la URL según tu configuración
+                        window.location.href = '/clientes/registro';
                     } else {
                         // Token o código de seguridad incorrectos, muestra un mensaje de error
                         Swal.fire(
@@ -403,7 +401,6 @@ function Registro() {
                     }
                 },
                 error: function () {
-                    // Maneja el error de la solicitud AJAX
                 }
             });
         }
