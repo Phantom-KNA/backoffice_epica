@@ -4,8 +4,12 @@ using Epica.Web.Operacion.Models.Entities;
 using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.UserResolver;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using System.IO;
+using System.Net.Mime;
+using System.Security.AccessControl;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -478,34 +482,70 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return respuesta;
         }
 
-        public async Task<DocumentosClienteDetailsResponse> GetVisualizarDocumentosClienteAsync(string url)
+        public async Task<DocumentoShowResponse> GetVisualizarDocumentosClienteAsync(string url)
         {
-            DocumentosClienteDetailsResponse? listaDocumentosCliente = new DocumentosClienteDetailsResponse();
+            Stream? docFile = null;
+            DocumentoShowResponse? documentoRecibido = new DocumentoShowResponse(); 
 
             try
             {
-                var response = await ApiClient.GetAsync(url);
+                var responseToken = _userContextService.GetLoginResponse();
+                ApiClient.DefaultRequestHeaders.Clear();
+
+                var client = new HttpClient();
+                var request = new HttpRequestMessage(HttpMethod.Get, url);
+                request.Headers.Add("Authorization", "Bearer " + responseToken.Token);
+                var response = await client.SendAsync(request);
 
                 if (response.IsSuccessStatusCode)
                 {
                     response.EnsureSuccessStatusCode();
-                    var jsonResponse = await response.Content.ReadAsStringAsync();
-                    var settings = new JsonSerializerSettings
-                    {
-                        NullValueHandling = NullValueHandling.Ignore,
-                        MissingMemberHandling = MissingMemberHandling.Ignore
-                    };
-                    listaDocumentosCliente = JsonConvert.DeserializeObject<DocumentosClienteDetailsResponse>(jsonResponse, settings);
+                    System.Net.Http.HttpContent content = response.Content;
+                    var h = content.Headers;
+
+                    documentoRecibido.MimeType = response.Content.Headers.ContentType.ToString();
+                    documentoRecibido.Nombre = response.Content.Headers.ContentDisposition.ToString().Substring(response.Content.Headers.ContentDisposition.ToString().IndexOf("filename=") + 10).Replace("\"", "");
+                    documentoRecibido.Documento = await content.ReadAsStreamAsync();
                 }
 
             }
             catch (Exception ex)
             {
-                return listaDocumentosCliente;
+                return null;
             }
 
-            return listaDocumentosCliente;
+            return documentoRecibido;
         }
+
+        public async Task<MensajeResponse> GetInsertaDocumentoClienteAsync(DocumentoClienteRequest request)
+        {
+            MensajeResponse respuesta = new MensajeResponse();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.ClientesOperations.GetInsertaDocumentoCliente();
+                var json = JsonConvert.SerializeObject(request);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await ApiClient.PostAsync(uri, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                respuesta.Error = true;
+                respuesta.Detalle = ex.Message;
+                return respuesta;
+            }
+
+            return respuesta;
+        }
+
         //private async Task<TokenResponse> GenTokenAsync()
         //{
         //    var uri = ApiClient + UrlsConfig.AuthenticateOperations.PostToken();

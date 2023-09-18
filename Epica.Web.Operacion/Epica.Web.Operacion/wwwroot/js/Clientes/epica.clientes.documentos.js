@@ -57,20 +57,17 @@ var KTDatatableRemoteAjax = function () {
             }],
             columns: [
                 { data: 'descripcionDocumento', name: 'DescripcionDocumento', title: 'Documento' },
-                { data: 'numeroIdentificacion', name: 'numeroIdentificacion', title: 'Numero de Identificación' },
-                { data: 'nombreDocumento', name: 'NombreDocumento', title: 'Nombre del Documento' },
-                { data: 'fechaUsuarioAlta', name: 'FechaUsuarioAlta', title: 'Fecha de Registro' },
-                { data: 'fechaUsuarioActualizacion', name: 'FechaUsuarioActualizacion', title: 'Fecha de Actialización' },
+                { data: 'observaciones', name: 'Observaciones', title: 'Observaciones' },
+                { data: 'fechaalta', name: 'fecha_alta', title: 'Fecha de Registro' },
+                { data: 'fechaactualizacion', name: 'fecha_actualizacion', title: 'Fecha de Actialización' },
                 {
                     title: '',
                     orderable: false,
                     data: null,
                     defaultContent: '',
                     render: function (data, type, row) {
-                        console.log(data);
                         if (type === 'display') {
                             var htmlString = row.acciones;
-                            console.log(htmlString);
                             return htmlString
                         }
                     }
@@ -118,26 +115,45 @@ jQuery(document).ready(function () {
 
 
 var plugins = () => {
-    $('.form-select2').select2();
-    myDropzone = new Dropzone("#dropfile", {
-        autoProcessQueue: false,
-        url: "/",
-        maxFiles: 1,
-        maxFilesize: 5, // MB
-        addRemoveLinks: true,
-        uploadMultiple: false,
-        acceptedFiles: ".jpeg,.jpg,.png,application/pdf",
-        addedfiles: function (files) {
-            if (files[0].accepted == false) {
-                if (this.files.length >= 1)
-                    toastr.error("Elimine el documento antes de agregar uno nuevo.", "BAK")
-                else
-                    toastr.error("Solo se permiten archivos de 5MB.", "BAK")
-                this.removeFile(files[0])
+    $('#documento').filer({
+        addMore: true,
+        limit: 1,
+        maxSize: 30,
+        extensions: ["jpeg","jpg","png","pdf"],
+        showThumbs: true,
+        captions: {
+            button: "Cargar Archivo",
+            feedback: "Cargar Documento Cliente",
+            feedback2: "Archivos Agregados",
+            removeConfirmation: "Esta seguro que desea eliminar este documento?",
+            errors: {
+                filesLimit: "Unicamente se pueden cargar {{fi-limit}} archivos.",
+                filesType: "El formato del documento, no es valido.",
+                filesSize: "{{fi-name}} supera el limite permitido! El tamaño permitido es de {{fi-maxSize}} MB."
             }
-        },
-
+        }
     });
+
+    //$('.form-select2').select2();
+    //myDropzone = new Dropzone("#dropfile", {
+    //    autoProcessQueue: false,
+    //    url: "/",
+    //    maxFiles: 1,
+    //    maxFilesize: 5, // MB
+    //    addRemoveLinks: true,
+    //    uploadMultiple: false,
+    //    acceptedFiles: ".jpeg,.jpg,.png,application/pdf",
+    //    addedfiles: function (files) {
+    //        if (files[0].accepted == false) {
+    //            if (this.files.length >= 1)
+    //                toastr.error("Elimine el documento antes de agregar uno nuevo.", "BAK")
+    //            else
+    //                toastr.error("Solo se permiten archivos de 5MB.", "BAK")
+    //            this.removeFile(files[0])
+    //        }
+    //    },
+
+    //});
 }
 
 $(document).on('click', '#BtnGuardarDocumento', function (e) {
@@ -164,4 +180,50 @@ $(document).on('click', '#BtnGuardarDocumento', function (e) {
 
     });
     $("#btnCerrarCuenta").click();
+});
+
+$(document).on('click', '#btnVerDocumento', function (e) {
+
+    var DocAllySend = $(this).data('id');
+
+    toastr.info('Consultando Documento...', "");
+
+    $.ajax({
+        url: "Documentos/VerDocumentoCliente",
+        type: "POST",
+        dataType: 'json',
+        data: { DocAlly: DocAllySend },
+        success: function (data) {
+
+            if (data.error == false) {
+
+                var TipoVisualizador = "";
+
+                if (data.codigo == "PDF") {
+                    TipoVisualizador = "data:application/pdf;";
+                } else {
+                    TipoVisualizador = "data:image;";
+                }
+
+                var contenidoBase64 = TipoVisualizador + "base64," + data.Archivo64;
+
+                // Verifica si el contenido es una imagen o PDF
+                if (contenidoBase64.startsWith("data:image")) {
+                    $("#Ver_Docto .modal-body").html('<img src="' + contenidoBase64 + '" class="img-fluid">');
+                } else if (contenidoBase64.startsWith("data:application/pdf")) {
+                    $("#Ver_Docto .modal-body").html('<embed src="' + contenidoBase64 + '" type="application/pdf" style="width:100%;height:500px;">');
+                } else {
+                    $("#Ver_Docto .modal-body").html('<p>Formato no admitido</p>');
+                }
+                $('#Ver_Docto').modal('show');
+
+            }
+
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+        }
+
+
+    });
 });

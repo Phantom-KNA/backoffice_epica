@@ -18,8 +18,24 @@ namespace Epica.Web.Operacion.Models.Request
         public int idCliente { get; set; }
         [JsonPropertyName("tipoDocumento")]
         public string? tipoDocumento { get; set; }
+        [JsonPropertyName("observaciones")]
+        public string? Observaciones { get; set; }
         [JsonPropertyName("documento")]
         public IFormFile? documento { get; set; }
         public List<DatosCatalogoResponse> listaDocs { get; set; }
+    }
+
+    public class DocumentoClienteRequest
+    {
+        [JsonPropertyName("idCliente")]
+        public int IdCliente { get; set; }
+        [JsonPropertyName("documento64")]
+        public string? Documento64 { get; set; }
+        [JsonPropertyName("tipo_documento")]
+        public int TipoDocumento { get; set; }
+        [JsonPropertyName("observaciones")]
+        public string? Observaciones { get; set; }
+        [JsonPropertyName("nombre_documento")]
+        public string? NombreDocumento { get; set; }
     }
 }

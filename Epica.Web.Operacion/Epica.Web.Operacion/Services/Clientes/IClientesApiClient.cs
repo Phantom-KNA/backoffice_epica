@@ -22,5 +22,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
         //Task<RegistrarModificarClienteResponse> GetModificaCliente(RegistroModificacionClienteRequest request);
         Task<MensajeResponse> GetRestablecerContraseñaCorreo(string correo);
         Task<MensajeResponse> GetRestablecerContraseñaTelefono(string telefono);
+        Task<DocumentoShowResponse> GetVisualizarDocumentosClienteAsync(string url);
+        Task<MensajeResponse> GetInsertaDocumentoClienteAsync(DocumentoClienteRequest request);
     }
 }

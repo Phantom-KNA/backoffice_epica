@@ -3,12 +3,10 @@
 <form asp-controller="Clientes" asp-action="CargarDocumento" id="CargaDocumentoForm" method="post" enctype="multipart/form-data">
 
     <input asp-for="idCliente" hidden class="form-control form-control-sm form-control-solid" id="idCliente" readonly value="@Model.idCliente" type="text" autocomplete="off" />
-    @*<input asp-for="documento" hidden class="form-control form-control-sm form-control-solid" id="documento" readonly type="text" autocomplete="off" />*@
 
     <div class="modal-body">
         <div class="d-flex flex-stack row">
             <div class="row mb-5 mt-5">
-                <input asp-for="documento" hidden class="form-control form-control-sm form-control-solid" id="documento" type="file" />
                 <div class="form-group input-group-sm col-md-12 row">
                     <label class="col-md-3 form-label required">Documento: &nbsp;</label>
                     <div class="col-md-9">
@@ -27,19 +25,23 @@
         <div class="d-flex flex-stack row">
             <div class="row mb-5 mt-5">
                 <div class="form-group input-group-sm col-md-12 row">
+                    <label class="col-md-3 form-label required">Observaciones: &nbsp;</label>
+                    <div class="col-md-9">
+                        <div class="fv-row">
+                            <input asp-for="Observaciones" class="form-control form-control-sm form-control-solid" id="ApellidoPaterno" type="text" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <div class="d-flex flex-stack row">
+            <div class="row mb-5 mt-5">
+                <div class="form-group input-group-sm col-md-12 row">
                     <label class="col-md-3 form-label required">Archivo: &nbsp;</label>
                     <div class="col-md-9">
                         <div class="fv-row">
-                            <div class="dropzone" id="dropfile">
-                                <input asp-for="documento" hidden type="file" />
-                                <div class="dz-message needsclick">
-                                    <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
-                                    <div class="ms-4">
-                                        <h3 class="fs-5 fw-bold text-gray-900 mb-1">Suelte los archivos aquí o haga clic para cargarlos.</h3>
-                                    </div>
-                                </div>
-                            </div>
+                            <input asp-for="documento" hidden class="form-control form-control-sm form-control-solid" id="documento" type="file" />
                         </div>
                     </div>
                 </div>

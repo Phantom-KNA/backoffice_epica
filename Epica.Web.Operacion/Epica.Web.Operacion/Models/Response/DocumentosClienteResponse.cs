@@ -20,24 +20,28 @@ public class DocumentosClienteResponse
     [JsonPropertyName("idCliente")]
     public int IdCliente { get; set; }
     [JsonPropertyName("tipoDocumento")]
-    public int TipoDocumento { get; set; }
+    public int tipo_documento { get; set; }
     [JsonPropertyName("descripcionDocumento")]
     public string? DescripcionDocumento { get; set; }
     [JsonPropertyName("ruta")]
     public string? Ruta { get; set; }
     [JsonPropertyName("observaciones")]
     public string? Observaciones { get; set; }
-    [JsonPropertyName("urlImagen")]
-    public string? UrlImagen { get; set; }
+    [JsonPropertyName("ruta_documento")]
+    public string? ruta_documento { get; set; }
     [JsonPropertyName("idUsuarioAlta")]
     public int IdUsuarioAlta { get; set; }
     [JsonPropertyName("fechaUsuarioAlta")]
-    public DateTime? FechaUsuarioAlta { get; set; }
+    public DateTime? fecha_alta { get; set; }
+    public string? fechaalta { get; set; }
 
     [JsonPropertyName("idUsuarioActualizacion")]
     public int IdUsuarioActualizacion { get; set; }
     [JsonPropertyName("fechaUsuarioActualizacion")]
-    public DateTime? FechaUsuarioActualizacion { get; set; }
+    public DateTime? fecha_actualizacion { get; set; }
+    public string? fechaactualizacion { get; set; }
+
+    public string? urlAlly { get; set; }
 }
 
 public class DocumentosClienteResponseGrid : DocumentosClienteResponse

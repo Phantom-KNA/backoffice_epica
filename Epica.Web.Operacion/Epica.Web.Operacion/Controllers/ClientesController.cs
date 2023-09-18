@@ -17,6 +17,7 @@ using Epica.Web.Operacion.Services.Catalogos;
 using Epica.Web.Operacion.Services.Log;
 using System.Globalization;
 using Epica.Web.Operacion.Models.Response;
+using System.IO;
 
 namespace Epica.Web.Operacion.Controllers;
 
@@ -882,10 +883,35 @@ public class ClientesController : Controller
     [Authorize]
     [Route("Clientes/Detalle/Documentos/CargarDocumentoCliente")]
     [HttpPost]
-    public async Task<ActionResult> CargarDocumentoCliente(DocumentosClienteRegistro model, IFormFile documento)
+    public async Task<ActionResult> CargarDocumentoCliente(DocumentosClienteRegistro model)
     {
-        var archivo = Request.Form["dropzonejs1"];
-        return Json(model);
+        DocumentoClienteRequest? sendDocumento = new DocumentoClienteRequest();
+        MensajeResponse? response = new MensajeResponse();
+
+        try
+        {
+            if (model.documento.Length > 0)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    model.documento.CopyTo(ms);
+                    var fileBytes = ms.ToArray();
+                    sendDocumento.Documento64 = Convert.ToBase64String(fileBytes);
+                }
+            }
+
+            sendDocumento.IdCliente = model.idCliente;
+            sendDocumento.TipoDocumento = Convert.ToInt32(model.tipoDocumento);
+            sendDocumento.Observaciones = model.Observaciones;
+            sendDocumento.NombreDocumento = model.documento.FileName;
+
+            response = await _clientesApiClient.GetInsertaDocumentoClienteAsync(sendDocumento);
+
+        } catch (Exception ex) {
+            response.Error = true;
+        }
+      
+        return Json(response);
     }
 
 
@@ -1343,14 +1369,20 @@ public class ClientesController : Controller
             var List = new List<DocumentosClienteResponseGrid>();
             foreach (var row in ListPF.value)
             {
+                var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(row.ruta_documento);
+                var ally = System.Convert.ToBase64String(plainTextBytes);
+
+                row.urlAlly = ally;
+
                 List.Add(new DocumentosClienteResponseGrid
                 {
                     IdCliente = row.IdCliente,
                     DescripcionDocumento = row.DescripcionDocumento,
-                    TipoDocumento = row.TipoDocumento,
-                    FechaUsuarioAlta = row.FechaUsuarioAlta,
-                    FechaUsuarioActualizacion = row.FechaUsuarioActualizacion,
+                    tipo_documento = row.tipo_documento,
+                    fechaalta = row.fecha_alta.ToString(),
+                    fechaactualizacion = row.fecha_actualizacion.ToString(),
                     Observaciones = row.Observaciones,
+                    urlAlly = ally,
                     Acciones = await this.RenderViewToStringAsync("~/Views/Clientes/_AccionesDocumentos.cshtml", row)
                 });
             }
@@ -1369,12 +1401,44 @@ public class ClientesController : Controller
         return Json(gridData);
     }
 
-    public IActionResult suntest()
+    [Route("Clientes/Detalle/Documentos/VerDocumentoCliente")]
+    [HttpPost]
+    public async Task<JsonResult> VerDocumentoCliente(string DocAlly)
     {
-        var url = "https://demomatic.alquimiadigital.mx/cpanel/index.php/api/v1/imagen/20764";
 
+        MensajeArchivoResponse? result = new MensajeArchivoResponse();
 
-        return View();
+        try
+        {
+            var base64EncodedBytes = System.Convert.FromBase64String(DocAlly);
+            var url = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+
+            DocumentoShowResponse response = await _clientesApiClient.GetVisualizarDocumentosClienteAsync(url);
+
+            var ArchivoUsuario = File(response.Documento, response.MimeType, response.Nombre);
+
+            byte[] bytes;
+            using (var memoryStream = new MemoryStream())
+            {
+                ArchivoUsuario.FileStream.CopyTo(memoryStream);
+                bytes = memoryStream.ToArray();
+            }
+            
+            if (response.MimeType == "application/pdf") {
+                result.Codigo = "PDF";
+            } else {
+                result.Codigo = "image";
+            }
+
+            result.Error = false;
+            result.Archivo64 = Convert.ToBase64String(bytes);
+
+        } catch (Exception ex) {
+            result.Error = true;
+        }
+
+        return Json(result);
+
     }
 
     #region "Modelos"
@@ -1524,12 +1588,12 @@ public class ClientesController : Controller
                 var gen = generarNombreArchivo(i);
 
                 var pf = new DocumentosClienteResponse();
-                pf.idCliente = i;
-                pf.idDocApodLeg = 100 + i;
-                pf.tipoDocumento = i;
-                pf.documento = GenNumeroTelefono(5);
-                pf.numeroIdentificacion = GenNumeroTelefono(20);
-                pf.nombreDocumento = generarNombreArchivo(i);
+                //pf.idCliente = i;
+                //pf.idDocApodLeg = 100 + i;
+                //pf.tipoDocumento = i;
+                //pf.documento = GenNumeroTelefono(5);
+                //pf.numeroIdentificacion = GenNumeroTelefono(20);
+                //pf.nombreDocumento = generarNombreArchivo(i);
 
                 List.Add(pf);
             }
