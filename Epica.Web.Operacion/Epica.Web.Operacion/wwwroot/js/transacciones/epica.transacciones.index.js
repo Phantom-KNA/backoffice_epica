@@ -134,7 +134,6 @@ var KTDatatableTransacciones = (function () {
                     $("#myModal").modal("show");
                 },
                 error: function (xhr, status, error) {
-                    console.log("Error en la solicitud AJAX: " + error);
                 }
             });
         });

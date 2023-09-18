@@ -421,11 +421,10 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 var json = JsonConvert.SerializeObject(correo);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var responseToken = _userContextService.GetTokenResponse();
-                //TokenResponse responsetoken = await GenTokenAsync();
+                var responseToken = _userContextService.GetLoginResponse();
                 ApiClient.DefaultRequestHeaders.Clear();
                 ApiClient.DefaultRequestHeaders.Add("token_type", "Bearer");
-                ApiClient.DefaultRequestHeaders.Add("access_token", responseToken.AccessToken);
+                ApiClient.DefaultRequestHeaders.Add("access_token", responseToken.Token);
 
                 var response = await ApiClient.PostAsync(uri,content);
                 if (response.IsSuccessStatusCode)
@@ -455,11 +454,10 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 var uri = UrlApi + UrlsConfig.AuthenticateOperations.RestableceContraseñaTelefono(telefono);
                 var json = JsonConvert.SerializeObject(telefono);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var responseToken = _userContextService.GetTokenResponse();
-                //TokenResponse responsetoken = await GenTokenAsync();
+                var responseToken = _userContextService.GetLoginResponse();
                 ApiClient.DefaultRequestHeaders.Clear();
                 ApiClient.DefaultRequestHeaders.Add("token_type", "Bearer");
-                ApiClient.DefaultRequestHeaders.Add("access_token", responseToken.AccessToken);
+                ApiClient.DefaultRequestHeaders.Add("access_token", responseToken.Token);
 
                 var response = await ApiClient.PostAsync(uri, content);
                 if (response.IsSuccessStatusCode)

@@ -8,6 +8,7 @@ namespace Epica.Web.Operacion.Models.Response
         public string? Usuario { get; set; }
         public string? Email { get; set; }
         public string? Rol { get; set; }
+        public string? Token { get; set; }
         public List<UserPermisosResponse>? AccionesPorModulo { get; set; }
         public int Activo { get; set; }
         public bool IsAuthenticated { get; set; }

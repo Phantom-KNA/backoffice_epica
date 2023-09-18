@@ -379,7 +379,7 @@ function Registro() {
                 success: function (validationResult) {
                     if (validationResult.mensaje === true) {
                         // Redirige a la vista "transacciones/registro"
-                        window.location.href = '/transacciones/registro'; // Cambia la URL según tu configuración
+                        window.location.href = '/transacciones/registro'; 
                     } else {
                         // Token o código de seguridad incorrectos, muestra un mensaje de error
                         Swal.fire(
@@ -390,7 +390,6 @@ function Registro() {
                     }
                 },
                 error: function () {
-                    // Maneja el error de la solicitud AJAX
                 }
             });
         }
