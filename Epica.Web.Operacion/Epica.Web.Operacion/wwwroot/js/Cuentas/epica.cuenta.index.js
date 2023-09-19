@@ -434,7 +434,6 @@ function GestionarCuenta(AccountID, estatus) {
                     )
                 },
                 error: function (xhr, status, error) {
-                    console.log(error);
                 }
             });
         }
