@@ -1,4 +1,5 @@
 ﻿using Epica.Web.Operacion.Config;
+using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Models.Response;
 using Epica.Web.Operacion.Services.UserResolver;
@@ -11,14 +12,17 @@ namespace Epica.Web.Operacion.Services.Transaccion
 {
     public class TransaccionesApiClient : ApiClientBase, ITransaccionesApiClient
     {
+        private readonly UserContextService _userContextService;
         public TransaccionesApiClient(
             HttpClient httpClient, 
             ILogger<TransaccionesApiClient> logger, 
             IOptions<UrlsConfig> config, 
             IHttpContextAccessor httpContext, 
-            IConfiguration configuration, 
+            IConfiguration configuration,
+            UserContextService userContextService,
             IUserResolver userResolver) : base(httpClient, logger, config, httpContext, configuration, userResolver)
         {
+            _userContextService = userContextService;
         }
 
         public async Task<TransaccionDetailsResponse> GetTransaccionRastreoCobranzaAsync(string rastreoCobranza)
@@ -449,6 +453,32 @@ namespace Epica.Web.Operacion.Services.Transaccion
             }
 
             return respuesta;
+        }
+
+        public async Task<VoucherResponse> GetVoucherTransaccionAsync(int cuentaAhorro, int transaccion)
+        {
+            VoucherResponse? docFile = new VoucherResponse();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetComprobanteTransaccion(cuentaAhorro, transaccion);
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    docFile = JsonConvert.DeserializeObject<VoucherResponse>(jsonResponse);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+            return docFile;
         }
     }
 }

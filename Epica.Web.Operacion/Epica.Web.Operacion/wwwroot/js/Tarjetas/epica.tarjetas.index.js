@@ -67,7 +67,6 @@ var KTDatatableRemoteAjax = function () {
                 {
                     data: 'vinculo', name: 'Vinculo', title: 'Nombre Titular',
                     render: function (data, type, row) {
-                        console.log(data);
                         var partes = data.split("|"); // Separar la parte entera y decimal
                         var nombreCompleto = partes[0];
                         var idCliente = partes[1];
@@ -221,7 +220,7 @@ jQuery(document).ready(function () {
     KTDatatableRemoteAjax.init();
 });
 
-function GestionarTarjeta(AccountID, estatus) {
+function GestionarTarjeta(numgen, estatus, id) {
 
     Swal.fire({
         title: 'Bloqueo/Desbloqueo de Tarjetas',
@@ -234,12 +233,29 @@ function GestionarTarjeta(AccountID, estatus) {
     }).then((result) => {
         if (result.isConfirmed) {
 
-            datatable.ajax.reload();
-            Swal.fire(
-                'Estatus Actualizado',
-                'Se ha actualizado el estatus de la tarjeta con exito.',
-                'success'
-            )
+            toastr.info('Aplicando Devolución a transacción...', "");
+
+            $.ajax({
+                url: 'Tarjetas/GestionarEstatusTarjetas',
+                async: true,
+                cache: false,
+                type: 'POST',
+                data: { NumGen: numgen, estatus: estatus, id: id },
+                success: function (data) {
+
+                    datatable.ajax.reload();
+                    Swal.fire(
+                        'Estatus Actualizado',
+                        'Se ha actualizado el estatus de la tarjeta con exito.',
+                        'success'
+                    )
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+
+
         }
     })
 }

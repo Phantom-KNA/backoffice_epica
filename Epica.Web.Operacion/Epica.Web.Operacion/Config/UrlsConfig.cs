@@ -35,6 +35,7 @@ public class UrlsConfig
         public static string GetTransaccionBatch(int idRegistro) => $"/api/v1/cargabach/buscar_registro?idRegistro={idRegistro}";
         public static string GetTransaccionEditBatch() => $"/api/v1/cargabach/modificar_registro";
         public static string GetProcesarTransaccion() => $"/api/v1/cargabach/inserta_multiple_transacciones";
+        public static string GetComprobanteTransaccion(int cuentaAhorro, int Transaccion) => $"/api/v1/transacciones/imprimir_voucher?idCuentaAhorro={cuentaAhorro}&idTransaccion={Transaccion}";
 
     }
 
@@ -88,6 +89,7 @@ public class UrlsConfig
         public static string GetTarjetasCliente(int idClientes) => $"/api/v1/tarjetas/clientes_tarjetas?idCliente={idClientes}";
         public static string GetTarjetas(int numberPage, int TotalRecords) => $"/api/v1/tarjetas/view_tarjetas?pageNumber={numberPage}&pageSize={TotalRecords}";
         public static string GetTarjetasRegistra() => $"/api/v1/tarjetas/add_toka";
+        public static string GetBloquearDesbloquearTarjeta(string numeroTarjeta, int estatus) => $"/api/v1/tarjetas/bloquear_desbloquear_tarjeta?numeroTarjeta={numeroTarjeta}&status={estatus}";
     }
 
     public class LoginOperations
@@ -111,6 +113,16 @@ public class UrlsConfig
         public static string GetUsuariosDesasignarRoles(int idUsuario) => $"/api/v1/usuario/quitar_rol_usuario{idUsuario}";
         public static string GetInsertarRol(string nombreRol) => $"/api/v1/usuario/insertar_rol?nombreRol={nombreRol}";
     }
+
+    public class ReintentadorOperations
+    {
+        public static string ReenviarTransacciones() => $"/api/v1/reintentador/reenviar_transacciones";
+        public static string ReenviarTransaccion(string ClaveRastreo) => $"/api/v1/reintentador/reenviar_transaccion?claveRastreo={ClaveRastreo}";
+        public static string DevolverTransacciones() => $"/api/v1/reintentador/aplicar_devoluciones";
+        public static string DevolverTransaccion(string ClaveRastreo) => $"/api/v1/reintentador/aplicar_devolucion?claveRastreo={ClaveRastreo}";
+        public static string GetTransaccionesDevolver() => $"/api/v1/reintentador/resumen";
+    }
+
     public string users { get; set; }
     public string Authenticate { get; set; }
     public string Transaccion { get; set; }

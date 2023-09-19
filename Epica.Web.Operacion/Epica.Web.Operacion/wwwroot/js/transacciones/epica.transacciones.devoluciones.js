@@ -179,6 +179,7 @@ $(document).on('click', '.btn_reenviar_transacciones', function () {
             title: 'Selecciona al menos una transferencia para reenviar',
             showConfirmButton: true,
         });
+        return false;
     }
 
     Swal.fire({
@@ -204,14 +205,14 @@ $(document).on('click', '.btn_reenviar_transacciones', function () {
 
                     if (data.error == true) {
                         Swal.fire(
-                            'Eliminar Transacción',
+                            'Reenviar Transacción',
                             'Hubo un problema al eliminar esta transacción, inténtelo mas tarde o verifique su existencia.',
                             'error'
                         )
                     } else {
                         datatable_transaccion.ajax.reload();
                         Swal.fire(
-                            'Eliminar Transacción',
+                            'Reenviar Transacción',
                             'Se ha eliminado la transacción con exito.',
                             'success'
                         )
@@ -226,5 +227,152 @@ $(document).on('click', '.btn_reenviar_transacciones', function () {
 
 });
 
+$(document).on('click', '.btn_devolver_transacciones', function () {
+    var selected = [];
+    $('.reenviarCb:checkbox:checked').each(function () {
+        var claveRastreo = $(this).attr('data-claveRastreo');
+        selected.push(claveRastreo);
+    });
+    if (selected.length <= 0) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Selecciona al menos una transferencia para devolver',
+            showConfirmButton: true,
+        });
+        return false;
+    }
 
+    Swal.fire({
+        title: 'Devolver Transacciones',
+        text: "¿Estas seguro que deseas aplicar la devolución para las " + selected.length + " transferencias seleccionadas?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar'
+    }).then((result) => {
+        if (result.isConfirmed) {
 
+            toastr.info('Aplcando Devolución a transacciones...', "");
+
+            $.ajax({
+                url: 'DevolverTransacciones',
+                async: true,
+                cache: false,
+                type: 'POST',
+                data: { clavesRastreo: selected },
+                success: function (data) {
+
+                    if (data.error == true) {
+                        Swal.fire(
+                            'Devolver Transacción',
+                            'Hubo un problema al aplicar la devolución de esta transacción, inténtelo mas tarde o verifique su existencia.',
+                            'error'
+                        )
+                    } else {
+                        datatable_transaccion.ajax.reload();
+                        Swal.fire(
+                            'Devolver Transacción',
+                            'Se ha realizado la devolución de la transacción con exito.',
+                            'success'
+                        )
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+    })
+
+});
+
+function DevolverTransaccion(claveRastreo) {
+    Swal.fire({
+        title: 'Devolver Transacciones',
+        text: "¿Estas seguro que deseas aplicar la devolución para esta transacción?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            toastr.info('Aplicando Devolución a transacción...', "");
+
+            $.ajax({
+                url: 'DevolverTransaccion',
+                async: true,
+                cache: false,
+                type: 'POST',
+                data: { clavesRastreo: claveRastreo },
+                success: function (data) {
+
+                    if (data.error == true) {
+                        Swal.fire(
+                            'Devolver Transacción',
+                            'Hubo un problema al aplicar la devolución de esta transacción, inténtelo mas tarde o verifique su existencia.',
+                            'error'
+                        )
+                    } else {
+                        datatable_transaccion.ajax.reload();
+                        Swal.fire(
+                            'Devolver Transacción',
+                            'Se ha realizado la devolución de la transacción con exito.',
+                            'success'
+                        )
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+    });
+}
+
+function ReenviarTransaccion(claveRastreo) {
+    Swal.fire({
+        title: 'Reenviar Transacción',
+        text: "¿Estas seguro que deseas reenviar esta transacción?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            toastr.info('Aplicando Devolución a transacción...', "");
+
+            $.ajax({
+                url: 'ReenviarTransaccion',
+                async: true,
+                cache: false,
+                type: 'POST',
+                data: { clavesRastreo: claveRastreo },
+                success: function (data) {
+
+                    if (data.error == true) {
+                        Swal.fire(
+                            'Reenviar Transacción',
+                            'Hubo un problema para reenviar esta transacción, inténtelo mas tarde o verifique su existencia.',
+                            'error'
+                        )
+                    } else {
+                        datatable_transaccion.ajax.reload();
+                        Swal.fire(
+                            'Reenviar Transacción',
+                            'Se ha realizado el reenvio de la transacción con exito.',
+                            'success'
+                        )
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+    });
+}

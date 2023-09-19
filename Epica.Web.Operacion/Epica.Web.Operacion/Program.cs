@@ -69,6 +69,8 @@ builder.Services.AddScoped<ICatalogosApiClient, CatalogosApiClient>();
 builder.Services.AddScoped<ILogsApiClient, LogsApiClient>();
 builder.Services.AddScoped<IUsuariosApiClient,  UsuariosApiClient>();
 builder.Services.AddScoped<IAuthenticationTokenCodigo, AuthenticationTokenCodigo>();
+builder.Services.AddScoped<IReintentadorService, ReintentadorService>();
+
 
 builder.Services.AddSingleton<UserContextService>();
 

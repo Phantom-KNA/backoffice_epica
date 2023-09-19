@@ -7,14 +7,14 @@
         <li class="menu-item px-3">
             @if (Model.CanDevolver == true)
             {
-                <a data-id="@Model.ClaveRastreo" onclick="DevolverTransaccion(@Model.ClaveRastreo)" title="Devolver Transacción" class="btnEditar menu-link px-3">
+                <a data-id="@Model.ClaveRastreo" onclick="DevolverTransaccion('@Model.ClaveRastreo')" title="Devolver Transacción" class="btnEditar menu-link px-3">
                     <i class="bi bi-arrow-left"></i>&nbsp;
                     Devolver
                 </a>
             }
         </li>
         <li class="menu-item px-3">
-            <a data-id="@Model.ClaveRastreo" onclick="DevolverTransaccion(@Model.ClaveRastreo)" title="Reenviar Transacción" class="btnEditar menu-link px-3">
+            <a data-id="@Model.ClaveRastreo" onclick="ReenviarTransaccion('@Model.ClaveRastreo')" title="Reenviar Transacción" class="btnEditar menu-link px-3">
                 <i class="bi bi-send"></i>&nbsp;
                 Reenviar
             </a>

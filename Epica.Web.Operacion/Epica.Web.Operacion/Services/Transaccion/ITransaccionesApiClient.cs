@@ -21,6 +21,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
         Task<CargaBachRequest> GetTransaccionBatchAsync(int idRegistro);
         Task<string> GetModificaTransaccionBatchAsync(CargaBachRequest request);
         Task<MensajeResponse> GetProcesaTransaccion(List<InsertarTransaccionRequest> request);
+        Task<VoucherResponse> GetVoucherTransaccionAsync(int cuentaAhorro, int transaccion);
 
     }
 }

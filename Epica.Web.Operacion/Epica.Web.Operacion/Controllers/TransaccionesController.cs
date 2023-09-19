@@ -24,6 +24,7 @@ using System.IO;
 using System.Data;
 using System.Collections.Generic;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Net.Mime;
 
 namespace Epica.Web.Operacion.Controllers
 {
@@ -32,6 +33,7 @@ namespace Epica.Web.Operacion.Controllers
     {
         #region "Locales"
         private readonly UserContextService _userContextService;
+        private readonly IReintentadorService _reintentadorService;
         private readonly ITransaccionesApiClient _transaccionesApiClient;//Transacciones
         private readonly ICatalogosApiClient _catalogosApiClient;
         private readonly ILogsApiClient _logsApiClient;
@@ -43,6 +45,7 @@ namespace Epica.Web.Operacion.Controllers
             UserContextService userContextService,
             ICatalogosApiClient catalogosApiClient,
             ILogsApiClient logsApiClient,
+            IReintentadorService reintentadorService,
             IWebHostEnvironment webHostEnvironment
             )
         {
@@ -51,6 +54,7 @@ namespace Epica.Web.Operacion.Controllers
             _catalogosApiClient = catalogosApiClient;
             _logsApiClient = logsApiClient;
             _webHostEnvironment = webHostEnvironment;
+            _reintentadorService = reintentadorService;
         }
         #endregion
 
@@ -108,6 +112,32 @@ namespace Epica.Web.Operacion.Controllers
                 return Json(recibir);
             }
             return NotFound();
+
+        }
+
+        public async Task<IActionResult> DescargarVoucherTransaccion(int CuentaAhorro, int Transaccion)
+        {
+            VoucherResponse? respuesta = new VoucherResponse();
+
+            try
+            {
+                respuesta = await _transaccionesApiClient.GetVoucherTransaccionAsync(CuentaAhorro, Transaccion);
+
+                if (respuesta == null) {
+                    return RedirectToAction("index", "home");
+                }
+
+                byte[] bytes = Convert.FromBase64String(respuesta.archivo);
+                MemoryStream Archivo = new MemoryStream(bytes);
+
+                var contentType = "APPLICATION/octet-stream";
+                var fileName = string.Format("comprobante_{0}_{1}.pdf", CuentaAhorro.ToString(), Transaccion.ToString());
+
+                return File(Archivo, contentType, fileName);
+
+            } catch (Exception ex) {
+                return RedirectToAction("index", "home");
+            }
 
         }
 
@@ -566,7 +596,6 @@ namespace Epica.Web.Operacion.Controllers
             return File(content, contentType, fileName);
         }
 
-
         #region Devoluciones
 
         [Authorize]
@@ -603,14 +632,14 @@ namespace Epica.Web.Operacion.Controllers
             var gridData = new ResponseGrid<DevolucionesResponseGrid>();
             List<DevolucionesResponse> ListPF = new List<DevolucionesResponse>();
 
-            ListPF = QAGetListDevoluciones();
+            ListPF = await _reintentadorService.GetTransaccionesDevolverReintentar();
 
             var List = new List<DevolucionesResponseGrid>();
             foreach (var row in ListPF)
             {
                 List.Add(new DevolucionesResponseGrid
                 {
-                    idTransaccion = row.idTransaccion,
+                    Id = row.Id,
                     ClaveRastreo = row.ClaveRastreo,
                     CuentaOrigen = row.CuentaOrigen,
                     Monto = row.Monto,
@@ -624,7 +653,7 @@ namespace Epica.Web.Operacion.Controllers
             if (!string.IsNullOrEmpty(request.Busqueda))
             {
                 List = List.Where(x =>
-                (x.idTransaccion.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.Id.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
                 (x.ClaveRastreo?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
                 (x.CuentaOrigen?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
                 (x.Monto.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
@@ -706,10 +735,69 @@ namespace Epica.Web.Operacion.Controllers
         [HttpPost]
         public async Task<JsonResult> ReenviarTransacciones(List<string> clavesRastreo)
         {
-            //Pendiente de pasar claves a servicio
+            MensajeResponse response = new MensajeResponse();
 
-            return Json(true);
+            try
+            {
+                response = await _reintentadorService.GetReenviarTransaccionesAsync(clavesRastreo);
+            } catch (Exception ex) {
+                response.Error = true;
+            }
+
+            return Json(response);
         }
+
+        [HttpPost]
+        public async Task<JsonResult> ReenviarTransaccion(string clavesRastreo)
+        {
+            MensajeResponse response = new MensajeResponse();
+
+            try
+            {
+                response = await _reintentadorService.GetReenviarTransaccionAsync(clavesRastreo);
+            }
+            catch (Exception ex)
+            {
+                response.Error = true;
+            }
+
+            return Json(response);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> DevolverTransacciones(List<string> clavesRastreo)
+        {
+            MensajeResponse response = new MensajeResponse();
+
+            try
+            {
+                response = await _reintentadorService.GetDevolverTransaccionesAsync(clavesRastreo);
+            }
+            catch (Exception ex)
+            {
+                response.Error = true;
+            }
+
+            return Json(response);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> DevolverTransaccion(string clavesRastreo)
+        {
+            MensajeResponse response = new MensajeResponse();
+
+            try
+            {
+                response = await _reintentadorService.GetDevolverTransaccionAsync(clavesRastreo);
+            }
+            catch (Exception ex)
+            {
+                response.Error = true;
+            }
+
+            return Json(response);
+        }
+
 
         #endregion
 
@@ -972,7 +1060,6 @@ namespace Epica.Web.Operacion.Controllers
         }
         #endregion
 
-
         #endregion
 
         #region "Modelos"
@@ -1044,12 +1131,12 @@ namespace Epica.Web.Operacion.Controllers
                     var gen = generarnombreBanco(i);
 
                     var pf = new DevolucionesResponse();
-                    pf.idTransaccion = i;
+                    pf.Id = i;
                     pf.ClaveRastreo = string.Format("AQPAY0000{0}{1}", DateTime.Now.ToString("yyyyMMdd"), i);
                     pf.CuentaOrigen = string.Format("46000047896324{0}", i);
                     pf.Monto = Convert.ToDecimal(rnd.Next(0001, 99999));
                     pf.Concepto = string.Format("Test De Transacciones {0}", i);
-                    pf.FechaAlta = DateTime.Now.ToString();
+                    pf.FechaAlta = DateTime.Now;
                     pf.CuentaDestino = string.Format("112311234324{0}", i);
                     pf.CanDevolver = true;
                     pf.BancoTxt = gen;

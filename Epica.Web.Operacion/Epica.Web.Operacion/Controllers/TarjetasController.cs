@@ -281,6 +281,51 @@ public class TarjetasController : Controller
         return Json(response);
     }
 
+    [HttpPost]
+    public async Task<JsonResult> GestionarEstatusTarjetas(string NumGen, string estatus, int id)
+    {
+        var loginResponse = _userContextService.GetLoginResponse();
+        MensajeResponse response = new MensajeResponse();
+        int EstatusTarjeta = 0;
+
+        try
+        {
+            string accion = "";
+
+            if (estatus == "False") {
+                EstatusTarjeta = 2;
+                accion = "Bloquear Tarjeta";
+            } else if (estatus == "True") {
+                EstatusTarjeta = 1;
+                accion = "Desbloquear Tarjeta";
+            }
+
+            response = await _tarjetasApiClient.GetBloqueoTarjeta(NumGen, EstatusTarjeta);
+
+            LogRequest logRequest = new LogRequest
+            {
+                IdUser = loginResponse.IdUsuario.ToString(),
+                Modulo = "Tarjetas",
+                Fecha = HoraHelper.GetHoraCiudadMexico(),
+                NombreEquipo = loginResponse.NombreDispositivo,
+                Accion = accion,
+                Ip = loginResponse.DireccionIp,
+                Envio = JsonConvert.SerializeObject(NumGen),
+                Respuesta = response.Error.ToString(),
+                Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
+                IdRegistro = id
+            };
+            await _logsApiClient.InsertarLogAsync(logRequest);
+
+        }
+        catch (Exception ex)
+        {
+            response.Detalle = ex.Message;
+        }
+
+        return Json(response);
+    }
+
     #endregion
 
     #region "Modelos"

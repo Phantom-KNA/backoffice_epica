@@ -3,7 +3,7 @@
     <button type="button" class="btn btn-sm btn-icon btn-light btn-active-light-primary me-2 btnDetalle" data-id="@Model.idTransaccion" data-estatus="@Model.estatus" data-clabeCobranza="@Model.clabeCobranza" title="Detalles de Transacción" data-kt-docs-datatable-subtable="expand_row">
         <i class="bi bi-question-circle"></i>
     </button>
-    <button type="button" class="btn btn-sm btn-icon btn-light btn-active-light-primary me-2" data-id="@Model.idTransaccion" title="Imprimir Voucher">
-        <i class="bi bi-printer"></i>
-    </button>
+    <a asp-controller="Transacciones" asp-action="DescargarVoucherTransaccion" asp-route-cuentaAhorro="@Model.idCuentaAhorro" asp-route-Transaccion="@Model.idTransaccion" title="Imprimir Recibo" class="btn btn-sm btn-icon btn-light btn-active-light-primary me-2">
+        <i class="bi bi-printer"></i>&nbsp;
+    </a>
 </div>

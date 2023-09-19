@@ -896,7 +896,15 @@ public class ClientesController : Controller
                 {
                     model.documento.CopyTo(ms);
                     var fileBytes = ms.ToArray();
-                    sendDocumento.Documento64 = Convert.ToBase64String(fileBytes);
+                    var extension = System.IO.Path.GetExtension(model.documento.FileName);
+
+                    if (extension.ToLower() == ".pdf") {
+                        sendDocumento.Documento64 = "data:application/pdf;base64,";
+                    } else {
+                        sendDocumento.Documento64 = string.Format("data:image/{0};base64,", extension.Replace(".", ""));
+                    }
+
+                    sendDocumento.Documento64 += Convert.ToBase64String(fileBytes);
                 }
             }
 
@@ -904,6 +912,7 @@ public class ClientesController : Controller
             sendDocumento.TipoDocumento = Convert.ToInt32(model.tipoDocumento);
             sendDocumento.Observaciones = model.Observaciones;
             sendDocumento.NombreDocumento = model.documento.FileName;
+            sendDocumento.Documento64 = sendDocumento.Documento64.Trim();
 
             response = await _clientesApiClient.GetInsertaDocumentoClienteAsync(sendDocumento);
 
