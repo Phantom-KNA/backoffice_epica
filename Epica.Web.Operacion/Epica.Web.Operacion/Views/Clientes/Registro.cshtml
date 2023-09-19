@@ -127,8 +127,35 @@
                     <div class="py-2 px-4 col-md-3 fv-row">
                         <label class="form-label required">Tipo de teléfono: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="ClientesDetalles.TelefonoTipo" class="form-control form-control-sm form-control-solid" id="Telefono" type="text" value="@(Model?.ClientesDetalles.TelefonoTipo ?? "")" autocomplete="off" required />
-                            <span asp-validation-for="ClientesDetalles.TelefonoTipo" class="text-danger"></span>
+                            <select asp-for="ClientesDetalles.TelefonoTipo" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción" required>
+                                <option></option>
+                                @{
+                                    if (Model != null)
+                                    {
+                                        if (Model.ClientesDetalles.TelefonoTipo == "Móvil")
+                                        {
+                                            <option value="Móvil" selected>Móvil</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="Móvil">Móvil</option>
+                                        }
+                                        if (Model.ClientesDetalles.TelefonoTipo == "Casa")
+                                        {
+                                            <option value="Casa" selected>Casa</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="Casa">Casa</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option value="Móvil">Móvil</option>
+                                        <option value="Casa">Casa</option>
+                                    }
+                                }
+                            </select>
                         </div>
                     </div>
                 </div>
