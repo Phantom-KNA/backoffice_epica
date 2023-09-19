@@ -289,6 +289,37 @@ $(document).on('click', '.btn_devolver_transacciones', function () {
 
 function DevolverTransaccion(claveRastreo) {
     Swal.fire({
+        title: '<span class="swal-title-custom"><b>Valida tu identidad</b></span>',
+        text: 'Por favor, ingrese su token y código de seguridad:',
+        html:
+            '<label for="swal-input1" class="swal-label"><b>Token:</b></label>' +
+            '<input id="swal-input1" class="swal2-input" style="font-size:14px;width:250px"  placeholder="Token">' +
+            '<div style="margin-top: 20px;"></div>' +
+            '<label for="swal-input2" class="swal-label"><b>Código de Seguridad:</b></label>' +
+            '<input id="swal-input2" class="swal2-input" style="font-size:14px;width:250px" type="password" placeholder="Código de Seguridad">',
+        showCancelButton: true,
+        confirmButtonColor: '#0493a8',
+        confirmButtonText: 'Aceptar',
+        cancelButtonText: 'Cancelar',
+        preConfirm: () => {
+            const swalInput1 = Swal.getPopup().querySelector('#swal-input1').value;
+            const swalInput2 = Swal.getPopup().querySelector('#swal-input2').value;
+            return [swalInput1, swalInput2];
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const [tokenInput, codigoInput] = result.value;
+
+            // Realiza la validación del token y código de seguridad
+            $.ajax({
+                url: '/Autenticacion/ValidarTokenYCodigo',
+                async: true,
+                cache: false,
+                type: 'POST',
+                data: { token: tokenInput, codigo: codigoInput },
+                success: function (validationResult) {
+                    if (validationResult.mensaje === true) {
+    Swal.fire({
         title: 'Devolver Transacciones',
         text: "¿Estas seguro que deseas aplicar la devolución para esta transacción?",
         icon: 'warning',
@@ -325,7 +356,19 @@ function DevolverTransaccion(claveRastreo) {
                     }
                 },
                 error: function (xhr, status, error) {
-                    console.log(error);
+                }
+            });
+        }
+    });
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            'Token o código de seguridad incorrectos. Inténtalo de nuevo.',
+                            'error'
+                        );
+                    }
+                },
+                error: function () {
                 }
             });
         }
@@ -334,43 +377,84 @@ function DevolverTransaccion(claveRastreo) {
 
 function ReenviarTransaccion(claveRastreo) {
     Swal.fire({
-        title: 'Reenviar Transacción',
-        text: "¿Estas seguro que deseas reenviar esta transacción?",
-        icon: 'warning',
+        title: '<span class="swal-title-custom"><b>Valida tu identidad</b></span>',
+        text: 'Por favor, ingrese su token y código de seguridad:',
+        html:
+            '<label for="swal-input1" class="swal-label"><b>Token:</b></label>' +
+            '<input id="swal-input1" class="swal2-input" style="font-size:14px;width:250px"  placeholder="Token">' +
+            '<div style="margin-top: 20px;"></div>' +
+            '<label for="swal-input2" class="swal-label"><b>Código de Seguridad:</b></label>' +
+            '<input id="swal-input2" class="swal2-input" style="font-size:14px;width:250px" type="password" placeholder="Código de Seguridad">',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Aceptar'
+        confirmButtonColor: '#0493a8',
+        confirmButtonText: 'Aceptar',
+        cancelButtonText: 'Cancelar',
+        preConfirm: () => {
+            const swalInput1 = Swal.getPopup().querySelector('#swal-input1').value;
+            const swalInput2 = Swal.getPopup().querySelector('#swal-input2').value;
+            return [swalInput1, swalInput2];
+        }
     }).then((result) => {
         if (result.isConfirmed) {
+            const [tokenInput, codigoInput] = result.value;
 
-            toastr.info('Aplicando Devolución a transacción...', "");
-
+            // Realiza la validación del token y código de seguridad
             $.ajax({
-                url: 'ReenviarTransaccion',
+                url: '/Autenticacion/ValidarTokenYCodigo',
                 async: true,
                 cache: false,
                 type: 'POST',
-                data: { clavesRastreo: claveRastreo },
-                success: function (data) {
+                data: { token: tokenInput, codigo: codigoInput },
+                success: function (validationResult) {
+                    if (validationResult.mensaje === true) {
+                        Swal.fire({
+                            title: 'Reenviar Transacción',
+                            text: "¿Estás seguro que deseas reenviar esta transacción?",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Aceptar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                toastr.info('Aplicando Devolución a transacción...', "");
 
-                    if (data.error == true) {
-                        Swal.fire(
-                            'Reenviar Transacción',
-                            'Hubo un problema para reenviar esta transacción, inténtelo mas tarde o verifique su existencia.',
-                            'error'
-                        )
+                                $.ajax({
+                                    url: 'ReenviarTransaccion',
+                                    async: true,
+                                    cache: false,
+                                    type: 'POST',
+                                    data: { clavesRastreo: claveRastreo },
+                                    success: function (data) {
+                                        if (data.error == true) {
+                                            Swal.fire(
+                                                'Reenviar Transacción',
+                                                'Hubo un problema para reenviar esta transacción, inténtelo más tarde o verifique su existencia.',
+                                                'error'
+                                            )
+                                        } else {
+                                            datatable_transaccion.ajax.reload();
+                                            Swal.fire(
+                                                'Reenviar Transacción',
+                                                'Se ha realizado el reenvío de la transacción con éxito.',
+                                                'success'
+                                            )
+                                        }
+                                    },
+                                    error: function (xhr, status, error) {
+                                    }
+                                });
+                            }
+                        });
                     } else {
-                        datatable_transaccion.ajax.reload();
                         Swal.fire(
-                            'Reenviar Transacción',
-                            'Se ha realizado el reenvio de la transacción con exito.',
-                            'success'
-                        )
+                            'Error',
+                            'Token o código de seguridad incorrectos. Inténtalo de nuevo.',
+                            'error'
+                        );
                     }
                 },
-                error: function (xhr, status, error) {
-                    console.log(error);
+                error: function () {
                 }
             });
         }

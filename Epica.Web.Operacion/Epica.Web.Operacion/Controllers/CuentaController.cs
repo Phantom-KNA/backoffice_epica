@@ -98,7 +98,8 @@ public class CuentaController : Controller
                     idCuenta = cuenta.IdCuenta,
                     noCuenta = cuenta.NoCuenta,
                     fechaAltaFormat = cuenta.FechaAlta,
-                    fechaActualizacionformat = cuenta.FechaActualizacion
+                    fechaActualizacionformat = cuenta.FechaActualizacion,
+                    clabe = cuenta.Clabe
                 };
 
                 ListPF.Add(cuentasResponse);
@@ -125,6 +126,7 @@ public class CuentaController : Controller
                 estatus = row.estatus,
                 tipoPersona = row.tipoPersona,
                 alias = "",
+                clabe = row.clabe,
                 Acciones = await this.RenderViewToStringAsync("~/Views/Cuenta/_Acciones.cshtml", row)
             });
         }

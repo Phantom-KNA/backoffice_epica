@@ -66,6 +66,9 @@ var KTDatatableRemoteAjax = function () {
             columns: [
 /*                { data: 'idCuenta', name: 'idCuenta', title: 'ID' },*/
                 {
+                    data: 'clabe', name: 'Clabe', title: 'Cuenta Clabe'
+                },
+                {
                     data: 'noCuenta', name: 'NoCuenta', title: 'Numero de Cuenta',
                     render: function (data, type, row) {
                         var partes = data.split("|"); // Separar la parte entera y decimal
@@ -76,11 +79,7 @@ var KTDatatableRemoteAjax = function () {
                     }
                 },
                 {
-                    data: 'alias', name: 'Alias', title: ''
-                },
-                { data: 'nombrePersona', name: 'nombrePersona', title: 'Nombre persona' },
-                {
-                    data: 'alias', name: 'Alias', title: ''
+                    data: 'nombrePersona', name: 'nombrePersona', title: 'Nombre persona'
                 },
                 {
                     data: 'saldo', name: 'Saldo', title: 'Saldo',
@@ -88,9 +87,6 @@ var KTDatatableRemoteAjax = function () {
                         return accounting.formatMoney(data);
                     }
                 },
-                //{
-                //    data: 'alias', name: 'Alias', title: ''
-                //},
                 {
                     data: 'tipoPersona', name: 'Tipo', title: 'Tipo Persona'
                 },
@@ -100,6 +96,9 @@ var KTDatatableRemoteAjax = function () {
                         return data == 1 ?
                             "<span class='badge badge-light-danger' >Desactivado</span>" : "<span class='badge badge-light-success' >Activo</span>";
                     }
+                },
+                {
+                    data: 'alias', name: 'Alias', title: ''
                 },
                 {
                     title: '',

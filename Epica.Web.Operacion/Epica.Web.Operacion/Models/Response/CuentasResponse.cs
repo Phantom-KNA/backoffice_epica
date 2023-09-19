@@ -20,6 +20,7 @@ public class CuentasResponse
     public string email { get; set; }
     public string telefono { get; set; }
     public bool validarPermiso { get; set; }
+    public string clabe { get; set; }
 }
 
 public class CuentasResponseGrid : CuentasResponse
