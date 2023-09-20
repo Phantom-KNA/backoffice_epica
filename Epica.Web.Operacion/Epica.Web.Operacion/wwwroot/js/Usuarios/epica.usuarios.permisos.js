@@ -364,12 +364,11 @@ function GestionarUsuario(AccountID, estatus) {
             datatable.ajax.reload();
             Swal.fire(
                 'Gestionar Usuario',
-                'Se ha actualizado la cuenta con exito.',
+                'Se ha actualizado la cuenta con éxito.',
                 'success'
             )
         },
         error: function (xhr, status, error) {
-            console.log(error);
         }
     });
 }
@@ -402,12 +401,11 @@ function GestionarPermisos(event) {
             datatable.ajax.reload();
             Swal.fire(
                 'Asignación de Permisos',
-                'Se ha actualizado el permiso con exito.',
+                'Se ha actualizado el permiso con éxito.',
                 'success'
             )
         },
         error: function (xhr, status, error) {
-            console.log(error);
         }
     });
 }
@@ -438,7 +436,7 @@ $("#GuardarRol").click(function () {
     const rol = inputNombreRol.value;
 
     if ((rol == null) | (rol == "")) {
-        toastr.warning("El valor ingresado, no es válido");
+        toastr.warning("El valor ingresado no es válido");
         return false;
     } 
 
@@ -456,7 +454,7 @@ $("#GuardarRol").click(function () {
             if (data.error == false) {
                 Swal.fire(
                     'Crear Nuevo Rol',
-                    'Se ha creado el rol con exito.',
+                    'Se ha creado el rol con éxito.',
                     'success'
                 )
                 datatable.ajax.reload();
@@ -470,7 +468,6 @@ $("#GuardarRol").click(function () {
 
         },
         error: function (xhr, status, error) {
-            console.log(error);
         }
     });
 

@@ -125,11 +125,11 @@ var plugins = () => {
             button: "Cargar Archivo",
             feedback: "Cargar Documento Cliente",
             feedback2: "Archivos Agregados",
-            removeConfirmation: "Esta seguro que desea eliminar este documento?",
+            removeConfirmation: "¿Estás seguro que deseas eliminar este documento?",
             errors: {
-                filesLimit: "Unicamente se pueden cargar {{fi-limit}} archivos.",
-                filesType: "El formato del documento, no es valido.",
-                filesSize: "{{fi-name}} supera el limite permitido! El tamaño permitido es de {{fi-maxSize}} MB."
+                filesLimit: "Únicamente se pueden cargar {{fi-limit}} archivos.",
+                filesType: "El formato del documento, no es válido.",
+                filesSize: "{{fi-name}} supera el límite permitido! El tamaño permitido es de {{fi-maxSize}} MB."
             }
         }
     });
@@ -171,7 +171,7 @@ $(document).on('click', '#BtnGuardarDocumento', function (e) {
         success: function (data) {
 
             datatable.ajax.reload();
-            toastr.success('Se guardo la informacion de manera exitosa', "");
+            toastr.success('Se guardó la información de manera exitosa', "");
         },
         error: function (xhr, status, error) {
             console.log(error);
@@ -221,7 +221,6 @@ $(document).on('click', '#btnVerDocumento', function (e) {
 
         },
         error: function (xhr, status, error) {
-            console.log(error);
         }
 
 

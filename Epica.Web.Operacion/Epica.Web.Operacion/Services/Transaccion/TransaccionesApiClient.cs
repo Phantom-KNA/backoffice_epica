@@ -1,12 +1,10 @@
 ﻿using Epica.Web.Operacion.Config;
 using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Models.Request;
-using Epica.Web.Operacion.Models.Response;
 using Epica.Web.Operacion.Services.UserResolver;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Text;
-using System.Text.Json;
 
 namespace Epica.Web.Operacion.Services.Transaccion
 {
@@ -36,11 +34,11 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    transaccionResponse = JsonConvert.DeserializeObject<TransaccionDetailsResponse>(jsonResponse);
+                    transaccionResponse = JsonConvert.DeserializeObject<TransaccionDetailsResponse>(jsonResponse)!;
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return transaccionResponse;
             }
@@ -68,14 +66,14 @@ namespace Epica.Web.Operacion.Services.Transaccion
                         MissingMemberHandling = MissingMemberHandling.Ignore
                     };
                     ListaTransacciones = JsonConvert.DeserializeObject<List<CargaBachRequest>>(jsonResponse, settings);
-                    paginacion = int.Parse(response.Headers.GetValues("x-totalRecord").FirstOrDefault()?.ToString());
-                    return (JsonConvert.DeserializeObject<List<CargaBachRequest>>(jsonResponse), paginacion);
+                    paginacion = int.Parse(response.Headers.GetValues("x-totalRecord").FirstOrDefault()!.ToString());
+                    return (JsonConvert.DeserializeObject<List<CargaBachRequest>>(jsonResponse), paginacion)!;
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (ListaTransacciones, paginacion); ;
+                return (ListaTransacciones, paginacion)!; ;
             }
 
             return (ListaTransacciones, paginacion);
@@ -101,14 +99,14 @@ namespace Epica.Web.Operacion.Services.Transaccion
                         MissingMemberHandling = MissingMemberHandling.Ignore
                     };
                     ListaTransacciones = JsonConvert.DeserializeObject<List<TransaccionesResponse>>(jsonResponse, settings);
-                    paginacion = int.Parse(response.Headers.GetValues("x-totalRecord").FirstOrDefault()?.ToString());
-                    return (JsonConvert.DeserializeObject<List<TransaccionesResponse>>(jsonResponse), paginacion);
+                    paginacion = int.Parse(response.Headers.GetValues("x-totalRecord").FirstOrDefault()!.ToString());
+                    return (JsonConvert.DeserializeObject<List<TransaccionesResponse>>(jsonResponse), paginacion)!;
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (ListaTransacciones, paginacion);
+                return (ListaTransacciones, paginacion)!;
             }
 
             return (ListaTransacciones, paginacion);
@@ -124,7 +122,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
             var stringResponse = await response.Content.ReadAsStringAsync();
 
-            return JsonConvert.DeserializeObject<TransaccionesResponse>(stringResponse);
+            return JsonConvert.DeserializeObject<TransaccionesResponse>(stringResponse)!;
         }
 
         public async Task<int> GetTotalTransaccionesAsync()
@@ -166,7 +164,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse)!;
                 }
 
             }
@@ -202,12 +200,12 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return ListaTransacciones;
+                return ListaTransacciones!;
             }
 
-            return ListaTransacciones;
+            return ListaTransacciones!;
         }
 
         public async Task<MensajeResponse> GetRegistroTransaccion(RegistrarTransaccionRequest request)
@@ -225,7 +223,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse)!;
                 }
 
             }
@@ -256,12 +254,12 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return TransaccionDetalle;
+                return TransaccionDetalle!;
             }
 
-            return TransaccionDetalle;
+            return TransaccionDetalle!;
         }
 
         public async Task<TransaccionDetailsResponse> GetTransaccionDetalleByCobranzaAsync(string cobranzaRef)
@@ -281,12 +279,12 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return TransaccionDetalle;
+                return TransaccionDetalle!;
             }
 
-            return TransaccionDetalle;
+            return TransaccionDetalle!;
         }
 
         public async Task<TransaccionesDetailsgeneralResponse> GetTransaccionesClienteAsync(int idCliente)
@@ -311,12 +309,12 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return ListaTransacciones;
+                return ListaTransacciones!;
             }
 
-            return ListaTransacciones;
+            return ListaTransacciones!;
         }
 
         public async Task<MensajeResponse> GetInsertaTransaccionesBatchAsync(List<CargaBachRequest> request)
@@ -338,12 +336,12 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return respuesta;
+                return respuesta!;
             }
 
-            return respuesta;
+            return respuesta!;
         }
 
         public async Task<MensajeResponse> GetEliminarTransaccionBatchAsync(int idRegistro)
@@ -359,7 +357,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse)!;
                 }
 
             }
@@ -390,12 +388,12 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return TransaccionBatch;
+                return TransaccionBatch!;
             }
 
-            return TransaccionBatch;
+            return TransaccionBatch!;
         }
 
         public async Task<string> GetModificaTransaccionBatchAsync(CargaBachRequest request)
@@ -419,8 +417,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
             }
             catch (Exception ex)
             {
-                respuesta = "";
-                return respuesta;
+                return respuesta + ex.Message;
             }
 
             return respuesta;
@@ -441,7 +438,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse)!;
                 }
 
             }
@@ -455,13 +452,12 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return respuesta;
         }
 
-        public async Task<VoucherResponse> GetVoucherTransaccionAsync(int cuentaAhorro, int transaccion)
+        public async Task<VoucherResponse> GetVoucherTransaccionAsync(int cuentaAhorro, int transaccion, string token)
         {
             VoucherResponse? docFile = new VoucherResponse();
-
             try
             {
-                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetComprobanteTransaccion(cuentaAhorro, transaccion);
+                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetComprobanteTransaccion(cuentaAhorro, transaccion, token);
                 var response = await ApiClient.GetAsync(uri);
 
                 if (response.IsSuccessStatusCode)
@@ -475,10 +471,10 @@ namespace Epica.Web.Operacion.Services.Transaccion
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("" + ex.Message);
             }
 
-            return docFile;
+            return docFile!;
         }
     }
 }

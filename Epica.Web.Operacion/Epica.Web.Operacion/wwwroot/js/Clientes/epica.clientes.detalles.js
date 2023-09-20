@@ -6,7 +6,7 @@ function ResetContrasenaEmail(Email, ID) {
 
     Swal.fire({
         title: 'Enviar Reseteo de Contraseña por Correo Electrónico',
-        text: "¿Esta seguro que desea enviar el reseteo de contraseña para este cliente?",
+        text: "¿Estás seguro que deseas enviar el reseteo de contraseña para este cliente?",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -25,15 +25,15 @@ function ResetContrasenaEmail(Email, ID) {
 
                     datatable.ajax.reload();
                     Swal.fire(
-                        'Envio Reseteo Contraseña',
-                        'Se ha enviado la petición con exito.',
+                        'Envío Reseteo Contraseña',
+                        'Se ha enviado la petición con éxito.',
                         'success'
                     )
                 },
                 error: function (xhr, status, error) {
                     Swal.fire(
-                        'Envio Reseteo Contraseña',
-                        'Hubo un problema al realizar esta solicitud. Intentelo más tarde.',
+                        'Envío Reseteo Contraseña',
+                        'Hubo un problema al realizar esta solicitud. Inténtalo más tarde.',
                         'danger'
                     )
                 }
@@ -47,7 +47,7 @@ function ResetContrasenaTelefono(Telefono, ID) {
 
     Swal.fire({
         title: 'Enviar Reseteo de Contraseña por SMS',
-        text: "¿Esta seguro que desea enviar el reseteo de contraseña para este cliente?",
+        text: "¿Estás seguro que deseas enviar el reseteo de contraseña para este cliente?",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -67,14 +67,14 @@ function ResetContrasenaTelefono(Telefono, ID) {
                     datatable.ajax.reload();
                     Swal.fire(
                         'Envio Reseteo Contraseña',
-                        'Se ha enviado la petición con exito.',
+                        'Se ha enviado la petición con éxito.',
                         'success'
                     )
                 },
                 error: function (xhr, status, error) {
                     Swal.fire(
-                        'Envio Reseteo Contraseña',
-                        'Hubo un problema al realizar esta solicitud. Intentelo más tarde.',
+                        'Envío Reseteo Contraseña',
+                        'Hubo un problema al realizar esta solicitud. Inténtalo más tarde.',
                         'danger'
                     )
                 }

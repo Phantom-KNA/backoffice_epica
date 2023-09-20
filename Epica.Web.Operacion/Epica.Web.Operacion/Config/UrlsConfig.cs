@@ -35,7 +35,7 @@ public class UrlsConfig
         public static string GetTransaccionBatch(int idRegistro) => $"/api/v1/cargabach/buscar_registro?idRegistro={idRegistro}";
         public static string GetTransaccionEditBatch() => $"/api/v1/cargabach/modificar_registro";
         public static string GetProcesarTransaccion() => $"/api/v1/cargabach/inserta_multiple_transacciones";
-        public static string GetComprobanteTransaccion(int cuentaAhorro, int Transaccion) => $"/api/v1/transacciones/imprimir_voucher?idCuentaAhorro={cuentaAhorro}&idTransaccion={Transaccion}";
+        public static string GetComprobanteTransaccion(int cuentaAhorro, int Transaccion, string valida) => $"/api/v1/transacciones/imprimir_voucher?idCuentaAhorro={cuentaAhorro}&idTransaccion={Transaccion}&valida={valida}";
 
     }
 
@@ -90,7 +90,7 @@ public class UrlsConfig
         public static string GetTarjetasCliente(int idClientes) => $"/api/v1/tarjetas/clientes_tarjetas?idCliente={idClientes}";
         public static string GetTarjetas(int numberPage, int TotalRecords) => $"/api/v1/tarjetas/view_tarjetas?pageNumber={numberPage}&pageSize={TotalRecords}";
         public static string GetTarjetasRegistra() => $"/api/v1/tarjetas/add_toka";
-        public static string GetBloquearDesbloquearTarjeta(string numeroTarjeta, int estatus) => $"/api/v1/tarjetas/bloquear_desbloquear_tarjeta?numeroTarjeta={numeroTarjeta}&status={estatus}";
+        public static string GetBloquearDesbloquearTarjeta(string numeroTarjeta, int estatus, string valida) => $"/api/v1/tarjetas/bloquear_desbloquear_tarjeta?numeroTarjeta={numeroTarjeta}&status={estatus}&valida={valida}";
     }
 
     public class LoginOperations

@@ -3,15 +3,9 @@ using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Models.Entities;
 using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.UserResolver;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using System.IO;
-using System.Net.Mime;
-using System.Security.AccessControl;
 using System.Text;
-using System.Text.Json.Serialization;
 
 namespace Epica.Web.Operacion.Services.Transaccion
 {
@@ -47,11 +41,11 @@ namespace Epica.Web.Operacion.Services.Transaccion
                     listaClientes = JsonConvert.DeserializeObject<List<ClienteResponse>>(jsonResponse);
                 }
 
-            } catch (Exception ex) {
-                return listaClientes;
+            } catch (Exception) {
+                return listaClientes!;
             }
 
-            return listaClientes;
+            return listaClientes!;
         }
 
         public async Task<object> GetClientesbyNombreAsync(string nombreCliente)
@@ -65,7 +59,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    listaClientes = JsonConvert.DeserializeObject<List<DatosCatalogoResponse>>(jsonResponse);
+                    listaClientes = JsonConvert.DeserializeObject<List<DatosCatalogoResponse>>(jsonResponse)!;
                 }
 
             }
@@ -88,13 +82,13 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    listaClientes = JsonConvert.DeserializeObject<List<DatosClienteEntity>>(jsonResponse);
+                    listaClientes = JsonConvert.DeserializeObject<List<DatosClienteEntity>>(jsonResponse)!;
                 }
 
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception(ex.Message);
             }
 
             return listaClientes;
@@ -145,12 +139,12 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return cliente;
+                throw new Exception(ex.Message);
             }
 
-            return cliente;
+            return cliente!;
         }
 
         public async Task<DocumentosClienteDetailsResponse> GetDocumentosClienteAsync(int id)
@@ -177,10 +171,10 @@ namespace Epica.Web.Operacion.Services.Transaccion
             }
             catch (Exception ex)
             {
-                return listaDocumentosCliente;
+                throw new Exception(ex.Message);
             }
 
-            return listaDocumentosCliente;
+            return listaDocumentosCliente!;
         }
 
         public async Task<BloqueoWebResponse> GetBloqueoWeb(BloqueoWebClienteRequest request)
@@ -198,7 +192,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    respuesta = JsonConvert.DeserializeObject<BloqueoWebResponse>(jsonResponse);
+                    respuesta = JsonConvert.DeserializeObject<BloqueoWebResponse>(jsonResponse)!;
                 }
 
             }
@@ -227,7 +221,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    respuesta = JsonConvert.DeserializeObject<BloqueoTotalResponse>(jsonResponse);
+                    respuesta = JsonConvert.DeserializeObject<BloqueoTotalResponse>(jsonResponse)!;
                 }
 
             }
@@ -256,7 +250,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse)!;
                 }
 
             }
@@ -285,7 +279,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse)!;
                 }
 
             }
@@ -320,12 +314,12 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return cliente;
+                throw new Exception(ex.Message);
             }
 
-            return cliente;
+            return cliente!;
         }
 
         //public async Task<RegistrarModificarClienteResponse> GetModificaCliente(RegistroModificacionClienteRequest request)
@@ -372,7 +366,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse)!;
                 }
 
             }
@@ -401,7 +395,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse)!;
                 }
 
             }
@@ -435,7 +429,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse)!;
                 }
 
             }
@@ -468,7 +462,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse)!;
                 }
 
             }
@@ -503,15 +497,15 @@ namespace Epica.Web.Operacion.Services.Transaccion
                     System.Net.Http.HttpContent content = response.Content;
                     var h = content.Headers;
 
-                    documentoRecibido.MimeType = response.Content.Headers.ContentType.ToString();
-                    documentoRecibido.Nombre = response.Content.Headers.ContentDisposition.ToString().Substring(response.Content.Headers.ContentDisposition.ToString().IndexOf("filename=") + 10).Replace("\"", "");
+                    documentoRecibido.MimeType = response.Content.Headers.ContentType!.ToString();
+                    documentoRecibido.Nombre = response.Content.Headers.ContentDisposition!.ToString().Substring(response.Content.Headers.ContentDisposition.ToString().IndexOf("filename=") + 10).Replace("\"", "");
                     documentoRecibido.Documento = await content.ReadAsStreamAsync();
                 }
 
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception(ex.Message);
             }
 
             return documentoRecibido;
@@ -532,7 +526,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse)!;
                 }
 
             }

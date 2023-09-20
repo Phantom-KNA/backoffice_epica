@@ -253,15 +253,15 @@ function GestionarTarjeta(numgen, estatus, id) {
                 data: { token: tokenInput, codigo: codigoInput },
                 success: function (validationResult) {
                     if (validationResult.mensaje === true) {
-    Swal.fire({
-        title: 'Bloqueo/Desbloqueo de Tarjetas',
-        text: "¿Esta seguro que desea bloquear o desbloquear esta tarjeta?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Aceptar'
-    }).then((result) => {
+                        Swal.fire({
+                            title: (estatus.toLowerCase() === 'true' ? 'Desbloqueo de Tarjetas' : 'Bloqueo de Tarjetas'),
+                            text: (estatus.toLowerCase() === 'true' ? "¿Estás seguro que deseas desbloquear esta tarjeta?" : "¿Estás seguro que deseas bloquear esta tarjeta?" ),
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Aceptar'
+                        }).then((result) => {
         if (result.isConfirmed) {
 
             toastr.info('Aplicando Devolución a transacción...', "");
@@ -277,7 +277,7 @@ function GestionarTarjeta(numgen, estatus, id) {
                     datatable.ajax.reload();
                     Swal.fire(
                         'Estatus Actualizado',
-                        'Se ha actualizado el estatus de la tarjeta con exito.',
+                        'Se ha actualizado el estatus de la tarjeta con éxito.',
                         'success'
                     )
                 },

@@ -1,16 +1,12 @@
 ﻿using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Models.Common;
 using Epica.Web.Operacion.Models.Request;
-using Epica.Web.Operacion.Models.Response;
-using Epica.Web.Operacion.Models.ViewModels;
 using Epica.Web.Operacion.Services.Catalogos;
 using Epica.Web.Operacion.Services.Log;
 using Epica.Web.Operacion.Services.Usuarios;
 using Epica.Web.Operacion.Utilities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace Epica.Web.Operacion.Controllers
 {
@@ -242,7 +238,7 @@ namespace Epica.Web.Operacion.Controllers
         public async Task<ActionResult> GestionarPermisos()
         {
             var loginResponse = _userContextService.GetLoginResponse();
-            var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Configuracion" && modulo.Ver == 0);
+            var validacion = loginResponse?.AccionesPorModulo!.Any(modulo => modulo.ModuloAcceso == "Configuracion" && modulo.Ver == 0);
             if (validacion == true)
                 return View();
             return NotFound();
@@ -293,7 +289,7 @@ namespace Epica.Web.Operacion.Controllers
             {
                 List<ListUserPermissionResponse> listPermisos = new List<ListUserPermissionResponse>();
 
-                if (row.AccionesPorModulo.Count == 0) {
+                if (row.AccionesPorModulo!.Count == 0) {
                     listPermisos = mapeoRolesVistaVacio(row.Id);
                 } else if (row.AccionesPorModulo.Count == 5) {
                     listPermisos = mapeoRolesVista(row.AccionesPorModulo);
@@ -304,7 +300,7 @@ namespace Epica.Web.Operacion.Controllers
                 List.Add(new UserPermissionResponseGrid
                 {
                     id = row.Id,
-                    nombreRol = row.NombreRol,
+                    nombreRol = row.NombreRol!,
                     listaGen = listPermisos
                 }); 
             }
@@ -531,7 +527,7 @@ namespace Epica.Web.Operacion.Controllers
                         var pf = new ListUserPermissionResponse();
                         pf.IdPermiso = row.IdPermiso;
                         pf.IdRol = row.IdRol;
-                        pf.vista = row.ModuloAcceso;
+                        pf.vista = row.ModuloAcceso!;
                         pf.Escritura = row.Insertar == 0 ? true : false;
                         pf.Lectura = row.Ver == 0 ? true : false;
                         pf.Eliminar = row.Eliminar == 0 ? true : false;
@@ -557,7 +553,7 @@ namespace Epica.Web.Operacion.Controllers
                 var pf = new ListUserPermissionResponse();
                 pf.IdPermiso = row.IdPermiso;
                 pf.IdRol = row.IdRol;
-                pf.vista = row.ModuloAcceso;
+                pf.vista = row.ModuloAcceso!;
                 pf.Escritura = row.Insertar == 0 ? true : false;
                 pf.Lectura = row.Ver == 0 ? true : false;
                 pf.Eliminar = row.Eliminar == 0 ? true : false;

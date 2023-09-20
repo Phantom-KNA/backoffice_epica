@@ -97,7 +97,7 @@ var KTDatatableRemoteAjax = function () {
 
         
 
-        toastr.success('Se guardo la informacion de manera exitosa', "");
+        toastr.success('Se guardó la información de manera exitosa', "");
         $("#btnCerrarCuenta").click();
     });
 
@@ -310,20 +310,19 @@ $(document).on('click', '#GuardarAsignacion', function (e) {
             if (data.error == true) {
                 Swal.fire(
                     'Asignar Cuenta',
-                    'Hubo un problema al asignar la cuenta, verifique su existencia o Inténtelo más tarde.',
+                    'Hubo un problema al asignar la cuenta, verifique su existencia o Inténtalo más tarde.',
                     'error'
                 )
             } else {
                 datatable.ajax.reload();
                 Swal.fire(
                     'Asignar Cuenta',
-                    'Se guardo la información de manera exitosa.',
+                    'Se guardó la información de manera exitosa.',
                     'success'
                 )
             }
         },
         error: function (xhr, status, error) {
-            console.log(error);
         }
 
 
@@ -335,7 +334,7 @@ $(document).on('click', '.btnDesasignar', function (e) {
 
     Swal.fire({
         title: 'Desvincular Cuenta',
-        text: "¿Está seguro de que desea desvincular esta cuenta del cliente?",
+        text: "¿Estás seguro de que deseas desvincular esta cuenta del cliente?",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -356,7 +355,7 @@ $(document).on('click', '.btnDesasignar', function (e) {
                     if (data.error == true) {
                         Swal.fire(
                             'Desvincular Cuenta',
-                            'Hubo un problema al desvincular la cuenta, verifique su existencia o Inténtelo más tarde.',
+                            'Hubo un problema al desvincular la cuenta, verifique su existencia o Inténtalo más tarde.',
                             'error'
                         )
                     } else {
@@ -370,9 +369,7 @@ $(document).on('click', '.btnDesasignar', function (e) {
 
                 },
                 error: function (xhr, status, error) {
-                    console.log(error);
                 }
-
 
             });
         }
