@@ -73,6 +73,7 @@ public class ClientesController : Controller
 
         int totalRecord = 0;
         int filterRecord = 0;
+        int paginacion = 0;
 
         var draw = Request.Form["draw"].FirstOrDefault();
         int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
@@ -115,7 +116,7 @@ public class ClientesController : Controller
         }
         else
         {
-            ListPF = await _clientesApiClient.GetClientesAsync(1, 200);
+            (ListPF, paginacion) = await _clientesApiClient.GetClientesAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros));
 
         }
 
@@ -185,8 +186,7 @@ public class ClientesController : Controller
         }
 
         gridData.Data = List;
-        gridData.RecordsTotal = List.Count;
-        gridData.Data = gridData.Data.Skip(skip).Take(pageSize).ToList();
+        gridData.RecordsTotal = paginacion;
         filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.Data.Count;
         gridData.RecordsFiltered = filterRecord;
         gridData.Draw = draw;

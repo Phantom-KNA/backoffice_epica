@@ -25,10 +25,11 @@ namespace Epica.Web.Operacion.Services.Transaccion
             _userContextService = userContextService;
         }
 
-        public async Task<List<ClienteResponse>> GetClientesAsync(int pageNumber, int recordsTotal)
+        public async Task<(List<ClienteResponse>, int)> GetClientesAsync(int pageNumber, int recordsTotal)
         {
 
             List<ClienteResponse>? listaClientes = new List<ClienteResponse>();
+            int paginacion = 0;
 
             try
             {
@@ -38,14 +39,21 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    listaClientes = JsonConvert.DeserializeObject<List<ClienteResponse>>(jsonResponse);
+                    var settings = new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+                    listaClientes = JsonConvert.DeserializeObject<List<ClienteResponse>>(jsonResponse, settings);
+                    paginacion = int.Parse(response.Headers.GetValues("x-totalRecord").FirstOrDefault()!.ToString());
+                    return (listaClientes, paginacion)!;
                 }
 
             } catch (Exception) {
-                return listaClientes!;
+                return (listaClientes, paginacion)!; ;
             }
 
-            return listaClientes!;
+            return (listaClientes, paginacion);
         }
 
         public async Task<object> GetClientesbyNombreAsync(string nombreCliente)

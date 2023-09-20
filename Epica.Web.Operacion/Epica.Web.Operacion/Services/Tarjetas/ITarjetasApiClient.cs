@@ -8,7 +8,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
     {
         Task<ResumenTarjetasResponse> GetBuscarTarjetasasync(string noTarjeta);
         Task<List<TarjetasResponse>> GetTarjetasClientesAsync(int idCliente);
-        Task<List<TarjetasResponse>> GetTarjetasAsync(int pageNumber, int recordsTotal);
+        Task<(List<TarjetasResponse>, int)> GetTarjetasAsync(int pageNumber, int recordsTotal);
         Task<MensajeResponse> GetRegistroTarjetaAsync(RegistrarTarjetaRequest request);
         Task<MensajeResponse> GetBloqueoTarjeta(string numeroTarjeta, int status, string token);
     }

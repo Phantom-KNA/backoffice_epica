@@ -131,6 +131,7 @@ public class TarjetasController : Controller
 
         int totalRecord = 0;
         int filterRecord = 0;
+        int paginacion = 0;
 
         var draw = Request.Form["draw"].FirstOrDefault();
         int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
@@ -166,7 +167,7 @@ public class TarjetasController : Controller
         }
         else
         {
-            ListPF = await _tarjetasApiClient.GetTarjetasAsync(1, 200);
+            (ListPF, paginacion) = await _tarjetasApiClient.GetTarjetasAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros));
 
         }
 
@@ -230,8 +231,7 @@ public class TarjetasController : Controller
         }
 
         gridData.Data = List;
-        gridData.RecordsTotal = List.Count;
-        gridData.Data = gridData.Data.Skip(skip).Take(pageSize).ToList();
+        gridData.RecordsTotal = paginacion;
         filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.Data.Count;
         gridData.RecordsFiltered = filterRecord;
         gridData.Draw = draw;

@@ -62,6 +62,7 @@ public class CuentaController : Controller
 
         int totalRecord = 0;
         int filterRecord = 0;
+        int paginacion = 0;
 
         var draw = Request.Form["draw"].FirstOrDefault();
         int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
@@ -102,7 +103,7 @@ public class CuentaController : Controller
 
             } else if (TipoDeFiltro.Value == "3") {
 
-                var filtrocuentaclabe = filters.FirstOrDefault(x => x.Key == "noCuenta");
+                var filtrocuentaclabe = filters.FirstOrDefault(x => x.Key == "nombreCliente");
 
                 if (filtrocuentaclabe.Value != null)
                 {
@@ -144,10 +145,11 @@ public class CuentaController : Controller
                 {
                     ListPF = await _cuentaApiClient.GetCuentasFiltroAsync(filtrocuentaclabe.Value, Convert.ToInt32(TipoDeFiltro.Value));
                 }
-            }
+            } 
 
-            } else {
-            ListPF = await _cuentaApiClient.GetCuentasAsync(1, 100);
+        } else {
+
+            (ListPF, paginacion) = await _cuentaApiClient.GetCuentasAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros));
 
         }
 
@@ -216,8 +218,7 @@ public class CuentaController : Controller
         //}
 
         gridData.Data = List;
-        gridData.RecordsTotal = List.Count;
-        gridData.Data = gridData.Data.Skip(skip).Take(pageSize).ToList();
+        gridData.RecordsTotal = paginacion;
         filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.Data.Count;
         gridData.RecordsFiltered = filterRecord;
         gridData.Draw = draw;

@@ -43,10 +43,11 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
             return listaCuentas;
         }
-        public async Task<List<CuentasResponse>> GetCuentasAsync(int pageNumber, int recordsTotal)
+        public async Task<(List<CuentasResponse>, int)> GetCuentasAsync(int pageNumber, int recordsTotal)
         {
 
             List<CuentasResponse>? ListaCuentas = new List<CuentasResponse>();
+            int paginacion = 0;
 
             try
             {
@@ -56,17 +57,24 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 if (response.IsSuccessStatusCode)
                 {
                     response.EnsureSuccessStatusCode();
+                    var settings = new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    ListaCuentas = JsonConvert.DeserializeObject<List<CuentasResponse>>(jsonResponse);
+                    ListaCuentas = JsonConvert.DeserializeObject<List<CuentasResponse>>(jsonResponse,settings);
+                    paginacion = int.Parse(response.Headers.GetValues("x-totalRecord").FirstOrDefault()!.ToString());
+                    return (ListaCuentas, paginacion)!;
                 }
 
             }
             catch (Exception ex)
             {
-                return ListaCuentas;
+                return (ListaCuentas, paginacion)!; ;
             }
 
-            return ListaCuentas;
+            return (ListaCuentas, paginacion);
         }
 
         public async Task<int> GetTotalCuentasAsync()

@@ -71,10 +71,11 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return listaClientes!;
         }
 
-        public async Task<List<TarjetasResponse>> GetTarjetasAsync(int pageNumber, int recordsTotal)
+        public async Task<(List<TarjetasResponse>, int)> GetTarjetasAsync(int pageNumber, int recordsTotal)
         {
 
             List<TarjetasResponse>? listaClientes = new List<TarjetasResponse>();
+            int paginacion = 0;
 
             try
             {
@@ -90,15 +91,17 @@ namespace Epica.Web.Operacion.Services.Transaccion
                         MissingMemberHandling = MissingMemberHandling.Ignore
                     };
                     listaClientes = JsonConvert.DeserializeObject<List<TarjetasResponse>>(jsonResponse,settings);
+                    paginacion = int.Parse(response.Headers.GetValues("x-totalRecord").FirstOrDefault()!.ToString());
+                    return (listaClientes, paginacion)!;
                 }
 
             }
             catch (Exception ex)
             {
-                return listaClientes!;
+                return (listaClientes, paginacion)!; ;
             }
 
-            return listaClientes!;
+            return (listaClientes, paginacion);
         }
 
         public async Task<MensajeResponse> GetRegistroTarjetaAsync(RegistrarTarjetaRequest request)
