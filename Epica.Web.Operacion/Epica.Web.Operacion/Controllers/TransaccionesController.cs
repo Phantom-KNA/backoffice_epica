@@ -9,22 +9,10 @@ using Epica.Web.Operacion.Services.Log;
 using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Utilities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using System.Linq;
-using System.Net;
-using System.Net.NetworkInformation;
-using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text.RegularExpressions;
-using System.Threading;
-using static Epica.Web.Operacion.Controllers.CuentaController;
 using ExcelDataReader;
-using System.IO;
 using System.Data;
-using System.Collections.Generic;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Net.Mime;
 
 namespace Epica.Web.Operacion.Controllers
 {
@@ -121,7 +109,7 @@ namespace Epica.Web.Operacion.Controllers
 
             try
             {
-                respuesta = await _transaccionesApiClient.GetVoucherTransaccionAsync(CuentaAhorro, Transaccion);
+                respuesta = await _transaccionesApiClient.GetVoucherTransaccionAsync(CuentaAhorro, Transaccion, _userContextService.GetLoginResponse().Token);
 
                 if (respuesta == null) {
                     return RedirectToAction("index", "home");

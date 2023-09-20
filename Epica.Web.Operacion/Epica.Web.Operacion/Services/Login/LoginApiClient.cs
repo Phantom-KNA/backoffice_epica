@@ -1,14 +1,11 @@
 ﻿using Epica.Web.Operacion.Config;
 using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Models.Request;
-using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Services.UserResolver;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Security.Claims;
 using System.Text;
-using System.Text.Json.Serialization;
 
 namespace Epica.Web.Operacion.Services.Login
 {
@@ -39,20 +36,19 @@ namespace Epica.Web.Operacion.Services.Login
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    loginResponse = JsonConvert.DeserializeObject<LoginResponse>(jsonResponse);
+                    loginResponse = JsonConvert.DeserializeObject<LoginResponse>(jsonResponse)!;
 
                     loginResponse.IsAuthenticated = true;
                     loginResponse.DireccionIp = loginRequest.Ip;
                     loginResponse.NombreDispositivo = loginRequest.DispositivoAcceso;
-
                     var claims = new List<Claim>
                     {
-                        new Claim(ClaimTypes.Name, loginResponse.Usuario)
+                        new Claim(ClaimTypes.Name, loginResponse.Usuario!)
                     };
 
                     var claimsIdentity = new ClaimsIdentity(claims, "EpicaWebEsquema"); 
 
-                    await HttpContext.HttpContext.SignInAsync("EpicaWebEsquema", new ClaimsPrincipal(claimsIdentity));
+                    await HttpContext.HttpContext!.SignInAsync("EpicaWebEsquema", new ClaimsPrincipal(claimsIdentity));
                     userContextService.SetLoginResponse(loginResponse);
 
                 }

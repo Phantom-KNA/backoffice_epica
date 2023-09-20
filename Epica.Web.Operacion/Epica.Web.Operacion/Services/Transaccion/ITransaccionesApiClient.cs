@@ -1,5 +1,4 @@
 ﻿using Epica.Web.Operacion.Models.Request;
-using System.Collections.Generic;
 
 namespace Epica.Web.Operacion.Services.Transaccion
 {
@@ -21,7 +20,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
         Task<CargaBachRequest> GetTransaccionBatchAsync(int idRegistro);
         Task<string> GetModificaTransaccionBatchAsync(CargaBachRequest request);
         Task<MensajeResponse> GetProcesaTransaccion(List<InsertarTransaccionRequest> request);
-        Task<VoucherResponse> GetVoucherTransaccionAsync(int cuentaAhorro, int transaccion);
+        Task<VoucherResponse> GetVoucherTransaccionAsync(int cuentaAhorro, int transaccion, string token);
 
     }
 }

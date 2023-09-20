@@ -1,13 +1,9 @@
 ﻿using Epica.Web.Operacion.Config;
-using Epica.Web.Operacion.Models.Entities;
 using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.UserResolver;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.Text;
-using System.Text.Json;
-using static Epica.Web.Operacion.Controllers.CuentaController;
 
 namespace Epica.Web.Operacion.Services.Transaccion
 {
@@ -34,7 +30,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    tarjetaResponse = JsonConvert.DeserializeObject<ResumenTarjetasResponse>(jsonResponse);
+                    tarjetaResponse = JsonConvert.DeserializeObject<ResumenTarjetasResponse>(jsonResponse)!;
                 }
 
             }
@@ -69,10 +65,10 @@ namespace Epica.Web.Operacion.Services.Transaccion
             }
             catch (Exception ex)
             {
-                return listaClientes;
+                return listaClientes!;
             }
 
-            return listaClientes;
+            return listaClientes!;
         }
 
         public async Task<List<TarjetasResponse>> GetTarjetasAsync(int pageNumber, int recordsTotal)
@@ -99,10 +95,10 @@ namespace Epica.Web.Operacion.Services.Transaccion
             }
             catch (Exception ex)
             {
-                return listaClientes;
+                return listaClientes!;
             }
 
-            return listaClientes;
+            return listaClientes!;
         }
 
         public async Task<MensajeResponse> GetRegistroTarjetaAsync(RegistrarTarjetaRequest request)
@@ -120,7 +116,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse)!;
                 }
 
             }
@@ -132,13 +128,13 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return respuesta;
         }
 
-        public async Task<MensajeResponse> GetBloqueoTarjeta(string numeroTarjeta, int status)
+        public async Task<MensajeResponse> GetBloqueoTarjeta(string numeroTarjeta, int status, string token)
         {
             MensajeResponse respuesta = new MensajeResponse();
 
             try
             {
-                var uri = Urls.Transaccion + UrlsConfig.TarjetasOperations.GetBloquearDesbloquearTarjeta(numeroTarjeta,status);
+                var uri = Urls.Transaccion + UrlsConfig.TarjetasOperations.GetBloquearDesbloquearTarjeta(numeroTarjeta, status, token);
                 var json = JsonConvert.SerializeObject("");
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -147,7 +143,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse)!;
                 }
 
             }
