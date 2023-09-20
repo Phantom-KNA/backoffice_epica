@@ -76,37 +76,77 @@ public class CuentaController : Controller
         var gridData = new ResponseGrid<CuentasResponseGrid>();
         List<CuentasResponse> ListPF = new List<CuentasResponse>();
 
-        var filtroNoCuenta = filters.FirstOrDefault(x => x.Key == "noCuenta");
+        var TipoDeFiltro = filters.FirstOrDefault(x => x.Key == "tipo_filtro");
 
-        if (filtroNoCuenta.Value != null)
+        if (TipoDeFiltro.Value != null)
         {
-            string noCuenta = filtroNoCuenta.Value;
-            var listPF2 = await _cuentaApiClient.GetListaByNumeroCuentaAsync(noCuenta);
 
-            foreach (var cuenta in listPF2)
+            if (TipoDeFiltro.Value == "1")
             {
-                CuentasResponse cuentasResponse = new CuentasResponse
-                {
-                    idCliente = cuenta.IdCliente,
-                    saldo = decimal.Parse(cuenta.Saldo.ToString()),
-                    alias = cuenta.Alias,
-                    fechaActualizacion = cuenta.FechaActualizacion,
-                    estatus = cuenta.Estatus,
-                    nombrePersona = cuenta.NombrePersona,
-                    fechaAlta = cuenta.FechaAlta,
-                    tipoPersona = cuenta.TipoPersona,
-                    idCuenta = cuenta.IdCuenta,
-                    noCuenta = cuenta.NoCuenta,
-                    fechaAltaFormat = cuenta.FechaAlta,
-                    fechaActualizacionformat = cuenta.FechaActualizacion,
-                    clabe = cuenta.Clabe
-                };
 
-                ListPF.Add(cuentasResponse);
+                var filtrocuentaclabe = filters.FirstOrDefault(x => x.Key == "cuentaClabe");
+
+                if (filtrocuentaclabe.Value != null)
+                {
+                    ListPF = await _cuentaApiClient.GetCuentasFiltroAsync(filtrocuentaclabe.Value, Convert.ToInt32(TipoDeFiltro.Value));
+                }
+
+            } else if (TipoDeFiltro.Value == "2") {
+
+                var filtrocuentaclabe = filters.FirstOrDefault(x => x.Key == "noCuenta");
+
+                if (filtrocuentaclabe.Value != null)
+                {
+                    ListPF = await _cuentaApiClient.GetCuentasFiltroAsync(filtrocuentaclabe.Value, Convert.ToInt32(TipoDeFiltro.Value));
+                }
+
+            } else if (TipoDeFiltro.Value == "3") {
+
+                var filtrocuentaclabe = filters.FirstOrDefault(x => x.Key == "noCuenta");
+
+                if (filtrocuentaclabe.Value != null)
+                {
+                    ListPF = await _cuentaApiClient.GetCuentasFiltroAsync(filtrocuentaclabe.Value, Convert.ToInt32(TipoDeFiltro.Value));
+                }
+
+            } else if (TipoDeFiltro.Value == "4") {
+
+                var filtrocuentaclabe = filters.FirstOrDefault(x => x.Key == "estatus");
+
+                if (filtrocuentaclabe.Value != null)
+                {
+                    ListPF = await _cuentaApiClient.GetCuentasFiltroAsync(filtrocuentaclabe.Value, Convert.ToInt32(TipoDeFiltro.Value));
+                }
+
+            } else if (TipoDeFiltro.Value == "5") {
+
+                var filtrocuentaclabe = filters.FirstOrDefault(x => x.Key == "tipoPersona");
+
+                if (filtrocuentaclabe.Value != null)
+                {
+                    ListPF = await _cuentaApiClient.GetCuentasFiltroAsync(filtrocuentaclabe.Value, Convert.ToInt32(TipoDeFiltro.Value));
+                }
+
+            } else if (TipoDeFiltro.Value == "6") {
+
+                var filtrocuentaclabe = filters.FirstOrDefault(x => x.Key == "alias");
+
+                if (filtrocuentaclabe.Value != null)
+                {
+                    ListPF = await _cuentaApiClient.GetCuentasFiltroAsync(filtrocuentaclabe.Value, Convert.ToInt32(TipoDeFiltro.Value));
+                }
+
+            } else if (TipoDeFiltro.Value == "7") {
+
+                var filtrocuentaclabe = filters.FirstOrDefault(x => x.Key == "cobranzaReferenciada");
+
+                if (filtrocuentaclabe.Value != null)
+                {
+                    ListPF = await _cuentaApiClient.GetCuentasFiltroAsync(filtrocuentaclabe.Value, Convert.ToInt32(TipoDeFiltro.Value));
+                }
             }
-        }
-        else
-        {
+
+            } else {
             ListPF = await _cuentaApiClient.GetCuentasAsync(1, 100);
 
         }
@@ -142,38 +182,38 @@ public class CuentaController : Controller
             ).ToList();
         }
         //Aplicacion de Filtros temporal, 
-        var filtronombreCliente = filters.FirstOrDefault(x => x.Key == "NombreCliente");
-        var filtroEstatus = filters.FirstOrDefault(x => x.Key == "estatus");
+        //var filtronombreCliente = filters.FirstOrDefault(x => x.Key == "NombreCliente");
+        //var filtroEstatus = filters.FirstOrDefault(x => x.Key == "estatus");
         //var filtroSaldo = filters.FirstOrDefault(x => x.Key == "saldo");
-        var filtroTipo = filters.FirstOrDefault(x => x.Key == "tipoPersona");
+        //var filtroTipo = filters.FirstOrDefault(x => x.Key == "tipoPersona");
 
-        if (filtronombreCliente.Value != null)
-        {
-            List = List.Where(x => x.nombrePersona.Contains(Convert.ToString(filtronombreCliente.Value))).ToList();
-        }
+        //if (filtronombreCliente.Value != null)
+        //{
+        //    List = List.Where(x => x.nombrePersona.Contains(Convert.ToString(filtronombreCliente.Value))).ToList();
+        //}
 
-        if (filtroNoCuenta.Value != null)
-        {
-            string filtro = Convert.ToString(filtroNoCuenta.Value).ToUpper();
-            List = List.Where(x => x.noCuenta != null &&
-                                  x.noCuenta.Length >= 16 &&
-                                  x.noCuenta.Substring(0, 16) == filtro).ToList();
-        }
+        //if (filtroNoCuenta.Value != null)
+        //{
+        //    string filtro = Convert.ToString(filtroNoCuenta.Value).ToUpper();
+        //    List = List.Where(x => x.noCuenta != null &&
+        //                          x.noCuenta.Length >= 16 &&
+        //                          x.noCuenta.Substring(0, 16) == filtro).ToList();
+        //}
 
-        if (filtroEstatus.Value != null)
-        {
-            List = List.Where(x => x.estatus == Convert.ToInt32(filtroEstatus.Value)).ToList();
-        }
+        //if (filtroEstatus.Value != null)
+        //{
+        //    List = List.Where(x => x.estatus == Convert.ToInt32(filtroEstatus.Value)).ToList();
+        //}
 
         //if (filtroSaldo.Value != null)
         //{
         //    List = List.Where(x => x.saldo == Convert.ToDecimal(filtroSaldo.Value)).ToList();
         //}
 
-        if (filtroTipo.Value != null)
-        {
-            List = List.Where(x => x.tipoPersona.Contains(Convert.ToString(filtroTipo.Value))).ToList();
-        }
+        //if (filtroTipo.Value != null)
+        //{
+        //    List = List.Where(x => x.tipoPersona.Contains(Convert.ToString(filtroTipo.Value))).ToList();
+        //}
 
         gridData.Data = List;
         gridData.RecordsTotal = List.Count;

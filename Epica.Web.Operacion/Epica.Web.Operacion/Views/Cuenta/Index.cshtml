@@ -50,12 +50,29 @@
                                 <div class="separator border-gray-200"></div>
                                 <div class="px-7 py-5">
                                     <div class="mb-5">
+                                        <label class="form-label fs-5 fw-semibold mb-3">Tipo de Filtro:</label>
+                                        <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="tipo_filtro" data-kt-select2="true" data-placeholder="Seleciona un filtro" data-allow-clear="true" id="filtro_tipo_filtro">
+                                            <option></option>
+                                            <option value="1">Cuenta clabe</option>
+                                            <option value="2">Número de Cuenta</option>
+                                            <option value="3">Nombre Persona</option>
+                                            <option value="4">Estatus</option>
+                                            <option value="5">Tipo de Persona</option>
+                                            <option value="6">Alias</option>
+                                            <option value="7">Cobranza Referenciada</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-5">
+                                        <label class="form-label fs-5 fw-semibold mb-3">Cuenta Clabe:</label>
+                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="cuentaClabe" placeholder="Cuenta Clabe" id="filtro_cuenta_clabe" />
+                                    </div>
+                                    <div class="mb-5">
                                         <label class="form-label fs-5 fw-semibold mb-3">Número de Cuenta:</label>
                                         <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="noCuenta" placeholder="Número de Cuenta" id="filtro_no_cuenta" />
                                     </div>
                                     <div class="mb-5">
                                         <label class="form-label fs-5 fw-semibold mb-3">Nombre Persona:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="NombreCliente" placeholder="Nombre Persona" id="filtro_nombre_cliente" />
+                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreCliente" placeholder="Nombre Persona" id="filtro_nombre_cliente" />
                                     </div>
                                     <div class="mb-5">
                                         <label class="form-label fs-5 fw-semibold mb-3">Estatus:</label>
@@ -72,6 +89,14 @@
                                     <div class="mb-5">
                                         <label class="form-label fs-5 fw-semibold mb-3">Tipo de Persona:</label>
                                         <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="tipoPersona" placeholder="Tipo de Persona" id="filtro_tipoPersona" />
+                                    </div>
+                                    <div class="mb-5">
+                                        <label class="form-label fs-5 fw-semibold mb-3">Cobranza Referenciada:</label>
+                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="cobranzaReferenciada" placeholder="Cobranza Referenciada" id="filtro_cobranza_referenciada" />
+                                    </div>
+                                    <div class="mb-5">
+                                        <label class="form-label fs-5 fw-semibold mb-3">Alias:</label>
+                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="alias" placeholder="Alias" id="filtro_alias" />
                                     </div>
 
                                     <div class="d-flex justify-content-end">
