@@ -100,13 +100,12 @@ var KTDatatableRemoteAjax = function () {
                     datatable.ajax.reload();
                     Swal.fire(
                         'Desvincular Cuenta',
-                        'Se guardo la información de manera exitosa.',
+                        'Se guardó la información de manera exitosa.',
                         'success'
                     )
                 }
             },
             error: function (xhr, status, error) {
-                console.log(error);
             }
 
 

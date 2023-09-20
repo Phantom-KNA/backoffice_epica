@@ -213,11 +213,11 @@ var plugins = () => {
             button: "Cargar Archivo",
             feedback: "Cargar Documento Excel",
             feedback2: "Archivos Agregados",
-            removeConfirmation: "Esta seguro que desea eliminar este documento?",
+            removeConfirmation: "¿Estás seguro que deseas eliminar este documento?",
             errors: {
-                filesLimit: "Unicamente se pueden cargar {{fi-limit}} archivos.",
-                filesType: "El formato del documento, no es valido.",
-                filesSize: "{{fi-name}} supera el limite permitido! El tamaño permitido es de {{fi-maxSize}} MB."
+                filesLimit: "Únicamente se pueden cargar {{fi-limit}} archivos.",
+                filesType: "El formato del documento no es válido.",
+                filesSize: "{{fi-name}} supera el límite permitido! El tamaño permitido es de {{fi-maxSize}} MB."
             }
         }
     });
@@ -236,7 +236,7 @@ $(document).on('click', '#GuardarDocumento', function (e) {
 
     Swal.fire({
         title: 'Cargar Masiva Transacciones',
-        text: "¿Está seguro de que desea cargar este documento?",
+        text: "¿Estás seguro de que deseas cargar este documento?",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -259,20 +259,19 @@ $(document).on('click', '#GuardarDocumento', function (e) {
 
                     if (data.error == true) {
                         Swal.fire(
-                            'Cargar Masiva Transacciones',
+                            'Carga Masiva Transacciones',
                             'Hubo un problema al cargar las transacciones, verifique que el documento sea válido.',
                             'error'
                         )
                     } else {
                         Swal.fire(
-                            'Cargar Masiva Transacciones',
+                            'Carga Masiva Transacciones',
                             'Se han cargado las transacciones de forma exitosa.',
                             'success'
                         )
                     }
                 },
                 error: function (xhr, status, error) {
-                    console.log(error);
                 }
 
 

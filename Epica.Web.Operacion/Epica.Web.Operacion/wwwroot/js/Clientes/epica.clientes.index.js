@@ -232,8 +232,8 @@ function GestionarClienteWeb(AccountID, estatus) {
                 success: function (validationResult) {
                     if (validationResult.mensaje === true) {
                         Swal.fire({
-                            title: 'Bloqueo Web',
-                            text: '¿Está seguro que desea bloquear o desbloquear la opción web para este cliente?',
+                            title: (estatus.toLowerCase() === 'true' ? 'Desbloqueo Web' : 'Bloqueo Web'),
+                            text: (estatus.toLowerCase() === 'true' ? '¿Estás seguro que deseas desbloquear la opción web para este cliente?' : '¿Estás seguro que deseas bloquear la opción web para este cliente?'),
                             icon: 'warning',
                             showCancelButton: true,
                             confirmButtonColor: '#3085d6',
@@ -251,12 +251,11 @@ function GestionarClienteWeb(AccountID, estatus) {
                                         datatable.ajax.reload();
                                         Swal.fire(
                                             'Cliente Actualizado',
-                                            'Se ha actualizado el estatus con exito.',
+                                            'Se ha actualizado el estatus con éxito.',
                                             'success'
                                         )
                                     },
                                     error: function (xhr, status, error) {
-                                        console.log(error);
                                     }
                                 });
                             }
@@ -310,8 +309,8 @@ function GestionarClienteTotal(AccountID, estatus) {
                 success: function (validationResult) {
                     if (validationResult.mensaje === true) {
     Swal.fire({
-        title: 'Bloqueo Total',
-        text: "¿Esta seguro que desea bloquear o desbloquear la opción total para este cliente?",
+        title: (estatus.toLowerCase() === 'true' ? 'Desbloqueo Total' : 'Bloqueo Total'),
+        text: (estatus.toLowerCase() === 'true' ? '¿Estás seguro que deseas desbloquear la opción total para este cliente?' : '¿Estás seguro que deseas bloquear la opción total para este cliente?'),
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -331,12 +330,11 @@ function GestionarClienteTotal(AccountID, estatus) {
                     datatable.ajax.reload();
                     Swal.fire(
                         'Cliente Actualizado',
-                        'Se ha actualizado el estatus con exito.',
+                        'Se ha actualizado el estatus con éxito.',
                         'success'
                     )
                 },
                 error: function (xhr, status, error) {
-                    console.log(error);
                 }
             });
         }
@@ -441,7 +439,7 @@ function ResetContrasenaEmail(Email, ID) {
                     if (validationResult.mensaje === true) {
     Swal.fire({
         title: 'Enviar Reseteo de Contraseña por Correo Electrónico',
-        text: "¿Esta seguro que desea enviar el reseteo de contraseña para este cliente?",
+        text: "¿Estás seguro que deseas enviar el reseteo de contraseña para este cliente?",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -460,15 +458,15 @@ function ResetContrasenaEmail(Email, ID) {
 
                     datatable.ajax.reload();
                     Swal.fire(
-                        'Envio Reseteo Contraseña',
+                        'Envío Reseteo Contraseña',
                         'Se ha enviado la petición con exito.',
                         'success'
                     )
                 },
                 error: function (xhr, status, error) {
                     Swal.fire(
-                        'Envio Reseteo Contraseña',
-                        'Hubo un problema al realizar esta solicitud. Intentelo más tarde.',
+                        'Envío Reseteo Contraseña',
+                        'Hubo un problema al realizar esta solicitud. Inténtalo más tarde.',
                         'danger'
                     )
                 }
@@ -525,7 +523,7 @@ function ResetContrasenaTelefono(Telefono, ID) {
                     if (validationResult.mensaje === true) {
     Swal.fire({
         title: 'Enviar Reseteo de Contraseña por SMS',
-        text: "¿Esta seguro que desea enviar el reseteo de contraseña para este cliente?",
+        text: "¿Estás seguro que deseas enviar el reseteo de contraseña para este cliente?",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -544,15 +542,15 @@ function ResetContrasenaTelefono(Telefono, ID) {
 
                     datatable.ajax.reload();
                     Swal.fire(
-                        'Envio Reseteo Contraseña',
+                        'Envío Reseteo Contraseña',
                         'Se ha enviado la petición con exito.',
                         'success'
                     )
                 },
                 error: function (xhr, status, error) {
                     Swal.fire(
-                        'Envio Reseteo Contraseña',
-                        'Hubo un problema al realizar esta solicitud. Intentelo más tarde.',
+                        'Envío Reseteo Contraseña',
+                        'Hubo un problema al realizar esta solicitud. Inténtalo más tarde.',
                         'danger'
                     )
                 }

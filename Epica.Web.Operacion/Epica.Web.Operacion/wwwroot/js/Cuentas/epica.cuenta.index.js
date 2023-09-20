@@ -407,8 +407,8 @@ function GestionarCuenta(AccountID, estatus) {
                 success: function (validationResult) {
                     if (validationResult.mensaje === true) {
     Swal.fire({
-        title: 'Bloqueo/Desbloqueo de Cuenta',
-        text: "¿Esta seguro que desea bloquear o desbloquear esta cuenta?",
+        title: (estatus.toLowerCase() === 'true' ? 'Desbloqueo de cuenta' : 'Bloqueo de cuenta'),
+        text: (estatus.toLowerCase() === 'true' ? "¿Estás seguro que deseas desbloquear esta cuenta?" : "¿Estás seguro que deseas bloquear esta cuenta?"),
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -428,7 +428,7 @@ function GestionarCuenta(AccountID, estatus) {
                     datatable.ajax.reload();
                     Swal.fire(
                         'Estatus Actualizado',
-                        'Se ha actualizado el estatus de la cuenta con exito.',
+                        'Se ha actualizado el estatus de la cuenta con éxito.',
                         'success'
                     )
                 },

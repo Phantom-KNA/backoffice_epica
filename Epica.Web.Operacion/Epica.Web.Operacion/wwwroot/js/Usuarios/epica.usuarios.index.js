@@ -226,10 +226,10 @@ $(document).on('click', '#btnBuscarUsuario', function () {
             const nombreUsuario = document.getElementById('nombreUsuario');
             nombreUsuario.value = result.descripcion;
             idUsuario.value = result.id;
-            toastr.success("Usuario localizada.");
+            toastr.success("Usuario localizado.");
         },
         error: function (error) {
-            toastr.warning("No se pudo localizar la usuario.");
+            toastr.warning("No se pudo localizar al usuario.");
         }
     });
 });
@@ -256,7 +256,7 @@ $(document).on('click', '#GuardarAsignacion', function (e) {
             } else {
                 $('#modal_asignacion').modal('toggle');
                 datatable.ajax.reload();
-                toastr.success('Se guardo la informacion de manera exitosa', "");
+                toastr.success('Se guardó la información de manera exitosa', "");
             }
 
             $('#idUsuario').val('');
@@ -265,7 +265,6 @@ $(document).on('click', '#GuardarAsignacion', function (e) {
 
         },
         error: function (xhr, status, error) {
-            console.log(error);
         }
 
 
@@ -277,7 +276,7 @@ function DesAsignarRol(idUser) {
 
     Swal.fire({
         title: 'Desasignar Rol a Usuario',
-        text: "¿Esta seguro que desea desasignar este rol?",
+        text: "¿Estás seguro que deseas desasignar este rol?",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -297,12 +296,11 @@ function DesAsignarRol(idUser) {
                     datatable.ajax.reload();
                     Swal.fire(
                         'Usuario Actualizado',
-                        'Se ha actualizado el usuario con exito.',
+                        'Se ha actualizado el usuario con éxito.',
                         'success'
                     )
                 },
                 error: function (xhr, status, error) {
-                    console.log(error);
                 }
             });
         }

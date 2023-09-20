@@ -176,11 +176,11 @@ var plugins = () => {
             button: "Cargar Archivo",
             feedback: "Cargar Documento Excel",
             feedback2: "Archivos Agregados",
-            removeConfirmation: "Esta seguro que desea eliminar este documento?",
+            removeConfirmation: "¿Estás seguro que deseas eliminar este documento?",
             errors: {
-                filesLimit: "Unicamente se pueden cargar {{fi-limit}} archivos.",
-                filesType: "El formato del documento, no es valido.",
-                filesSize: "{{fi-name}} supera el limite permitido! El tamaño permitido es de {{fi-maxSize}} MB."
+                filesLimit: "Únicamente se pueden cargar {{fi-limit}} archivos.",
+                filesType: "El formato del documento no es válido.",
+                filesSize: "{{fi-name}} supera el límite permitido! El tamaño permitido es de {{fi-maxSize}} MB."
             }
         }
     });
@@ -189,8 +189,8 @@ var plugins = () => {
 $(document).on('click', '#GuardarDocumento', function (e) {
 
     Swal.fire({
-        title: 'Cargar Masiva Transacciones',
-        text: "¿Está seguro de que desea cargar este documento?",
+        title: 'Carga Masiva Transacciones',
+        text: "¿Estás seguro de que deseas cargar este documento?",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -213,21 +213,20 @@ $(document).on('click', '#GuardarDocumento', function (e) {
 
                     if (data.error == true) {
                         Swal.fire(
-                            'Cargar Masiva Transacciones',
+                            'Carga Masiva Transacciones',
                             'Hubo un problema al cargar las transacciones, verifique que el documento sea válido.',
                             'error'
                         )
                     } else {
                         datatable_transaccion.ajax.reload();
                         Swal.fire(
-                            'Cargar Masiva Transacciones',
+                            'Carga Masiva Transacciones',
                             'Se han cargado las transacciones de forma exitosa.',
                             'success'
                         )
                     }
                 },
                 error: function (xhr, status, error) {
-                    console.log(error);
                 }
 
 
@@ -242,7 +241,7 @@ function EliminarTransaccionBatch(idRegistro) {
 
     Swal.fire({
         title: 'Eliminar Transacción',
-        text: "¿Esta seguro que desea eliminar esta transacción?",
+        text: "¿Estás seguro que desea eliminar esta transacción?",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -262,20 +261,19 @@ function EliminarTransaccionBatch(idRegistro) {
                     if (data.error == true) {
                         Swal.fire(
                             'Eliminar Transacción',
-                            'Hubo un problema al eliminar esta transacción, inténtelo mas tarde o verifique su existencia.',
+                            'Hubo un problema al eliminar esta transacción, inténtelo más tarde o verifique su existencia.',
                             'error'
                         )
                     } else {
                         datatable_transaccion.ajax.reload();
                         Swal.fire(
                             'Eliminar Transacción',
-                            'Se ha eliminado la transacción con exito.',
+                            'Se ha eliminado la transacción con éxito.',
                             'success'
                         )
                     }
                 },
                 error: function (xhr, status, error) {
-                    console.log(error);
                 }
             });
         }
@@ -318,7 +316,7 @@ $(document).on('click', '#btnGuardarModificaciones', function (e) {
 
     Swal.fire({
         title: 'Almacenar Cambios Transacción',
-        text: "¿Está seguro de que desea almacenar estos cambios?",
+        text: "¿Estás seguro de que deseas almacenar estos cambios?",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -341,21 +339,20 @@ $(document).on('click', '#btnGuardarModificaciones', function (e) {
 
                     if (data.error == true) {
                         Swal.fire(
-                            'Cargar Masiva Transacciones',
+                            'Carga Masiva Transacciones',
                             'Hubo un problema al cargar las transacciones, verifique que el documento sea válido.',
                             'error'
                         )
                     } else {
                         datatable_transaccion.ajax.reload();
                         Swal.fire(
-                            'Cargar Masiva Transacciones',
+                            'Carga Masiva Transacciones',
                             'Se han cargado las transacciones de forma exitosa.',
                             'success'
                         )
                     }
                 },
                 error: function (xhr, status, error) {
-                    console.log(error);
                 }
             });
         }
@@ -366,7 +363,7 @@ $(document).on('click', '#btnAlmacenarTransacciones', function (e) {
 
     Swal.fire({
         title: 'Almacenar Cambios Transacción',
-        text: "¿Está seguro de que desea almacenar estos cambios?",
+        text: "¿Estás seguro de que deseas almacenar estos cambios?",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -395,14 +392,13 @@ $(document).on('click', '#btnAlmacenarTransacciones', function (e) {
                     } else {
                         datatable_transaccion.ajax.reload();
                         Swal.fire(
-                            'Cargar Masiva Transacciones',
+                            'Carga Masiva Transacciones',
                             'Se han cargado las transacciones de forma exitosa.',
                             'success'
                         )
                     }
                 },
                 error: function (xhr, status, error) {
-                    console.log(error);
                 }
             });
         }

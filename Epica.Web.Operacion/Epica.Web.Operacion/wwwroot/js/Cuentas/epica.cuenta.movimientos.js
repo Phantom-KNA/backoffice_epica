@@ -118,10 +118,9 @@ var KTDatatableRemoteAjax = function () {
             success: function (data) {
 
                 datatable.ajax.reload();
-                toastr.success('Se guardo la informacion de manera exitosa', "");
+                toastr.success('Se guardó la información de manera exitosa', "");
             },
             error: function (xhr, status, error) {
-                console.log(error);
             }
 
 
