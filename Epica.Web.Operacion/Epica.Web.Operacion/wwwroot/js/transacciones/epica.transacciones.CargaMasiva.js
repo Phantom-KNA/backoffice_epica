@@ -65,7 +65,12 @@ var KTDatatableTransacciones = (function () {
                 { data: "fechaOperacion", name: "FechaOperacion", title: "Fecha Operación" },
                 { data: "descripcionOperacion", name: "TipoOperacion", title: "Tipo de Operación" },
                 { data: "descripcionMedioPago", name: "MedioPago", title: "Medio de Pago" },
-                { data: "observaciones", name: "observaciones", title: "Observaciones" },
+                {
+                    data: "observaciones", name: "observaciones", title: "Observaciones",
+                    render: function (data, type, row) {
+                        return "<span class='badge badge-light-danger' >" + data + "</span>";
+                    }
+                },
                 {
                     title: '',
                     orderable: false,
@@ -359,7 +364,7 @@ $(document).on('click', '#btnGuardarModificaciones', function (e) {
     })
 });
 
-$(document).on('click', '#btnAlmacenarTransacciones', function (e) {
+function AlmacenarTransacciones(idUsuario) {
 
     Swal.fire({
         title: 'Almacenar Cambios Transacción',
@@ -371,16 +376,12 @@ $(document).on('click', '#btnAlmacenarTransacciones', function (e) {
         confirmButtonText: 'Aceptar'
     }).then((result) => {
         if (result.isConfirmed) {
-            var infoTabla = datatable_transaccion.page.info();
-
-            var numPagina = infoTabla.start / infoTabla.length + 1; // calcular el número de página
-            var Size = infoTabla.length; // número de registros por página
 
             $.ajax({
                 url: "ProcesarTransaccionesMasiva",
                 type: "POST",
                 dataType: 'json',
-                data: { 'pagina': numPagina, 'registros': Size },
+                data: { 'idUsuario': idUsuario },
                 success: function (data) {
 
                     if (data.error == true) {
@@ -391,6 +392,8 @@ $(document).on('click', '#btnAlmacenarTransacciones', function (e) {
                         )
                     } else {
                         datatable_transaccion.ajax.reload();
+                        $("#area_CancelarTransacciones").show();
+                        $("#area_CargarTransacciones").hide();
                         Swal.fire(
                             'Carga Masiva Transacciones',
                             'Se han cargado las transacciones de forma exitosa.',
@@ -403,4 +406,49 @@ $(document).on('click', '#btnAlmacenarTransacciones', function (e) {
             });
         }
     })
-});
+}
+
+
+function CancelarTransacciones(idUsuario) {
+
+    Swal.fire({
+        title: 'Eliminar Transacciones',
+        text: "¿Estás seguro de que deseas eliminar todas las transacciones cargadas?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            $.ajax({
+                url: "EliminarTransaccionesBatch",
+                type: "POST",
+                dataType: 'json',
+                data: { 'idUsuario': idUsuario },
+                success: function (data) {
+
+                    if (data.error == true) {
+                        Swal.fire(
+                            'Eliminar Transacciones',
+                            'Hubo un problema al eliminar las transacciones cargadas. Inténtelo más tarde.',
+                            'error'
+                        )
+                    } else {
+                        datatable_transaccion.ajax.reload();
+                        $("#area_CancelarTransacciones").hide();
+                        $("#area_CargarTransacciones").show();
+                        Swal.fire(
+                            'Carga Masiva Transacciones',
+                            'Se han cargado las transacciones de forma exitosa.',
+                            'success'
+                        )
+                    }
+                },
+                error: function (xhr, status, error) {
+                }
+            });
+        }
+    })
+}

@@ -16,6 +16,7 @@ public class TarjetasResponse
     public string Vinculo { get; set; }
     public string clabe { get; set; }
     public string proxyNumber { get; set; }
+    public string cadena { get; set; }
     public int Estatus { get; set; }
 }
 

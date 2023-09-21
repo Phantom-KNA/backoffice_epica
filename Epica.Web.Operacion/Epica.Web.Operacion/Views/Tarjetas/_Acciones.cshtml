@@ -7,14 +7,14 @@
         <li class="menu-item px-3">
             @if (Model.Estatus == 1)
             {
-                <a data-id="@Model.idCuentaAhorro" onclick="GestionarTarjeta(@Model.tarjeta, 'False', @Model.idCuentaAhorro)" title="Bloquear Tarjeta" class="btnEditar menu-link px-3">
+                <a data-id="@Model.idCuentaAhorro" onclick="GestionarTarjeta('@Model.cadena', 'False', @Model.idCuentaAhorro)" title="Bloquear Tarjeta" class="btnEditar menu-link px-3">
                     <i class="bi bi-lock"></i>&nbsp;
                     Bloquear
                 </a>
             }
             else
             {
-                <a data-id="@Model.idCuentaAhorro" onclick="GestionarTarjeta(@Model.tarjeta, 'True', @Model.idCuentaAhorro)" title="Desbloquear Tarjeta" class="btnEditar menu-link px-3">
+                <a data-id="@Model.idCuentaAhorro" onclick="GestionarTarjeta('@Model.cadena', 'True', @Model.idCuentaAhorro)" title="Desbloquear Tarjeta" class="btnEditar menu-link px-3">
                     <i class="bi bi-unlock"></i>&nbsp;
                     Desbloquear
                 </a>

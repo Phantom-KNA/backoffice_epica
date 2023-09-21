@@ -158,7 +158,9 @@ namespace Epica.Web.Operacion.Controllers
         {
             var listaClientes = await _usuariosApiClient.GetUsuarioPorNombreAsync(usuario);
 
-            return Json(listaClientes.First());
+            listaClientes = listaClientes.Distinct().ToList();
+
+            return Json(listaClientes);
         }
 
         [Authorize]

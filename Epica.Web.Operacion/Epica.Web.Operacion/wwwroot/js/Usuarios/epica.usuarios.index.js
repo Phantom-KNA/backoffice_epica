@@ -222,11 +222,16 @@ $(document).on('click', '#btnBuscarUsuario', function () {
         data: { usuario: usuario },
         success: function (result) {
 
-            const idUsuario = document.getElementById('idUsuario');
-            const nombreUsuario = document.getElementById('nombreUsuario');
-            nombreUsuario.value = result.descripcion;
-            idUsuario.value = result.id;
-            toastr.success("Usuario localizado.");
+            $("#idUsuario").empty();
+
+            if (result.length == 0) {
+                toastr.success("No se pudo localizar resultados para esta busqueda.");
+            } else {
+                $.each(result, function (index, value) {
+                    $("#idUsuario").append('<option value="' + value.id + '">' + value.descripcion + '</option>');
+                });
+                toastr.success("Usuario localizado.");
+            }
         },
         error: function (error) {
             toastr.warning("No se pudo localizar al usuario.");

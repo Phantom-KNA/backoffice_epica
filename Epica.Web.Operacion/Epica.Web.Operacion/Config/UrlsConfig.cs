@@ -34,8 +34,11 @@ public class UrlsConfig
         public static string GetEliminarTransaccionBatch(int idRegistro) => $"/api/v1/cargabach/remover_registro{idRegistro}";
         public static string GetTransaccionBatch(int idRegistro) => $"/api/v1/cargabach/buscar_registro?idRegistro={idRegistro}";
         public static string GetTransaccionEditBatch() => $"/api/v1/cargabach/modificar_registro";
-        public static string GetProcesarTransaccion() => $"/api/v1/cargabach/inserta_multiple_transacciones";
+        public static string GetProcesarTransaccion(int idUsuario) => $"/api/v1/cargabach/inserta_multiple_transacciones?idUsuario={idUsuario}";
         public static string GetComprobanteTransaccion(int cuentaAhorro, int Transaccion, string valida) => $"/api/v1/transacciones/imprimir_voucher?idCuentaAhorro={cuentaAhorro}&idTransaccion={Transaccion}&valida={valida}";
+        public static string GetTransaccionesBatchTotalPorUsuario(int idUsuario) => $"/api/v1/cargabach/total?usuario={idUsuario}";
+        public static string GetEliminarTransaccionBatchPorUsuario(int idUsuario) => $"/api/v1/cargabach/remover_multiples_resgistro{idUsuario}";
+
 
     }
 

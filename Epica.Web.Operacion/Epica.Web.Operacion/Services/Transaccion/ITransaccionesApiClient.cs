@@ -19,8 +19,10 @@ namespace Epica.Web.Operacion.Services.Transaccion
         Task<MensajeResponse> GetEliminarTransaccionBatchAsync(int idRegistro);
         Task<CargaBachRequest> GetTransaccionBatchAsync(int idRegistro);
         Task<string> GetModificaTransaccionBatchAsync(CargaBachRequest request);
-        Task<MensajeResponse> GetProcesaTransaccion(List<InsertarTransaccionRequest> request);
+        Task<MensajeResponse> GetProcesaTransaccion(int idUsuario);
         Task<VoucherResponse> GetVoucherTransaccionAsync(int cuentaAhorro, int transaccion, string token);
+        Task<int> GetTotalTransaccionesBatchAsync(int idUsuario);
+        Task<MensajeResponse> GetEliminarTransaccionesBatchAsync(int idUsuario);
 
     }
 }

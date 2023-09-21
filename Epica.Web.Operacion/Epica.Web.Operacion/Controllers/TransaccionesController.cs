@@ -792,12 +792,19 @@ namespace Epica.Web.Operacion.Controllers
         #region Carga Masiva
 
         [Authorize]
-        public IActionResult ConsultarCargaMasiva()
+        public async Task<IActionResult> ConsultarCargaMasiva()
         {
             var loginResponse = _userContextService.GetLoginResponse();
             var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Ver == 0);
             if (validacion == true)
             {
+                int valida = await _transaccionesApiClient.GetTotalTransaccionesBatchAsync(loginResponse.IdUsuario);
+
+                if (valida == 0) {
+                    ViewBag.ValidaCarga = "True";
+                } else {
+                    ViewBag.ValidaCarga = "False";
+                }
                 return View(loginResponse);
             }
 
@@ -1006,7 +1013,7 @@ namespace Epica.Web.Operacion.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> ProcesarTransaccionesMasiva(int pagina, int registros)
+        public async Task<JsonResult> ProcesarTransaccionesMasiva(int idUsuario)
         {
             var loginResponse = _userContextService.GetLoginResponse();
             string response = "";
@@ -1014,30 +1021,30 @@ namespace Epica.Web.Operacion.Controllers
             MensajeResponse respuesta = new MensajeResponse();
             try
             {
-                List<CargaBachRequest> ListPF = new List<CargaBachRequest>();
+                //List<CargaBachRequest> ListPF = new List<CargaBachRequest>();
 
-                (ListPF, paginacion) = await _transaccionesApiClient.GetTransaccionesMasivaAsync(Convert.ToInt32(pagina), Convert.ToInt32(registros), loginResponse.IdUsuario);
+                //(ListPF, paginacion) = await _transaccionesApiClient.GetTransaccionesMasivaAsync(loginResponse.IdUsuario);
 
-                var List = new List<InsertarTransaccionRequest>();
-                foreach (var row in ListPF)
-                {
-                    List.Add(new InsertarTransaccionRequest
-                    {
-                        Id = row.Id,
-                        ClaveRastreo = row.ClaveRastreo,
-                        FechaOperacion = row.FechaOperacion.ToString("yyyy-MM-dd HH:mm:ss"),
-                        NoCuentaBeneficiario = row.CuentaBeneficiario,
-                        Monto = row.Monto,
-                        Concepto = row.ConceptoPago,
-                        TipoOperacion = row.TipoOperacion,
-                        MedioPago = row.MedioPago,
-                        Comision = row.Comision,
-                        CuentaOrdenante = row.Ordenante,                     
-                        IdUsuario = loginResponse.IdUsuario
-                    });
-                }
+                //var List = new List<InsertarTransaccionRequest>();
+                //foreach (var row in ListPF)
+                //{
+                //    List.Add(new InsertarTransaccionRequest
+                //    {
+                //        Id = row.Id,
+                //        ClaveRastreo = row.ClaveRastreo,
+                //        FechaOperacion = row.FechaOperacion.ToString("yyyy-MM-dd HH:mm:ss"),
+                //        NoCuentaBeneficiario = row.CuentaBeneficiario,
+                //        Monto = row.Monto,
+                //        Concepto = row.ConceptoPago,
+                //        TipoOperacion = row.TipoOperacion,
+                //        MedioPago = row.MedioPago,
+                //        Comision = row.Comision,
+                //        CuentaOrdenante = row.Ordenante,                     
+                //        IdUsuario = loginResponse.IdUsuario
+                //    });
+                //}
 
-                respuesta = await _transaccionesApiClient.GetProcesaTransaccion(List);
+                respuesta = await _transaccionesApiClient.GetProcesaTransaccion(loginResponse.IdUsuario);
             }
             catch (Exception ex)
             {
@@ -1045,6 +1052,24 @@ namespace Epica.Web.Operacion.Controllers
             }
 
             return Json(respuesta);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> EliminarTransaccionesBatch(int idUsuario)
+        {
+            //var loginResponse = _userContextService.GetLoginResponse();
+            MensajeResponse response = new MensajeResponse();
+
+            try
+            {
+                response = await _transaccionesApiClient.GetEliminarTransaccionesBatchAsync(idUsuario);
+            }
+            catch (Exception ex)
+            {
+                response.Detalle = ex.Message;
+            }
+
+            return Json(response);
         }
         #endregion
 

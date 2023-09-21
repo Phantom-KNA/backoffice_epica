@@ -178,6 +178,10 @@ public class TarjetasController : Controller
         var List = new List<TarjetasResponseGrid>();
         foreach (var row in ListPF)
         {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(row.tarjeta);
+            var ally = System.Convert.ToBase64String(plainTextBytes);
+
+            row.cadena = ally;
             row.nombreCompleto = row.nombreCompleto == null ? "N/A" : row.nombreCompleto;
             List.Add(new TarjetasResponseGrid
             {
@@ -277,6 +281,9 @@ public class TarjetasController : Controller
     [HttpPost]
     public async Task<JsonResult> GestionarEstatusTarjetas(string NumGen, string estatus, int id)
     {
+        var base64EncodedBytes = System.Convert.FromBase64String(NumGen);
+        var tarjeta = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+
         var loginResponse = _userContextService.GetLoginResponse();
         MensajeResponse response = new MensajeResponse();
         int EstatusTarjeta = 0;
@@ -293,7 +300,7 @@ public class TarjetasController : Controller
                 accion = "Desbloquear Tarjeta";
             }
 
-            response = await _tarjetasApiClient.GetBloqueoTarjeta(NumGen, EstatusTarjeta, loginResponse.Token!);
+            response = await _tarjetasApiClient.GetBloqueoTarjeta(tarjeta, EstatusTarjeta, loginResponse.Token!);
 
             LogRequest logRequest = new LogRequest
             {

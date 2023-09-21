@@ -423,14 +423,14 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return respuesta;
         }
 
-        public async Task<MensajeResponse> GetProcesaTransaccion(List<InsertarTransaccionRequest> request)
+        public async Task<MensajeResponse> GetProcesaTransaccion(int idUsuario)
         {
             MensajeResponse respuesta = new MensajeResponse();
 
             try
             {
-                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetProcesarTransaccion();
-                var json = JsonConvert.SerializeObject(request);
+                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetProcesarTransaccion(idUsuario);
+                var json = JsonConvert.SerializeObject(idUsuario);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 var response = await ApiClient.PostAsync(uri, content);
@@ -475,6 +475,56 @@ namespace Epica.Web.Operacion.Services.Transaccion
             }
 
             return docFile!;
+        }
+        public async Task<int> GetTotalTransaccionesBatchAsync(int idUsuario)
+        {
+            int result = 0;
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetTransaccionesBatchTotalPorUsuario(idUsuario);
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    result = int.Parse(jsonResponse);
+                }
+
+            }
+            catch (Exception)
+            {
+                return result;
+            }
+
+            return result;
+        }
+
+        public async Task<MensajeResponse> GetEliminarTransaccionesBatchAsync(int idUsuario)
+        {
+            MensajeResponse respuesta = new MensajeResponse();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetEliminarTransaccionBatchPorUsuario(idUsuario);
+                var response = await ApiClient.DeleteAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse)!;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                respuesta.Error = true;
+                respuesta.Detalle = ex.Message;
+                return respuesta;
+            }
+
+            return respuesta;
         }
     }
 }
