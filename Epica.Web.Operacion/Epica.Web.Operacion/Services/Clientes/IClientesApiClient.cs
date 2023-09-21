@@ -7,7 +7,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
     public interface IClientesApiClient
     {
         Task<List<DatosClienteEntity>> GetDetallesClientesByNombresAsync(string nombres);
-        Task<object> GetClientesbyNombreAsync(string nombreCliente);
+        Task<List<DatosCatalogoResponse>> GetClientesbyNombreAsync(string nombreCliente);
         Task<(List<ClienteResponse>, int)> GetClientesAsync(int pageNumber, int recordsTotal);
         Task<int> GetTotalClientesAsync();
         Task<ClienteDetailsResponse> GetClienteAsync(int id);

@@ -474,3 +474,8 @@ $("#GuardarRol").click(function () {
     datatable.ajax.reload();
     recargar();
 });
+
+$('#nuevoRolModal').on('hidden.bs.modal', function () {
+    // Limpiar campos del modal al cerrarlo
+    $('#create_rol').val('');
+});

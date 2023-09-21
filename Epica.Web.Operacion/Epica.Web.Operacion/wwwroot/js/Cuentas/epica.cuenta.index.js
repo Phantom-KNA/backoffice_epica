@@ -280,7 +280,7 @@ function pruebas(idAccount) {
                 button.classList.remove('active');
             } else {
 
-                toastr.info('Consultando Cobranza Referenciada', "");
+                toastr.info('Consultando Cobranza Referenciada', "").preventDuplicates;
 
                 $.ajax({
                     url: siteLocation + 'Cuenta/ConsultarSubCuentas',

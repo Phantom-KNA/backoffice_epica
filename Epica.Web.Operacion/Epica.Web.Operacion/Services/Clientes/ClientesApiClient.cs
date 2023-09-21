@@ -56,7 +56,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return (listaClientes, paginacion);
         }
 
-        public async Task<object> GetClientesbyNombreAsync(string nombreCliente)
+        public async Task<List<DatosCatalogoResponse>> GetClientesbyNombreAsync(string nombreCliente)
         {
             List<DatosCatalogoResponse> listaClientes = new List<DatosCatalogoResponse>();
             try
