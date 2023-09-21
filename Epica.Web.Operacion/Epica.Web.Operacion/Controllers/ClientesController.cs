@@ -1116,6 +1116,10 @@ public class ClientesController : Controller
     public async Task<ActionResult> BuscarClientes(string nombreCliente)
     {
         var listaClientes = await _clientesApiClient.GetClientesbyNombreAsync(nombreCliente);
+        if (listaClientes.Count == 0)
+        {
+            return BadRequest();
+        }
         return Json(listaClientes);
     }
 

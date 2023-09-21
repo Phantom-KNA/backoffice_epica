@@ -1,4 +1,6 @@
 ﻿"use strict";
+toastr.options.preventDuplicates = true;
+
 
 var Init = function () {
     var init = function () {

@@ -1,4 +1,5 @@
 "use strict"
+toastr.options.preventDuplicates = true;
 
 var datatable;
 
@@ -77,7 +78,17 @@ var KTDatatableRemoteAjax = function () {
 
     $(document).on('click', '#GuardarTarjetas', function (e) {
 
-        toastr.info('Almacenando Tarjeta...', "");
+        var numeroTarjeta = $('#numeroTarjeta').val();
+        var proxyNumber = $('#proxyNumber').val();
+        var mesVigencia = $('#mesVigencia').val();
+        var yearVigencia = $('#yearVigencia').val(); 
+
+        if (!numeroTarjeta || !proxyNumber || !mesVigencia || !yearVigencia) {
+            toastr.error('Por favor, complete todos los campos obligatorios.', "").preventDuplicates;
+            return; 
+        }
+
+        toastr.info('Almacenando Tarjeta...', "").preventDuplicates;
 
         var form = $("#TarjetasForm")
         var valdata = form.serialize();
@@ -111,6 +122,14 @@ var KTDatatableRemoteAjax = function () {
 
         });   
         $("#btnCerrarCuenta").click();
+    });
+
+    $('#kt_modal_1').on('hidden.bs.modal', function () {
+        // Limpiar campos del modal al cerrarlo
+        $('#numeroTarjeta').val('');
+        $('#proxyNumber').val('');
+        $('#mesVigencia').val('');
+        $('#yearVigencia').val(''); 
     });
 
     var plugins = () => {

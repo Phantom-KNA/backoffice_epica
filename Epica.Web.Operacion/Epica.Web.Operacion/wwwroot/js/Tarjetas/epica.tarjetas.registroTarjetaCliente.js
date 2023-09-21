@@ -1,4 +1,5 @@
 ﻿"use strict";
+toastr.options.preventDuplicates = true;
 
 const selectYearVigencia = document.getElementById('yearVigencia');
 const yearVigencia = selectYearVigencia.value;
@@ -17,7 +18,7 @@ $(document).on('click', '#btnGuardarTarjeta', function (e) {
     if (allFieldsFilled) {
         $('#confirmModal').modal('show');
     } else {
-        toastr.error('Por favor, complete todos los campos obligatorios', "");
+        toastr.error('Por favor, complete todos los campos obligatorios', "").preventDuplicates;
     }
 });
 $(document).on('click', '#btnCerrarModal, #btnCerrarModal2, .modal-close', function (e) {
@@ -28,7 +29,8 @@ $(document).on('click', '#btnBuscarCliente', function () {
     const inputNombreCliente = document.getElementById('nombreCliente');
     const nombreCliente = inputNombreCliente.value;
 
-    toastr.info("Localizando clientes.");
+    toastr.info("Localizando clientes.").preventDuplicates;
+    toastr.clear();
 
     $.ajax({
         url: "/Clientes/BuscarClientes",
@@ -45,10 +47,17 @@ $(document).on('click', '#btnBuscarCliente', function () {
                 selectClientes.appendChild(option);
             });
 
-            toastr.success("Clientes localizados.");
+            toastr.success("Clientes localizados.").preventDuplicates;
         },
         error: function (error) {
-            toastr.error("No se pudieron localizar los clientes.");
+            toastr.error("No se pudieron localizar los clientes.").preventDuplicates;
         }
     });
+});
+
+$(document).on('keydown', '#nombreCliente', function (e) {
+    if (e.keyCode === 13) {
+        e.preventDefault();
+        $('#btnBuscarCliente').click();
+    }
 });
