@@ -18,11 +18,23 @@
                     <p><strong>Nombre:</strong></p>
                     <label>@Model.NombrePersona</label>
                 </div>
-                <div class="col-6">
+                <div class="col-2">
                     <p><strong>Estatus:</strong></p>
                     @if (Model.Estatus == 1){
                         <span class='badge badge-light-danger'>Desactivado</span>
                     } else {
+                        <span class='badge badge-light-success'>Activo</span>
+                    }
+
+                </div>
+                <div class="col-4">
+                    <p><strong>Estatus Spei Out:</strong></p>
+                    @if (Model.Estatus == 1)
+                    {
+                        <span class='badge badge-light-danger'>Desactivado</span>
+                    }
+                    else
+                    {
                         <span class='badge badge-light-success'>Activo</span>
                     }
 
