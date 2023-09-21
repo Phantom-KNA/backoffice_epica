@@ -17,7 +17,7 @@
             <div class="form-group input-group-sm col-md-12 row">
                 <label class="col-md-5 form-label required">Número de Proxy: &nbsp;</label>
                 <div class="col-md-7">
-                    <input asp-for="proxyNumber" class="form-control form-control-sm form-control-solid" id="proxyNumber" type="number" min="0" autocomplete="off" />
+                    <input asp-for="proxyNumber" required class="form-control form-control-sm form-control-solid" id="proxyNumber" type="number" min="0" autocomplete="off" />
                 </div>
             </div>
         </div>
@@ -26,9 +26,9 @@
     <div class="d-flex flex-stack row">
         <div class="row mb-5 mt-5">
             <div class="form-group input-group-sm col-md-12 row">
-                <label class="col-md-5 form-label">Mes Vigencia: &nbsp;</label>
+                <label class="col-md-5 form-label required">Mes Vigencia: &nbsp;</label>
                 <div class="col-md-7">
-                    <select asp-for="mesVigencia" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción">
+                    <select asp-for="mesVigencia" id="mesVigencia" required class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción">
                         <option></option>
                         <option value="01">Enero</option>
                         <option value="02">Febrero</option>
@@ -50,9 +50,9 @@
     <div class="d-flex flex-stack row">
         <div class="row mb-5 mt-5">
             <div class="form-group input-group-sm col-md-12 row">
-                <label class="col-md-5 form-label">Año Vigencia: &nbsp;</label>
+                <label class="col-md-5 form-label required">Año Vigencia: &nbsp;</label>
                 <div class="col-md-7">
-                    <input asp-for="yearVigencia" class="form-control form-control-sm form-control-solid" id="yearVigencia" type="number" min="0" autocomplete="off" />
+                    <input asp-for="yearVigencia" class="form-control form-control-sm form-control-solid" id="yearVigencia" type="number" min="0" autocomplete="off" required/>
                 </div>
             </div>
         </div>
