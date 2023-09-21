@@ -69,7 +69,14 @@ var KTDatatableRemoteAjax = function () {
                 { data: 'fechaAltaFormat', name: 'fechaAltaFormat', title: 'Fecha de Alta' },
                 { data: 'fechaActualizacionformat', name: 'fechaActualizacionformat', title: 'Fecha de Actualizacion' },
                 {
-                    data: 'estatus', name: 'Estatus', title: 'Estatus',
+                    data: 'estatus', name: 'Estatus', title: 'Estatus Cuenta',
+                    render: function (data, type, row) {
+                        return data == 1 ?
+                            "<span class='badge badge-light-danger' >Desactivado</span>" : "<span class='badge badge-light-success' >Activo</span>";
+                    }
+                },
+                {
+                    data: 'bloqueoSPEIOut', name: 'BloqueoSpeiOut', title: 'Estatus Spei Out',
                     render: function (data, type, row) {
                         return data == 1 ?
                             "<span class='badge badge-light-danger' >Desactivado</span>" : "<span class='badge badge-light-success' >Activo</span>";

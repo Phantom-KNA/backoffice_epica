@@ -1,3 +1,4 @@
+toastr.options.preventDuplicates = true;
 var table;
 var datatable;
 var filterAccount;
@@ -69,7 +70,7 @@ var KTDatatableRemoteAjax = function () {
                     data: 'clabe', name: 'Clabe', title: 'Cuenta Clabe'
                 },
                 {
-                    data: 'noCuenta', name: 'NoCuenta', title: 'Numero de Cuenta',
+                    data: 'noCuenta', name: 'NoCuenta', title: 'Número de Cuenta',
                     render: function (data, type, row) {
                         var partes = data.split("|"); // Separar la parte entera y decimal
                         var NumCuenta = partes[0];
@@ -79,7 +80,7 @@ var KTDatatableRemoteAjax = function () {
                     }
                 },
                 {
-                    data: 'nombrePersona', name: 'nombrePersona', title: 'Nombre persona'
+                    data: 'nombrePersona', name: 'nombrePersona', title: 'Nombre Persona'
                 },
                 {
                     data: 'saldo', name: 'Saldo', title: 'Saldo',
@@ -91,14 +92,18 @@ var KTDatatableRemoteAjax = function () {
                     data: 'tipoPersona', name: 'Tipo', title: 'Tipo Persona'
                 },
                 {
-                    data: 'estatus', name: 'Estatus', title: 'Estatus',
+                    data: 'estatus', name: 'Estatus', title: 'Estatus Cuenta',
                     render: function (data, type, row) {
                         return data == 1 ?
                             "<span class='badge badge-light-danger' >Desactivado</span>" : "<span class='badge badge-light-success' >Activo</span>";
                     }
                 },
                 {
-                    data: 'alias', name: 'Alias', title: ''
+                    data: 'bloqueoSPEIOut', name: 'BloqueoSpeiOut', title: 'Estatus Spei Out',
+                    render: function (data, type, row) {
+                        return data == 1 ?
+                            "<span class='badge badge-light-danger' >Desactivado</span>" : "<span class='badge badge-light-success' >Activo</span>";
+                    }
                 },
                 {
                     title: '',
@@ -108,6 +113,7 @@ var KTDatatableRemoteAjax = function () {
                     render: function (data, type, row) {
                         if (type === 'display') {
                             var htmlString = row.acciones;
+                            htmlString = '<div class="custom-cell">' + htmlString + '</div>';
                             return htmlString
                         }
                     },

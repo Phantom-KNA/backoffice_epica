@@ -169,6 +169,7 @@ public class CuentaController : Controller
                 tipoPersona = row.tipoPersona,
                 alias = "",
                 clabe = row.clabe,
+                bloqueoSPEIOut = row.bloqueoSPEIOut,
                 Acciones = await this.RenderViewToStringAsync("~/Views/Cuenta/_Acciones.cshtml", row)
             });
         }

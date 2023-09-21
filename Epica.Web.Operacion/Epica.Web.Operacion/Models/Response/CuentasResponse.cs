@@ -21,6 +21,7 @@ public class CuentasResponse
     public string telefono { get; set; }
     public bool validarPermiso { get; set; }
     public string clabe { get; set; }
+    public int bloqueoSPEIOut { get; set; }
 }
 
 public class CuentasResponseGrid : CuentasResponse
