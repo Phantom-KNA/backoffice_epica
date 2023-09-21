@@ -506,7 +506,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
             try
             {
-                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetEliminarTransaccionBatchPorUsuario(idUsuario);
+                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetEliminarTransaccionBatchPorUsuario(idUsuario,0);
                 var response = await ApiClient.DeleteAsync(uri);
 
                 if (response.IsSuccessStatusCode)

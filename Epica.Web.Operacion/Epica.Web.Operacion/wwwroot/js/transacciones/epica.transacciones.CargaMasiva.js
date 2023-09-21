@@ -68,7 +68,12 @@ var KTDatatableTransacciones = (function () {
                 {
                     data: "observaciones", name: "observaciones", title: "Observaciones",
                     render: function (data, type, row) {
-                        return "<span class='badge badge-light-danger' >" + data + "</span>";
+                        if (data != null) {
+                            return "<span class='badge badge-light-danger' >" + data + "</span>";
+                        } else {
+                            return "<span class='badge badge-light-info' >" + "Sin Observaciones" + "</span>";
+                        }
+
                     }
                 },
                 {
@@ -384,6 +389,8 @@ function AlmacenarTransacciones(idUsuario) {
                 data: { 'idUsuario': idUsuario },
                 success: function (data) {
 
+                    $('#kt_modal_Nuevo').modal('toggle');
+
                     if (data.error == true) {
                         Swal.fire(
                             'Cargar Masiva Transacciones',
@@ -435,7 +442,7 @@ function CancelarTransacciones(idUsuario) {
                             'Hubo un problema al eliminar las transacciones cargadas. Inténtelo más tarde.',
                             'error'
                         )
-                    } else {
+                    } else {    
                         datatable_transaccion.ajax.reload();
                         $("#area_CancelarTransacciones").hide();
                         $("#area_CargarTransacciones").show();

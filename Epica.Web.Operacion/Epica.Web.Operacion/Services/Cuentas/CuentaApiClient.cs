@@ -1,9 +1,12 @@
 ﻿using Epica.Web.Operacion.Config;
+using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Models.Entities;
+using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.UserResolver;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.Json;
 using static Epica.Web.Operacion.Controllers.CuentaController;
 
@@ -11,14 +14,17 @@ namespace Epica.Web.Operacion.Services.Transaccion
 {
     public class CuentaApiClient : ApiClientBase, ICuentaApiClient
     {
+        private readonly UserContextService _userContextService;
         public CuentaApiClient(
             HttpClient httpClient, 
             ILogger<CuentaApiClient> logger, 
             IOptions<UrlsConfig> config, 
-            IHttpContextAccessor httpContext, 
+            IHttpContextAccessor httpContext,
+            UserContextService userContextService,
             IConfiguration configuration, 
             IUserResolver userResolver) : base(httpClient, logger, config, httpContext, configuration, userResolver)
         {
+            _userContextService = userContextService;
         }
 
         public async Task<List<ResumenCuentasResponse>> GetListaByNumeroCuentaAsync(string noCuenta)
@@ -209,8 +215,6 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
             return getcuenta;
         }
-
-
         public async Task<List<CuentasResponse>> GetCuentasFiltroAsync(string Valor, int TipoFiltro)
         {
 
@@ -236,7 +240,63 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
             return ListaCuentas;
         }
+        public async Task<MensajeResponse> BloqueoCuentaAsync(int idCuenta, int estatus, int nip, string softoken)
+        {
+            MensajeResponse respuesta = new MensajeResponse();
 
+            try
+            {
+                var responseToken = _userContextService.GetLoginResponse();
+                var uri = Urls.Transaccion + UrlsConfig.CuentasOperations.GetBloqueaCuenta(idCuenta, estatus,nip,softoken, responseToken.Token);
+                var json = JsonConvert.SerializeObject("");
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
 
+                var response = await ApiClient.PostAsync(uri, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse)!;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                respuesta.Error = true;
+                respuesta.Detalle = ex.Message;
+                return respuesta;
+            }
+
+            return respuesta;
+        }
+        public async Task<MensajeResponse> BloqueoCuentaSpeiOutAsync(int idCuenta, int estatus, int nip, string softoken)
+        {
+            MensajeResponse respuesta = new MensajeResponse();
+
+            try
+            {
+                var responseToken = _userContextService.GetLoginResponse();
+                var uri = Urls.Transaccion + UrlsConfig.CuentasOperations.GetBloqueaCuentaSpeiOut(idCuenta, estatus, nip, softoken, responseToken.Token);
+                var json = JsonConvert.SerializeObject("");
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await ApiClient.PostAsync(uri, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse)!;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                respuesta.Error = true;
+                respuesta.Detalle = ex.Message;
+                return respuesta;
+            }
+
+            return respuesta;
+        }
     }
 }

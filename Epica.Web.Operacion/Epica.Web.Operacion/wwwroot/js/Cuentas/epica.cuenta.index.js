@@ -380,6 +380,8 @@ function pruebas(idAccount) {
 
 
 function GestionarCuenta(AccountID, estatus) {
+    var token = "";
+    var CS = "";
     Swal.fire({
         title: '<span class="swal-title-custom"><b>Valida tu identidad</b></span>',
         text: 'Por favor, ingrese su token y código de seguridad:',
@@ -396,7 +398,9 @@ function GestionarCuenta(AccountID, estatus) {
         cancelButtonText: 'Cancelar',
         preConfirm: () => {
             const swalInput1 = Swal.getPopup().querySelector('#swal-input1').value;
+            token = Swal.getPopup().querySelector('#swal-input1').value;
             const swalInput2 = Swal.getPopup().querySelector('#swal-input2').value;
+            CS = Swal.getPopup().querySelector('#swal-input2').value;
             return [swalInput1, swalInput2];
         }
     }).then((result) => {
@@ -424,25 +428,125 @@ function GestionarCuenta(AccountID, estatus) {
         if (result.isConfirmed) {
 
             $.ajax({
-                url: siteLocation + 'Clientes/GestionarEstatusClienteTotal',
+                url: 'Cuenta/GestionarEstatusCuentas',
                 async: true,
                 cache: false,
                 type: 'POST',
-                data: { id: AccountID, Estatus: estatus },
+                data: { id: AccountID, Estatus: estatus, token: token, cs: CS },
                 success: function (data) {
 
-                    datatable.ajax.reload();
-                    Swal.fire(
-                        'Estatus Actualizado',
-                        'Se ha actualizado el estatus de la cuenta con éxito.',
-                        'success'
-                    )
+                    if (data.error == true) {
+                        Swal.fire(
+                            'Estatus Actualizado',
+                            'Hubo un problema al actualizar el estatus de la cuenta, verifique su existencia o Inténtalo más tarde.',
+                            'error'
+                        )
+                    } else {
+                        datatable.ajax.reload();
+                        Swal.fire(
+                            'Estatus Actualizado',
+                            'Se ha actualizado el estatus de la cuenta con éxito.',
+                            'success'
+                        )
+                    }
                 },
                 error: function (xhr, status, error) {
                 }
             });
         }
     })
+                    } else {
+                        // Token o código de seguridad incorrectos, muestra un mensaje de error
+                        Swal.fire(
+                            'Error',
+                            'Token o código de seguridad incorrectos. Inténtalo de nuevo.',
+                            'error'
+                        );
+                    }
+                },
+                error: function () {
+                }
+            });
+        }
+    });
+}
+
+function GestionarCuentaSpeiOut(AccountID, estatus) {
+    var token = "";
+    var CS = "";
+    Swal.fire({
+        title: '<span class="swal-title-custom"><b>Valida tu identidad</b></span>',
+        text: 'Por favor, ingrese su token y código de seguridad:',
+        html:
+            '<label for="swal-input1" class="swal-label"><b>Token:</b></label>' +
+            '<input id="swal-input1" class="swal2-input" style="font-size:14px;width:250px"  placeholder="Token">' +
+            '<div style="margin-top: 20px;"></div>' +
+            '<label for="swal-input2" class="swal-label"><b>Código de Seguridad:</b></label>' +
+            '<input id="swal-input2" class="swal2-input" style="font-size:14px;width:250px" type="password" placeholder="Código de Seguridad">',
+        showCancelButton: true,
+        showCancelButton: true,
+        confirmButtonColor: '#0493a8',
+        confirmButtonText: 'Aceptar',
+        cancelButtonText: 'Cancelar',
+        preConfirm: () => {
+            const swalInput1 = Swal.getPopup().querySelector('#swal-input1').value;
+            token = Swal.getPopup().querySelector('#swal-input1').value;
+            const swalInput2 = Swal.getPopup().querySelector('#swal-input2').value;
+            CS = Swal.getPopup().querySelector('#swal-input2').value;
+            return [swalInput1, swalInput2];
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const [tokenInput, codigoInput] = result.value;
+
+            // Realiza la validación del token y código de seguridad
+            $.ajax({
+                url: '/Autenticacion/ValidarTokenYCodigo',
+                async: true,
+                cache: false,
+                type: 'POST',
+                data: { token: tokenInput, codigo: codigoInput },
+                success: function (validationResult) {
+                    if (validationResult.mensaje === true) {
+                        Swal.fire({
+                            title: (estatus.toLowerCase() === 'true' ? 'Desbloqueo de Spei Out' : 'Bloqueo de Spei Out'),
+                            text: (estatus.toLowerCase() === 'true' ? "¿Estás seguro que deseas desbloquear el Spei Out a esta cuenta?" : "¿Estás seguro que deseas bloquear el Spei Out a esta cuenta?"),
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Aceptar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+
+                                $.ajax({
+                                    url: 'Cuenta/GestionarEstatusSpeiOutCuentas',
+                                    async: true,
+                                    cache: false,
+                                    type: 'POST',
+                                    data: { id: AccountID, Estatus: estatus, token: token, cs: CS },
+                                    success: function (data) {
+
+                                        if (data.error == true) {
+                                            Swal.fire(
+                                                'Estatus Actualizado',
+                                                'Hubo un problema al actualizar el estatus de la cuenta, verifique su existencia o Inténtalo más tarde.',
+                                                'error'
+                                            )
+                                        } else {
+                                            datatable.ajax.reload();
+                                            Swal.fire(
+                                                'Estatus Actualizado',
+                                                'Se ha actualizado el estatus de la cuenta con éxito.',
+                                                'success'
+                                            )
+                                        }
+                                    },
+                                    error: function (xhr, status, error) {
+                                    }
+                                });
+                            }
+                        })
                     } else {
                         // Token o código de seguridad incorrectos, muestra un mensaje de error
                         Swal.fire(

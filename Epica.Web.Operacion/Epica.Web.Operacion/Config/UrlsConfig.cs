@@ -37,7 +37,7 @@ public class UrlsConfig
         public static string GetProcesarTransaccion(int idUsuario) => $"/api/v1/cargabach/inserta_multiple_transacciones?idUsuario={idUsuario}";
         public static string GetComprobanteTransaccion(int cuentaAhorro, int Transaccion, string valida) => $"/api/v1/transacciones/imprimir_voucher?idCuentaAhorro={cuentaAhorro}&idTransaccion={Transaccion}&valida={valida}";
         public static string GetTransaccionesBatchTotalPorUsuario(int idUsuario) => $"/api/v1/cargabach/total?usuario={idUsuario}";
-        public static string GetEliminarTransaccionBatchPorUsuario(int idUsuario) => $"/api/v1/cargabach/remover_multiples_resgistro{idUsuario}";
+        public static string GetEliminarTransaccionBatchPorUsuario(int idUsuario, int estatus) => $"/api/v1/cargabach/remover_multiples_resgistro/{idUsuario}/{estatus}";
 
 
     }
@@ -52,6 +52,10 @@ public class UrlsConfig
         public static string GetCuentasClientes(int id) => $"/api/v1/cuentas/cliente_cuentas?idCliente={id}";
         public static string GetCuentaDetalle(string NoCuenta) => $"/api/v1/cuentas/buscar_cuenta?noCuenta={NoCuenta}";
         public static string GetCuentaDetalleSinAsignar(string NoCuenta) => $"/api/v1/catalogos/buscar_cuenta_asignar?noCuenta={NoCuenta}";
+        public static string GetBloqueaCuenta(int idCuenta, int estatus, int nip, string softoken, string valida) => $"/api/v1/cuentas/bloquear_desbloquear_cuenta?idCuenta={idCuenta}&estatus={estatus}&nip={nip}&softoken={softoken}&valida={valida}";
+        public static string GetBloqueaCuentaSpeiOut(int idCuenta, int estatus, int nip, string softoken, string valida) => $"/api/v1/cuentas/bloquear_desbloquear_speiout?idCuenta={idCuenta}&estatus={estatus}&nip={nip}&softoken={softoken}&valida={valida}";
+
+
     }
 
     public class ClientesOperations

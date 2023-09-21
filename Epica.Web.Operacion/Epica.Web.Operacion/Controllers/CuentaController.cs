@@ -3,16 +3,20 @@ using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Models;
 using Epica.Web.Operacion.Models.Common;
 using Epica.Web.Operacion.Models.Request;
+using Epica.Web.Operacion.Models.Response;
 using Epica.Web.Operacion.Models.ViewModels;
+using Epica.Web.Operacion.Services.Log;
 using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Services.UserResolver;
 using Epica.Web.Operacion.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using static Epica.Web.Operacion.Controllers.TransaccionesController;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Epica.Web.Operacion.Controllers;
 
@@ -24,12 +28,14 @@ public class CuentaController : Controller
     private readonly IClientesApiClient _usuariosApiClient;
     private readonly ITransaccionesApiClient _transaccionesApiClient;
     private readonly UserContextService _userContextService;
+    private readonly ILogsApiClient _logsApiClient;
     #endregion
 
     #region "Constructores"
     public CuentaController(ICuentaApiClient cuentaApiClient,
         IClientesApiClient usuariosApiClient,
         ITransaccionesApiClient transaccionesApiClient,
+        ILogsApiClient logsApiClient,
         UserContextService userContextService)
     {
 
@@ -37,6 +43,7 @@ public class CuentaController : Controller
         _usuariosApiClient = usuariosApiClient;
         _transaccionesApiClient = transaccionesApiClient;
         _userContextService = userContextService;
+        _logsApiClient = logsApiClient;
     }
     #endregion
 
@@ -462,19 +469,43 @@ public class CuentaController : Controller
 
     [Authorize]
     [HttpPost]
-    public async Task<JsonResult> GestionarEstatusCuentas(int id, string Estatus)
+    public async Task<JsonResult> GestionarEstatusCuentas(int id, string Estatus, int token, string cs)
     {
+        MensajeResponse respuesta = new MensajeResponse();
+        var loginResponse = _userContextService.GetLoginResponse();
+        var accion = "";
+
         try
         {
 
             if (Estatus == "True") {
-
+                respuesta = await _cuentaApiClient.BloqueoCuentaAsync(id,0,token,cs);
+                accion = "Desbloquear Cuenta";
             } else if (Estatus == "False") {
-
-            } else {
+                respuesta = await _cuentaApiClient.BloqueoCuentaAsync(id, 1, token, cs);
+                accion = "Bloquear Cuenta";
+            }
+            else {
                 //Deteccion de posible cambio en codigo HTML a través de inspeccionar elemento
                 return Json(BadRequest());
             }
+
+            LogRequest logRequest = new LogRequest
+            {
+                IdUser = loginResponse.IdUsuario.ToString(),
+                Modulo = "Cuentas",
+                Fecha = HoraHelper.GetHoraCiudadMexico(),
+                NombreEquipo = loginResponse.NombreDispositivo,
+                Accion = accion,
+                Ip = loginResponse.DireccionIp,
+                Envio = JsonConvert.SerializeObject(id),
+                Respuesta = respuesta.Error.ToString(),
+                Error = respuesta.Error ? JsonConvert.SerializeObject(respuesta.Detalle) : string.Empty,
+                IdRegistro = id
+            };
+
+            await _logsApiClient.InsertarLogAsync(logRequest);
+
         } catch (Exception ex) {
 
             return Json(BadRequest());
@@ -483,6 +514,56 @@ public class CuentaController : Controller
         return Json(Ok());
     }
 
+    [HttpPost]
+    public async Task<JsonResult> GestionarEstatusSpeiOutCuentas(int id, string Estatus, int token, string cs)
+    {
+        MensajeResponse respuesta = new MensajeResponse();
+        var loginResponse = _userContextService.GetLoginResponse();
+        var accion = "";
+
+        try
+        {
+
+            if (Estatus == "True")
+            {
+                respuesta = await _cuentaApiClient.BloqueoCuentaSpeiOutAsync(id, 0, token, cs);
+                accion = "Desbloquear Spei Out";
+            }
+            else if (Estatus == "False")
+            {
+                respuesta = await _cuentaApiClient.BloqueoCuentaSpeiOutAsync(id, 1, token, cs);
+                accion = "Bloquear Spei Out";
+            }
+            else
+            {
+                //Deteccion de posible cambio en codigo HTML a través de inspeccionar elemento
+                return Json(BadRequest());
+            }
+
+            LogRequest logRequest = new LogRequest
+            {
+                IdUser = loginResponse.IdUsuario.ToString(),
+                Modulo = "Cuentas",
+                Fecha = HoraHelper.GetHoraCiudadMexico(),
+                NombreEquipo = loginResponse.NombreDispositivo,
+                Accion = accion,
+                Ip = loginResponse.DireccionIp,
+                Envio = JsonConvert.SerializeObject(id),
+                Respuesta = respuesta.Error.ToString(),
+                Error = respuesta.Error ? JsonConvert.SerializeObject(respuesta.Detalle) : string.Empty,
+                IdRegistro = id
+            };
+
+            await _logsApiClient.InsertarLogAsync(logRequest);
+        }
+        catch (Exception ex)
+        {
+
+            return Json(BadRequest());
+        }
+
+        return Json(Ok());
+    }
     #endregion
 
     #region "Modelos"
@@ -504,65 +585,65 @@ public class CuentaController : Controller
 
     #region "Funciones Auxiliares"
 
-    private GenerarNombreResponse generarnombre(int i)
-    {
-        var res = new GenerarNombreResponse();
-        Random rnd = new Random((int)DateTime.Now.Ticks);
+    //private GenerarNombreResponse generarnombre(int i)
+    //{
+    //    var res = new GenerarNombreResponse();
+    //    Random rnd = new Random((int)DateTime.Now.Ticks);
 
-        i = i - 1;
-
-
-
-
-        String[] nombres = { "Juan", "Pablo", "Paco", "Jose", "Alberto", "Roberto", "Genaro", "Andrea", "Maria", "Carmen" };
-        String[] apellidos = { "Sanchez", "Perez", "Lopez", "Torres", "Alvarez", "Martinez", "Guzman", "Rodriguez", "Flores", "Vazquez" };
-        String[] apellidosM = { "Vazquez", "Flores", "Rodriguez", "Guzman", "Martinez", "Alvarez", "Torres", "Lopez", "Perez", "Sanchez" };
+    //    i = i - 1;
 
 
 
-        var genNombre = nombres[i];
 
-        String gen = genNombre + " " + apellidos[i] + " " + apellidos[i];
-
-        res.Nombre = genNombre;
-        res.NombreCompleto = gen;
-
-        return res;
-    }
-
-    public List<CuentasResponse> GetList()
-    {
+    //    String[] nombres = { "Juan", "Pablo", "Paco", "Jose", "Alberto", "Roberto", "Genaro", "Andrea", "Maria", "Carmen" };
+    //    String[] apellidos = { "Sanchez", "Perez", "Lopez", "Torres", "Alvarez", "Martinez", "Guzman", "Rodriguez", "Flores", "Vazquez" };
+    //    String[] apellidosM = { "Vazquez", "Flores", "Rodriguez", "Guzman", "Martinez", "Alvarez", "Torres", "Lopez", "Perez", "Sanchez" };
 
 
-        var List = new List<CuentasResponse>();
-        Random rnd = new Random();
-        const string characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-        String[] characters2 = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
+    //    var genNombre = nombres[i];
 
-        try
-        {
-            for (int i = 1; i <= 10; i++)
-            {
-                var gen = generarnombre(i);
+    //    String gen = genNombre + " " + apellidos[i] + " " + apellidos[i];
 
-                var pf = new CuentasResponse();
-                pf.idCuenta = i;
-                pf.nombrePersona = gen.NombreCompleto;
-                pf.noCuenta = string.Format("465236478963245{0}", i);
-                pf.saldo = Convert.ToDecimal(rnd.Next(0001, 99999).ToString("C2"));
-                pf.estatus = 1;
-                pf.tipoPersona = "Persona fisica";
+    //    res.Nombre = genNombre;
+    //    res.NombreCompleto = gen;
 
-                List.Add(pf);
-            }
-        }
-        catch (Exception e)
-        {
-            List = new List<CuentasResponse>();
-        }
+    //    return res;
+    //}
 
-        return List;
-    }
+    //public List<CuentasResponse> GetList()
+    //{
+
+
+    //    var List = new List<CuentasResponse>();
+    //    Random rnd = new Random();
+    //    const string characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+    //    String[] characters2 = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
+
+    //    try
+    //    {
+    //        for (int i = 1; i <= 10; i++)
+    //        {
+    //            var gen = generarnombre(i);
+
+    //            var pf = new CuentasResponse();
+    //            pf.idCuenta = i;
+    //            pf.nombrePersona = gen.NombreCompleto;
+    //            pf.noCuenta = string.Format("465236478963245{0}", i);
+    //            pf.saldo = Convert.ToDecimal(rnd.Next(0001, 99999).ToString("C2"));
+    //            pf.estatus = 1;
+    //            pf.tipoPersona = "Persona fisica";
+
+    //            List.Add(pf);
+    //        }
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        List = new List<CuentasResponse>();
+    //    }
+
+    //    return List;
+    //}
     #endregion
 }

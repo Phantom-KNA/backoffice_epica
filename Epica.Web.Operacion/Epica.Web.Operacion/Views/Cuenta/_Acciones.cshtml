@@ -16,18 +16,34 @@
                 Transacciones
             </a>
         </li>
-@*         <li class="menu-item px-3">
+        <li class="menu-item px-3">
             @if (Model.estatus == 1) {
                 <a data-id="@Model.idCuenta" onclick="GestionarCuenta(@Model.idCuenta, 'True')" title="Desbloquear Cuenta" class="btnEditar menu-link px-3">
                     <i class="bi bi-unlock"></i>&nbsp;
-                    Desbloquear
+                    Desbl Cuenta
                 </a>
             } else {
                 <a data-id="@Model.idCuenta" onclick="GestionarCuenta(@Model.idCuenta, 'False')" title="Bloquear Cuenta" class="btnEditar menu-link px-3">
                     <i class="bi bi-lock"></i>&nbsp;
-                    Bloquear
+                    Bloquear Cuenta
                 </a>
             }
-        </li> *@
+        </li>
+        <li class="menu-item px-3">
+            @if (Model.bloqueoSPEIOut == 1)
+            {
+                <a data-id="@Model.idCuenta" onclick="GestionarCuentaSpeiOut(@Model.idCuenta, 'True')" title="Desbloquear Cuenta" class="btnEditar menu-link px-3">
+                    <i class="bi bi-unlock"></i>&nbsp;
+                    Desbl SpeiOut
+                </a>
+            }
+            else
+            {
+                <a data-id="@Model.idCuenta" onclick="GestionarCuentaSpeiOut(@Model.idCuenta, 'False')" title="Bloquear Cuenta" class="btnEditar menu-link px-3">
+                    <i class="bi bi-lock"></i>&nbsp;
+                    Bloquear SpeiOut
+                </a>
+            }
+        </li>
     </ul>
 </div>
