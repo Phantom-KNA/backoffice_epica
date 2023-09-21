@@ -71,7 +71,7 @@ public class UrlsConfig
         public static string ModificarClienteNuevo() => $"/api/v1/clientes/modificar_cliente";
         public static string AsignarCuentaCliente() => $"/api/v1/clientes/asignar_cuenta";
         public static string DesvincularCuentaCliente() => $"/api/v1/clientes/desasociar_cuenta";
-        public static string GetInsertaDocumentoCliente() => $"/api/v1/clientes/insertar_documento";
+        public static string GetInsertaDocumentoCliente() => $"/api/v1/registro/documento";
 
     }
 

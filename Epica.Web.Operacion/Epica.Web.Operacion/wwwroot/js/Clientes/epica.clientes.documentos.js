@@ -171,6 +171,11 @@ $(document).on('click', '#BtnGuardarDocumento', function (e) {
         success: function (data) {
 
             datatable.ajax.reload();
+            $('#kt_modal_Nuevo').modal('toggle');
+            $('#CargaDocumentoForm')[0].reset();
+            var filerKit = $("#documento").prop("jFiler");
+            filerKit.reset();
+
             toastr.success('Se guardó la información de manera exitosa', "");
         },
         error: function (xhr, status, error) {

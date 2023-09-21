@@ -525,9 +525,14 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
             try
             {
-                var uri = Urls.Transaccion + UrlsConfig.ClientesOperations.GetInsertaDocumentoCliente();
+                var responseToken = _userContextService.GetLoginResponse();
+                ApiClient.DefaultRequestHeaders.Clear();
+
+                var uri = UrlApi + UrlsConfig.ClientesOperations.GetInsertaDocumentoCliente();
                 var json = JsonConvert.SerializeObject(request);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
+                ApiClient.DefaultRequestHeaders.Clear();
+                ApiClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + responseToken.Token);
 
                 var response = await ApiClient.PostAsync(uri, content);
                 if (response.IsSuccessStatusCode)

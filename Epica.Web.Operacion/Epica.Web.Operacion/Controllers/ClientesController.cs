@@ -898,21 +898,21 @@ public class ClientesController : Controller
                     var fileBytes = ms.ToArray();
                     var extension = System.IO.Path.GetExtension(model.documento.FileName);
 
-                    if (extension.ToLower() == ".pdf") {
-                        sendDocumento.Documento64 = "data:application/pdf;base64,";
-                    } else {
-                        sendDocumento.Documento64 = string.Format("data:image/{0};base64,", extension.Replace(".", ""));
-                    }
+                    //if (extension.ToLower() == ".pdf") {
+                    //    sendDocumento.documento = "data:application/pdf;base64,";
+                    //} else {
+                    //    sendDocumento.documento = string.Format("data:image/{0};base64,", extension.Replace(".", ""));
+                    //}
 
-                    sendDocumento.Documento64 += Convert.ToBase64String(fileBytes);
+                    sendDocumento.documento = Convert.ToBase64String(fileBytes);
                 }
             }
 
-            sendDocumento.IdCliente = model.idCliente;
-            sendDocumento.TipoDocumento = Convert.ToInt32(model.tipoDocumento);
-            sendDocumento.Observaciones = model.Observaciones;
-            sendDocumento.NombreDocumento = model.documento.FileName;
-            sendDocumento.Documento64 = sendDocumento.Documento64.Trim();
+            sendDocumento.idCliente = model.idCliente;
+            sendDocumento.tipoDocumento = model.tipoDocumento;
+            //sendDocumento.Observaciones = model.Observaciones;
+            //sendDocumento.NombreDocumento = model.documento.FileName;
+            sendDocumento.documento = sendDocumento.documento.Trim();
 
             response = await _clientesApiClient.GetInsertaDocumentoClienteAsync(sendDocumento);
 

@@ -10,7 +10,7 @@
                 <div class="form-group input-group-sm col-md-12 row">
                     <label class="col-md-3 form-label required">Documento: &nbsp;</label>
                     <div class="col-md-9">
-                        <select asp-for="tipoDocumento" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción">
+                        <select asp-for="tipoDocumento" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción" required>
                             <option></option>
                             @foreach (var Roles in Model.listaDocs)
                             {
@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        <div class="d-flex flex-stack row">
+@*         <div class="d-flex flex-stack row">
             <div class="row mb-5 mt-5">
                 <div class="form-group input-group-sm col-md-12 row">
                     <label class="col-md-3 form-label required">Observaciones: &nbsp;</label>
@@ -33,7 +33,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> *@
 
         <div class="d-flex flex-stack row">
             <div class="row mb-5 mt-5">
@@ -41,7 +41,7 @@
                     <label class="col-md-3 form-label required">Archivo: &nbsp;</label>
                     <div class="col-md-9">
                         <div class="fv-row">
-                            <input asp-for="documento" hidden class="form-control form-control-sm form-control-solid" id="documento" type="file" />
+                            <input asp-for="documento" hidden class="form-control form-control-sm form-control-solid" id="documento" type="file" required/>
                         </div>
                     </div>
                 </div>

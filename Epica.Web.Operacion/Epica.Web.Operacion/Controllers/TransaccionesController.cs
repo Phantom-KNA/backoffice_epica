@@ -134,6 +134,7 @@ namespace Epica.Web.Operacion.Controllers
         public async Task<JsonResult> Consulta(List<RequestListFilters> filters, string idAccount = "")
         {
             var request = new RequestList();
+            var loginResponse = _userContextService.GetLoginResponse();
 
             int totalRecord = 0;
             int filterRecord = 0;
@@ -191,6 +192,14 @@ namespace Epica.Web.Operacion.Controllers
             var List = new List<ResumenTransaccionResponseGrid>();
             foreach (var row in ListPF)
             {
+                var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Editar == 0);
+
+                if (validacion == true) {
+                    row.permiso = true;
+                } else {
+                    row.permiso = false;
+                }
+
                 row.claveRastreo = row.claveRastreo == null ? "N/A" : row.claveRastreo;
                 List.Add(new ResumenTransaccionResponseGrid
                 {

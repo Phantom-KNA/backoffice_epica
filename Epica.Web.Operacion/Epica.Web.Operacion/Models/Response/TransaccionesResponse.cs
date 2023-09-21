@@ -29,7 +29,7 @@ namespace Epica.Web.Operacion.Models.Response
         public string fechaAutorizacion { get; set; }
         public string alias { get; set; }
         public string descripcionMedioPago { get; set; }
-
+        public bool permiso { get; set; }
     }
 
     public class TransaccionesResponseGrid : TransaccionesResponse
