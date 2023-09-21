@@ -1,3 +1,4 @@
+toastr.options.preventDuplicates = true;
 var table;
 var datatable;
 var filterAccount;
