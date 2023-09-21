@@ -1,4 +1,5 @@
 "use strict"
+toastr.options.preventDuplicates = true;
 
 var datatable;
 
@@ -298,7 +299,16 @@ $(document).on('click', '#btnBuscarCliente', function () {
 });
 
 $(document).on('click', '#GuardarAsignacion', function (e) {
+    e.preventDefault();
 
+    var numeroCuenta = $('#NumeroCuenta').val();
+    var rol = $('#rol').val();
+    var idEmpresa = $('#idEmpresa').val();
+
+    if (!numeroCuenta || !rol || !idEmpresa) {
+        toastr.error('Por favor, complete todos los campos obligatorios.', "").preventDuplicates;
+        return; // Detener la ejecución si los campos no están completos
+    }
     toastr.info('Almacenando Cuenta Asignada...', "");
 
     var form = $("#AsignacionForm")
@@ -335,6 +345,14 @@ $(document).on('click', '#GuardarAsignacion', function (e) {
 
     });
     $("#btnCerrarCuenta").click();
+});
+
+$('#modal_asignacion').on('hidden.bs.modal', function () {
+    // Limpiar campos del modal al cerrarlo
+    $('#nombreCliente').val('');
+    $('#numeroCuenta').val('');
+    $('#rol').val('');
+    $('#idEmpresa').val('');
 });
 
 $(document).on('click', '.btnDesasignar', function (e) {

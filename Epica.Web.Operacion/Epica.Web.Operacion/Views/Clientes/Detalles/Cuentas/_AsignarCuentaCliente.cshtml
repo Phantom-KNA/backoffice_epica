@@ -21,7 +21,7 @@
                         <div class="form-group input-group-sm col-md-12 row">
                             <label class="col-md-3 form-label" required>Cuenta: &nbsp;</label>
                             <div class="col-md-9">
-                                <input asp-for="IdCuenta" hidden class="form-control form-control-sm form-control-solid" id="IdCuenta" readonly type="text" autocomplete="off" />
+                                <input required asp-for="IdCuenta" hidden class="form-control form-control-sm form-control-solid" id="IdCuenta" readonly type="text" autocomplete="off" />
                                 <input type="text" id="numeroCuenta" name="numeroCuenta" class="form-control form-control-sm form-control-solid" placeholder="Número de Cuenta" readonly autocomplete="off" />
                             </div>
                         </div>
@@ -32,7 +32,7 @@
                         <div class="form-group input-group-sm col-md-12 row">
                             <label class="col-md-3 form-label" required>Rol: &nbsp;</label>
                             <div class="col-md-9">
-                                <select asp-for="Rol" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción">
+                                <select asp-for="Rol" id="rol" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción" required>
                                     <option></option>
                                     @foreach (var Roles in Model.ListaRoles)
                                     {
@@ -48,7 +48,7 @@
                         <div class="form-group input-group-sm col-md-12 row">
                             <label class="col-md-3 form-label" required>Empresa: &nbsp;</label>
                             <div class="col-md-9">
-                                <select asp-for="IdEmpresa" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción">
+                                <select asp-for="IdEmpresa" id="idEmpresa" required class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción">
                                     <option></option>
                                     @foreach (var Roles in Model.ListaEmpresa)
                                     {
