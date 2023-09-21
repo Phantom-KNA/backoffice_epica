@@ -124,13 +124,13 @@ namespace Epica.Web.Operacion.Services
 
             try
             {
-                var tokenResponse = _userContextService.GetLoginResponse();
-                request.IdCliente = "1996";
+                var userResponse = _userContextService.GetLoginResponse();
+                request.IdCliente = userResponse.IdUsuario.ToString();
                 var uri = UrlApi + UrlsConfig.AuthenticateOperations.VerificarAcceso();
                 var json = JsonConvert.SerializeObject(request);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var accessToken = tokenResponse.Token;
+                var accessToken = userResponse.Token;
                 _apiClient.DefaultRequestHeaders.Clear();
                 _apiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 

@@ -12,7 +12,6 @@ using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Services.Catalogos;
 using Epica.Web.Operacion.Services.Log;
 using Epica.Web.Operacion.Services.Usuarios;
-using Epica.Web.Operacion.Services.AuthenticationTokenCodigo;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>
@@ -68,7 +67,6 @@ builder.Services.AddScoped<ITarjetasApiClient, TarjetasApiClient>();
 builder.Services.AddScoped<ICatalogosApiClient, CatalogosApiClient>();
 builder.Services.AddScoped<ILogsApiClient, LogsApiClient>();
 builder.Services.AddScoped<IUsuariosApiClient,  UsuariosApiClient>();
-builder.Services.AddScoped<IAuthenticationTokenCodigo, AuthenticationTokenCodigo>();
 builder.Services.AddScoped<IReintentadorService, ReintentadorService>();
 
 

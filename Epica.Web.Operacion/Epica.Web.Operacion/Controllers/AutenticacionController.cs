@@ -1,7 +1,6 @@
 ﻿using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.Authentication;
-using Epica.Web.Operacion.Services.AuthenticationTokenCodigo;
 using Epica.Web.Operacion.Services.Transaccion;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Win32;
