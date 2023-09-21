@@ -1,6 +1,7 @@
 var table;
 var datatable;
 var filterAccount;
+toastr.options.preventDuplicates = true;
 
 var KTDatatableRemoteAjax = function () {
     var table;
@@ -205,16 +206,16 @@ jQuery(document).ready(function () {
 });
 
 $(document).on('click', '#btnBuscarUsuario', function () {
-
     const inputNombreUsuario = document.getElementById('findnombreUsuario');
     const usuario = inputNombreUsuario.value;
 
     if ((usuario == null) || (usuario == "")) {
         toastr.warning("El valor ingresado, no es válido");
         return false;
-    } 
+    }
 
-    toastr.info("Localizando cuenta.");
+    toastr.info("Localizando cuenta.").preventDuplicates;
+    toastr.clear();
 
     $.ajax({
         url: "Usuarios/BuscarUsuario",
@@ -225,23 +226,41 @@ $(document).on('click', '#btnBuscarUsuario', function () {
             $("#idUsuario").empty();
 
             if (result.length == 0) {
-                toastr.success("No se pudo localizar resultados para esta busqueda.");
+                toastr.success("No se pudo localizar resultados para esta busqueda.").preventDuplicates;
             } else {
                 $.each(result, function (index, value) {
                     $("#idUsuario").append('<option value="' + value.id + '">' + value.descripcion + '</option>');
                 });
-                toastr.success("Usuario localizado.");
+                toastr.success("Usuario localizado.").preventDuplicates;
             }
         },
         error: function (error) {
-            toastr.warning("No se pudo localizar al usuario.");
+            toastr.warning("No se pudo localizar al usuario.").preventDuplicates;
         }
     });
 });
 
-$(document).on('click', '#GuardarAsignacion', function (e) {
+$("#findnombreUsuario").on("keydown", function (e) {
+    if (e.keyCode === 13) { 
+        e.preventDefault();
 
-    toastr.info('Almacenando Rol Asignado...', "");
+        $("#btnBuscarUsuario").click();
+    }
+});
+
+$(document).on('click', '#GuardarAsignacion', function (e) {
+    e.preventDefault();
+
+    var idUsuario = $('#idUsuario').val();
+    var idRol = $('#idRol').val();
+
+    if (!idUsuario || !idRol) {
+        toastr.error('Por favor, complete todos los campos obligatorios.', "").preventDuplicates;
+        return; // Detener la ejecución si los campos no están completos
+    }
+
+
+    toastr.info('Almacenando Rol Asignado...', "").preventDuplicates;
 
     var form = $("#AsignacionForm")
     var valdata = form.serialize();
@@ -257,11 +276,11 @@ $(document).on('click', '#GuardarAsignacion', function (e) {
             if (data.error == true) {
                 $('#modal_asignacion').modal('toggle');
                 datatable.ajax.reload();
-                toastr.warning('El usuario ya cuenta con un rol asignado', "");
+                toastr.warning('Error al asignar el rol', "").preventDuplicates;
             } else {
                 $('#modal_asignacion').modal('toggle');
                 datatable.ajax.reload();
-                toastr.success('Se guardó la información de manera exitosa', "");
+                toastr.success('Se guardó la información de manera exitosa', "").preventDuplicates;
             }
 
             $('#idUsuario').val('');
@@ -275,6 +294,13 @@ $(document).on('click', '#GuardarAsignacion', function (e) {
 
     });
     $("#btnCerrarCuenta").click();
+});
+
+$('#modal_asignacion').on('hidden.bs.modal', function () {
+    // Limpiar campos del modal al cerrarlo
+    $('#idUsuario').val('');
+    $('#idRol').val('');
+    $('#findnombreUsuario').val('');
 });
 
 function DesAsignarRol(idUser) {
