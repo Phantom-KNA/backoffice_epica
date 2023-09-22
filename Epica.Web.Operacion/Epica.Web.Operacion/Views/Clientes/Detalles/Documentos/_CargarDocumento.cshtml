@@ -10,7 +10,7 @@
                 <div class="form-group input-group-sm col-md-12 row">
                     <label class="col-md-3 form-label required">Documento: &nbsp;</label>
                     <div class="col-md-9">
-                        <select asp-for="tipoDocumento" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción" required>
+                        <select asp-for="tipoDocumento" id="tipoDocumento" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción" required>
                             <option></option>
                             @foreach (var Roles in Model.listaDocs)
                             {

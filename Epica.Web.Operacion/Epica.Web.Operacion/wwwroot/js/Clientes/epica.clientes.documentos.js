@@ -1,3 +1,5 @@
+toastr.options.preventDuplicates = true;
+
 var table;
 var datatable;
 var filterAccount;
@@ -158,7 +160,17 @@ var plugins = () => {
 
 $(document).on('click', '#BtnGuardarDocumento', function (e) {
 
-    toastr.info('Almacenando Documento...', ""); 
+    e.preventDefault();
+
+    var tipoDocumento = $('#tipoDocumento').val();
+    var documento = $('#documento').val();
+
+    if (!tipoDocumento || !documento) {
+        toastr.error('Por favor, complete todos los campos obligatorios.', "").preventDuplicates;
+        return; // Detener la ejecución si los campos no están completos
+    }
+
+    toastr.info('Almacenando Documento...', "").preventDuplicates; 
     var form = new FormData($('#CargaDocumentoForm')[0]);
 
     $.ajax({
@@ -176,15 +188,21 @@ $(document).on('click', '#BtnGuardarDocumento', function (e) {
             var filerKit = $("#documento").prop("jFiler");
             filerKit.reset();
 
-            toastr.success('Se guardó la información de manera exitosa', "");
+            toastr.success('Se guardó la información de manera exitosa', "").preventDuplicates;
         },
         error: function (xhr, status, error) {
-            console.log(error);
         }
 
 
     });
     $("#btnCerrarCuenta").click();
+});
+
+$('#kt_modal_Nuevo').on('hidden.bs.modal', function () {
+    // Limpiar campos del modal al cerrarlo
+    $('#tipoDocumento').val('');
+    var filerKit = $("#documento").prop("jFiler");
+    filerKit.reset();
 });
 
 $(document).on('click', '#btnVerDocumento', function (e) {
