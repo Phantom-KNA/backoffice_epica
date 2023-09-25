@@ -26,7 +26,7 @@ namespace Epica.Web.Operacion.Helpers
             }
             catch (Exception ex)
             {
-                return null;
+                return "0.0.0.0";
             }
         }
     }
