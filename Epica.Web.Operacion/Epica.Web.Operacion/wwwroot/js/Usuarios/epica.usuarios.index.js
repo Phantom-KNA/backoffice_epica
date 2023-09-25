@@ -264,6 +264,7 @@ $(document).on('click', '#GuardarAsignacion', function (e) {
 
     var form = $("#AsignacionForm")
     var valdata = form.serialize();
+    var cierre = 'true';
 
     $.ajax({
         url: "Usuarios/RegistrarAsignacionUsuario",
@@ -272,8 +273,13 @@ $(document).on('click', '#GuardarAsignacion', function (e) {
         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
         data: valdata,
         success: function (data) {
-
-            if (data.error == true) {
+            if (data.detalle == 'El usuario ya tiene un rol asignado.') {
+                //$('#modal_asignacion').modal('toggle');
+                //datatable.ajax.reload();
+                toastr.warning('El usuario ya tiene un rol asignado, desvincule el Rol del Usuario', "").preventDuplicates;
+                cierre = 'false';
+            }
+            else if (data.error == true) {
                 $('#modal_asignacion').modal('toggle');
                 datatable.ajax.reload();
                 toastr.warning('Error al asignar el rol', "").preventDuplicates;
@@ -283,9 +289,11 @@ $(document).on('click', '#GuardarAsignacion', function (e) {
                 toastr.success('Se guardó la información de manera exitosa', "").preventDuplicates;
             }
 
-            $('#idUsuario').val('');
-            $('#nombreUsuario').val('');
-            $('#findnombreUsuario').val('');
+            if (cierre == 'true') {
+                $('#idUsuario').val('');
+                $('#nombreUsuario').val('');
+                $('#findnombreUsuario').val('');
+            }
 
         },
         error: function (xhr, status, error) {
@@ -293,7 +301,9 @@ $(document).on('click', '#GuardarAsignacion', function (e) {
 
 
     });
-    $("#btnCerrarCuenta").click();
+    if (cierre == 'true') {
+        $("#btnCerrarCuenta").click();
+    }
 });
 
 $('#modal_asignacion').on('hidden.bs.modal', function () {
@@ -337,3 +347,13 @@ function DesAsignarRol(idUser) {
         }
     })
 }
+$("#filtro_username, #filtro_rol, #filtro_fecha_alta, #filtro_fecha_acceso").on("keydown", function (e) {
+    if (e.keyCode === 13) { 
+        e.preventDefault();
+        $("#btnAplicarFiltros").click();
+    }
+});
+
+
+
+

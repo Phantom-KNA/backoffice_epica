@@ -112,35 +112,30 @@ namespace Epica.Web.Operacion.Controllers
             }
 
             //Aplicacion de Filtros temporal, 
-            var filtrouser = filters.FirstOrDefault(x => x.Key == "telefono");
-            var filtroCorreoElectronico = filters.FirstOrDefault(x => x.Key == "correoElectronico");
-            var filtroCurp = filters.FirstOrDefault(x => x.Key == "curp");
-            var filtroOrganizacion = filters.FirstOrDefault(x => x.Key == "organizacion");
+            var filtroUser = filters.FirstOrDefault(x => x.Key == "username");
+            var filtroRol = filters.FirstOrDefault(x => x.Key == "rol");
+            var filtroFechaAlta = filters.FirstOrDefault(x => x.Key == "fechaAlta");
+            var filtroFechaUltimoAcceso = filters.FirstOrDefault(x => x.Key == "fechaUltimoAcceso");
 
-            //if (filtronombreCliente.Value != null)
-            //{
-            //    List = List.Where(x => x.nombreCompleto.Contains(Convert.ToString(filtronombreCliente.Value.ToUpper()))).ToList();
-            //}
+            if (filtroUser?.Value != null)
+            {
+                List = List.Where(x => x.Username.ToUpper().Contains(Convert.ToString(filtroUser.Value.ToUpper()))).ToList();
+            }
 
-            //if (filtroTelefono.Value != null)
-            //{
-            //    List = List.Where(x => x.telefono == Convert.ToString(filtroTelefono.Value)).ToList();
-            //}
+            if (filtroRol?.Value != null)
+            {
+                List = List.Where(x => x.DescripcionRol.ToUpper().Equals((Convert.ToString(filtroRol.Value.ToUpper())))).ToList();
+            }
 
-            //if (filtroCorreoElectronico.Value != null)
-            //{
-            //    List = List.Where(x => x.email == Convert.ToString(filtroCorreoElectronico.Value)).ToList();
-            //}
+            if (filtroFechaAlta?.Value != null)
+            {
+                List = List.Where(x => x.FechaAlta.Contains(Convert.ToString(filtroFechaAlta.Value))).ToList();
+            }
 
-            //if (filtroCurp.Value != null)
-            //{
-            //    List = List.Where(x => x.CURP == Convert.ToString(filtroCurp.Value)).ToList();
-            //}
-
-            //if (filtroOrganizacion.Value != null)
-            //{
-            //    List = List.Where(x => x.organizacion == Convert.ToString(filtroOrganizacion.Value)).ToList();
-            //}
+            if (filtroFechaUltimoAcceso?.Value != null)
+            {
+                List = List.Where(x => x.FechaUltimoAcceso.Contains(Convert.ToString(filtroFechaUltimoAcceso.Value))).ToList();
+            }
 
             gridData.Data = List;
             gridData.RecordsTotal = List.Count;
