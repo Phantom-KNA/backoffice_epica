@@ -236,7 +236,8 @@ namespace Epica.Web.Operacion.Controllers
                 (x.concepto?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
                 (x.idMedioPago.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
                 (x.idCuentaAhorro.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-                (x.fechaAlta.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower())
+                (x.fechaAutorizacion.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.fechaInstruccion.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower())
                 ).ToList();
             }
             //Aplicacion de Filtros temporal, 
