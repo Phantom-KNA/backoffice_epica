@@ -221,13 +221,17 @@ $(document).on('click', '#GuardarDocumento', function (e) {
                 data: form,
                 success: function (data) {
 
+                    var filerKit = $("#documento").prop("jFiler");
+                    filerKit.reset();
+                    $('#CargaMasivaTransaccion').modal('toggle');
+
                     if (data.error == true) {
                         Swal.fire(
                             'Carga Masiva Transacciones',
-                            'Hubo un problema al cargar las transacciones, verifique que el documento sea válido.',
+                            data.message,
                             'error'
                         )
-                    } else {
+                    } else {                       
                         datatable_transaccion.ajax.reload();
                         Swal.fire(
                             'Carga Masiva Transacciones',
@@ -394,7 +398,7 @@ function AlmacenarTransacciones(idUsuario) {
                     if (data.error == true) {
                         Swal.fire(
                             'Cargar Masiva Transacciones',
-                            'Hubo un problema al cargar las transacciones, verifique que el documento sea válido.',
+                            data.message,
                             'error'
                         )
                     } else {

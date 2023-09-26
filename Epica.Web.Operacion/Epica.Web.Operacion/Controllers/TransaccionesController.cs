@@ -575,6 +575,12 @@ namespace Epica.Web.Operacion.Controllers
                     tablaDatos = resultExcel.Tables[0];
                 }
 
+                if (tablaDatos.Rows.Count == 1) {
+                    response.Error = true;
+                    response.message = "El Archivo Excel no cuenta con registros validos.";
+                    return Json(response);
+                }
+
                 for (var rowCell = 0; rowCell <= tablaDatos.Rows.Count - 1; rowCell++)
                 {
                     var rowData = tablaDatos.Rows[rowCell];
@@ -619,6 +625,7 @@ namespace Epica.Web.Operacion.Controllers
 
             } catch (Exception ex) {
                 response.Error = true;
+                response.message = "Hubo un problema al cargar las transacciones, verifique que el documento sea válido.";
             }
 
             return Json(response);
