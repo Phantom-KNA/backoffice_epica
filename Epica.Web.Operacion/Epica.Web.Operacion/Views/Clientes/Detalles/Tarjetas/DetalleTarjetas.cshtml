@@ -68,11 +68,11 @@
 <div class="modal fade" tabindex="-1" id="kt_modal_1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Crear Nueva Tarjeta</h3>
-                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
-                    <span class="svg-icon svg-icon-1"></span>
-                </div>
+            <div class="modal-header header-modal">
+                <h3 class="modal-title fs-5 text-header-modal">Crear Nueva Tarjeta</h3>
+                <button type="button" class="custom-close-button" data-bs-dismiss="modal" aria-label="Close">
+                    <span>✕</span>
+                </button>
             </div>
             <div class="modal-body">
                 <partial name="~/Views/Tarjetas/_PartialRenderRegistroTarjetas.cshtml" model="@ViewBag.DatosRef" />
@@ -89,7 +89,41 @@
 @section Scripts{
     <script asp-append-version="true" src="~/js/Clientes/epica.clientes.tarjetas.js"></script>
     <script asp-append-version="true" src="~/js/components/accounting.js"></script>
+    <script asp-append-version="true" src="~/js/components/utilerias.js"></script>
     <script>
         var AccountId = '@ViewBag.AccountID';
     </script>
 }
+
+
+<style>
+
+    .header-modal {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .text-header-modal {
+        color: white;
+    }
+
+    .custom-close-button {
+        color: white;
+        background-color: transparent;
+        border: none;
+        opacity: 1;
+        padding: 0;
+        font-size: 1rem;
+        line-height: 1;
+        cursor: pointer;
+        transition: color 0.3s, opacity 0.3s;
+        position: absolute;
+        right: 0;
+        padding: 21px;
+    }
+
+        .custom-close-button:hover {
+            opacity: 0.8;
+        }
+</style>

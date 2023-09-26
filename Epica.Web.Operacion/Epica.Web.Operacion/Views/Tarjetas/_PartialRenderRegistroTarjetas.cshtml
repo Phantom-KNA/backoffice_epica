@@ -7,7 +7,7 @@
                 <label class="col-md-5 form-label required">Número de Tarjeta: &nbsp;</label>
                 <div class="col-md-7">
                     <input asp-for="idCliente" hidden class="form-control form-control-sm form-control-solid" id="idCliente" readonly value="@Model.idCliente" type="text" autocomplete="off" />
-                    <input asp-for="numeroTarjeta" class="form-control form-control-sm form-control-solid" id="numeroTarjeta" type="text" autocomplete="off" />
+                    <input asp-for="numeroTarjeta" class="form-control form-control-sm form-control-solid" id="numeroTarjeta" onkeypress="return SoloNumeros(event)" maxlength="16" type="text" autocomplete="off" />
                 </div>
             </div>
         </div>
@@ -17,7 +17,7 @@
             <div class="form-group input-group-sm col-md-12 row">
                 <label class="col-md-5 form-label required">Número de Proxy: &nbsp;</label>
                 <div class="col-md-7">
-                    <input asp-for="proxyNumber" required class="form-control form-control-sm form-control-solid" id="proxyNumber" type="number" min="0" autocomplete="off" />
+                    <input asp-for="proxyNumber" required class="form-control form-control-sm form-control-solid" id="proxyNumber" onkeypress="return SoloNumeros(event)" maxlength="11" type="text" min="0" autocomplete="off" />
                 </div>
             </div>
         </div>
@@ -52,7 +52,7 @@
             <div class="form-group input-group-sm col-md-12 row">
                 <label class="col-md-5 form-label required">Año Vigencia: &nbsp;</label>
                 <div class="col-md-7">
-                    <input asp-for="yearVigencia" class="form-control form-control-sm form-control-solid" id="yearVigencia" type="number" min="0" autocomplete="off" required/>
+                    <input asp-for="yearVigencia" class="form-control form-control-sm form-control-solid" id="yearVigencia" onkeypress="return SoloNumeros(event)" maxlength="4" type="text" min="0" autocomplete="off" required />
                 </div>
             </div>
         </div>
