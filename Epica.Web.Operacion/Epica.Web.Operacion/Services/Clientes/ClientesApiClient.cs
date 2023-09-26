@@ -334,36 +334,6 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
             return cliente!;
         }
-
-        //public async Task<RegistrarModificarClienteResponse> GetModificaCliente(RegistroModificacionClienteRequest request)
-        //{
-        //    RegistrarModificarClienteResponse respuesta = new RegistrarModificarClienteResponse();
-
-        //    try
-        //    {
-        //        var uri = Urls.Transaccion + UrlsConfig.ClientesOperations.ModificarClienteNuevo();
-        //        var json = JsonConvert.SerializeObject(request);
-        //        var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-        //        var response = await ApiClient.PostAsync(uri, content);
-        //        if (response.IsSuccessStatusCode)
-        //        {
-        //            response.EnsureSuccessStatusCode();
-        //            var jsonResponse = await response.Content.ReadAsStringAsync();
-        //            respuesta = JsonConvert.DeserializeObject<RegistrarModificarClienteResponse>(jsonResponse);
-        //        }
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        respuesta.error = true;
-        //        respuesta.detalle = ex.Message;
-        //        return respuesta;
-        //    }
-
-        //    return respuesta;
-        //}
-
         public async Task<MensajeResponse> GetRegistroAsignacionCuentaCliente(AsignarCuentaResponse request)
         {
             MensajeResponse respuesta = new MensajeResponse();
@@ -557,25 +527,5 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
             return respuesta;
         }
-
-        //private async Task<TokenResponse> GenTokenAsync()
-        //{
-        //    var uri = ApiClient + UrlsConfig.AuthenticateOperations.PostToken();
-
-        //    var credentials = new TokenRequest() { Username = UsernameApi, Password = PasswordApi };
-
-        //    var content = new StringContent(JsonConvert.SerializeObject(credentials), Encoding.UTF8, "application/json");
-        //    JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
-        //    {
-        //        PropertyNameCaseInsensitive = true,
-        //        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-        //    };
-        //    var response = await ApiClient.PostAsync(uri, content);
-
-        //    var stringResponse = await response.Content.ReadAsStringAsync();
-        //    var result = System.Text.Json.JsonSerializer.Deserialize<TokenResponse>(stringResponse, _serializerOptions);
-
-        //    return result;
-        //}
     }
 }
