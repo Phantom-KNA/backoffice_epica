@@ -209,6 +209,13 @@ $(document).on('click', '#GuardarDocumento', function (e) {
     }).then((result) => {
         if (result.isConfirmed) {
 
+            var doc = $("#documento").val();
+
+            if (doc == '') {
+                toastr.warning('No se ha seleccionado algún documento válido.', "");
+                return false;
+            }
+
             toastr.info('Cargando Documento...', "");
             var form = new FormData($('#CargaDocumentoForm')[0]);
 
@@ -249,6 +256,11 @@ $(document).on('click', '#GuardarDocumento', function (e) {
     })
 
 
+});
+
+$(document).on('click', '#btnCerrarCuenta', function (e) {
+    var filerKit = $("#documento").prop("jFiler");
+    filerKit.reset();
 });
 
 function EliminarTransaccionBatch(idRegistro) {
@@ -463,3 +475,4 @@ function CancelarTransacciones(idUsuario) {
         }
     })
 }
+
