@@ -1419,9 +1419,18 @@ public class ClientesController : Controller
                 });
             }
 
-            gridData.Data = List;
+            if (!string.IsNullOrEmpty(request.Busqueda))
+            {
+                List = List.Where(x =>
+                (x.DescripcionDocumento?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.fechaalta.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.fechaactualizacion.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.Observaciones?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
+                ).ToList();
+            }
+
             gridData.RecordsTotal = List.Count;
-            gridData.Data = gridData.Data.Skip(skip).Take(pageSize).ToList();
+            gridData.Data = List.Skip(skip).Take(pageSize).ToList(); 
             filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.Data.Count;
             gridData.RecordsFiltered = filterRecord;
             gridData.Draw = draw;

@@ -9,7 +9,7 @@ var KTDatatableRemoteAjax = function () {
     var initDatatable = function () {
         datatable = $('#kt_datatable').DataTable({
             "order": [],
-            pageLength: 15,
+            pageLength: 10,
             language: {
                 "decimal": "",
                 "emptyTable": "No hay información disponible",
