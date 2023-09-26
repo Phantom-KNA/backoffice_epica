@@ -105,7 +105,7 @@
                                     <br />
                                     <div class="d-flex justify-content-end">
                                         <button type="reset" class="btn btn-sm btn-light btn-active-light-primary me-2 btn_limpiar_filtros" data-kt-menu-dismiss="true" data-kt-customer-table-filter="reset">Limpiar</button>
-                                        <button type="submit" class="btn btn-sm btn-primary btn-filtrar" data-kt-menu-dismiss="true" data-kt-customer-table-filter="filter">Aplicar</button>
+                                        <button type="submit" id="btnAplicarFiltros"class="btn btn-sm btn-primary btn-filtrar" data-kt-menu-dismiss="true" data-kt-customer-table-filter="filter">Aplicar</button>
                                     </div>
                                 </div>
                             </div>
@@ -226,9 +226,11 @@
 <div class="modal fade" id="modal_detalle" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header ">
-                <h1 class="modal-title fs-5" id="modalLabelTitle"></h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header header-modal ">
+                <h1 class="modal-title fs-5 text-header-modal" id="modalLabelTitle"></h1>
+                <button type="button" class="custom-close-button" data-bs-dismiss="modal" aria-label="Close">
+                    <span>✕</span>
+                </button>
             </div>
             <div class="modal-body">
             </div>
@@ -270,3 +272,35 @@
         var AccountId = '@ViewBag.AccountID';
     </script>
 }
+
+<style>
+
+    .header-modal {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .text-header-modal {
+        color: white;
+    }
+
+    .custom-close-button {
+        color: white;
+        background-color: transparent;
+        border: none;
+        opacity: 1;
+        padding: 0;
+        font-size: 1rem;
+        line-height: 1;
+        cursor: pointer;
+        transition: color 0.3s, opacity 0.3s;
+        position: absolute;
+        right: 0;
+        padding: 21px;
+    }
+
+        .custom-close-button:hover {
+            opacity: 0.8;
+        }
+</style>
