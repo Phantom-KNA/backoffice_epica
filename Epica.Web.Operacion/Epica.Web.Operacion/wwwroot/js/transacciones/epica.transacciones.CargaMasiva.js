@@ -198,6 +198,13 @@ var plugins = () => {
 
 $(document).on('click', '#GuardarDocumento', function (e) {
 
+    var doc = $("#documento").val();
+
+    if (doc == '') {
+        toastr.warning('No se ha seleccionado algún documento válido.', "");
+        return false;
+    }
+
     Swal.fire({
         title: 'Carga Masiva Transacciones',
         text: "¿Estás seguro de que deseas cargar este documento?",
@@ -205,16 +212,10 @@ $(document).on('click', '#GuardarDocumento', function (e) {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Aceptar'
+        confirmButtonText: 'Aceptar',
+        cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
-
-            var doc = $("#documento").val();
-
-            if (doc == '') {
-                toastr.warning('No se ha seleccionado algún documento válido.', "");
-                return false;
-            }
 
             toastr.info('Cargando Documento...', "");
             var form = new FormData($('#CargaDocumentoForm')[0]);
@@ -272,7 +273,8 @@ function EliminarTransaccionBatch(idRegistro) {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Aceptar'
+        confirmButtonText: 'Aceptar',
+        cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
 
@@ -394,7 +396,8 @@ function AlmacenarTransacciones(idUsuario) {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Aceptar'
+        confirmButtonText: 'Aceptar',
+        cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
 
@@ -441,7 +444,8 @@ function CancelarTransacciones(idUsuario) {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Aceptar'
+        confirmButtonText: 'Aceptar',
+        cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
 
