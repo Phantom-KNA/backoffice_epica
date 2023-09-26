@@ -39,53 +39,70 @@
                                 <i class="bi bi-filter"></i>&nbsp;
                                 Filtrado
                             </button>
-                            <div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px" data-kt-menu="true" id="kt-toolbar-filter">
+                            <div class="menu menu-sub menu-sub-dropdown w-300px w-md-500px" data-kt-menu="true" id="kt-toolbar-filter">
                                 <div class="px-7 py-5">
                                     <div class="fs-4 text-dark fw-bold">Filtros</div>
                                 </div>
                                 <div class="separator border-gray-200"></div>
-
                                 <div class="px-7 py-5">
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Cuenta Ordenante:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="cuentaOrdenante" placeholder="Cuenta Ordenante" id="filtro_cuenta_ordenante" />
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Cuenta Ordenante:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="cuentaOrdenante" onkeypress="return SoloNumeros(event)" maxlength="18" placeholder="Cuenta Ordenante" id="filtro_cuenta_ordenante" />
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Nombre Ordenante:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreOrdenante" onkeypress="return SoloLetras(event)" maxlength="50" placeholder="Nombre del Ordenante" id="filtro_nombreOrdenante" />
+                                        </div>
                                     </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Clave de Rastreo:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="claveRastreo" placeholder="Clave de Rastreo" id="filtro_clave_rastreo" />
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Nombre Beneficiario:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreBeneficiario" onkeypress="return SoloLetras(event)" maxlength="50" placeholder="Nombre Del Beneficiario" id="filtro_nombreBeneficiario" />
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Clave de Rastreo:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="claveRastreo" onkeypress="return SinCaracteresEspeciales(event)" maxlength="30" placeholder="Clave de Rastreo" id="filtro_clave_rastreo" />
+                                        </div>
                                     </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Nombre Ordenante:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreOrdenante" placeholder="Nombre del Ordenante" id="filtro_nombreOrdenante" />
-                                    </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Nombre Beneficiario:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreBeneficiario" placeholder="Nombre Del Beneficiario" id="filtro_nombreBeneficiario" />
-                                    </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Concepto:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="concepto" placeholder="Concepto de la Transacción" id="filtro_transaccion" />
-                                    </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Monto:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="monto" placeholder="Monto" id="filtro_monto" />
-                                    </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Fecha:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="fecha" placeholder="Fecha" id="filtro_fecha" />
-                                    </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Estatus:</label>
-                                        <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatus" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_tipo">
-                                            <option></option>
-                                            <option value="0">En Proceso</option>
-                                            <option value="1">En Transito</option>
-                                            <option value="4">Liquidado</option>
-                                            <option value="5">Devuelto</option>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Estatus:</label>
+                                            <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatus" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_tipo">
+                                                <option></option>
+                                                <option value="0">En Proceso</option>
+                                                <option value="1">En Transito</option>
+                                                <option value="4">Liquidado</option>
+                                                <option value="5">Devuelto</option>
 
-                                        </select>
+                                            </select>
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Monto:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="monto" type="number" min="0" placeholder="Monto" id="filtro_monto" />
+                                        </div>
                                     </div>
-
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Fecha de Instrucción:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="fecha_instruccion" placeholder="Fecha de Instrucción" id="filtro_instruccion" />
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Fecha de Autorización:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="fecha_autorizacion" placeholder="Fecha de Autorización" id="fecha_autorizacion" />
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Concepto:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" onkeypress="return SinCaracteresEspeciales(event)" data-filtrar="concepto" placeholder="Concepto de la Transacción" id="filtro_transaccion" />
+                                        </div>
+                                    </div>
+                                    <br />
                                     <div class="d-flex justify-content-end">
                                         <button type="reset" class="btn btn-sm btn-light btn-active-light-primary me-2 btn_limpiar_filtros" data-kt-menu-dismiss="true" data-kt-customer-table-filter="reset">Limpiar</button>
                                         <button type="submit" class="btn btn-sm btn-primary btn-filtrar" data-kt-menu-dismiss="true" data-kt-customer-table-filter="filter">Aplicar</button>
@@ -247,7 +264,8 @@
 @section Scripts{
     <script asp-append-version="true" src="~/js/components/accounting.js"></script>
     <script asp-append-version="true" src="~/js/components/jquery.filer.min.js"></script>
-    <script src="~/js/transacciones/transacciones.js" asp-append-version="true"></script>
+    <script asp-append-version="true" src="~/js/components/utilerias.js"></script>
+    <script asp-append-version="true" src="~/js/transacciones/transacciones.js"></script>
     <script>
         var AccountId = '@ViewBag.AccountID';
     </script>

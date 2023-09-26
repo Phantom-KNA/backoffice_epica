@@ -6,7 +6,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
     {
         Task<TransaccionDetailsResponse> GetTransaccionRastreoCobranzaAsync(string rastreoCobranza);
         Task<(List<CargaBachRequest>, int)> GetTransaccionesMasivaAsync(int pageNumber, int recordsTotal, int idUsuario);
-        Task<(List<TransaccionesResponse>, int)> GetTransaccionesAsync(int pageNumber, int recordsTotal);
+        Task<(List<TransaccionesResponse>, int)> GetTransaccionesAsync(int pageNumber, int recordsTotal, int columna, bool ascendente);
         Task<TransaccionesResponse> GetTransaccionAsync(int idInterno);
         Task<int> GetTotalTransaccionesAsync();
         Task<TransaccionesDetailsgeneralResponse> GetTransaccionesCuentaAsync(int idCuenta);

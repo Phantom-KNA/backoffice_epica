@@ -89,19 +89,19 @@ namespace Epica.Web.Operacion.Controllers
             return NotFound();
         }
 
-        [Authorize]
-        public async Task<IActionResult> Transacciones()
-        {
-            var loginResponse = _userContextService.GetLoginResponse();
-            var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Ver == 0);
-            if (validacion == true)
-            {
-                var recibir = await _transaccionesApiClient.GetTransaccionesAsync(1, 100);
-                return Json(recibir);
-            }
-            return NotFound();
+        //[Authorize]
+        //public async Task<IActionResult> Transacciones()
+        //{
+        //    var loginResponse = _userContextService.GetLoginResponse();
+        //    var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Ver == 0);
+        //    if (validacion == true)
+        //    {
+        //        var recibir = await _transaccionesApiClient.GetTransaccionesAsync(1, 100);
+        //        return Json(recibir);
+        //    }
+        //    return NotFound();
 
-        }
+        //}
 
         public async Task<IActionResult> DescargarVoucherTransaccion(int CuentaAhorro, int Transaccion)
         {
@@ -138,7 +138,9 @@ namespace Epica.Web.Operacion.Controllers
 
             int totalRecord = 0;
             int filterRecord = 0;
-            int paginacion = Convert.ToInt32(HttpContext.Session.GetInt32("TotalTransacciones"));
+            int paginacion = 0;
+            int columna = 0;
+            bool tipoFiltro = false;
 
             var draw = Request.Form["draw"].FirstOrDefault();
             int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
@@ -149,6 +151,38 @@ namespace Epica.Web.Operacion.Controllers
             request.Busqueda = Request.Form["search[value]"].FirstOrDefault();
             request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
             request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
+
+            if (request.ColumnaOrdenamiento != null)
+            {
+                if (request.ColumnaOrdenamiento == "cuetaOrigenOrdenante") {
+                    columna = 1;
+                } else if (request.ColumnaOrdenamiento == "vinculo") {
+                    columna = 2;
+                } else if (request.ColumnaOrdenamiento == "NombreCuenta") {
+                    columna = 3;
+                } else if (request.ColumnaOrdenamiento == "Institucion") {
+                    columna = 4;
+                } else if (request.ColumnaOrdenamiento == "Concepto") {
+                    columna = 5;
+                } else if (request.ColumnaOrdenamiento == "Monto") {
+                    columna = 6;
+                } else if (request.ColumnaOrdenamiento == "FechaInstruccion") {
+                    columna = 7;
+                }  else if (request.ColumnaOrdenamiento == "FechaAutorizacion") {
+                    columna = 8;
+                } else if (request.ColumnaOrdenamiento == "Estatus") {
+                    columna = 9;
+                }
+            }
+
+            if (request.Ordenamiento != null)
+            {
+                if (request.Ordenamiento == "asc") {
+                    tipoFiltro = true;
+                } else {
+                    tipoFiltro = false;
+                }
+            }
 
             var gridData = new ResponseGrid<ResumenTransaccionResponseGrid>();
             List<TransaccionesResponse> ListPF = new List<TransaccionesResponse>();
@@ -186,7 +220,7 @@ namespace Epica.Web.Operacion.Controllers
             }
             else
             {
-                (ListPF, paginacion) = await _transaccionesApiClient.GetTransaccionesAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros));
+                (ListPF, paginacion) = await _transaccionesApiClient.GetTransaccionesAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros),columna,tipoFiltro);
             }
 
             var List = new List<ResumenTransaccionResponseGrid>();
@@ -279,10 +313,10 @@ namespace Epica.Web.Operacion.Controllers
                 List = List.Where(x => x.monto.ToString() == Convert.ToString(filtroMonto.Value)).ToList();
             }
 
-            if (filtroFecha.Value != null)
-            {
-                List = List.Where(x => x.fechaAlta.ToString() == Convert.ToString(filtroFecha.Value)).ToList();
-            }
+            //if (filtroFecha.Value != null)
+            //{
+            //    List = List.Where(x => x.fechaAlta.ToString() == Convert.ToString(filtroFecha.Value)).ToList();
+            //}
 
             if (filtroEstatus.Value != null)
             {

@@ -79,7 +79,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return (ListaTransacciones, paginacion);
         }
 
-        public async Task<(List<TransaccionesResponse>, int)> GetTransaccionesAsync(int pageNumber, int recordsTotal)
+        public async Task<(List<TransaccionesResponse>, int)> GetTransaccionesAsync(int pageNumber, int recordsTotal, int columna, bool ascendente)
         {
             List<TransaccionesResponse>? ListaTransacciones = new List<TransaccionesResponse>();
             int paginacion = 0;
@@ -87,6 +87,11 @@ namespace Epica.Web.Operacion.Services.Transaccion
             try
             {
                 var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetTransacciones(pageNumber, recordsTotal);
+
+                if (columna != 0) {
+                    uri += string.Format("&columna={0}&ascendente={1}", Convert.ToString(columna), ascendente);
+                }
+
                 var response = await ApiClient.GetAsync(uri);
 
                 if (response.IsSuccessStatusCode)
