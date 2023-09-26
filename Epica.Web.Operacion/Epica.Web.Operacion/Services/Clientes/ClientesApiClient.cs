@@ -25,7 +25,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
             _userContextService = userContextService;
         }
 
-        public async Task<(List<ClienteResponse>, int)> GetClientesAsync(int pageNumber, int recordsTotal)
+        public async Task<(List<ClienteResponse>, int)> GetClientesAsync(int pageNumber, int recordsTotal, int columna, bool ascendente)
         {
 
             List<ClienteResponse>? listaClientes = new List<ClienteResponse>();
@@ -34,6 +34,11 @@ namespace Epica.Web.Operacion.Services.Transaccion
             try
             {
                 var uri = Urls.Transaccion + UrlsConfig.ClientesOperations.GetClienteInfo(pageNumber, recordsTotal);
+
+                if (columna != 0) {
+                    uri += string.Format("&columna={0}&ascendente={1}", Convert.ToString(columna), ascendente);
+                }
+
                 var response = await ApiClient.GetAsync(uri);
 
                 if (response.IsSuccessStatusCode)

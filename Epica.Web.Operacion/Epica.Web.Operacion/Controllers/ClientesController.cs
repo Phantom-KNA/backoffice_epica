@@ -74,6 +74,8 @@ public class ClientesController : Controller
         int totalRecord = 0;
         int filterRecord = 0;
         int paginacion = 0;
+        int columna = 0;
+        bool tipoFiltro = false;
 
         var draw = Request.Form["draw"].FirstOrDefault();
         int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
@@ -85,6 +87,33 @@ public class ClientesController : Controller
         request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
         request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
 
+        if (request.ColumnaOrdenamiento != null)
+        {
+            if (request.ColumnaOrdenamiento == "NombreCompleto") {
+                columna = 1;
+            } else if (request.ColumnaOrdenamiento == "Telefono") {
+                columna = 2;
+            } else if (request.ColumnaOrdenamiento == "Email") {
+                columna = 3;
+            } else if (request.ColumnaOrdenamiento == "Curp") {
+                columna = 4;
+            } else if (request.ColumnaOrdenamiento == "Organizacion") {
+                columna = 5;
+            } else if (request.ColumnaOrdenamiento == "estatusweb") {
+                columna = 6;
+            } else if (request.ColumnaOrdenamiento == "Estatus") {
+                columna = 7;
+            }
+        }
+
+        if (request.Ordenamiento != null)
+        {
+            if (request.Ordenamiento == "asc") {
+                tipoFiltro = true;
+            } else {
+                tipoFiltro = false;
+            }
+        }
         var gridData = new ResponseGrid<ClienteResponseGrid>();
         List<ClienteResponse> ListPF = new List<ClienteResponse>();
 
@@ -116,10 +145,9 @@ public class ClientesController : Controller
         }
         else
         {
-            (ListPF, paginacion) = await _clientesApiClient.GetClientesAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros));
+            (ListPF, paginacion) = await _clientesApiClient.GetClientesAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros),columna, tipoFiltro);
 
         }
-
 
         //Entorno local de pruebas
         //ListPF = GetList();
@@ -1342,15 +1370,6 @@ public class ClientesController : Controller
 
     //    return NotFound();
     //}
-
-    [Authorize]
-    [HttpPost]
-    public async Task<JsonResult> ConsultarSubCuentas()
-    {
-        var ListPF = await _clientesApiClient.GetClientesAsync(1,200);
-        //var ListPF = GetList();
-        return Json(ListPF);
-    }
 
     [Authorize]
     [HttpPost]

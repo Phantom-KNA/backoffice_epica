@@ -171,6 +171,7 @@ var KTDatatableRemoteAjax = function () {
     $(".btn_limpiar_filtros").click(function () {
         $(".filtro-control").val('');
         $(".filtro-control-select").val(null).trigger('change');;
+/*        datatable.draw().order();*/
         recargar();
     });
 

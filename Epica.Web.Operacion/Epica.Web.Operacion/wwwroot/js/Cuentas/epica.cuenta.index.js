@@ -113,8 +113,8 @@ var KTDatatableRemoteAjax = function () {
                     render: function (data, type, row) {
                         if (type === 'display') {
                             var htmlString = row.acciones;
-                            htmlString = '<div class="custom-cell">' + htmlString + '</div>';
-                            return htmlString
+                            htmlString = '<div class="custom-cell" >' + htmlString + '</div>';
+                            return htmlString;
                         }
                     },
                 }
@@ -132,7 +132,7 @@ var KTDatatableRemoteAjax = function () {
                     extend: 'excelHtml5',
                     title: documentTitle,
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4]
+                        columns: [0, 1, 2, 3, 4, 5, 6]
                     }
                 }
             ]
@@ -620,57 +620,34 @@ var ModalDetalle = function () {
     }
 }();
 
-//function populateTemplate(dataMapper, target){
-//    console.log(dataMapper);
-//    dataMapper.forEach((d, index) => {
-//        // Clone template node
-//        const newTemplate = template.cloneNode(true);
+$('#kt_datatable').on('show.bs.dropdown', function () {
+    $('#kt_datatable').css("overflow", "inherit");
+});
 
-//        // Stock badges
-//        const lowStock = `<div class="badge badge-light-warning">Low Stock</div>`;
-//        const inStock = `<div class="badge badge-light-success">In Stock</div>`;
+$('#kt_datatable').on('hide.bs.dropdown', function () {
+    $('#kt_datatable').css("overflow", "auto");
+})
 
-//        // Select data elements
-//        const id = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_id"]');
-//        const numcuenta = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_numero_cuenta"]');
-//        const cliente = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_cliente"]');
-//        const estatus = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_estatus"]');
-//        const saldo = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_saldo"]');
-//        const tipo = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_tipo"]');
+function SoloNumeros(e) {
+    var charCode = (e.which) ? e.which : event.keyCode;
+    if (String.fromCharCode(charCode).match(/[^0-9]/g))
+        return false;
+}
+function SoloLetras(e) {
+    var keyCode = e.keyCode || e.which;
+    var regex = /^[A-Za-z]+$/;
 
-//        // Mapeo de Datos
-//        id.innerText = d.id;
-//        numcuenta.innerText = d.noCuenta;
-//        cliente.innerText = d.cliente;
-//        estatus.innerText = d.estatus;
-//        saldo.innerText = d.saldo;
-//        tipo.innerText = d.tipo;
+    //Validate TextBox value against the Regex.
+    var isValid = regex.test(String.fromCharCode(keyCode));
+    if (!isValid) {
+        return false;
+    }
 
-//        if (dataMapper.length === 1) {
-//            let borderClasses = ['rounded', 'rounded-end-0'];
-//            newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
-//            borderClasses = ['rounded', 'rounded-start-0'];
-//            newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
+    return isValid;
 
-//            newTemplate.classList.add('border-bottom-0');
-//        } else {
-//            if (index === (dataMapper.length - 1)) { // first row
-//                let borderClasses = ['rounded-start', 'rounded-bottom-0'];
-//                newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
-//                borderClasses = ['rounded-end', 'rounded-bottom-0'];
-//                newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
-//            }
-//            if (index === 0) { // last row
-//                let borderClasses = ['rounded-start', 'rounded-top-0'];
-//                newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
-//                borderClasses = ['rounded-end', 'rounded-top-0'];
-//                newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
+}
 
-//                newTemplate.classList.add('border-bottom-0');
-//            }
-//        }
+//$('#filtro_cuenta_clabe').keypress(function (e) {
 
-//        const tbody = document.querySelector('tbody');
-//        tbody.insertBefore(newTemplate, target.nextSibling);
-//    });
-//}
+
+//});  

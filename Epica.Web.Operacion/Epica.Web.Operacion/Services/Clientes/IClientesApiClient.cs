@@ -8,7 +8,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
     {
         Task<List<DatosClienteEntity>> GetDetallesClientesByNombresAsync(string nombres);
         Task<List<DatosCatalogoResponse>> GetClientesbyNombreAsync(string nombreCliente);
-        Task<(List<ClienteResponse>, int)> GetClientesAsync(int pageNumber, int recordsTotal);
+        Task<(List<ClienteResponse>, int)> GetClientesAsync(int pageNumber, int recordsTotal, int columna, bool ascendente);
         Task<int> GetTotalClientesAsync();
         Task<ClienteDetailsResponse> GetClienteAsync(int id);
         Task<DocumentosClienteDetailsResponse> GetDocumentosClienteAsync(int id);
