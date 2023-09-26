@@ -302,6 +302,14 @@ namespace Epica.Web.Operacion.Controllers
                 }); 
             }
 
+            if (!string.IsNullOrEmpty(request.Busqueda))
+            {
+                List = List.Where(x =>
+                (x.id.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.nombreRol.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower())
+                ).ToList();
+            }
+
             gridData.Data = List;
             gridData.RecordsTotal = List.Count;
             gridData.Data = gridData.Data.Skip(skip).Take(pageSize).ToList();

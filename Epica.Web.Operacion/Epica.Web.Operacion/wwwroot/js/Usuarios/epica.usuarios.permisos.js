@@ -214,7 +214,7 @@ var KTDatatableRemoteAjax = function () {
                     }
                 },
                 {
-                    data: 'listaGen', name: 'Configuracion', title: 'Configuracion',
+                    data: 'listaGen', name: 'Configuracion', title: 'Configuración',
                     render: function (data, type, row) {
                         var renderList = "<ul>";
 
@@ -374,38 +374,52 @@ function GestionarUsuario(AccountID, estatus) {
 }
 
 function GestionarPermisos(event) {
+    var isChecked = $(event).is(':checked');
+    Swal.fire({
+        title: '¿Deseas ' + (isChecked ? 'asignar' : 'quitar') + ' esta acción al módulo?',
+        text: 'Esta acción puede tener un impacto importante. ¿Estás seguro de continuar?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, continuar',
+        cancelButtonText: 'Cancelar',
+    }).then((result) => {
+        if (result.isConfirmed) {
 
-    var formData = new FormData();
+            var formData = new FormData();
 
-    formData.append('vista', $(event).data('vista'));
-    formData.append('permiso', $(event).data('permiso'));
-    formData.append('rol', $(event).data('rol'));
-    formData.append('accion', $(event).data('accion'));
+            formData.append('vista', $(event).data('vista'));
+            formData.append('permiso', $(event).data('permiso'));
+            formData.append('rol', $(event).data('rol'));
+            formData.append('accion', $(event).data('accion'));
 
-    if ($(event).is(':checked')) {
-        formData.append('activo', true);
-    } else {
-        formData.append('activo', false);
-    }
+            if ($(event).is(':checked')) {
+                formData.append('activo', true);
+            } else {
+                formData.append('activo', false);
+            }
 
-    $.ajax({
-        url: 'ActualizarPermiso',
-        async: true,
-        cache: false,
-        type: 'POST',
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function (data) {
-
-            datatable.ajax.reload();
-            Swal.fire(
-                'Asignación de Permisos',
-                'Se ha actualizado el permiso con éxito.',
-                'success'
-            )
-        },
-        error: function (xhr, status, error) {
+            $.ajax({
+                url: 'ActualizarPermiso',
+                async: true,
+                cache: false,
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    datatable.ajax.reload();
+                    Swal.fire(
+                        'Asignación de Permisos',
+                        'Se ha actualizado el permiso con éxito.',
+                        'success'
+                    )
+                },
+                error: function (xhr, status, error) {
+                }
+            });
+        }
+        else {
+            $(event).prop('checked', !isChecked);
         }
     });
 }
