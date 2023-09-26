@@ -1,4 +1,5 @@
-﻿"use strict";
+﻿
+"use strict";
 var datatable_myAccounts;
 
 //Agregar la tabla de transacciones
@@ -378,7 +379,7 @@ var ModalDetalle = function () {
 //                success: function (validationResult) {
 //                    if (validationResult.mensaje === true) {
 //                        // Redirige a la vista "transacciones/registro"
-//                        window.location.href = '/transacciones/registro'; 
+//                        window.location.href = '/transacciones/registro';
 //                    } else {
 //                        // Token o código de seguridad incorrectos, muestra un mensaje de error
 //                        Swal.fire(
@@ -394,3 +395,10 @@ var ModalDetalle = function () {
 //        }
 //    });
 //}
+
+$("#filtro_cuenta_ordenante, #filtro_claveRastreo, #filtro_nombreBeneficiario, #filtro_transaccion, #filtro_monto").on("keydown", function (e) {
+    if (e.keyCode === 13) {
+        e.preventDefault();
+        $("#btnAplicarFiltros").click();
+    }
+});

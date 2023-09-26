@@ -213,6 +213,5 @@ var KTDatatableTransacciones = (function () {
 $(document).ready(function () {
     KTDatatableTransacciones.init();
     var model = Html.Raw(ViewBag.AccountID);
-    console.log(model);
 });
 

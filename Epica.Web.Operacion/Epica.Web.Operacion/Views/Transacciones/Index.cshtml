@@ -52,12 +52,12 @@
                                     </div>
                                     <div class="mb-5">
                                         <label class="form-label fs-5 fw-semibold mb-3">Clave de Rastreo:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="claveRastreo" placeholder="Clave de Rastreo" id="filtro_clave_rastreo" />
+                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="claveRastreo" placeholder="Clave de Rastreo" id="filtro_claveRastreo" />
                                     </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Nombre Ordenante:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreOrdenante" placeholder="Nombre del Ordenante" id="filtro_nombreOrdenante" />
-                                    </div>
+@*                                    <div class="mb-5">
+                                        <label class="form-label fs-7 fw-semibold mb-3">Nombre Ordenante:</label>
+                                        <input class="form-control fs-7 form-control-sm fw-bold filtro-control" data-filtrar="nombreOrdenante" placeholder="Nombre del Ordenante" id="filtro_nombreOrdenante" />
+                                    </div>*@
                                     <div class="mb-5">
                                         <label class="form-label fs-5 fw-semibold mb-3">Nombre Beneficiario:</label>
                                         <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreBeneficiario" placeholder="Nombre Del Beneficiario" id="filtro_nombreBeneficiario" />
@@ -70,10 +70,14 @@
                                         <label class="form-label fs-5 fw-semibold mb-3">Monto:</label>
                                         <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="monto" placeholder="Monto" id="filtro_monto" />
                                     </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Fecha:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="fecha" placeholder="Fecha" id="filtro_fecha" />
+@*                                    <div class="mb-5">
+                                        <label class="form-label fs-5 fw-semibold mb-3">Fecha Instrucción:</label>
+                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="fechaInstruccion" placeholder="Fecha Instrucción" id="filtro_fechaInstruccion" />
                                     </div>
+                                    <div class="mb-5">
+                                        <label class="form-label fs-5 fw-semibold mb-3">Fecha Autorización:</label>
+                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="fechaAutorizacion" placeholder="Fecha Autorización" id="filtro_fechaAutorizacion" />
+                                    </div>*@
                                     <div class="mb-5">
                                         <label class="form-label fs-5 fw-semibold mb-3">Estatus:</label>
                                         <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatus" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_tipo">
@@ -88,7 +92,7 @@
 
                                     <div class="d-flex justify-content-end">
                                         <button type="reset" class="btn btn-sm btn-light btn-active-light-primary me-2 btn_limpiar_filtros" data-kt-menu-dismiss="true" data-kt-customer-table-filter="reset">Limpiar</button>
-                                        <button type="submit" class="btn btn-sm btn-primary btn-filtrar" data-kt-menu-dismiss="true" data-kt-customer-table-filter="filter">Aplicar</button>
+                                        <button type="submit" id="btnAplicarFiltros"class="btn btn-sm btn-primary btn-filtrar" data-kt-menu-dismiss="true" data-kt-customer-table-filter="filter">Aplicar</button>
                                     </div>
                                 </div>
                             </div>
@@ -209,9 +213,11 @@
 <div class="modal fade" id="modal_detalle" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header ">
-                <h1 class="modal-title fs-5" id="modalLabelTitle"></h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header header-modal ">
+                <h1 class="modal-title fs-5 text-header-modal" id="modalLabelTitle"></h1>
+                <button type="button" class="custom-close-button" data-bs-dismiss="modal" aria-label="Close">
+                    <span>✕</span>
+                </button>
             </div>
             <div class="modal-body">
             </div>
@@ -252,3 +258,35 @@
         var AccountId = '@ViewBag.AccountID';
     </script>
 }
+
+<style>
+
+    .header-modal {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .text-header-modal {
+        color: white;
+    }
+
+    .custom-close-button {
+        color: white;
+        background-color: transparent;
+        border: none;
+        opacity: 1;
+        padding: 0;
+        font-size: 1rem;
+        line-height: 1;
+        cursor: pointer;
+        transition: color 0.3s, opacity 0.3s;
+        position: absolute;
+        right: 0;
+        padding: 21px;
+    }
+
+        .custom-close-button:hover {
+            opacity: 0.8;
+        }
+</style>

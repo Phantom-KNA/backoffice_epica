@@ -155,34 +155,36 @@ namespace Epica.Web.Operacion.Controllers
 
             var filtronombreClaveRastreo = filters.FirstOrDefault(x => x.Key == "claveRastreo");
 
-            if (filtronombreClaveRastreo.Value != null)
+            if (filtronombreClaveRastreo?.Value != null)
             {
                 string transaccion = filtronombreClaveRastreo.Value;
                 var listPF2 = await _transaccionesApiClient.GetTransaccionRastreoCobranzaAsync(transaccion);
 
-                TransaccionesResponse transaccionResponse = new TransaccionesResponse()
+                if (listPF2.value.ClaveRastreo != null)
                 {
-                    clabeCobranza = listPF2.value.ClabeCobranza,
-                    claveRastreo = listPF2.value.ClaveRastreo,
-                    concepto = listPF2.value.Concepto,
-                    cuetaOrigenOrdenante = listPF2.value.cuetaOrigenOrdenante,
-                    estatus = listPF2.value.Estatus ?? 0,
-                    fechaActualizacion = listPF2.value.FechaActualizacion,
-                    fechaAlta = listPF2.value.FechaAlta,
-                    idCliente = listPF2.value.IdCliente,
-                    idCuentaAhorro = listPF2.value.IdCuentaAhorro,
-                    idMedioPago = listPF2.value.IdMedioPago ?? 0,
-                    idTransaccion = listPF2.value.IdTrasaccion ?? 0,
-                    monto = decimal.Parse(listPF2.value.Monto.ToString()),
-                    nombreBeneficiario = listPF2.value.NombreBeneficiario,
-                    nombreOrdenante = listPF2.value.nombreOrdenante,
-                    fechaAutorizacion = listPF2.value.FechaAutorizacion,
-                    fechaInstruccion = listPF2.value.FechaInstruccion,
-                    alias = listPF2.value.Alias,
-                    descripcionMedioPago = listPF2.value.DescripcionMedioPago
-                };
-
-                ListPF.Add(transaccionResponse);
+                    TransaccionesResponse transaccionResponse = new TransaccionesResponse()
+                    {
+                        clabeCobranza = listPF2.value.ClabeCobranza,
+                        claveRastreo = listPF2.value.ClaveRastreo,
+                        concepto = listPF2.value.Concepto,
+                        cuetaOrigenOrdenante = listPF2.value.cuetaOrigenOrdenante,
+                        estatus = listPF2.value.Estatus ?? 0,
+                        fechaActualizacion = listPF2.value.FechaActualizacion,
+                        fechaAlta = listPF2.value.FechaAlta,
+                        idCliente = listPF2.value.IdCliente,
+                        idCuentaAhorro = listPF2.value.IdCuentaAhorro,
+                        idMedioPago = listPF2.value.IdMedioPago ?? 0,
+                        idTransaccion = listPF2.value.IdTrasaccion ?? 0,
+                        monto = decimal.Parse(listPF2.value.Monto.ToString()),
+                        nombreBeneficiario = listPF2.value.NombreBeneficiario,
+                        nombreOrdenante = listPF2.value.nombreOrdenante,
+                        fechaAutorizacion = listPF2.value.FechaAutorizacion,
+                        fechaInstruccion = listPF2.value.FechaInstruccion,
+                        alias = listPF2.value.Alias,
+                        descripcionMedioPago = listPF2.value.DescripcionMedioPago
+                    };
+                    ListPF.Add(transaccionResponse);
+                }
             }
             else
             {
@@ -242,47 +244,52 @@ namespace Epica.Web.Operacion.Controllers
             }
             //Aplicacion de Filtros temporal, 
             var filtroCuentaOrdenante = filters.FirstOrDefault(x => x.Key == "cuentaOrdenante");
-            var filtroNombreOrdenante = filters.FirstOrDefault(x => x.Key == "nombreOrdenante");
+            //var filtroNombreOrdenante = filters.FirstOrDefault(x => x.Key == "nombreOrdenante");
             var filtroNombreBeneficiario = filters.FirstOrDefault(x => x.Key == "nombreBeneficiario");
             var filtroConcepto = filters.FirstOrDefault(x => x.Key == "concepto");
             var filtroMonto = filters.FirstOrDefault(x => x.Key == "monto");
-            var filtroFecha = filters.FirstOrDefault(x => x.Key == "fecha");
+            //var filtroFechaAutorizacion = filters.FirstOrDefault(x => x.Key == "fechaAutorizacion");
+            //var filtroFechaInstruccion = filters.FirstOrDefault(x => x.Key == "fechaInstruccion");
             var filtroEstatus = filters.FirstOrDefault(x => x.Key == "estatus");
 
             if (filtroCuentaOrdenante.Value != null)
             {
-                List = List.Where(x => x.cuetaOrigenOrdenante.Contains(Convert.ToString(filtroCuentaOrdenante.Value))).ToList();
+                List = List.Where(x => x.cuetaOrigenOrdenante.ToLower().Contains((Convert.ToString(filtroCuentaOrdenante.Value.ToLower())))).ToList();
             }
 
             if (filtronombreClaveRastreo.Value != null)
             {
-                List = List.Where(x => x.claveRastreo.Contains(Convert.ToString(filtronombreClaveRastreo.Value))).ToList();
+                List = List.Where(x => x.claveRastreo.ToLower().Contains((Convert.ToString(filtronombreClaveRastreo.Value.ToLower())))).ToList();
             }
 
-            if (filtroNombreOrdenante.Value != null)
-            {
-                List = List.Where(x => x.nombreOrdenante == Convert.ToString(filtroNombreOrdenante.Value)).ToList();
-            }
+            //if (filtroNombreOrdenante.Value != null)
+            //{
+            //    List = List.Where(x => x.nombreOrdenante.ToLower().Contains((Convert.ToString(filtroNombreOrdenante.Value.ToLower())))).ToList();
+            //}
 
             if (filtroNombreBeneficiario.Value != null)
             {
-                List = List.Where(x => x.nombreBeneficiario == Convert.ToString(filtroNombreBeneficiario.Value)).ToList();
+                List = List.Where(x => x.nombreBeneficiario.ToLower().Contains((Convert.ToString(filtroNombreBeneficiario.Value.ToLower())))).ToList();
             }
 
             if (filtroConcepto.Value != null)
             {
-                List = List.Where(x => x.concepto == Convert.ToString(filtroConcepto.Value)).ToList();
+                List = List.Where(x => x.concepto.ToLower().Contains((Convert.ToString(filtroConcepto.Value.ToLower())))).ToList();
             }
 
             if (filtroMonto.Value != null)
             {
-                List = List.Where(x => x.monto.ToString() == Convert.ToString(filtroMonto.Value)).ToList();
+                List = List.Where(x => x.monto.ToString().Contains(Convert.ToString(filtroMonto.Value))).ToList();
             }
 
-            if (filtroFecha.Value != null)
-            {
-                List = List.Where(x => x.fechaAlta.ToString() == Convert.ToString(filtroFecha.Value)).ToList();
-            }
+            //if (filtroFechaAutorizacion?.Value != null)
+            //{
+            //    List = List.Where(x => x.fechaAutorizacion.ToString().Contains(Convert.ToString(filtroFechaAutorizacion.Value))).ToList();
+            //}
+            //if (filtroFechaInstruccion?.Value != null)
+            //{
+            //    List = List.Where(x => x.fechaInstruccion.ToString().Contains(Convert.ToString(filtroFechaInstruccion.Value))).ToList();
+            //}
 
             if (filtroEstatus.Value != null)
             {
