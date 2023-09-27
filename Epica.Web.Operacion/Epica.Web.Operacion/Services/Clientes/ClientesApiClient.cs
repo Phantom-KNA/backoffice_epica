@@ -81,38 +81,38 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 var filtroEstatusWeb = filters.FirstOrDefault(x => x.Key == "estatusWeb");
                 var filtroEstatusTotal = filters.FirstOrDefault(x => x.Key == "estatusTotal");
 
-                if (filtroNombreCliente.Value != null) {
+                if (filtroNombreCliente!.Value != null) {
                     uri += string.Format("&nombre={0}", Convert.ToString(filtroNombreCliente.Value));
                 }
 
-                if (filtroTelefono.Value != null)
+                if (filtroTelefono!.Value != null)
                 {
                     uri += string.Format("&telefono={0}", Convert.ToString(filtroTelefono.Value));
                 }
 
-                if (filtroCorreoElectronico.Value != null)
+                if (filtroCorreoElectronico!.Value != null)
                 {
                     uri += string.Format("&correo={0}", Convert.ToString(filtroCorreoElectronico.Value));
                 }
 
-                if (filtroCurp.Value != null)
+                if (filtroCurp!.Value != null)
                 {
                     uri += string.Format("&curp={0}", Convert.ToString(filtroCurp.Value));
                 }
 
-                if (filtroOrganizacion.Value != null)
+                if (filtroOrganizacion!.Value != null)
                 {
                     uri += string.Format("&organizacion={0}", Convert.ToString(filtroOrganizacion.Value));
                 }
 
-                if (filtroEstatusWeb.Value != null)
+                if (filtroEstatusWeb!.Value != null)
                 {
                     uri += string.Format("&estatusWeb={0}", Convert.ToString(filtroEstatusWeb.Value));
                 }
 
-                if (filtroEstatusTotal.Value != null)
+                if (filtroEstatusTotal!.Value != null)
                 {
-                    uri += string.Format("&estatusTotal={0}", Convert.ToString(filtroEstatusWeb.Value));
+                    uri += string.Format("&estatusTotal={0}", filtroEstatusTotal.Value);
                 }
 
                 var response = await ApiClient.GetAsync(uri);
