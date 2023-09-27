@@ -1,4 +1,5 @@
-﻿using Epica.Web.Operacion.Models.Request;
+﻿using Epica.Web.Operacion.Models.Common;
+using Epica.Web.Operacion.Models.Request;
 
 namespace Epica.Web.Operacion.Services.Transaccion
 {
@@ -7,6 +8,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
         Task<TransaccionDetailsResponse> GetTransaccionRastreoCobranzaAsync(string rastreoCobranza);
         Task<(List<CargaBachRequest>, int)> GetTransaccionesMasivaAsync(int pageNumber, int recordsTotal, int idUsuario);
         Task<(List<TransaccionesResponse>, int)> GetTransaccionesAsync(int pageNumber, int recordsTotal, int columna, bool ascendente);
+        Task<(List<TransaccionesResponse>, int)> GetTransaccionesFilterAsync(int pageNumber, int recordsTotal, int columna, bool ascendente, List<RequestListFilters> filters);
         Task<TransaccionesResponse> GetTransaccionAsync(int idInterno);
         Task<int> GetTotalTransaccionesAsync();
         Task<TransaccionesDetailsgeneralResponse> GetTransaccionesCuentaAsync(int idCuenta);

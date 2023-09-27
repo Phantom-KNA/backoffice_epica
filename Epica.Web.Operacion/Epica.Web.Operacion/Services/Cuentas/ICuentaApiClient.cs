@@ -1,4 +1,5 @@
-﻿using Epica.Web.Operacion.Models.Entities;
+﻿using Epica.Web.Operacion.Models.Common;
+using Epica.Web.Operacion.Models.Entities;
 using static Epica.Web.Operacion.Controllers.CuentaController;
 
 namespace Epica.Web.Operacion.Services.Transaccion
@@ -6,7 +7,8 @@ namespace Epica.Web.Operacion.Services.Transaccion
     public interface ICuentaApiClient
     {
         Task<List<ResumenCuentasResponse>> GetListaByNumeroCuentaAsync(string noCuenta);
-        Task<(List<CuentasResponse>, int)> GetCuentasAsync(int pageNumber, int recordsTotal);
+        Task<(List<CuentasResponse>, int)> GetCuentasAsync(int pageNumber, int recordsTotal, int columna, bool ascendente);
+        Task<(List<CuentasResponse>, int)> GetCuentasFilterAsync(int pageNumber, int recordsTotal, int columna, bool ascendente, List<RequestListFilters> filters);
         Task<int> GetTotalCuentasAsync();
         Task<List<CobranzaReferenciadaResponse>> GetCobranzaReferenciadaAsync(int id);
         Task<List<CuentasResponse>> GetCuentasByClienteAsync(int idCliente);

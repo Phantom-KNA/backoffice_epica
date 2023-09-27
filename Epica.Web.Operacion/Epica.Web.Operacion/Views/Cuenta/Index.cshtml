@@ -51,58 +51,49 @@
                                 <div class="px-7 py-5">
                                     <div class="row">
                                         <div class="col-6">
-                                            <label class="form-label fs-5 fw-semibold mb-3">Tipo de Filtro:</label>
-                                            <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="tipo_filtro" data-kt-select2="true" data-placeholder="Seleciona un filtro" data-allow-clear="true" id="filtro_tipo_filtro">
-                                                <option></option>
-                                                <option value="1">Cuenta clabe</option>
-                                                <option value="2">Número de Cuenta</option>
-                                                <option value="3">Nombre Persona</option>
-                                                <option value="4">Estatus</option>
-                                                <option value="5">Tipo de Persona</option>
-                                                <option value="6">Alias</option>
-                                                <option value="7">Cobranza Referenciada</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Cuenta Clabe:</label>
                                             <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="cuentaClabe" placeholder="Cuenta Clabe" onkeypress="return SoloNumeros(event)" maxlength="18" id="filtro_cuenta_clabe" />
                                         </div>
-                                    </div>
-                                    <br />
-                                    <div class="row">
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Número de Cuenta:</label>
                                             <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="noCuenta" onkeypress="return SoloNumeros(event)" maxlength="16" placeholder="Número de Cuenta" id="filtro_no_cuenta" />
                                         </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Nombre Persona:</label>
                                             <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreCliente" onkeypress="return SoloLetras(event)" maxlength="40" placeholder="Nombre Persona" id="filtro_nombre_cliente" />
                                         </div>
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Saldo:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="saldo" type="number" min="0" maxlength="40" placeholder="Saldo" id="filtro_saldo" />
+                                        </div>
                                     </div>
                                     <br />
                                     <div class="row">
                                         <div class="col-6">
-                                            <label class="form-label fs-5 fw-semibold mb-3">Estatus:</label>
-                                            <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatus" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_estatus">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Estatus Cuenta:</label>
+                                            <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatusCuenta" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_estatus_cuenta">
                                                 <option></option>
-                                                <option value="1">Activo</option>
-                                                <option value="2">Desactivado</option>
+                                                <option value="2">Activo</option>
+                                                <option value="1">Desactivado</option>
                                             </select>
                                         </div>
                                         <div class="col-6">
-                                            <label class="form-label fs-5 fw-semibold mb-3">Tipo de Persona:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="tipoPersona" onkeypress="return SoloLetras(event)" maxlength="50" placeholder="Tipo de Persona" id="filtro_tipoPersona" />
+                                            <label class="form-label fs-5 fw-semibold mb-3">Estatus Spei Out:</label>
+                                            <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatusSpeiOut" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_estatus_speiout">
+                                                <option></option>
+                                                <option value="2">Activo</option>
+                                                <option value="1">Desactivado</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <br />
                                     <div class="row">
-                                        <div class="col-6">
-                                            <label class="form-label fs-5 fw-semibold mb-3">Cobranza Referenciada:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="cobranzaReferenciada" onkeypress="return SoloNumeros(event)" maxlength="30" placeholder="Cobranza Referenciada" id="filtro_cobranza_referenciada" />
-                                        </div>
-                                        <div class="col-6">
-                                            <label class="form-label fs-5 fw-semibold mb-3">Alias:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="alias" onkeypress="return SoloLetras(event)" maxlength="40" placeholder="Alias" id="filtro_alias" />
+                                        <div class="col-12">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Tipo de Persona:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="tipoPersona" onkeypress="return SoloLetras(event)" maxlength="50" placeholder="Tipo de Persona" id="filtro_tipoPersona" />
                                         </div>
                                     </div>
                                     <br />

@@ -10,7 +10,7 @@
                         <div class="form-group input-group-sm col-md-12 row">
                             <label class="form-label required">Buscar Cuenta:&nbsp;</label>
 
-                            <input type="text" id="nombreCliente" name="nombreCliente" class="form-control form-control-sm form-control-solid" placeholder="Número de Cuenta" autocomplete="off" />
+                            <input type="text" id="nombreCliente" name="nombreCliente" onkeypress="return SoloNumeros(event)" maxlength="16" class="form-control form-control-sm form-control-solid" placeholder="Número de Cuenta" autocomplete="off" />
                             <button type="button" class="btn btn-sm btn-primary" id="btnBuscarCliente">Buscar</button>
 
                         </div>

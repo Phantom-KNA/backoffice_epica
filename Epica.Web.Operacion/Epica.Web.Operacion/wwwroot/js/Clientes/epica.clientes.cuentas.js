@@ -50,7 +50,7 @@ var KTDatatableRemoteAjax = function () {
             }],
             columns: [
                 {
-                    data: 'noCuenta', name: 'noCuenta', title: 'Número Cuenta',
+                    data: 'concatLabel', name: 'concatLabel', title: 'Número Cuenta',
                     render: function (data, type, row) {
                         var partes = data.split("|"); // Separar la parte entera y decimal
                         var NumCuenta = partes[0];
@@ -286,6 +286,8 @@ $(document).on('click', '#btnBuscarCliente', function () {
         data: { NoCuenta: NoCuenta },
         success: function (result) {
 
+            console.log(result);
+
             const idCuenta = document.getElementById('IdCuenta');
             const NumCuenta = document.getElementById('numeroCuenta');
             NumCuenta.value = result.descripcion;
@@ -293,7 +295,7 @@ $(document).on('click', '#btnBuscarCliente', function () {
             toastr.success("Cuenta localizada.");
         },
         error: function (error) {
-            toastr.danger("No se pudo localizar la cuenta.");
+            toastr.warning("No se pudo localizar la cuenta.");
         }
     });
 });

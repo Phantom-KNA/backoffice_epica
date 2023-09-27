@@ -11,3 +11,15 @@ public class FiltroDatosResponse
     public List<ClienteResponse> listaResultado { get; set; }
     public int? cantidadEncontrada { get; set; }
 }
+
+public class FiltroDatosResponseCuenta
+{
+    public List<CuentasResponse> listaResultado { get; set; }
+    public int? cantidadEncontrada { get; set; }
+}
+
+public class FiltroDatosResponseTransacciones
+{
+    public List<TransaccionesResponse> listaResultado { get; set; }
+    public int? cantidadEncontrada { get; set; }
+}

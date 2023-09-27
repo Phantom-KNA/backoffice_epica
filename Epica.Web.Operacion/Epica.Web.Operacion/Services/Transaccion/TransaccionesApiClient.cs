@@ -1,5 +1,6 @@
 ﻿using Epica.Web.Operacion.Config;
 using Epica.Web.Operacion.Helpers;
+using Epica.Web.Operacion.Models.Common;
 using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.UserResolver;
 using Microsoft.Extensions.Options;
@@ -106,6 +107,101 @@ namespace Epica.Web.Operacion.Services.Transaccion
                     ListaTransacciones = JsonConvert.DeserializeObject<List<TransaccionesResponse>>(jsonResponse, settings);
                     paginacion = int.Parse(response.Headers.GetValues("x-totalRecord").FirstOrDefault()!.ToString());
                     return (JsonConvert.DeserializeObject<List<TransaccionesResponse>>(jsonResponse), paginacion)!;
+                }
+
+            }
+            catch (Exception)
+            {
+                return (ListaTransacciones, paginacion)!;
+            }
+
+            return (ListaTransacciones, paginacion);
+        }
+
+        public async Task<(List<TransaccionesResponse>, int)> GetTransaccionesFilterAsync(int pageNumber, int recordsTotal, int columna, bool ascendente, List<RequestListFilters> filters)
+        {
+            List<TransaccionesResponse>? ListaTransacciones = new List<TransaccionesResponse>();
+            FiltroDatosResponseTransacciones responseConsulta = new FiltroDatosResponseTransacciones();
+            int paginacion = 0;
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetTransaccionesFilter(pageNumber, recordsTotal);
+
+                var filtroCuentaOrdenante = filters.FirstOrDefault(x => x.Key == "cuentaOrdenante");
+                var filtronombreOrdenante = filters.FirstOrDefault(x => x.Key == "nombreOrdenante");
+                var filtronombreBeneficiario = filters.FirstOrDefault(x => x.Key == "nombreBeneficiario");
+                var filtroclaveRastreo = filters.FirstOrDefault(x => x.Key == "claveRastreo");
+                var filtroEstatus = filters.FirstOrDefault(x => x.Key == "estatus");
+                var filtromonto = filters.FirstOrDefault(x => x.Key == "monto");
+                var filtrofechaInstruccion = filters.FirstOrDefault(x => x.Key == "fecha_instruccion");
+                var filtrofechaAutorizacion = filters.FirstOrDefault(x => x.Key == "fecha_autorizacion");
+                var filtroconcepto = filters.FirstOrDefault(x => x.Key == "concepto");
+
+
+                if (filtroCuentaOrdenante!.Value != null)
+                {
+                    uri += string.Format("&cuentaOrdenante={0}", Convert.ToString(filtroCuentaOrdenante.Value));
+                }
+
+                if (filtroclaveRastreo!.Value != null)
+                {
+                    uri += string.Format("&claveRastreo={0}", Convert.ToString(filtroclaveRastreo.Value));
+                }
+
+                if (filtronombreOrdenante!.Value != null)
+                {
+                    uri += string.Format("&nombreOrdenante={0}", Convert.ToString(filtronombreOrdenante.Value));
+                }
+
+                if (filtronombreBeneficiario!.Value != null)
+                {
+                    uri += string.Format("&nombreBeneficiario={0}", Convert.ToString(filtronombreBeneficiario.Value));
+                }
+
+                if (filtroconcepto!.Value != null)
+                {
+                    uri += string.Format("&concepto={0}", Convert.ToString(filtroconcepto.Value));
+                }
+
+                if (filtromonto!.Value != null)
+                {
+                    uri += string.Format("&monto={0}", Convert.ToString(filtromonto.Value));
+                }
+
+                if (filtrofechaInstruccion!.Value != null)
+                {
+                    uri += string.Format("&fechaInstruccion={0}", Convert.ToString(filtrofechaInstruccion.Value));
+                }
+
+                if (filtrofechaAutorizacion!.Value != null)
+                {
+                    uri += string.Format("&fechaAutorizacion={0}", Convert.ToString(filtrofechaAutorizacion.Value));
+                }
+
+                if (filtroEstatus!.Value != null)
+                {
+                    uri += string.Format("&estatus={0}", Convert.ToString(filtroEstatus.Value));
+                }
+
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var settings = new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+
+                    responseConsulta = JsonConvert.DeserializeObject<FiltroDatosResponseTransacciones>(jsonResponse, settings);
+
+                    ListaTransacciones = responseConsulta.listaResultado;
+                    paginacion = Convert.ToInt32(responseConsulta.cantidadEncontrada);
+
+                    return (ListaTransacciones, paginacion)!;
                 }
 
             }

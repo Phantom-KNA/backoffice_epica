@@ -70,6 +70,8 @@ public class CuentaController : Controller
         int totalRecord = 0;
         int filterRecord = 0;
         int paginacion = 0;
+        int columna = 0;
+        bool tipoFiltro = false;
 
         var draw = Request.Form["draw"].FirstOrDefault();
         int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
@@ -81,83 +83,44 @@ public class CuentaController : Controller
         request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
         request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
 
+        if (request.ColumnaOrdenamiento != null)
+        {
+            if (request.ColumnaOrdenamiento == "Clabe") {
+                columna = 1;
+            } else if (request.ColumnaOrdenamiento == "NoCuenta") {
+                columna = 2;
+            } else if (request.ColumnaOrdenamiento == "nombrePersona") {
+                columna = 3;
+            } else if (request.ColumnaOrdenamiento == "Saldo") {
+                columna = 4;
+            } else if (request.ColumnaOrdenamiento == "Tipo") {
+                columna = 5;
+            } else if (request.ColumnaOrdenamiento == "Estatus") {
+                columna = 6;
+            } else if (request.ColumnaOrdenamiento == "BloqueoSpeiOut") {
+                columna = 7;
+            }
+        }
+
+        if (request.Ordenamiento != null)
+        {
+            if (request.Ordenamiento == "asc") {
+                tipoFiltro = true;
+            } else {
+                tipoFiltro = false;
+            }
+        }
+
         var gridData = new ResponseGrid<CuentasResponseGrid>();
         List<CuentasResponse> ListPF = new List<CuentasResponse>();
 
-        var TipoDeFiltro = filters.FirstOrDefault(x => x.Key == "tipo_filtro");
+        //Validar si hay algun filtro con valor ingresado
+        var validaFiltro = filters.Where(x => x.Value != null).ToList();
 
-        if (TipoDeFiltro.Value != null)
-        {
-
-            if (TipoDeFiltro.Value == "1")
-            {
-
-                var filtrocuentaclabe = filters.FirstOrDefault(x => x.Key == "cuentaClabe");
-
-                if (filtrocuentaclabe.Value != null)
-                {
-                    ListPF = await _cuentaApiClient.GetCuentasFiltroAsync(filtrocuentaclabe.Value, Convert.ToInt32(TipoDeFiltro.Value));
-                }
-
-            } else if (TipoDeFiltro.Value == "2") {
-
-                var filtrocuentaclabe = filters.FirstOrDefault(x => x.Key == "noCuenta");
-
-                if (filtrocuentaclabe.Value != null)
-                {
-                    ListPF = await _cuentaApiClient.GetCuentasFiltroAsync(filtrocuentaclabe.Value, Convert.ToInt32(TipoDeFiltro.Value));
-                }
-
-            } else if (TipoDeFiltro.Value == "3") {
-
-                var filtrocuentaclabe = filters.FirstOrDefault(x => x.Key == "nombreCliente");
-
-                if (filtrocuentaclabe.Value != null)
-                {
-                    ListPF = await _cuentaApiClient.GetCuentasFiltroAsync(filtrocuentaclabe.Value, Convert.ToInt32(TipoDeFiltro.Value));
-                }
-
-            } else if (TipoDeFiltro.Value == "4") {
-
-                var filtrocuentaclabe = filters.FirstOrDefault(x => x.Key == "estatus");
-
-                if (filtrocuentaclabe.Value != null)
-                {
-                    ListPF = await _cuentaApiClient.GetCuentasFiltroAsync(filtrocuentaclabe.Value, Convert.ToInt32(TipoDeFiltro.Value));
-                }
-
-            } else if (TipoDeFiltro.Value == "5") {
-
-                var filtrocuentaclabe = filters.FirstOrDefault(x => x.Key == "tipoPersona");
-
-                if (filtrocuentaclabe.Value != null)
-                {
-                    ListPF = await _cuentaApiClient.GetCuentasFiltroAsync(filtrocuentaclabe.Value, Convert.ToInt32(TipoDeFiltro.Value));
-                }
-
-            } else if (TipoDeFiltro.Value == "6") {
-
-                var filtrocuentaclabe = filters.FirstOrDefault(x => x.Key == "alias");
-
-                if (filtrocuentaclabe.Value != null)
-                {
-                    ListPF = await _cuentaApiClient.GetCuentasFiltroAsync(filtrocuentaclabe.Value, Convert.ToInt32(TipoDeFiltro.Value));
-                }
-
-            } else if (TipoDeFiltro.Value == "7") {
-
-                var filtrocuentaclabe = filters.FirstOrDefault(x => x.Key == "cobranzaReferenciada");
-
-                if (filtrocuentaclabe.Value != null)
-                {
-                    ListPF = await _cuentaApiClient.GetCuentasFiltroAsync(filtrocuentaclabe.Value, Convert.ToInt32(TipoDeFiltro.Value));
-                }
-            } 
-
+        if (validaFiltro.Count != 0) {
+            (ListPF, paginacion) = await _cuentaApiClient.GetCuentasFilterAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), columna, tipoFiltro, filters);
         } else {
-
-            (ListPF, paginacion) = await _cuentaApiClient.GetCuentasAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros));
-
+            (ListPF, paginacion) = await _cuentaApiClient.GetCuentasAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), columna, tipoFiltro);
         }
 
         //Entorno local de pruebas
@@ -191,39 +154,6 @@ public class CuentaController : Controller
             (x.tipoPersona?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
             ).ToList();
         }
-        //Aplicacion de Filtros temporal, 
-        //var filtronombreCliente = filters.FirstOrDefault(x => x.Key == "NombreCliente");
-        //var filtroEstatus = filters.FirstOrDefault(x => x.Key == "estatus");
-        //var filtroSaldo = filters.FirstOrDefault(x => x.Key == "saldo");
-        //var filtroTipo = filters.FirstOrDefault(x => x.Key == "tipoPersona");
-
-        //if (filtronombreCliente.Value != null)
-        //{
-        //    List = List.Where(x => x.nombrePersona.Contains(Convert.ToString(filtronombreCliente.Value))).ToList();
-        //}
-
-        //if (filtroNoCuenta.Value != null)
-        //{
-        //    string filtro = Convert.ToString(filtroNoCuenta.Value).ToUpper();
-        //    List = List.Where(x => x.noCuenta != null &&
-        //                          x.noCuenta.Length >= 16 &&
-        //                          x.noCuenta.Substring(0, 16) == filtro).ToList();
-        //}
-
-        //if (filtroEstatus.Value != null)
-        //{
-        //    List = List.Where(x => x.estatus == Convert.ToInt32(filtroEstatus.Value)).ToList();
-        //}
-
-        //if (filtroSaldo.Value != null)
-        //{
-        //    List = List.Where(x => x.saldo == Convert.ToDecimal(filtroSaldo.Value)).ToList();
-        //}
-
-        //if (filtroTipo.Value != null)
-        //{
-        //    List = List.Where(x => x.tipoPersona.Contains(Convert.ToString(filtroTipo.Value))).ToList();
-        //}
 
         gridData.Data = List;
         gridData.RecordsTotal = paginacion;
@@ -363,10 +293,10 @@ public class CuentaController : Controller
             List.Add(new ResumenTransaccionResponseGrid
             {
                 id = row.idTransaccion,
-                cuetaOrigenOrdenante = row.cuetaOrigenOrdenante,
-                claveRastreo = row.claveRastreo,
-                nombreOrdenante = row.nombreOrdenante,
-                nombreBeneficiario = row.nombreBeneficiario,
+                cuetaOrigenOrdenante = !string.IsNullOrEmpty(row.cuetaOrigenOrdenante) ? row.cuetaOrigenOrdenante : "-",
+                claveRastreo = !string.IsNullOrEmpty(row.claveRastreo) ? row.claveRastreo : "-",
+                nombreOrdenante = !string.IsNullOrEmpty(row.nombreOrdenante) ? row.nombreOrdenante : "-",
+                nombreBeneficiario = !string.IsNullOrEmpty(row.nombreBeneficiario) ? row.nombreBeneficiario : "-",
                 monto = row.monto,
                 estatus = row.estatus,
                 concepto = row.concepto,

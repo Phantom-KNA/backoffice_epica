@@ -600,11 +600,12 @@ public class ClientesController : Controller
             {
                 idCuenta = row.idCuenta,
                 nombrePersona = row.nombrePersona,
-                noCuenta = row.noCuenta + "|" + row.idCuenta.ToString() + "|" + id,
+                concatLabel = row.noCuenta + "|" + row.idCuenta.ToString() + "|" + id,
+                noCuenta = row.noCuenta,
                 saldo = row.saldo,
                 estatus = row.estatus,
                 tipoPersona = row.tipoPersona,
-                alias = row.alias,
+                alias = !string.IsNullOrEmpty(row.alias) ? row.alias : "-",
                 fechaActualizacion = row.fechaActualizacion,
                 fechaAlta = row.fechaAlta,
                 email = row.email,
@@ -614,40 +615,30 @@ public class ClientesController : Controller
                 Acciones = await this.RenderViewToStringAsync("~/Views/Clientes/Detalles/Cuentas/_Acciones.cshtml", row)
             });
         }
-        //if (!string.IsNullOrEmpty(request.Busqueda))
-        //{
-        //    List = List.Where(
-        //        x =>
-        //        x.NoCuenta.ToLower().Contains(request.Busqueda.ToLower()) ||
-        //        x.Saldo.ToLower().Contains(request.Busqueda.ToLower()) ||
-        //        x.Alias.ToLower().Contains(request.Busqueda.ToLower()) ||
-        //        x.NombrePersona.ToLower().Contains(request.Busqueda.ToLower()) ||
-        //        x.Tipo.ToLower().Contains(request.Busqueda.ToLower())
-        //        ).ToList();
-        //}
-        //if (!string.IsNullOrEmpty(request.ColumnaOrdenamiento) && !string.IsNullOrEmpty(request.Ordenamiento))
-        //{
-        //    var quer = List.AsQueryable();
-        //    List = quer.OrderBy(request.ColumnaOrdenamiento + " " + request.Ordenamiento).ToList();
 
-        //}
+        if (!string.IsNullOrEmpty(request.Busqueda))
+        {
+            if (request.Busqueda.ToLower() == "activo") {
+                request.Busqueda = "2";
+            } else if (request.Busqueda.ToLower() == "desactivado") {
+                request.Busqueda = "1";
+            }
 
+            List = List.Where(x =>
+            (x.nombrePersona?.ToUpper() ?? "").Contains(request.Busqueda.ToUpper()) ||
+            (x.noCuenta?.ToLower() ?? "").Contains(request.Busqueda.ToUpper()) ||
+            (x.alias?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.saldo.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.fechaActualizacion.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.fechaAlta.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower())
+            ).ToList();
+        }
 
-        //List.Add(new EstadisiticaUsoFormaValoradaResponse() { }, new EstadisiticaUsoFormaValoradaResponse() { });
-        gridData.Data = List;
         gridData.RecordsTotal = List.Count;
-        gridData.Data = gridData.Data.Skip(skip).Take(pageSize).ToList();
+        gridData.Data = List.Skip(skip).Take(pageSize).ToList();
         filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.Data.Count;
         gridData.RecordsFiltered = filterRecord;
         gridData.Draw = draw;
-
-        //var returnObj = new
-        //{
-        //    draw,
-        //    recordsTotal = totalRecord,
-        //    recordsFiltered = filterRecord,
-        //    data = List
-        //};
 
         return Json(gridData);
     }
