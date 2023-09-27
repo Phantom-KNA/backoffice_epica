@@ -575,9 +575,17 @@ namespace Epica.Web.Operacion.Controllers
                     tablaDatos = resultExcel.Tables[0];
                 }
 
+                //Validamos el encabezado, que no posea mas de ocho columnas
+                var ValidaEncabezado = tablaDatos.Rows[0];
+                if (ValidaEncabezado.ItemArray.Length != 8) {
+                    response.Error = true;
+                    response.message = "El Archivo Excel no cuenta con la estructura correcta para poder ser procesado.";
+                    return Json(response);
+                }
+
                 if (tablaDatos.Rows.Count == 1) {
                     response.Error = true;
-                    response.message = "El Archivo Excel no cuenta con registros validos.";
+                    response.message = "El Archivo Excel no cuenta con registros válidos.";
                     return Json(response);
                 }
 
