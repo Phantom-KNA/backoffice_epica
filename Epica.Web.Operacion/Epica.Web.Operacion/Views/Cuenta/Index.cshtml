@@ -137,7 +137,7 @@
             <div class="bottom-buffer">
                 <div class="datatable datatable-bordered datatable-head-custom">
                     <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" id="kt_datatable">
-                        <tr data-kt-docs-datatable-subtable="subtable_template" class="col-md-9 d-none">
+                        <tr data-kt-docs-datatable-subtable="subtable_template" style="background-color: aliceblue" id="subtabla" class="col-md-9 d-none">
                             <td class="text-left ocultar">
                                 <div class="text-dark fs-7"><strong>Número de Cuenta</strong></div>
                                 <div class="text-muted fs-7 fw-bold" data-kt-docs-datatable-subtable="template_numero_cuenta"></div>
@@ -186,9 +186,11 @@
 <div class="modal fade" id="modal_detalle" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header ">
-                <h1 class="modal-title fs-5" id="modalLabelTitle"></h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header header-modal">
+                <h1 class="modal-title fs-5 text-header-modal" id="modalLabelTitle"></h1>
+                <button type="button" class="custom-close-button" data-bs-dismiss="modal" aria-label="Close">
+                    <span>✕</span>
+                </button>
             </div>
             <div class="modal-body">
             </div>
@@ -223,4 +225,33 @@
     td, th {
         vertical-align: top;
     }
+
+    .header-modal {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .text-header-modal {
+        color: white;
+    }
+
+    .custom-close-button {
+        color: white;
+        background-color: transparent;
+        border: none;
+        opacity: 1;
+        padding: 0;
+        font-size: 1rem;
+        line-height: 1;
+        cursor: pointer;
+        transition: color 0.3s, opacity 0.3s;
+        position: absolute;
+        right: 0;
+        padding: 21px;
+    }
+
+        .custom-close-button:hover {
+            opacity: 0.8;
+        }
 </style>

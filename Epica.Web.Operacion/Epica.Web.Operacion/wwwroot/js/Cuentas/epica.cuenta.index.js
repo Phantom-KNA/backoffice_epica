@@ -290,86 +290,91 @@ function pruebas(idAccount) {
                     data: { 'id': TranID },
                     success: function (data) {
 
+                        if (data.length != 0) {
+                            data.forEach((d, index) => {
+                                // Clone template node
+                                var newTemplate = template.cloneNode(true);
 
-                        data.forEach((d, index) => {
-                            // Clone template node
-                            var newTemplate = template.cloneNode(true);
+                                // Select data elements
+                                var numcuenta = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_numero_cuenta"]');
+                                var cliente = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_cliente"]');
+                                var estatus = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_estatus"]');
+                                var mediopago = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_medio_pago"]');
+                                var noreferencia = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_numero_referencia"]');
+                                var fechadato = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_fecha"]');
+                                var numcuentaclabe = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_cuenta_clabe"]');
+                                var alias = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_alias"]');
+                                var numerotatarjeta = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_numero_tarjeta"]');
 
-                            // Select data elements
-                            var numcuenta = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_numero_cuenta"]');
-                            var cliente = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_cliente"]');
-                            var estatus = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_estatus"]');
-                            var mediopago = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_medio_pago"]');
-                            var noreferencia = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_numero_referencia"]');
-                            var fechadato = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_fecha"]');
-                            var numcuentaclabe = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_cuenta_clabe"]');
-                            var alias = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_alias"]');
-                            var numerotatarjeta = newTemplate.querySelector('[data-kt-docs-datatable-subtable="template_numero_tarjeta"]');
-                            
-                            // Mapeo de Datos
-                            numcuenta.innerText = d.noCuentaPadre;
+                                // Mapeo de Datos
+                                numcuenta.innerText = d.noCuentaPadre;
 
-                            if (d.nombre == "") {
-                                cliente.innerText = "N/A";
-                            } else {
-                                cliente.innerText = d.nombre;
-                            }
-
-
-                            if (d.estatus == null) {
-                                estatus.innerHTML = "<br> <span class='badge badge-light-warning'>En Proceso</span>"
-                            } else if (d.estatus == 0) {
-                                estatus.innerHTML = "<br> <span class='badge badge-light-success'>Liquidado</span>"
-                            } else if (d.estatus == 1) {
-                                estatus.innerHTML = "<br> <span class='badge badge-light-danger'>Error</span>"
-                            } else {
-                                estatus.innerHTML = "<br> <span class='badge badge-light-danger'>Error</span>"
-                            }
-                            //estatus.innerHTML = d.estatus == 1 ? "<span class='badge badge-light-success'>Activo</span>" : "<span class='badge badge-light-danger'>Desactivado</span>";
-                            mediopago.innerText = d.descripcionPago;
-
-                            if (d.numeroReferencia == null) {
-                                noreferencia.innerText = "N/A";
-                            } else {
-                                noreferencia.innerText = d.numeroReferencia;
-                            }
-
-                            fechadato.innerText = d.fechaAlta;
-
-                            numcuentaclabe.innerText = d.cuentaClabe;
-                            alias.innerText = d.alias;
-                            numerotatarjeta.innerText = d.noTarjeta;
-
-                            if (data.length === 1) {
-                                let borderClasses = ['rounded', 'rounded-end-0'];
-                                newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
-                                borderClasses = ['rounded', 'rounded-start-0'];
-                                newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
-
-                                newTemplate.classList.add('border-bottom-0');
-                            } else {
-                                if (index === (data.length - 1)) { // first row
-                                    let borderClasses = ['rounded-start', 'rounded-bottom-0'];
-                                    newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
-                                    borderClasses = ['rounded-end', 'rounded-bottom-0'];
-                                    newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
+                                if (d.nombre == "") {
+                                    cliente.innerText = "N/A";
+                                } else {
+                                    cliente.innerText = d.nombre;
                                 }
-                                if (index === 0) { // last row
-                                    let borderClasses = ['rounded-start', 'rounded-top-0'];
+
+
+                                if (d.estatus == null) {
+                                    estatus.innerHTML = "<br> <span class='badge badge-light-warning'>En Proceso</span>"
+                                } else if (d.estatus == 0) {
+                                    estatus.innerHTML = "<br> <span class='badge badge-light-success'>Liquidado</span>"
+                                } else if (d.estatus == 1) {
+                                    estatus.innerHTML = "<br> <span class='badge badge-light-danger'>Error</span>"
+                                } else {
+                                    estatus.innerHTML = "<br> <span class='badge badge-light-danger'>Error</span>"
+                                }
+                                //estatus.innerHTML = d.estatus == 1 ? "<span class='badge badge-light-success'>Activo</span>" : "<span class='badge badge-light-danger'>Desactivado</span>";
+                                mediopago.innerText = d.descripcionPago;
+
+                                if (d.numeroReferencia == null) {
+                                    noreferencia.innerText = "N/A";
+                                } else {
+                                    noreferencia.innerText = d.numeroReferencia;
+                                }
+
+                                fechadato.innerText = d.fechaAlta;
+
+                                numcuentaclabe.innerText = d.cuentaClabe;
+                                alias.innerText = d.alias;
+                                numerotatarjeta.innerText = d.noTarjeta;
+
+                                if (data.length === 1) {
+                                    let borderClasses = ['rounded', 'rounded-end-0'];
                                     newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
-                                    borderClasses = ['rounded-end', 'rounded-top-0'];
+                                    borderClasses = ['rounded', 'rounded-start-0'];
                                     newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
 
                                     newTemplate.classList.add('border-bottom-0');
+                                } else {
+                                    if (index === (data.length - 1)) { // first row
+                                        let borderClasses = ['rounded-start', 'rounded-bottom-0'];
+                                        newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
+                                        borderClasses = ['rounded-end', 'rounded-bottom-0'];
+                                        newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
+                                    }
+                                    if (index === 0) { // last row
+                                        let borderClasses = ['rounded-start', 'rounded-top-0'];
+                                        newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
+                                        borderClasses = ['rounded-end', 'rounded-top-0'];
+                                        newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
+                                        
+                                        newTemplate.classList.add('border-bottom-0');
+
+                                    }
                                 }
-                            }
 
-                            var tbody = document.querySelector('tbody');
-                            tbody.insertBefore(newTemplate, row.nextSibling);
-                        });
+                                var tbody = document.querySelector('tbody');
+                                tbody.insertBefore(newTemplate, row.nextSibling);
+                            });
 
-                        row.classList.add(...rowClasses);
-                        button.classList.add('active');
+                            row.classList.add(...rowClasses);
+                            button.classList.add('active');
+                        } else {
+                            toastr.warning('No se encontró cobranza referenciada para esta cuenta.', "").preventDuplicates;
+                        }
+
                     }
                 });
             }
