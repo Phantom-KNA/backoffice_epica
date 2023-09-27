@@ -535,6 +535,7 @@ public class ClientesController : Controller
             };
             ViewBag.Info = header;
             ViewBag.UrlView = "DatosGenerales";
+            ViewBag.NombrePascal = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(header.NombreCompleto.ToString().ToLower());
 
             var validacionEdicion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Editar == 0);
             if (validacionEdicion == true)
@@ -543,6 +544,7 @@ public class ClientesController : Controller
             } else {
                 ViewBag.ValEdicion = false;
             }
+
 
             return View("~/Views/Clientes/Detalles/DatosGenerales/DetalleCliente.cshtml", clientesDetallesViewModel);
         }
@@ -590,6 +592,7 @@ public class ClientesController : Controller
             ViewBag.Nombre = header.NombreCompleto;
             ViewBag.AccountID = id;
             ViewBag.AsignData = asign;
+            ViewBag.NombrePascal = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(header.NombreCompleto.ToLower());
 
             var validacionEdicion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Cuentas" && modulo.Editar == 0);
             if (validacionEdicion == true)
@@ -734,7 +737,9 @@ public class ClientesController : Controller
             };
             ViewBag.Info = header;
             ViewBag.Nombre = header.NombreCompleto;
-            
+            ViewBag.NombrePascal = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(header.NombreCompleto.ToLower());
+
+
             ViewBag.NumCuenta = noCuenta;
 
             if ((id == 0) && (noCuenta == null)) {
@@ -794,6 +799,7 @@ public class ClientesController : Controller
             ViewBag.Info = header;
             ViewBag.Nombre = header.NombreCompleto;
             ViewBag.AccountID = id;
+            ViewBag.NombrePascal = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(header.NombreCompleto.ToLower());
 
             return View("~/Views/Clientes/Detalles/Tarjetas/DetalleTarjetas.cshtml", loginResponse);
         }
@@ -901,6 +907,7 @@ public class ClientesController : Controller
             ViewBag.Info = header;
             ViewBag.Nombre = header.NombreCompleto;
             ViewBag.AccountID = id;
+            ViewBag.NombrePascal = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(header.NombreCompleto.ToLower());
 
             return View("~/Views/Clientes/Detalles/Documentos/DetalleDocumentos.cshtml", loginResponse);
         }
