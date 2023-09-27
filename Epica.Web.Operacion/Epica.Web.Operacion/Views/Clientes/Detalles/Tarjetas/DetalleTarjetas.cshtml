@@ -2,7 +2,7 @@
 
 @{
     //ViewData["Title"] = "Persona Fisica";
-    ViewData["Title"] = "Cuentas";
+    ViewData["Title"] = ViewBag.NombrePascal + " - Tarjetas";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section LogoPage{
@@ -13,13 +13,13 @@
         <span class="bullet bg-gray-400 w-5px h-2px"></span>
     </li>
     <li class="breadcrumb-item text-muted">
-        Clientes
+        <a class="text-muted" asp-controller="Clientes" asp-action="Index">Personas Físicas</a>
     </li>
     <li class="breadcrumb-item">
         <span class="bullet bg-gray-400 w-5px h-2px"></span>
     </li>
     <li class="breadcrumb-item text-muted">
-        <a class="text-muted" asp-controller="Clientes" asp-action="Index">Tarjetas</a>
+        Tarjetas
     </li>
 }
 
