@@ -1138,13 +1138,7 @@ namespace Epica.Web.Operacion.Controllers
         #endregion
 
         #region "Modelos"
-        public class RequestListFilters
-        {
-            [JsonProperty("key")]
-            public string Key { get; set; }
-            [JsonProperty("value")]
-            public string Value { get; set; }
-        }
+
         public class ResumenTransaccionResponse
         {
             public int id { get; set; }

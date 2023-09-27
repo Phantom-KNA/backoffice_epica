@@ -71,7 +71,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return listaClientes!;
         }
 
-        public async Task<(List<TarjetasResponse>, int)> GetTarjetasAsync(int pageNumber, int recordsTotal)
+        public async Task<(List<TarjetasResponse>, int)> GetTarjetasAsync(int pageNumber, int recordsTotal, int columna, bool ascendente)
         {
 
             List<TarjetasResponse>? listaClientes = new List<TarjetasResponse>();
@@ -80,6 +80,11 @@ namespace Epica.Web.Operacion.Services.Transaccion
             try
             {
                 var uri = Urls.Transaccion + UrlsConfig.TarjetasOperations.GetTarjetas(pageNumber, recordsTotal);
+
+                if (columna != 0) {
+                    uri += string.Format("&columna={0}&ascendente={1}", Convert.ToString(columna), ascendente);
+                }
+
                 var response = await ApiClient.GetAsync(uri);
 
                 if (response.IsSuccessStatusCode)

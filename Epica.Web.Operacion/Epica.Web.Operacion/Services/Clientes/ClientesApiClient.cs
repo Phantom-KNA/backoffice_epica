@@ -1,10 +1,12 @@
 ﻿using Epica.Web.Operacion.Config;
 using Epica.Web.Operacion.Helpers;
+using Epica.Web.Operacion.Models.Common;
 using Epica.Web.Operacion.Models.Entities;
 using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.UserResolver;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Epica.Web.Operacion.Services.Transaccion
@@ -55,6 +57,85 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 }
 
             } catch (Exception) {
+                return (listaClientes, paginacion)!; ;
+            }
+
+            return (listaClientes, paginacion);
+        }
+
+        public async Task<(List<ClienteResponse>, int)> GetClientesFilterAsync(int pageNumber, int recordsTotal, int columna, bool ascendente, List<RequestListFilters> filters)
+        {
+            FiltroDatosResponse? responseDatos = new FiltroDatosResponse();
+            List<ClienteResponse>? listaClientes = new List<ClienteResponse>();
+            int paginacion = 0;
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.ClientesOperations.GetClienteFiltroInfo(pageNumber, recordsTotal);
+
+                var filtroNombreCliente = filters.FirstOrDefault(x => x.Key == "nombreCliente");
+                var filtroTelefono = filters.FirstOrDefault(x => x.Key == "telefono");
+                var filtroCorreoElectronico = filters.FirstOrDefault(x => x.Key == "correoElectronico");
+                var filtroCurp = filters.FirstOrDefault(x => x.Key == "curp");
+                var filtroOrganizacion = filters.FirstOrDefault(x => x.Key == "organizacion");
+                var filtroEstatusWeb = filters.FirstOrDefault(x => x.Key == "estatusWeb");
+                var filtroEstatusTotal = filters.FirstOrDefault(x => x.Key == "estatusTotal");
+
+                if (filtroNombreCliente.Value != null) {
+                    uri += string.Format("&nombre={0}", Convert.ToString(filtroNombreCliente.Value));
+                }
+
+                if (filtroTelefono.Value != null)
+                {
+                    uri += string.Format("&telefono={0}", Convert.ToString(filtroTelefono.Value));
+                }
+
+                if (filtroCorreoElectronico.Value != null)
+                {
+                    uri += string.Format("&correo={0}", Convert.ToString(filtroCorreoElectronico.Value));
+                }
+
+                if (filtroCurp.Value != null)
+                {
+                    uri += string.Format("&curp={0}", Convert.ToString(filtroCurp.Value));
+                }
+
+                if (filtroOrganizacion.Value != null)
+                {
+                    uri += string.Format("&organizacion={0}", Convert.ToString(filtroOrganizacion.Value));
+                }
+
+                if (filtroEstatusWeb.Value != null)
+                {
+                    uri += string.Format("&estatusWeb={0}", Convert.ToString(filtroEstatusWeb.Value));
+                }
+
+                if (filtroEstatusTotal.Value != null)
+                {
+                    uri += string.Format("&estatusTotal={0}", Convert.ToString(filtroEstatusWeb.Value));
+                }
+
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var settings = new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+                    responseDatos = JsonConvert.DeserializeObject<FiltroDatosResponse>(jsonResponse, settings);
+
+                    listaClientes = responseDatos.listaResultado;
+                    paginacion = Convert.ToInt32(responseDatos.cantidadEncontrada);
+
+                    return (listaClientes, paginacion)!;
+                }
+
+            }
+            catch (Exception)
+            {
                 return (listaClientes, paginacion)!; ;
             }
 

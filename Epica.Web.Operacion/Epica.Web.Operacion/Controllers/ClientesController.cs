@@ -114,43 +114,18 @@ public class ClientesController : Controller
                 tipoFiltro = false;
             }
         }
+
         var gridData = new ResponseGrid<ClienteResponseGrid>();
         List<ClienteResponse> ListPF = new List<ClienteResponse>();
 
-        var filtronombreCliente = filters.FirstOrDefault(x => x.Key == "nombreCliente");
+        //Validar si hay algun filtro con valor ingresado
+        var validaFiltro = filters.Where(x => x.Value != null).ToList();
 
-        if(filtronombreCliente.Value != null)
-        {
-            string nombre = filtronombreCliente.Value;
-            var listPF2 = await _clientesApiClient.GetDetallesClientesByNombresAsync(nombre);
-
-            foreach (var cliente in listPF2)
-            {
-                ClienteResponse clienteResponse = new ClienteResponse
-                {
-                    nombreCompleto = cliente.nombre +" "+ cliente.apellido_paterno + " " +cliente.apellido_materno,
-                    sexo = cliente.sexo,
-                    CURP = cliente.curp,
-                    email = cliente.email,
-                    estatus = cliente.active ?? 0,
-                    id = cliente.id_cliente,
-                    membresia = cliente.membresia,
-                    organizacion = cliente.organizacion,
-                    telefono = cliente.telefono,
-                    estatusweb = cliente.estatusWeb
-                };
-
-                ListPF.Add(clienteResponse);
-            }
-        }
-        else
-        {
+        if(validaFiltro.Count != 0) {
+            (ListPF, paginacion) = await _clientesApiClient.GetClientesFilterAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), columna, tipoFiltro, filters);
+        } else {
             (ListPF, paginacion) = await _clientesApiClient.GetClientesAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros),columna, tipoFiltro);
-
         }
-
-        //Entorno local de pruebas
-        //ListPF = GetList();
 
         var List = new List<ClienteResponseGrid>();
         foreach (var row in ListPF)
@@ -171,8 +146,9 @@ public class ClientesController : Controller
                 Acciones = await this.RenderViewToStringAsync("~/Views/Clientes/_Acciones.cshtml", row)
             });
         }
-        if (!string.IsNullOrEmpty(request.Busqueda))
-        {
+
+        //Filtro TextBox Busqueda Rapida
+        if (!string.IsNullOrEmpty(request.Busqueda)) {
             List = List.Where(x =>
             (x.nombreCompleto?.ToUpper() ?? "").Contains(request.Busqueda.ToUpper()) ||
             (x.telefono?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
@@ -180,37 +156,6 @@ public class ClientesController : Controller
             (x.CURP?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
             (x.organizacion?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
             ).ToList();
-        }
-
-        //Aplicacion de Filtros temporal, 
-        var filtroTelefono = filters.FirstOrDefault(x => x.Key == "telefono");
-        var filtroCorreoElectronico = filters.FirstOrDefault(x => x.Key == "correoElectronico");
-        var filtroCurp = filters.FirstOrDefault(x => x.Key == "curp");
-        var filtroOrganizacion = filters.FirstOrDefault(x => x.Key == "organizacion");
-
-        if (filtronombreCliente.Value != null)
-        {
-            List = List.Where(x => x.nombreCompleto.Contains(Convert.ToString(filtronombreCliente.Value.ToUpper()))).ToList();
-        }
-
-        if (filtroTelefono.Value != null)
-        {
-            List = List.Where(x => x.telefono == Convert.ToString(filtroTelefono.Value)).ToList();
-        }
-
-        if (filtroCorreoElectronico.Value != null)
-        {
-            List = List.Where(x => x.email == Convert.ToString(filtroCorreoElectronico.Value)).ToList();
-        }
-
-        if (filtroCurp.Value != null)
-        {
-            List = List.Where(x => x.CURP == Convert.ToString(filtroCurp.Value)).ToList();
-        }
-
-        if (filtroOrganizacion.Value != null)
-        {
-            List = List.Where(x => x.organizacion == Convert.ToString(filtroOrganizacion.Value)).ToList();
         }
 
         gridData.Data = List;
@@ -1490,13 +1435,6 @@ public class ClientesController : Controller
         public string NombreCompleto { get; set; }
     }
 
-    public class RequestListFilters
-    {
-        [JsonProperty("key")]
-        public string Key { get; set; }
-        [JsonProperty("value")]
-        public string Value { get; set; }
-    }
     #endregion
 
     #region "Funciones Auxiliares"

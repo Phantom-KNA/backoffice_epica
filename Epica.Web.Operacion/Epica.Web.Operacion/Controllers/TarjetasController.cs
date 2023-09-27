@@ -132,6 +132,8 @@ public class TarjetasController : Controller
         int totalRecord = 0;
         int filterRecord = 0;
         int paginacion = 0;
+        int columna = 0;
+        bool tipoFiltro = false;
 
         var draw = Request.Form["draw"].FirstOrDefault();
         int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
@@ -142,6 +144,30 @@ public class TarjetasController : Controller
         request.Busqueda = Request.Form["search[value]"].FirstOrDefault();
         request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
         request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
+
+        if (request.ColumnaOrdenamiento != null)
+        {
+            if (request.ColumnaOrdenamiento == "Vinculo") {
+                columna = 1;
+            } else if (request.ColumnaOrdenamiento == "tarjeta") {
+                columna = 2;
+            } else if (request.ColumnaOrdenamiento == "clabe") {
+                columna = 3;
+            } else if (request.ColumnaOrdenamiento == "proxyNumber") {
+                columna = 4;
+            } else if (request.ColumnaOrdenamiento == "Estatus") {
+                columna = 5;
+            }
+        }
+
+        if (request.Ordenamiento != null)
+        {
+            if (request.Ordenamiento == "asc") {
+                tipoFiltro = true;
+            } else {
+                tipoFiltro = false;
+            }
+        }
 
         var gridData = new ResponseGrid<TarjetasResponseGrid>();
         List<TarjetasResponse> ListPF = new List<TarjetasResponse>();
@@ -164,10 +190,10 @@ public class TarjetasController : Controller
                     tarjeta = listPF2.tarjeta!               
                 };
             ListPF.Add(tarjetasResponse);
-        }
-        else
-        {
-            (ListPF, paginacion) = await _tarjetasApiClient.GetTarjetasAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros));
+
+        } else {
+
+            (ListPF, paginacion) = await _tarjetasApiClient.GetTarjetasAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros),columna, tipoFiltro);
 
         }
 
@@ -336,13 +362,6 @@ public class TarjetasController : Controller
         public string? NombreCompleto { get; set; }
     }
 
-    public class RequestListFilters
-    {
-        [JsonProperty("key")]
-        public string? Key { get; set; }
-        [JsonProperty("value")]
-        public string? Value { get; set; }
-    }
     #endregion
 
     #region "Funciones Auxiliares"

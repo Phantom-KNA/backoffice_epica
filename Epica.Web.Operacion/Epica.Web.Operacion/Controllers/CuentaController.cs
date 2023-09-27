@@ -574,13 +574,6 @@ public class CuentaController : Controller
         public string NombreCompleto { get; set; }
     }
 
-    public class RequestListFilters
-    {
-        [JsonProperty("key")]
-        public string Key { get; set; }
-        [JsonProperty("value")]
-        public string Value { get; set; }
-    }
     #endregion
 
     #region "Funciones Auxiliares"

@@ -66,6 +66,22 @@
                                         <label class="form-label fs-5 fw-semibold mb-3">Organización:</label>
                                         <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="organizacion" placeholder="Organización" id="filtro_organizacion" />
                                     </div>
+                                    <div class="mb-5">
+                                        <label class="form-label fs-5 fw-semibold mb-3">Estatus Web:</label>
+                                        <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatusWeb" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_estatus_web">
+                                            <option></option>
+                                            <option value="1">Activo</option>
+                                            <option value="2">Desactivado</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-5">
+                                        <label class="form-label fs-5 fw-semibold mb-3">Estatus Total:</label>
+                                        <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatusTotal" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_estatus_total">
+                                            <option></option>
+                                            <option value="activo">Activo</option>
+                                            <option value="bloqueado">Desactivado</option>
+                                        </select>
+                                    </div>
                                     <div class="d-flex justify-content-end">
                                         <button type="reset" class="btn btn-sm btn-light btn-active-light-primary me-2 btn_limpiar_filtros" data-kt-menu-dismiss="true" data-kt-customer-table-filter="reset">Limpiar</button>
                                         <button type="submit" class="btn btn-sm btn-primary btn-filtrar" data-kt-menu-dismiss="true" data-kt-customer-table-filter="filter">Aplicar</button>

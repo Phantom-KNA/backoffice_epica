@@ -1,4 +1,5 @@
-﻿using Epica.Web.Operacion.Models.Entities;
+﻿using Epica.Web.Operacion.Models.Common;
+using Epica.Web.Operacion.Models.Entities;
 using Epica.Web.Operacion.Models.Request;
 using static Epica.Web.Operacion.Controllers.CuentaController;
 
@@ -9,6 +10,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
         Task<List<DatosClienteEntity>> GetDetallesClientesByNombresAsync(string nombres);
         Task<List<DatosCatalogoResponse>> GetClientesbyNombreAsync(string nombreCliente);
         Task<(List<ClienteResponse>, int)> GetClientesAsync(int pageNumber, int recordsTotal, int columna, bool ascendente);
+        Task<(List<ClienteResponse>, int)> GetClientesFilterAsync(int pageNumber, int recordsTotal, int columna, bool ascendente, List<RequestListFilters> filters);
         Task<int> GetTotalClientesAsync();
         Task<ClienteDetailsResponse> GetClienteAsync(int id);
         Task<DocumentosClienteDetailsResponse> GetDocumentosClienteAsync(int id);
