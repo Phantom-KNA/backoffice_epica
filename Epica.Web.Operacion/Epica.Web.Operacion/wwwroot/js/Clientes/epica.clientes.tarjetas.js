@@ -88,6 +88,44 @@ var KTDatatableRemoteAjax = function () {
             return; 
         }
 
+        var primerCaracter = proxyNumber.charAt(0);
+        var todosIguales = true;
+
+        // Comprobar si todos los caracteres son iguales al primer carácter
+        for (var i = 0; i < proxyNumber.length; i++) {
+            if (proxyNumber.charAt(i) !== primerCaracter) {
+                todosIguales = false;
+                break;
+            }
+        }
+
+        if (todosIguales) {
+            toastr.error('Los valores ingresados, no son válidos.', "").preventDuplicates;
+            return; 
+        }
+
+        var num = numeroTarjeta;
+        var charCount = numeroTarjeta.length;
+
+        if (charCount == 16) {
+            var valid = isValid(num, charCount);
+            if (!valid) {
+                toastr.error('La tarjeta ingresada, no es válida.', "").preventDuplicates;
+                return;
+            }
+        } else {
+            toastr.error('La tarjeta ingresada, no es válida.', "").preventDuplicates;
+            return;
+        }
+
+        var validaAñoActual = new Date().getFullYear();
+        var validaAñoingreso = parseInt(yearVigencia)
+
+        if (validaAñoingreso < validaAñoActual) {
+            toastr.error('El año ingresado, no es válido o es menor al año en curso.', "").preventDuplicates;
+            return;
+        }
+
         toastr.info('Almacenando Tarjeta...', "").preventDuplicates;
 
         var form = $("#TarjetasForm")
@@ -123,6 +161,41 @@ var KTDatatableRemoteAjax = function () {
         });   
         $("#btnCerrarCuenta").click();
     });
+
+    function isValid(ccNum, charCount) {
+        var double = true;
+        var numArr = [];
+        var sumTotal = 0;
+        for (var i = 0; i < charCount; i++) {
+            var digit = parseInt(ccNum.charAt(i));
+
+            if (double) {
+                digit = digit * 2;
+                digit = toSingle(digit);
+                double = false;
+            } else {
+                double = true;
+            }
+            numArr.push(digit);
+        }
+
+        for (i = 0; i < numArr.length; i++) {
+            sumTotal += numArr[i];
+        }
+        var diff = eval(sumTotal % 10);
+        return (diff == "0");
+    }
+
+    function toSingle(digit) {
+        if (digit > 9) {
+            var tmp = digit.toString();
+            var d1 = parseInt(tmp.charAt(0));
+            var d2 = parseInt(tmp.charAt(1));
+            return (d1 + d2);
+        } else {
+            return digit;
+        }
+    }
 
     $('#kt_modal_1').on('hidden.bs.modal', function () {
         // Limpiar campos del modal al cerrarlo
