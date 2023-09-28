@@ -64,14 +64,14 @@
     </div>
 </div>
 
-<div class="modal fade" tabindex="-1" id="nuevoRolModal">
-    <div class="modal-dialog modal-lg">
+<div class="modal fade" id="nuevoRolModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Crear Nuevo Rol</h3>
-                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
-                    <span class="svg-icon svg-icon-1"></span>
-                </div>
+            <div class="modal-header header-modal">
+                <h1 class="modal-title text-header-modal fs-5" id="modalLabelTitle">Crear Nuevo Rol</h1>
+                <button type="button" class="custom-close-button" data-bs-dismiss="modal" aria-label="Close">
+                    <span>✕</span>
+                </button>
             </div>
             <div class="modal-body">
                 <div class="px-7 py-5">
@@ -93,3 +93,34 @@
 @section Scripts{
     <script src="~/js/Usuarios/epica.usuarios.permisos.js" asp-append-version="true"></script>
 }
+<style>
+
+    .header-modal {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .text-header-modal {
+        color: white;
+    }
+
+    .custom-close-button {
+        color: white;
+        background-color: transparent;
+        border: none;
+        opacity: 1;
+        padding: 0;
+        font-size: 1rem;
+        line-height: 1;
+        cursor: pointer;
+        transition: color 0.3s, opacity 0.3s;
+        position: absolute;
+        right: 0;
+        padding: 21px;
+    }
+
+        .custom-close-button:hover {
+            opacity: 0.8;
+        }
+</style>
