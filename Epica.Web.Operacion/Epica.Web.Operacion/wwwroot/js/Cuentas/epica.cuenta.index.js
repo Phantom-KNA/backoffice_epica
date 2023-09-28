@@ -353,13 +353,13 @@ function pruebas(idAccount) {
                                         let borderClasses = ['rounded-start', 'rounded-bottom-0'];
                                         newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
                                         borderClasses = ['rounded-end', 'rounded-bottom-0'];
-                                        newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
+                                        newTemplate.querySelectorAll('td')[7].classList.add(...borderClasses);
                                     }
                                     if (index === 0) { // last row
                                         let borderClasses = ['rounded-start', 'rounded-top-0'];
                                         newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
                                         borderClasses = ['rounded-end', 'rounded-top-0'];
-                                        newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
+                                        newTemplate.querySelectorAll('td')[7].classList.add(...borderClasses);
                                         
                                         newTemplate.classList.add('border-bottom-0');
 
