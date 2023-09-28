@@ -82,7 +82,7 @@
                                     </div>
                                     <div class="mb-5">
                                         <label class="form-label fs-5 fw-semibold mb-3">Estatus:</label>
-                                        <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatus" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_tipo">
+                                        <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatus" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_tipo" data-minimum-results-for-search="Infinity">
                                             <option></option>
                                             <option value="0">En Proceso</option>
                                             <option value="1">En Transito</option>
@@ -114,7 +114,7 @@
                             <div id="kt_datatable_buttons" class="d-none"></div>
 
                             @{
-                                var validacion = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Insertar == 0);
+                                var validacion = Model?.AccionesPorModulo!.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Insertar == 0);
                                 if (validacion == true)
                                 {
                                     <div class="m-0">

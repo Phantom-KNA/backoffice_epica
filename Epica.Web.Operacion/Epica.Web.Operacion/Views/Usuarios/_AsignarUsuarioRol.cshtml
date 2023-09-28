@@ -20,7 +20,7 @@
                         <div class="form-group input-group-sm col-md-12 row">
                             <label class="col-md-3 form-label" required>Nombre de Usuario: &nbsp;</label>
                             <div class="col-md-9">
-                                <select asp-for="idUsuario" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción" required>
+                                <select asp-for="idUsuario" class="form-select form-select-sm  form-select-solid" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" data-minimum-results-for-search="Infinity" required>
                                     <option></option>
                                 </select>
                                 @* <input asp-for="idUsuario" hidden class="form-control form-control-sm form-control-solid" id="idUsuario" readonly type="text" autocomplete="off" /> *@
@@ -34,9 +34,9 @@
                         <div class="form-group input-group-sm col-md-12 row">
                             <label class="col-md-3 form-label" required>Rol: &nbsp;</label>
                             <div class="col-md-9">
-                                <select asp-for="idRol" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción" required>
+                                <select asp-for="idRol" class="form-select form-select-sm  form-select-solid" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" data-minimum-results-for-search="Infinity" required>
                                     <option></option>
-                                    @foreach (var Roles in Model.ListaRoles)
+                                    @foreach (var Roles in Model!.ListaRoles!)
                                     {
                                         <option value="@Roles.Id">@Roles.Descripcion</option>
                                     }

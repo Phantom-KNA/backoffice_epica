@@ -27,7 +27,7 @@
                             <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor"></path>
                         </svg>
                     </span>
-                    <input type="text" id="search_input" data-kt-customer-table-filter="search" class="form-control form-control-sm w-250px ps-15" placeholder="Buscar...">
+                    <input type="text" id="search_input" data-kt-customer-table-filter="search" class="form-control form-control-sm w-250px ps-15" placeholder="Buscar clave rastreo...">
                 </div>
             </div>
             <div class="card-toolbar">
@@ -51,40 +51,22 @@
                                             <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="cuentaOrdenante" onkeypress="return SoloNumeros(event)" maxlength="18" placeholder="Cuenta Ordenante" id="filtro_cuenta_ordenante" />
                                         </div>
                                         <div class="col-6">
-                                            <label class="form-label fs-5 fw-semibold mb-3">Nombre Ordenante:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreOrdenante" onkeypress="return SoloLetras(event)" maxlength="50" placeholder="Nombre del Ordenante" id="filtro_nombreOrdenante" />
+                                            <label class="form-label fs-5 fw-semibold mb-3">Clave de Rastreo:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="claveRastreo" onkeypress="return SinCaracteresEspeciales(event)" maxlength="30" placeholder="Clave de Rastreo" id="filtro_clave_rastreo" />
                                         </div>
-                                    </div>
-                                    <br />
-                                    <div class="row">
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Nombre Beneficiario:</label>
                                             <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreBeneficiario" onkeypress="return SoloLetras(event)" maxlength="50" placeholder="Nombre Del Beneficiario" id="filtro_nombreBeneficiario" />
                                         </div>
                                         <div class="col-6">
-                                            <label class="form-label fs-5 fw-semibold mb-3">Clave de Rastreo:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="claveRastreo" onkeypress="return SinCaracteresEspeciales(event)" maxlength="30" placeholder="Clave de Rastreo" id="filtro_clave_rastreo" />
-                                        </div>
-                                    </div>
-                                    <br />
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <label class="form-label fs-5 fw-semibold mb-3">Estatus:</label>
-                                            <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatus" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_tipo">
-                                                <option></option>
-                                                <option value="0">En Proceso</option>
-                                                <option value="1">En Transito</option>
-                                                <option value="4">Liquidado</option>
-                                                <option value="5">Devuelto</option>
-
-                                            </select>
+                                            <label class="form-label fs-5 fw-semibold mb-3">Nombre Ordenante:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreOrdenante" onkeypress="return SoloLetras(event)" maxlength="50" placeholder="Nombre del Ordenante" id="filtro_nombreOrdenante" />
                                         </div>
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Monto:</label>
                                             <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="monto" type="number" min="0" placeholder="Monto" id="filtro_monto" />
                                         </div>
                                     </div>
-                                    <br />
                                     <div class="row">
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Fecha de Instrucción:</label>
@@ -95,6 +77,23 @@
                                             <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="fecha_autorizacion" placeholder="Fecha de Autorización" id="fecha_autorizacion" />
                                         </div>
                                     </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Estatus:</label>
+                                            <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatus" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_tipo" data-minimum-results-for-search="Infinity">
+                                                <option></option>
+                                                <option value="0">En Proceso</option>
+                                                <option value="1">En Transito</option>
+                                                <option value="4">Liquidado</option>
+                                                <option value="5">Devuelto</option>
+
+                                            </select>
+                                        </div>
+                                        
+                                    </div>
+                                    <br />
+                                    
                                     <br />
                                     <div class="row">
                                         <div class="col-12">
@@ -124,7 +123,7 @@
 
                             <div id="kt_datatable_buttons" class="d-none"></div>
                             @{
-                                var validacion = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Insertar == 0);
+                                var validacion = Model.AccionesPorModulo!.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Insertar == 0);
                                 if (validacion == true)
                                 {
                                     <div class="m-0">

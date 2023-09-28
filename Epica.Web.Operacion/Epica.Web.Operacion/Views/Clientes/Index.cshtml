@@ -27,7 +27,7 @@
                             <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor"></path>
                         </svg>
                     </span>
-                    <input type="text" id="search_input" data-kt-customer-table-filter="search" class="form-control form-control-sm w-250px ps-15" placeholder="Buscar...">
+                    <input type="text" id="search_input" data-kt-customer-table-filter="search" class="form-control form-control-sm w-250px ps-15" placeholder="Buscar nombre...">
                 </div>
             </div>
             <div class="card-toolbar">
@@ -68,7 +68,7 @@
                                     </div>
                                     <div class="mb-5">
                                         <label class="form-label fs-5 fw-semibold mb-3">Estatus Web:</label>
-                                        <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatusWeb" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_estatus_web">
+                                        <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatusWeb" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_estatus_web" data-minimum-results-for-search="Infinity">
                                             <option></option>
                                             <option value="1">Activo</option>
                                             <option value="2">Desactivado</option>
@@ -76,7 +76,7 @@
                                     </div>
                                     <div class="mb-5">
                                         <label class="form-label fs-5 fw-semibold mb-3">Estatus Total:</label>
-                                        <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatusTotal" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_estatus_total">
+                                        <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatusTotal" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_estatus_total" data-minimum-results-for-search="Infinity">
                                             <option></option>
                                             <option value="activo">Activo</option>
                                             <option value="bloqueado">Desactivado</option>
@@ -185,4 +185,5 @@
 
 @section Scripts{
     <script src="~/js/Clientes/epica.clientes.index.js" asp-append-version="true"></script>
+    
 }

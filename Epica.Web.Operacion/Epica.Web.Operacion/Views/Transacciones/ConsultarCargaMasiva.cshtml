@@ -33,7 +33,7 @@
                             <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor"></path>
                         </svg>
                     </span>
-                    <input type="text" id="search_input" data-kt-customer-table-filter="search" class="form-control form-control-sm w-250px ps-15" placeholder="Buscar...">
+                    <input type="text" id="search_input" data-kt-customer-table-filter="search" class="form-control form-control-sm w-250px ps-15" placeholder="Buscar clave de rastreo...">
                 </div>
             </div>
             <div class="card-toolbar">
@@ -113,12 +113,12 @@
 
                             <div id="kt_datatable_buttons" class="d-none"></div>
                             @{
-                                var validacion = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Insertar == 0);
+                                var validacion = Model?.AccionesPorModulo!.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Insertar == 0);
                                 if (validacion == true)
                                 {
                                     if (ViewBag.ValidaCarga == "False") {
                                         <div class="m-0" id="area_CancelarTransacciones" style="display: show">
-                                            <button data-bs-toggle="modal" onclick="CancelarTransacciones(@Model.IdUsuario)" class="btn btn-sm btn-danger me-3">
+                                            <button data-bs-toggle="modal" onclick="CancelarTransacciones(@Model!.IdUsuario)" class="btn btn-sm btn-danger me-3">
                                                 <i class="bi bi-trash"></i>&nbsp;Cancelar Transacciones
                                             </button>
                                         </div>
@@ -130,7 +130,7 @@
                                     } else {
 
                                         <div class="m-0" id="area_CancelarTransacciones" style="display: none">
-                                            <button data-bs-toggle="modal" onclick="CancelarTransacciones(@Model.IdUsuario)" class="btn btn-sm btn-danger me-3">
+                                            <button data-bs-toggle="modal" onclick="CancelarTransacciones(@Model!.IdUsuario)" class="btn btn-sm btn-danger me-3">
                                                 <i class="bi bi-trash"></i>&nbsp;Cancelar Transacciones
                                             </button>
                                         </div>
