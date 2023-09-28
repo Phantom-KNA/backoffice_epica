@@ -5,6 +5,7 @@ var filterAccount;
 
 var KTDatatableRemoteAjax = function () {
     var table;
+    $(".filtro-control").val('');
     var initDatatable = function () {
         datatable = $('#kt_datatable').DataTable({
             "order": [],
