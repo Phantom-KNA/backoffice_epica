@@ -23,6 +23,7 @@ public class UrlsConfig
         public static string GetTransacciones(int numberPage, int TotalRecords) => $"/api/v1/transacciones/movimientos_cta?pageNumber={numberPage}&pageSize={TotalRecords}";
         public static string GetTransaccionesFilter(int numberPage, int TotalRecords) => $"/api/v1/transacciones/buscar_filtro?pageNumber={numberPage}&pageSize={TotalRecords}";
         public static string GetTransaccionesMasiva(int numberPage, int TotalRecords, int idUsuario) => $"/api/v1/cargabach/cargar_temp?pagina={numberPage}&registrosPagina={TotalRecords}&idusuario={idUsuario}";
+        public static string GetTransaccionesMasivaFilter(int numberPage, int TotalRecords, int idUsuario) => $"/api/v1/cargabach/buscar_filtro?pagina={numberPage}&registrosPagina={TotalRecords}&idusuario={idUsuario}";
         public static string GetTransaccion(int idInterno) => $"/api/resumentransaccion?idInterno={idInterno}";
         public static string GetTransaccionesTotal() => $"/api/v1/transacciones/total";
         public static string GetTransaccionesPorCuenta(int idCuenta) => $"/api/v1/cuentas/cuenta_trasacciones?idCuenta={idCuenta}";

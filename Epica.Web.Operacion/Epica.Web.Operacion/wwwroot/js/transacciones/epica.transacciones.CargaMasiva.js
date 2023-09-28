@@ -101,7 +101,7 @@ var KTDatatableTransacciones = (function () {
     }
 
     var exportButtons = () => {
-        const documentTitle = 'Transacciones';
+        const documentTitle = 'Transacciones - Carga Masiva';
         var buttons = new $.fn.dataTable.Buttons(table, {
             buttons: [
                 {

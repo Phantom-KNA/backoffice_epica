@@ -95,14 +95,14 @@ var KTDatatableTransacciones = (function () {
     }
 
     var exportButtons = () => {
-        const documentTitle = 'Transacciones';
+        const documentTitle = 'Transacciones - Reintentador';
         var buttons = new $.fn.dataTable.Buttons(table, {
             buttons: [
                 {
                     extend: 'excelHtml5',
                     title: documentTitle,
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                        columns: [0, 1, 2, 3, 4, 5]
                     }
                 }
             ]

@@ -1,5 +1,6 @@
 ﻿@model Epica.Web.Operacion.Models.Response.LoginResponse
 
+
 @{
     ViewData["Title"] = "Consultar Carga Masiva Transacciones";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -45,52 +46,78 @@
                                 <i class="bi bi-filter"></i>&nbsp;
                                 Filtrado
                             </button>
-                            <div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px" data-kt-menu="true" id="kt-toolbar-filter">
+                            <div class="menu menu-sub menu-sub-dropdown w-300px w-md-500px" data-kt-menu="true" id="kt-toolbar-filter">
                                 <div class="px-7 py-5">
                                     <div class="fs-4 text-dark fw-bold">Filtros</div>
                                 </div>
                                 <div class="separator border-gray-200"></div>
 
                                 <div class="px-7 py-5">
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Cuenta Ordenante:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="cuentaOrdenante" placeholder="Cuenta Ordenante" id="filtro_cuenta_ordenante" />
+                                    <div class="row">
+                                        <div class="col-6">                     
+                                            <label class="form-label fs-5 fw-semibold mb-3">Cuenta Ordenante:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="cuentaOrdenante" onkeypress="return SoloNumeros(event)" maxlength="18" placeholder="Cuenta Ordenante" id="filtro_cuenta_ordenante" />
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Cuenta Beneficiario:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="cuentaBeneficiario" onkeypress="return SoloNumeros(event)" maxlength="18" placeholder="Cuenta Beneficiario" id="filtro_cuenta_beneficiario" />
+                                        </div>
                                     </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Clave de Rastreo:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="claveRastreo" placeholder="Clave de Rastreo" id="filtro_clave_rastreo" />
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Clave de Rastreo:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="claveRastreo" onkeypress="return SinCaracteresEspeciales(event)" maxlength="50" placeholder="Clave de Rastreo" id="filtro_clave_rastreo" />
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Monto:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="monto" onkeypress="return SoloNumeros(event)" maxlength="18" placeholder="Monto" id="filtro_monto" />
+                                        </div>
                                     </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Nombre Ordenante:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreOrdenante" placeholder="Nombre del Ordenante" id="filtro_nombreOrdenante" />
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Fecha Operación:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="fechaOperacion" type="date" placeholder="Fecha de Operación" id="filtro_fecha_operacion" />
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Tipo de Operación:</label>
+                                            <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="tipoOperacion" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_tipo" data-minimum-results-for-search="Infinity">
+                                                <option></option>
+                                                <option value="1">In</option>
+                                                <option value="2">Out</option>
+                                                <option value="3">Comisión</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Nombre Beneficiario:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreBeneficiario" placeholder="Nombre Del Beneficiario" id="filtro_nombreBeneficiario" />
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Observaciones:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="observaciones" maxlength="100" onkeypress="return SinCaracteresEspeciales(event)"  placeholder="Observaciones" id="filtro_observaciones" />
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Medio de Pago:</label>
+                                            <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="medioPago" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_medioPago" data-minimum-results-for-search="Infinity">
+                                                <option></option>
+                                                @if (ViewBag.CatalogoMediosPago != null)
+                                                {
+                                                    foreach (Epica.Web.Operacion.Models.Response.DatosCatalogoResponse medioPago in ViewBag.CatalogoMediosPago)
+                                                    {
+                                                        <option value="@medioPago.Id">@medioPago.Descripcion</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Concepto:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="concepto" placeholder="Concepto de la Transacción" id="filtro_transaccion" />
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Concepto:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="concepto" placeholder="Concepto de la Transacción" id="filtro_concepto" />
+                                        </div>
                                     </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Monto:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="monto" placeholder="Monto" id="filtro_monto" />
-                                    </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Fecha:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="fecha" placeholder="Fecha" id="filtro_fecha" />
-                                    </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Estatus:</label>
-                                        <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatus" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_tipo">
-                                            <option></option>
-                                            <option value="0">En Proceso</option>
-                                            <option value="1">En Transito</option>
-                                            <option value="4">Liquidado</option>
-                                            <option value="5">Devuelto</option>
-
-                                        </select>
-                                    </div>
+                                    <br />
 
                                     <div class="d-flex justify-content-end">
                                         <button type="reset" class="btn btn-sm btn-light btn-active-light-primary me-2 btn_limpiar_filtros" data-kt-menu-dismiss="true" data-kt-customer-table-filter="reset">Limpiar</button>
@@ -211,6 +238,7 @@
 @section Scripts{
     <script asp-append-version="true" src="~/js/components/accounting.js"></script>
     <script asp-append-version="true" src="~/js/components/jquery.filer.min.js"></script>
+    <script asp-append-version="true" src="~/js/components/utilerias.js"></script>
     <script asp-append-version="true" src="~/js/transacciones/epica.transacciones.CargaMasiva.js"></script>
 }
 

@@ -53,7 +53,10 @@
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Clave de Rastreo:</label>
                                             <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="claveRastreo" onkeypress="return SinCaracteresEspeciales(event)" maxlength="30" placeholder="Clave de Rastreo" id="filtro_clave_rastreo" />
-                                        </div>
+                                        </div>                                      
+                                    </div>
+                                    <br />
+                                    <div class="row">
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Nombre Beneficiario:</label>
                                             <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreBeneficiario" onkeypress="return SoloLetras(event)" maxlength="50" placeholder="Nombre Del Beneficiario" id="filtro_nombreBeneficiario" />
@@ -62,11 +65,8 @@
                                             <label class="form-label fs-5 fw-semibold mb-3">Nombre Ordenante:</label>
                                             <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreOrdenante" onkeypress="return SoloLetras(event)" maxlength="50" placeholder="Nombre del Ordenante" id="filtro_nombreOrdenante" />
                                         </div>
-                                        <div class="col-6">
-                                            <label class="form-label fs-5 fw-semibold mb-3">Monto:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="monto" type="number" min="0" placeholder="Monto" id="filtro_monto" />
-                                        </div>
                                     </div>
+                                    <br />
                                     <div class="row">
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Fecha de Instrucción:</label>
@@ -79,6 +79,10 @@
                                     </div>
                                     <br />
                                     <div class="row">
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Monto:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="monto" type="number" min="0" placeholder="Monto" id="filtro_monto" />
+                                        </div>
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Estatus:</label>
                                             <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatus" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_tipo" data-minimum-results-for-search="Infinity">

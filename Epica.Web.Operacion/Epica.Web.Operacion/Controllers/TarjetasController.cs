@@ -2,6 +2,7 @@
 using Epica.Web.Operacion.Models.Common;
 using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Models.ViewModels;
+using Epica.Web.Operacion.Services.Catalogos;
 using Epica.Web.Operacion.Services.Log;
 using Epica.Web.Operacion.Services.Transaccion;
 using Epica.Web.Operacion.Utilities;
@@ -18,6 +19,7 @@ public class TarjetasController : Controller
     private readonly IClientesApiClient _clientesApiClient;
     private readonly ITarjetasApiClient _tarjetasApiClient;
     private readonly ILogsApiClient _logsApiClient;
+    private readonly ICatalogosApiClient _catalogosApiClient;
     private readonly UserContextService _userContextService;
     #endregion
 
@@ -25,12 +27,14 @@ public class TarjetasController : Controller
     public TarjetasController(IClientesApiClient clientesApiClient,
         ITarjetasApiClient tarjetasApiClient,
         UserContextService userContextService,
+        ICatalogosApiClient catalogosApiClient,
         ILogsApiClient logsApiClient)
     {
         _clientesApiClient = clientesApiClient;
         _userContextService = userContextService;
         _tarjetasApiClient = tarjetasApiClient;
         _logsApiClient = logsApiClient;
+        _catalogosApiClient = catalogosApiClient;
     }
     #endregion
 
