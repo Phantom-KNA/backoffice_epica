@@ -80,7 +80,7 @@
                                 </div>
                             </div>
                             @{
-                                var validacion = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Configuracion" && modulo.Insertar == 0);
+                                var validacion = Model?.AccionesPorModulo!.Any(modulo => modulo.ModuloAcceso == "Configuracion" && modulo.Insertar == 0);
                                 if (validacion == true)
                                 {
                                     <div class="m-0">
