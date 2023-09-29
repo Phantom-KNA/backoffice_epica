@@ -89,6 +89,35 @@
         border-radius: 55%;
         background: white;
     }
+
+    .header-modal {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .text-header-modal {
+        color: white;
+    }
+
+    .custom-close-button {
+        color: white;
+        background-color: transparent;
+        border: none;
+        opacity: 1;
+        padding: 0;
+        font-size: 1rem;
+        line-height: 1;
+        cursor: pointer;
+        transition: color 0.3s, opacity 0.3s;
+        position: absolute;
+        right: 0;
+        padding: 21px;
+    }
+
+        .custom-close-button:hover {
+            opacity: 0.8;
+        }
 </style>
 
 <!-- Almacenar el mensaje de error en un atributo data-* -->
@@ -119,7 +148,7 @@
             <div class="fv-row mb-8 ">
                 <!--begin::Email-->
                 <label class="ms-0 py-0 me-10 ps-2 border-0" style="color: gray; font-size: 110%;">Usuario</label>
-                <input type="text" placeholder="Correo / No. Celular" onkeyup="validar2()" name="email" id="email" autocomplete="off" class="form-control " />
+                <input type="text" placeholder="Correo" onkeyup="validar2()" name="email" id="email" autocomplete="off" class="form-control" maxlength="50"/>
                 <div style="color:red" id="messageEmail"></div>
                 <!--end::Email-->
             </div>
@@ -131,8 +160,8 @@
             <!--begin::Submit button-->
             <div class="text-center mb-10">
                 @*<button id="login-account" class="btn btn-dark login-account">*@
-            
-            <button style="font-size: 100%;" type="button" class="btn btn-dark" id="validacion"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+
+                <button style="font-size: 100%;" type="button" class="btn btn-dark" id="validacion" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                 Iniciar Sesion
             </button>
             
@@ -140,11 +169,12 @@
             <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">    
                     <div class="modal-content">
-                        <div class="modal-header " style="background-color: #212529; border-color: #212529; color: #fff;">
-                            <h5 class="modal-title" id="staticBackdropLabel"></h5>
-
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
+                        <div class="modal-header header-modal">
+                <h1 class="modal-title text-header-modal fs-5" id="modalLabelTitle">Crear Nuevo Rol</h1>
+                <button type="button" class="custom-close-button" data-bs-dismiss="modal" aria-label="Close">
+                    <span>✕</span>
+                </button>
+            </div>
                         <div class="modal-body">
 
                                 <label class="ms-0 py-0 me-10 ps-2 border-0" style="color: gray; font-size: 110%; float:left;">Contraseña</label>
