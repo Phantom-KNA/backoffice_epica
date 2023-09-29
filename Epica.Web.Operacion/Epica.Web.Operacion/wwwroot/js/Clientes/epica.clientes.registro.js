@@ -19,6 +19,26 @@ function validateNumbersInput(inputElement) {
     }
 }
 
+function validateRFC(inputElement) {
+    var rfcValue = inputElement.value;
+    var rfcPattern = /^[A-Za-z]{4}\d{6}[A-Za-z\d]{3}$/;
+
+    if (!rfcPattern.test(rfcValue)) {
+        inputElement.value = ""; 
+        toastr.error("RFC no válido. Debe seguir el formato correcto.", "");
+    }
+}
+
+function validateCURP(inputElement) {
+    var curpValue = inputElement.value;
+    var curpPattern = /^[A-Z]{4}\d{6}[HM]{1}[A-Z]{5}[0-9]{2}$/;
+
+    if (!curpPattern.test(curpValue)) {
+        inputElement.value = "";
+        toastr.error("CURP no válida. Debe seguir el formato correcto.", "");
+    }
+}
+
 var Init = function () {
     var init = function () {
 

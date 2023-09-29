@@ -46,6 +46,15 @@ $(document).on('click', '#btnGuardarTarjeta', function (e) {
                 validationFailed = true;
             }
         }
+        if (field.id === "proxyNumber") {
+            if (field.value.length < 11 || field.value.length > 11) {
+                var errorMessage = field.getAttribute("data-error-message") || "Este campo";
+                if (!firstErrorMessage) {
+                    firstErrorMessage = ' Ingresa un número de Proxy válido';
+                }
+                validationFailed = true;
+            }
+        }
     });
 
     if (!allFieldsFilled || validationFailed) {

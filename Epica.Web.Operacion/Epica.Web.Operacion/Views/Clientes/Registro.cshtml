@@ -130,14 +130,14 @@
                     <div class="py-2 px-4 col-md-3 fv-row">
                         <label class="form-label required">Curp: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="ClientesDetalles!.Curp" class="form-control form-control-sm form-control-solid" id="Curp" type="text" value="@(Model?.ClientesDetalles!.Curp ?? "")" autocomplete="off" required pattern="[A-Z]{4}[0-9]{6}[HM]{1}[A-Z]{5}[0-9]{2}" title="Ingresa una CURP válida" data-error-message="CURP" />
+                            <input asp-for="ClientesDetalles!.RFC" class="form-control form-control-sm form-control-solid" id="RFC" type="text" value="@(Model?.ClientesDetalles!.RFC ?? "")" autocomplete="off" required pattern="[A-Z&]{3,4}(\d{2})(0[1-9]|1[0-2])(0[1-9
                             <span asp-validation-for="ClientesDetalles!.Curp" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-3 fv-row">
                         <label class="form-label required">RFC: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="ClientesDetalles!.RFC" class="form-control form-control-sm form-control-solid" id="Rfc" type="text" value="@(Model?.ClientesDetalles!.RFC ?? "")" autocomplete="off" required data-error-message="RFC" />
+                            <input asp-for="ClientesDetalles!.RFC" class="form-control form-control-sm form-control-solid" id="Rfc" type="text" value="@(Model?.ClientesDetalles!.RFC ?? "")" autocomplete="off" required data-error-message="RFC" oninput="validateRFC(this)" minlength="13" maxlength="13" />
                             <span asp-validation-for="ClientesDetalles!.RFC" class="text-danger"></span>
                         </div>
                     </div>
