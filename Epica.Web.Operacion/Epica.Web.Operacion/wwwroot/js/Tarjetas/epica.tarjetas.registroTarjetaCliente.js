@@ -1,6 +1,26 @@
 ﻿"use strict";
 toastr.options.preventDuplicates = true;
 
+function validateLettersInput(inputElement) {
+    var inputValue = inputElement.value;
+    var cleanValue = '';
+
+    for (var i = 0; i < inputValue.length; i++) {
+        var char = inputValue[i];
+        if (/[a-zA-Z]/.test(char) && cleanValue.length < 20) {
+            cleanValue += char;
+        }
+    }
+
+    if (cleanValue.length < 3) {
+        cleanValue = cleanValue.slice(0, 3);
+    } else if (cleanValue.length > 20) {
+        cleanValue = cleanValue.slice(0, 20);
+    }
+
+    inputElement.value = cleanValue;
+}
+
 function validateNumbersInput(inputElement) {
     var inputValue = inputElement.value;
     var cleanValue = '';
@@ -51,6 +71,16 @@ $(document).on('click', '#btnGuardarTarjeta', function (e) {
                 var errorMessage = field.getAttribute("data-error-message") || "Este campo";
                 if (!firstErrorMessage) {
                     firstErrorMessage = ' Ingresa un número de Proxy válido';
+                }
+                validationFailed = true;
+            }
+        }
+
+        if (field.id === "nombreCliente" ) {
+            if (field.value.length < 3 || field.value.length > 20) {
+                var errorMessage = field.getAttribute("data-error-message") || "Este campo";
+                if (!firstErrorMessage) {
+                    firstErrorMessage = errorMessage + ' debe tener entre 3 y 20 caracteres';
                 }
                 validationFailed = true;
             }

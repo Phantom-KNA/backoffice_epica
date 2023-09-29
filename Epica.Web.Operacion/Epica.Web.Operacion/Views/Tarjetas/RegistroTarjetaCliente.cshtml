@@ -95,7 +95,7 @@
                     <div class="form-group input-group-sm py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Buscar Persona: &nbsp;</label>
 
-                        <input type="text" id="nombreCliente" name="nombreCliente" class="form-control form-control-sm form-control-solid" placeholder="Buscar nombre" autocomplete="off" />
+                        <input type="text" id="nombreCliente" name="nombreCliente" class="form-control form-control-sm form-control-solid" placeholder="Buscar nombre" autocomplete="off" oninput="validateLettersInput(this)" data-error-message="Persona Física" minlength="3" maxlength="20" />
                         <button type="button" class="btn btn-sm btn-primary align-center" id="btnBuscarCliente">Buscar</button>
 @*                        <select id="selectClientes" class="form-select form-select-sm form-select-solid" autocomplete="off">
                             <option value="">Seleccione un cliente</option>
