@@ -68,7 +68,7 @@
         <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-title-gray-700 menu-icon-muted menu-active-bg menu-state-color fw-semibold py-4 fs-base w-150px" data-kt-menu="true" data-kt-element="theme-mode-menu">
             <!--begin::Menu item-->
             <div class="menu-item px-3 my-0">
-                <a href="#" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="light">
+                <a href="#" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="light" onclick="changeTheme('luz')">
                     <span class="menu-icon" data-kt-element="icon">
                         <!--begin::Svg Icon | path: icons/duotune/general/gen060.svg-->
                         <span class="svg-icon svg-icon-3">
@@ -92,7 +92,7 @@
             <!--end::Menu item-->
             <!--begin::Menu item-->
             <div class="menu-item px-3 my-0">
-                <a href="#" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="dark">
+                <a href="#" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="dark" onclick="changeTheme('negro')">
                     <span class="menu-icon" data-kt-element="icon">
                         <!--begin::Svg Icon | path: icons/duotune/general/gen061.svg-->
                         <span class="svg-icon svg-icon-3">
@@ -146,3 +146,16 @@
         white-space: nowrap;
     }
 </style>
+<script>
+    function changeTheme(indicador) {
+        // const subtabla = document.querySelector('$tr[data-kt-docs-datatable-subtable="subtable_template"]');
+        // const subtabla = document.querySelector('table#kt_datatable');
+        // const subtabla = document.querySelector('tr[data-kt-docs-datatable-subtable="template_numero_cuenta"]');
+        if (indicador == 'negro') {
+
+            $(".subtables").css("background-color", "#848751");
+        } else {
+            $(".subtables").css("background-color", "aliceblue");
+        }
+    }
+</script>

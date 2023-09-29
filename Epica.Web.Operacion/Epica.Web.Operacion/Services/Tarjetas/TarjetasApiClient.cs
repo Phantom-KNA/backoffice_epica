@@ -1,4 +1,5 @@
 ﻿using Epica.Web.Operacion.Config;
+using Epica.Web.Operacion.Models.Common;
 using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.UserResolver;
 using Microsoft.Extensions.Options;
@@ -97,6 +98,76 @@ namespace Epica.Web.Operacion.Services.Transaccion
                     };
                     listaClientes = JsonConvert.DeserializeObject<List<TarjetasResponse>>(jsonResponse,settings);
                     paginacion = int.Parse(response.Headers.GetValues("x-totalRecord").FirstOrDefault()!.ToString());
+                    return (listaClientes, paginacion)!;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return (listaClientes, paginacion)!; ;
+            }
+
+            return (listaClientes, paginacion);
+        }
+
+        public async Task<(List<TarjetasResponse>, int)> GetTarjetasFilterAsync(int pageNumber, int recordsTotal, int columna, bool ascendente, List<RequestListFilters> filters)
+        {
+
+            FiltroDatosResponseTarjetas? responseDatos = new FiltroDatosResponseTarjetas();
+            List<TarjetasResponse>? listaClientes = new List<TarjetasResponse>();
+            int paginacion = 0;
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.TarjetasOperations.GetTarjetasFilter(pageNumber, recordsTotal);
+
+                var filtronombreTitular = filters.FirstOrDefault(x => x.Key == "nombreTitular");
+                var filtrotarjeta = filters.FirstOrDefault(x => x.Key == "tarjeta");
+                var filtrocuentaClabe = filters.FirstOrDefault(x => x.Key == "cuentaClabe");
+                var filtronumeroProxy = filters.FirstOrDefault(x => x.Key == "numeroProxy");
+                var filtroestatus = filters.FirstOrDefault(x => x.Key == "estatusCuenta");
+
+                if (filtronombreTitular!.Value != null)
+                {
+                    uri += string.Format("&nombreTitular={0}", Convert.ToString(filtronombreTitular.Value));
+                }
+
+                if (filtrotarjeta!.Value != null)
+                {
+                    uri += string.Format("&tarjeta={0}", Convert.ToString(filtrotarjeta.Value));
+                }
+
+                if (filtrocuentaClabe!.Value != null)
+                {
+                    uri += string.Format("&cuentaClabe={0}", Convert.ToString(filtrocuentaClabe.Value));
+                }
+
+                if (filtronumeroProxy!.Value != null)
+                {
+                    uri += string.Format("&numeroProxy={0}", Convert.ToString(filtronumeroProxy.Value));
+                }
+
+                if (filtroestatus!.Value != null)
+                {
+                    uri += string.Format("&estatus={0}", Convert.ToString(filtroestatus.Value));
+                }
+
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var settings = new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+
+                    responseDatos = JsonConvert.DeserializeObject<FiltroDatosResponseTarjetas>(jsonResponse, settings);
+
+                    listaClientes = responseDatos.listaResultado;
+                    paginacion = Convert.ToInt32(responseDatos.cantidadEncontrada);
+
                     return (listaClientes, paginacion)!;
                 }
 

@@ -3,6 +3,8 @@ var table;
 var datatable;
 var filterAccount;
 
+
+
 var KTDatatableRemoteAjax = function () {
     var table;
     $(".filtro-control").val('');
@@ -353,13 +355,13 @@ function pruebas(idAccount) {
                                         let borderClasses = ['rounded-start', 'rounded-bottom-0'];
                                         newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
                                         borderClasses = ['rounded-end', 'rounded-bottom-0'];
-                                        newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
+                                        newTemplate.querySelectorAll('td')[7].classList.add(...borderClasses);
                                     }
                                     if (index === 0) { // last row
                                         let borderClasses = ['rounded-start', 'rounded-top-0'];
                                         newTemplate.querySelectorAll('td')[0].classList.add(...borderClasses);
                                         borderClasses = ['rounded-end', 'rounded-top-0'];
-                                        newTemplate.querySelectorAll('td')[4].classList.add(...borderClasses);
+                                        newTemplate.querySelectorAll('td')[7].classList.add(...borderClasses);
                                         
                                         newTemplate.classList.add('border-bottom-0');
 
@@ -372,6 +374,13 @@ function pruebas(idAccount) {
 
                             row.classList.add(...rowClasses);
                             button.classList.add('active');
+
+                            if (document.documentElement.getAttribute("data-theme") == "light") {
+                                $(".subtables").css("background-color", "aliceblue");
+                            } else {
+                                $(".subtables").css("background-color", "#848751");
+                            }
+
                         } else {
                             toastr.warning('No se encontró cobranza referenciada para esta cuenta.', "").preventDuplicates;
                         }
@@ -383,6 +392,8 @@ function pruebas(idAccount) {
     });
 
 }
+
+
 
 
 function GestionarCuenta(AccountID, estatus) {
@@ -651,6 +662,24 @@ function SoloLetras(e) {
 
     return isValid;
 
+}
+
+function atributoThemeCambiado(mutationsList) {
+    //alert("cambio de tema");
+    //for (let mutation of mutationsList) {
+    //    if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+    //        const nuevoValor = $(mutation.target).attr('data-theme');
+
+    //        // Realizar acciones específicas cuando el atributo cambie a "light" o "dark"
+    //        if (nuevoValor === 'light') {
+    //            console.log('El tema cambió a light');
+    //            // Realiza acciones para el tema light
+    //        } else if (nuevoValor === 'dark') {
+    //            console.log('El tema cambió a dark');
+    //            // Realiza acciones para el tema dark
+    //        }
+    //    }
+    //}
 }
 
 //$('#filtro_cuenta_clabe').keypress(function (e) {

@@ -6,7 +6,8 @@ namespace Epica.Web.Operacion.Services.Transaccion
     public interface ITransaccionesApiClient
     {
         Task<TransaccionDetailsResponse> GetTransaccionRastreoCobranzaAsync(string rastreoCobranza);
-        Task<(List<CargaBachRequest>, int)> GetTransaccionesMasivaAsync(int pageNumber, int recordsTotal, int idUsuario);
+        Task<(List<CargaBachRequest>, int)> GetTransaccionesMasivaAsync(int pageNumber, int recordsTotal, int idUsuario, int columna, bool ascendente);
+        Task<(List<CargaBachRequest>, int)> GetTransaccionesMasivaFilterAsync(int pageNumber, int recordsTotal, int idUsuario, int columna, bool ascendente, List<RequestListFilters> filters);
         Task<(List<TransaccionesResponse>, int)> GetTransaccionesAsync(int pageNumber, int recordsTotal, int columna, bool ascendente);
         Task<(List<TransaccionesResponse>, int)> GetTransaccionesFilterAsync(int pageNumber, int recordsTotal, int columna, bool ascendente, List<RequestListFilters> filters);
         Task<TransaccionesResponse> GetTransaccionAsync(int idInterno);

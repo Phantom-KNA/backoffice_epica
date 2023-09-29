@@ -773,8 +773,10 @@ namespace Epica.Web.Operacion.Controllers
         {
             var loginResponse = _userContextService.GetLoginResponse();
             var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Ver == 0);
+
             if (validacion == true)
             {
+                ViewBag.CatalogoMediosPago = await _catalogosApiClient.GetMediosPagoAsync();
                 int valida = await _transaccionesApiClient.GetTotalTransaccionesBatchAsync(loginResponse.IdUsuario);
 
                 if (valida == 0) {
@@ -797,6 +799,8 @@ namespace Epica.Web.Operacion.Controllers
             int totalRecord = 0;
             int filterRecord = 0;
             int paginacion = 0;
+            int columna = 0;
+            bool tipoFiltro = false;
 
             var draw = Request.Form["draw"].FirstOrDefault();
             int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
@@ -808,10 +812,49 @@ namespace Epica.Web.Operacion.Controllers
             request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
             request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
 
+            if (request.ColumnaOrdenamiento != null)
+            {
+                if (request.ColumnaOrdenamiento == "claveRastreo") {
+                    columna = 1;
+                } else if (request.ColumnaOrdenamiento == "Ordenante") {
+                    columna = 2;
+                } else if (request.ColumnaOrdenamiento == "CuentaBeneficiario") {
+                    columna = 3;
+                } else if (request.ColumnaOrdenamiento == "Monto") {
+                    columna = 4;
+                } else if (request.ColumnaOrdenamiento == "ConceptoPago") {
+                    columna = 5;
+                } else if (request.ColumnaOrdenamiento == "FechaOperacion") {
+                    columna = 6;
+                } else if (request.ColumnaOrdenamiento == "TipoOperacion") {
+                    columna = 7;
+                } else if (request.ColumnaOrdenamiento == "MedioPago") {
+                    columna = 8;
+                } else if (request.ColumnaOrdenamiento == "observaciones") {
+                    columna = 9;
+                }
+            }
+
+            if (request.Ordenamiento != null)
+            {
+                if (request.Ordenamiento == "asc") {
+                    tipoFiltro = true;
+                } else {
+                    tipoFiltro = false;
+                }
+            }
+
             var gridData = new ResponseGrid<CargaBachRequestGrid>();
             List<CargaBachRequest> ListPF = new List<CargaBachRequest>();
 
-            (ListPF, paginacion) = await _transaccionesApiClient.GetTransaccionesMasivaAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), loginResponse.IdUsuario);
+            //Validar si hay algun filtro con valor ingresado
+            var validaFiltro = filters.Where(x => x.Value != null).ToList();
+
+            if (validaFiltro.Count != 0) {
+                (ListPF, paginacion) = await _transaccionesApiClient.GetTransaccionesMasivaFilterAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), loginResponse.IdUsuario, columna, tipoFiltro, filters);
+            } else {
+                (ListPF, paginacion) = await _transaccionesApiClient.GetTransaccionesMasivaAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), loginResponse.IdUsuario, columna, tipoFiltro);
+            }
 
             var List = new List<CargaBachRequestGrid>();
             foreach (var row in ListPF)

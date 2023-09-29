@@ -47,7 +47,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return transaccionResponse;
         }
 
-        public async Task<(List<CargaBachRequest>, int)> GetTransaccionesMasivaAsync(int pageNumber, int recordsTotal, int idUsuario)
+        public async Task<(List<CargaBachRequest>, int)> GetTransaccionesMasivaAsync(int pageNumber, int recordsTotal, int idUsuario, int columna, bool ascendente)
         {
             List<CargaBachRequest>? ListaTransacciones = new List<CargaBachRequest>();
             int paginacion = 0;
@@ -55,6 +55,11 @@ namespace Epica.Web.Operacion.Services.Transaccion
             try
             {
                 var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetTransaccionesMasiva(pageNumber, recordsTotal, idUsuario);
+                if (columna != 0)
+                {
+                    uri += string.Format("&columna={0}&ascendente={1}", Convert.ToString(columna), ascendente);
+                }
+
                 var response = await ApiClient.GetAsync(uri);
 
                 if (response.IsSuccessStatusCode)
@@ -69,6 +74,101 @@ namespace Epica.Web.Operacion.Services.Transaccion
                     ListaTransacciones = JsonConvert.DeserializeObject<List<CargaBachRequest>>(jsonResponse, settings);
                     paginacion = int.Parse(response.Headers.GetValues("x-totalRecord").FirstOrDefault()!.ToString());
                     return (JsonConvert.DeserializeObject<List<CargaBachRequest>>(jsonResponse), paginacion)!;
+                }
+
+            }
+            catch (Exception)
+            {
+                return (ListaTransacciones, paginacion)!; ;
+            }
+
+            return (ListaTransacciones, paginacion);
+        }
+
+        public async Task<(List<CargaBachRequest>, int)> GetTransaccionesMasivaFilterAsync(int pageNumber, int recordsTotal, int idUsuario, int columna, bool ascendente, List<RequestListFilters> filters)
+        {
+            List<CargaBachRequest>? ListaTransacciones = new List<CargaBachRequest>();
+            FiltroDatosResponseTransaccionesBatch respuestaDatos = new FiltroDatosResponseTransaccionesBatch();
+
+            int paginacion = 0;
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetTransaccionesMasivaFilter(pageNumber, recordsTotal, idUsuario);
+
+                var filtroclabeRastreo = filters.FirstOrDefault(x => x.Key == "claveRastreo");
+                var filtroCuentaOrdenante = filters.FirstOrDefault(x => x.Key == "cuentaOrdenante");
+                var filtrocuentaBeneficiario = filters.FirstOrDefault(x => x.Key == "cuentaBeneficiario");
+                var filtromonto = filters.FirstOrDefault(x => x.Key == "monto");
+                var filtroconcepto = filters.FirstOrDefault(x => x.Key == "concepto");
+                var filtrofechaOperacion = filters.FirstOrDefault(x => x.Key == "fechaOperacion");
+                var filtrotipoOperacion = filters.FirstOrDefault(x => x.Key == "tipoOperacion");
+                var filtroobservaciones = filters.FirstOrDefault(x => x.Key == "observaciones");
+                var filtromedioPago = filters.FirstOrDefault(x => x.Key == "medioPago");
+
+                if (filtroclabeRastreo!.Value != null)
+                {
+                    uri += string.Format("&clabeRastreo={0}", Convert.ToString(filtroclabeRastreo.Value));
+                }
+
+                if (filtroCuentaOrdenante!.Value != null)
+                {
+                    uri += string.Format("&cuentaOrdenante={0}", Convert.ToString(filtroCuentaOrdenante.Value));
+                }
+
+                if (filtrocuentaBeneficiario!.Value != null)
+                {
+                    uri += string.Format("&cuentaBeneficiario={0}", Convert.ToString(filtrocuentaBeneficiario.Value));
+                }
+
+                if (filtromonto!.Value != null)
+                {
+                    uri += string.Format("&monto={0}", Convert.ToString(filtromonto.Value));
+                }
+
+                if (filtroconcepto!.Value != null)
+                {
+                    uri += string.Format("&concepto={0}", Convert.ToString(filtroconcepto.Value));
+                }
+
+                if (filtrofechaOperacion!.Value != null)
+                {
+                    uri += string.Format("&fechaOperacion={0}", Convert.ToString(filtrofechaOperacion.Value));
+                }
+
+                if (filtrotipoOperacion!.Value != null)
+                {
+                    uri += string.Format("&tipoOperacion={0}", Convert.ToString(filtrotipoOperacion.Value));
+                }
+
+                if (filtromedioPago!.Value != null)
+                {
+                    uri += string.Format("&medioPago={0}", Convert.ToString(filtromedioPago.Value));
+                }
+
+                if (filtroobservaciones!.Value != null)
+                {
+                    uri += string.Format("&observaciones={0}", Convert.ToString(filtroobservaciones.Value));
+                }
+
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var settings = new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+
+                    respuestaDatos = JsonConvert.DeserializeObject<FiltroDatosResponseTransaccionesBatch>(jsonResponse, settings);
+
+                    ListaTransacciones = respuestaDatos.listaResultado;
+                    paginacion = Convert.ToInt32(respuestaDatos.cantidadEncontrada);
+
+                    return (ListaTransacciones, paginacion)!;
                 }
 
             }

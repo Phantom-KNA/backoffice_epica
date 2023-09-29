@@ -23,6 +23,7 @@ public class UrlsConfig
         public static string GetTransacciones(int numberPage, int TotalRecords) => $"/api/v1/transacciones/movimientos_cta?pageNumber={numberPage}&pageSize={TotalRecords}";
         public static string GetTransaccionesFilter(int numberPage, int TotalRecords) => $"/api/v1/transacciones/buscar_filtro?pageNumber={numberPage}&pageSize={TotalRecords}";
         public static string GetTransaccionesMasiva(int numberPage, int TotalRecords, int idUsuario) => $"/api/v1/cargabach/cargar_temp?pagina={numberPage}&registrosPagina={TotalRecords}&idusuario={idUsuario}";
+        public static string GetTransaccionesMasivaFilter(int numberPage, int TotalRecords, int idUsuario) => $"/api/v1/cargabach/buscar_filtro?pagina={numberPage}&registrosPagina={TotalRecords}&idusuario={idUsuario}";
         public static string GetTransaccion(int idInterno) => $"/api/resumentransaccion?idInterno={idInterno}";
         public static string GetTransaccionesTotal() => $"/api/v1/transacciones/total";
         public static string GetTransaccionesPorCuenta(int idCuenta) => $"/api/v1/cuentas/cuenta_trasacciones?idCuenta={idCuenta}";
@@ -99,6 +100,7 @@ public class UrlsConfig
         public static string GetBuscarTarjeta(string noTarjeta) => $"/api/v1/tarjetas/buscar_tarjeta?noTarjeta={noTarjeta}";
         public static string GetTarjetasCliente(int idClientes) => $"/api/v1/tarjetas/clientes_tarjetas?idCliente={idClientes}";
         public static string GetTarjetas(int numberPage, int TotalRecords) => $"/api/v1/tarjetas/view_tarjetas?pageNumber={numberPage}&pageSize={TotalRecords}";
+        public static string GetTarjetasFilter(int numberPage, int TotalRecords) => $"/api/v1/tarjetas/buscar_filtro?pageNumber={numberPage}&pageSize={TotalRecords}";
         public static string GetTarjetasRegistra() => $"/api/v1/tarjetas/add_toka";
         public static string GetBloquearDesbloquearTarjeta(string numeroTarjeta, int estatus, string valida) => $"/api/v1/tarjetas/bloquear_desbloquear_tarjeta?numeroTarjeta={numeroTarjeta}&status={estatus}&valida={valida}";
     }

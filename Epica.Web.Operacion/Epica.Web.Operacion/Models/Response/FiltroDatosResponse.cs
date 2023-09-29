@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using Epica.Web.Operacion.Models.Request;
+using System.Text.Json.Serialization;
 using static Epica.Web.Operacion.Controllers.CuentaController;
 
 namespace Epica.Web.Operacion.Models.Response;
@@ -21,5 +22,17 @@ public class FiltroDatosResponseCuenta
 public class FiltroDatosResponseTransacciones
 {
     public List<TransaccionesResponse> listaResultado { get; set; }
+    public int? cantidadEncontrada { get; set; }
+}
+
+public class FiltroDatosResponseTransaccionesBatch
+{
+    public List<CargaBachRequest> listaResultado { get; set; }
+    public int? cantidadEncontrada { get; set; }
+}
+
+public class FiltroDatosResponseTarjetas
+{
+    public List<TarjetasResponse> listaResultado { get; set; }
     public int? cantidadEncontrada { get; set; }
 }
