@@ -1,3 +1,5 @@
+toastr.options.preventDuplicates = true;
+
 var table;
 var datatable;
 var filterAccount;
@@ -449,8 +451,10 @@ $("#GuardarRol").click(function () {
     const inputNombreRol = document.getElementById('create_rol');
     const rol = inputNombreRol.value;
 
-    if ((rol == null) | (rol == "")) {
-        toastr.warning("El valor ingresado no es válido");
+    const regex = /^[a-zA-Z]{2,}$/;
+
+    if (!regex.test(rol)) {
+        toastr.warning("El rol debe contener al menos dos letras y no puede incluir números ni caracteres especiales.");
         return false;
     } 
 
@@ -488,6 +492,14 @@ $("#GuardarRol").click(function () {
     datatable.ajax.reload();
     recargar();
 });
+
+$("#create_rol").keydown(function (event) {
+    if (event.keyCode === 13) { 
+        event.preventDefault(); 
+        $("#GuardarRol").click();
+    }
+});
+
 
 $('#nuevoRolModal').on('hidden.bs.modal', function () {
     // Limpiar campos del modal al cerrarlo
