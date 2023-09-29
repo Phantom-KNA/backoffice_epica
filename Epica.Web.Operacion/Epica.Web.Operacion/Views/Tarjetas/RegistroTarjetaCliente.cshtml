@@ -45,7 +45,7 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Número de tarjeta: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="@Model.TarjetasDetalles.numeroTarjeta" class="form-control form-control-sm form-control-solid" id="NumeroTarjeta" type="text" value="@(Model?.TarjetasDetalles.numeroTarjeta ?? "")" autocomplete="off" required />
+                            <input asp-for="@Model.TarjetasDetalles.numeroTarjeta" class="form-control form-control-sm form-control-solid" id="NumeroTarjeta" type="text" value="@(Model?.TarjetasDetalles.numeroTarjeta ?? "")" autocomplete="off" required oninput="validateNumbersInput(this)" data-error-message="Número de Tarjeta" minlength="14" maxlength="16" />
                             <span asp-validation-for="@Model!.TarjetasDetalles.numeroTarjeta" class="text-danger"></span>
                         </div>
                     </div>
