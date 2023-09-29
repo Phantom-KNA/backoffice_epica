@@ -56,7 +56,7 @@
                         <label class="form-label required">Nombre: &nbsp;</label>
                         <div class="position-relative">
                             <input asp-for="@Model!.ClientesDetalles!.IdCliente" hidden class="form-control form-control-sm form-control-solid" id="idCliente" type="text" value="@(Model?.ClientesDetalles!.IdCliente ?? 0)" autocomplete="off" required />
-                            <input asp-for="@Model!.ClientesDetalles!.Nombre" class="form-control form-control-sm form-control-solid" id="Nombre" type="text" value="@(Model?.ClientesDetalles!.Nombre ?? "")" autocomplete="off" required />
+                            <input asp-for="ClientesDetalles!.Nombre" class="form-control form-control-sm form-control-solid" id="Nombre" type="text" value="@(Model?.ClientesDetalles!.Nombre ?? "")" autocomplete="off" required />
                             <span asp-validation-for="@Model!.ClientesDetalles!.Nombre" class="text-danger"></span>
                         </div>
                     </div>
@@ -173,7 +173,7 @@
                     <div class="py-2 px-4 col-md-3 fv-row">
                         <label class="form-label required">País: &nbsp;</label>
                         <div class="position-relative">
-                            <select asp-for="ClientesDetalles!.IdPais" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required>
+                            <select asp-for="ClientesDetalles!.IdPais" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" data-minimum-results-for-search="Infinity" required>
                                 <option></option>
                                 @foreach (var pais in Model!.ListaPaises!)
                                 {
@@ -185,7 +185,7 @@
                     <div class="py-2 px-4 col-md-3 fv-row">
                         <label class="form-label required">Nacionalidad: &nbsp;</label>
                         <div class="position-relative">
-                            <select asp-for="ClientesDetalles!.IdNacionalidad" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required>
+                            <select asp-for="ClientesDetalles!.IdNacionalidad" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required data-minimum-results-for-search="Infinity">
                                 <option></option>
                                 @foreach (var nacionalidad in Model!.ListaNacionalidades!)
                                 {
@@ -275,7 +275,7 @@
                     <div class="py-2 px-4 col-md-3 fv-row">
                         <label class="form-label required">Ocupación: &nbsp;</label>
                         <div class="position-relative">
-                            <select asp-for="ClientesDetalles!.IdOcupacion" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required>
+                            <select asp-for="ClientesDetalles!.IdOcupacion" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required data-minimum-results-for-search="Infinity">
                                 <option></option>
                                 @foreach (var ocupacion in Model!.ListaOcupaciones!)
                                 {
@@ -312,7 +312,7 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Empresa: &nbsp;</label>
                         <div class="position-relative">
-                            <select asp-for="ClientesDetalles!.Empresa" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required>
+                            <select asp-for="ClientesDetalles!.Empresa" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required data-minimum-results-for-search="Infinity">
                                 <option></option>
                                 @foreach (var empresa in Model!.ListaEmpresas!)
                                 {
@@ -324,7 +324,7 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Rol: &nbsp;</label>
                         <div class="position-relative">
-                            <select asp-for="ClientesDetalles!.Rol" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required>
+                            <select asp-for="ClientesDetalles!.Rol" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required data-minimum-results-for-search="Infinity">
                                 <option></option>
                                 @foreach (var rol in Model!.ListaRoles!)
                                 {
@@ -336,7 +336,7 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Apoderado legal: &nbsp;</label>
                         <div class="position-relative">
-                            <select asp-for="ClientesDetalles!.ApoderadoLegal" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" data-minimum-results-for-search="Infinity" required>
+                            <select asp-for="ClientesDetalles!.ApoderadoLegal" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" data-minimum-results-for-search="Infinity" required data-minimum-results-for-search="Infinity">
                                 <option></option>
                                 @foreach (var apoderadoLegal in Model!.ApoderadoLegalOpciones!)
                                 {
