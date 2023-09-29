@@ -176,6 +176,17 @@ public class TarjetasController : Controller
         var gridData = new ResponseGrid<TarjetasResponseGrid>();
         List<TarjetasResponse> ListPF = new List<TarjetasResponse>();
 
+        if (!string.IsNullOrEmpty(request.Busqueda))
+        {
+            filters.RemoveAll(x => x.Key == "tarjeta");
+
+            filters.Add(new RequestListFilters
+            {
+                Key = "tarjeta",
+                Value = request.Busqueda
+            });
+        }
+
         //Validar si hay algun filtro con valor ingresado
         var validaFiltro = filters.Where(x => x.Value != null).ToList();
 

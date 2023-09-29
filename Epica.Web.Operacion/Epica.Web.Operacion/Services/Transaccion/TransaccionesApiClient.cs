@@ -5,6 +5,7 @@ using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.UserResolver;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using System.Collections.Immutable;
 using System.Text;
 
 namespace Epica.Web.Operacion.Services.Transaccion
@@ -283,6 +284,47 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     uri += string.Format("&estatus={0}", Convert.ToString(filtroEstatus.Value));
                 }
+
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var settings = new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+
+                    responseConsulta = JsonConvert.DeserializeObject<FiltroDatosResponseTransacciones>(jsonResponse, settings);
+
+                    ListaTransacciones = responseConsulta.listaResultado;
+                    paginacion = Convert.ToInt32(responseConsulta.cantidadEncontrada);
+
+                    return (ListaTransacciones, paginacion)!;
+                }
+
+            }
+            catch (Exception)
+            {
+                return (ListaTransacciones, paginacion)!;
+            }
+
+            return (ListaTransacciones, paginacion);
+        }
+
+        public async Task<(List<TransaccionesResponse>, int)> GetTransaccionesFilterEspAsync(int pageNumber, int recordsTotal, int columna, bool ascendente, string valor)
+        {
+            List<TransaccionesResponse>? ListaTransacciones = new List<TransaccionesResponse>();
+            FiltroDatosResponseTransacciones responseConsulta = new FiltroDatosResponseTransacciones();
+            int paginacion = 0;
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetTransaccionesFilter(pageNumber, recordsTotal);
+
+                uri += string.Format("&claveRastreo={0}", valor.Trim());
 
                 var response = await ApiClient.GetAsync(uri);
 

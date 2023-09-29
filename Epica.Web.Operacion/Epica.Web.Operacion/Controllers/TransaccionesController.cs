@@ -13,6 +13,10 @@ using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using ExcelDataReader;
 using System.Data;
+using System;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Epica.Web.Operacion.Controllers
 {
@@ -187,13 +191,26 @@ namespace Epica.Web.Operacion.Controllers
             var gridData = new ResponseGrid<ResumenTransaccionResponseGrid>();
             List<TransaccionesResponse> ListPF = new List<TransaccionesResponse>();
 
+            if (!string.IsNullOrEmpty(request.Busqueda)) {
+
+                filters.RemoveAll(x => x.Key == "claveRastreo");
+
+                filters.Add(new RequestListFilters
+                {
+                    Key = "claveRastreo",
+                    Value = request.Busqueda
+                });
+            }
+
             //Validar si hay algun filtro con valor ingresado
             var validaFiltro = filters.Where(x => x.Value != null).ToList();
 
-            if (validaFiltro.Count != 0) {
+            if (validaFiltro.Count != 0) { 
                 (ListPF, paginacion) = await _transaccionesApiClient.GetTransaccionesFilterAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), columna, tipoFiltro, filters);
+
             } else {
                 (ListPF, paginacion) = await _transaccionesApiClient.GetTransaccionesAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros),columna,tipoFiltro);
+            
             }
 
             var List = new List<ResumenTransaccionResponseGrid>();
@@ -231,22 +248,22 @@ namespace Epica.Web.Operacion.Controllers
                     Acciones = await this.RenderViewToStringAsync("~/Views/Transacciones/_Acciones.cshtml", row)
                 });
             }
-            if (!string.IsNullOrEmpty(request.Busqueda))
-            {
-                List = List.Where(x =>
-                (x.id.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-                (x.claveRastreo?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-                (x.nombreOrdenante?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-                (x.nombreBeneficiario?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-                (x.monto.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-                (x.estatus.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-                (x.concepto?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-                (x.idMedioPago.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-                (x.idCuentaAhorro.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-                (x.fechaAutorizacion.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-                (x.fechaInstruccion.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower())
-                ).ToList();
-            }
+            //if (!string.IsNullOrEmpty(request.Busqueda))
+            //{
+            //    List = List.Where(x =>
+            //    (x.id.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            //    (x.claveRastreo?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            //    (x.nombreOrdenante?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            //    (x.nombreBeneficiario?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            //    (x.monto.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            //    (x.estatus.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            //    (x.concepto?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            //    (x.idMedioPago.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            //    (x.idCuentaAhorro.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            //    (x.fechaAutorizacion.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            //    (x.fechaInstruccion.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower())
+            //    ).ToList();
+            //}
 
             gridData.Data = List;
             gridData.RecordsTotal = paginacion;
@@ -520,6 +537,36 @@ namespace Epica.Web.Operacion.Controllers
                             RegistrarTransaccion.Comision = 1;
                         }
 
+                        bool validarCuentaBeneficiario = ValidaCadena(rowData.ItemArray[1].ToString(), 18);
+                        if (validarCuentaBeneficiario == true) {
+                            RegistrarTransaccion.observaciones = "La cuenta Clabe no es válida.";
+                            continue;
+                        }
+
+                        bool validarCuentaOrdenante = ValidaCadena(rowData.ItemArray[7].ToString(), 16);
+                        if (validarCuentaOrdenante == true) {
+                            RegistrarTransaccion.observaciones = "La Cuenta Ordenante no es válida.";
+                            continue;
+                        }
+
+                        bool validarMonto = ValidarMontos(rowData.ItemArray[2].ToString());
+                        if (validarMonto == true) {
+                            RegistrarTransaccion.observaciones = "El monto no es válida.";
+                            continue;
+                        }
+
+                        bool validarconceptoPago = ValidarCaracteresEspeciales(rowData.ItemArray[3].ToString(), 30);
+                        if (validarconceptoPago == true) {
+                            RegistrarTransaccion.observaciones = "El concepto de pago no es válido.";
+                            continue;
+                        }
+
+                        bool validarclaverastreo = ValidarCaracteresEspeciales(rowData.ItemArray[5].ToString(), 25);
+                        if (validarclaverastreo == true) {
+                            RegistrarTransaccion.observaciones = "La clave de rastreo no es válido.";
+                            continue;
+                        }
+
                         RegistrarTransaccion.FechaOperacion = Convert.ToDateTime(rowData.ItemArray[4]);
                         RegistrarTransaccion.CuentaBeneficiario = rowData.ItemArray[1].ToString();
                         RegistrarTransaccion.Monto = Convert.ToDouble(rowData.ItemArray[2]);
@@ -536,7 +583,12 @@ namespace Epica.Web.Operacion.Controllers
                     }
                 }
 
-                response = await _transaccionesApiClient.GetInsertaTransaccionesBatchAsync(ListaBach);
+                if (ListaBach.Count == 0) {
+                    response.Error = true;
+                    response.message = "No se pudo cargar las transacciones, debido a que los datos proporcionados no son válidos.";
+                } else {
+                    response = await _transaccionesApiClient.GetInsertaTransaccionesBatchAsync(ListaBach);
+                }
 
             } catch (Exception ex) {
                 response.Error = true;
@@ -847,6 +899,17 @@ namespace Epica.Web.Operacion.Controllers
             var gridData = new ResponseGrid<CargaBachRequestGrid>();
             List<CargaBachRequest> ListPF = new List<CargaBachRequest>();
 
+            if (!string.IsNullOrEmpty(request.Busqueda)) {
+
+                filters.RemoveAll(x => x.Key == "claveRastreo");
+
+                filters.Add(new RequestListFilters
+                {
+                    Key = "claveRastreo",
+                    Value = request.Busqueda
+                });
+            }
+
             //Validar si hay algun filtro con valor ingresado
             var validaFiltro = filters.Where(x => x.Value != null).ToList();
 
@@ -1059,7 +1122,7 @@ namespace Epica.Web.Operacion.Controllers
                 //        TipoOperacion = row.TipoOperacion,
                 //        MedioPago = row.MedioPago,
                 //        Comision = row.Comision,
-                //        CuentaOrdenante = row.Ordenante,                     
+                //        CuentaOrdenante = row.Ordenante,
                 //        IdUsuario = loginResponse.IdUsuario
                 //    });
                 //}
@@ -1127,6 +1190,90 @@ namespace Epica.Web.Operacion.Controllers
         #endregion
 
         #region "Funciones Auxiliares"
+
+        private bool ValidarCaracteresEspeciales(string cadena, int tamaño = 0) {
+
+            bool error = false;
+
+            try
+            {
+                //Validar que la cadena no tenga caracteres especiales
+                bool isValid = Regex.IsMatch(cadena, "^[a-zA-Z]*$");
+                if (isValid == true)
+                {
+                    error = true;
+                }
+
+                if (cadena.Length > tamaño) {
+                    error = true;
+                }
+
+            } catch (Exception ex) {
+                error = true;
+            }
+
+            return error;
+        }
+
+        private bool ValidaCadena(string cadena, int tamaño = 0) {
+
+            bool error = false;
+
+            try
+            {
+                //Validar que la cadena tenga solo numeros
+                bool isNumeric = Regex.IsMatch(cadena, @"^\d+$");
+                if (isNumeric != true) {
+                    error = true;
+                }
+
+                //Validar que la cadena tenga el tamaño maximo
+                if (cadena.Length > tamaño) {
+                    error = true;
+                } else if (cadena.Length < tamaño) {
+                    error = true;
+                }
+
+
+            } catch (Exception ex)  {
+                return true;
+            }
+
+            return error;
+        }
+
+        private bool ValidarMontos(string cadena)
+        {
+
+            bool error = false;
+
+            try
+            {
+                //Validar que la cadena tenga solo numeros
+                bool isNumeric = Regex.IsMatch(cadena, @"^\d+$");
+                if (isNumeric != true)
+                {
+                    error = true;
+                }
+
+                //Validar que la cadena tenga un monto valido
+                var montoGeneral = Convert.ToDouble(cadena.Replace(",",""));
+
+                if (montoGeneral == 0) {
+                    error = true;
+                } else if (montoGeneral <= -1) {
+                    error = true;
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                return true;
+            }
+
+            return error;
+        }
 
         private string generarnombreBanco(int i)
         {

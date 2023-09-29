@@ -118,10 +118,21 @@ public class ClientesController : Controller
         var gridData = new ResponseGrid<ClienteResponseGrid>();
         List<ClienteResponse> ListPF = new List<ClienteResponse>();
 
+        if (!string.IsNullOrEmpty(request.Busqueda))
+        {
+            filters.RemoveAll(x => x.Key == "nombreCliente");
+
+            filters.Add(new RequestListFilters
+            {
+                Key = "nombreCliente",
+                Value = request.Busqueda
+            });
+        }
+
         //Validar si hay algun filtro con valor ingresado
         var validaFiltro = filters.Where(x => x.Value != null).ToList();
 
-        if(validaFiltro.Count != 0) {
+        if (validaFiltro.Count != 0) {
             (ListPF, paginacion) = await _clientesApiClient.GetClientesFilterAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), columna, tipoFiltro, filters);
         } else {
             (ListPF, paginacion) = await _clientesApiClient.GetClientesAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros),columna, tipoFiltro);

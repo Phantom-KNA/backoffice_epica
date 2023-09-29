@@ -10,6 +10,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
         Task<(List<CargaBachRequest>, int)> GetTransaccionesMasivaFilterAsync(int pageNumber, int recordsTotal, int idUsuario, int columna, bool ascendente, List<RequestListFilters> filters);
         Task<(List<TransaccionesResponse>, int)> GetTransaccionesAsync(int pageNumber, int recordsTotal, int columna, bool ascendente);
         Task<(List<TransaccionesResponse>, int)> GetTransaccionesFilterAsync(int pageNumber, int recordsTotal, int columna, bool ascendente, List<RequestListFilters> filters);
+        Task<(List<TransaccionesResponse>, int)> GetTransaccionesFilterEspAsync(int pageNumber, int recordsTotal, int columna, bool ascendente, string valor);
         Task<TransaccionesResponse> GetTransaccionAsync(int idInterno);
         Task<int> GetTotalTransaccionesAsync();
         Task<TransaccionesDetailsgeneralResponse> GetTransaccionesCuentaAsync(int idCuenta);

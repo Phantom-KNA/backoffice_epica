@@ -114,6 +114,17 @@ public class CuentaController : Controller
         var gridData = new ResponseGrid<CuentasResponseGrid>();
         List<CuentasResponse> ListPF = new List<CuentasResponse>();
 
+        if (!string.IsNullOrEmpty(request.Busqueda))
+        {
+            filters.RemoveAll(x => x.Key == "cuentaClabe");
+
+            filters.Add(new RequestListFilters
+            {
+                Key = "cuentaClabe",
+                Value = request.Busqueda
+            });
+        }
+
         //Validar si hay algun filtro con valor ingresado
         var validaFiltro = filters.Where(x => x.Value != null).ToList();
 

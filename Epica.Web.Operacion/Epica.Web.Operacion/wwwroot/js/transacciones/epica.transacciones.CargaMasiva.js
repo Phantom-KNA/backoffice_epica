@@ -239,7 +239,9 @@ $(document).on('click', '#GuardarDocumento', function (e) {
                             data.message,
                             'error'
                         )
-                    } else {                       
+                    } else {         
+                        $("#area_CancelarTransacciones").show();
+                        $("#area_CargarTransacciones").hide();
                         datatable_transaccion.ajax.reload();
                         Swal.fire(
                             'Carga Masiva Transacciones',
