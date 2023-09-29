@@ -39,30 +39,45 @@
                                 <i class="bi btn-sm bi-filter"></i>&nbsp;
                                 Filtrado
                             </button>
-                            <div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px" data-kt-menu="true" id="kt-toolbar-filter">
+                            <div class="menu menu-sub menu-sub-dropdown w-300px w-md-500px" data-kt-menu="true" id="kt-toolbar-filter">
                                 <div class="px-7 py-5">
                                     <div class="fs-4 text-dark fw-bold">Filtros</div>
                                 </div>
                                 <div class="separator border-gray-200"></div>
 
                                 <div class="px-7 py-5">
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Nombre del Titular:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreTitular" placeholder="Nombre del Titular" id="filtro_nombreTitular" />
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Nombre del Titular:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreTitular" placeholder="Nombre del Titular" id="filtro_nombreTitular" />
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Tarjeta:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="tarjeta" placeholder="Tarjeta" id="filtro_tarjeta" />
+                                        </div>
                                     </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Tarjeta:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="tarjeta" placeholder="Tarjeta" id="filtro_tarjeta" />
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Cuenta Clabe:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="cuentaClabe" placeholder="Cuenta Clabe" id="filtro_cuentaClabe" />
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Número de Proxy:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="numeroProxy" placeholder="Número de Proxy" id="filtro_numeroProxy" />
+                                        </div>
                                     </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Cuenta Clabe:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="cuentaClabe" placeholder="Cuenta Clabe" id="filtro_cuentaClabe" />
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Estatus:</label>
+                                            <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatusTarjeta" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_estatus" data-minimum-results-for-search="Infinity">
+                                                <option></option>
+                                                <option value="2">Activo</option>
+                                                <option value="1">Desactivado</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Número de Proxy:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="numeroProxy" placeholder="Número de Proxy" id="filtro_numeroProxy" />
-                                    </div>
-
                                     <div class="d-flex justify-content-end">
                                         <button type="reset" class="btn btn-sm btn-light btn-active-light-primary me-2 btn_limpiar_filtros" data-kt-menu-dismiss="true" data-kt-customer-table-filter="reset">Limpiar</button>
                                         <button type="submit" class="btn btn-sm btn-primary btn-filtrar" data-kt-menu-dismiss="true" data-kt-customer-table-filter="filter">Aplicar</button>

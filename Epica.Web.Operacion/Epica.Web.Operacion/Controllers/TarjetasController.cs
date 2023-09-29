@@ -176,31 +176,14 @@ public class TarjetasController : Controller
         var gridData = new ResponseGrid<TarjetasResponseGrid>();
         List<TarjetasResponse> ListPF = new List<TarjetasResponse>();
 
-        var filtrotarjeta = filters.FirstOrDefault(x => x.Key == "tarjeta");
+        //Validar si hay algun filtro con valor ingresado
+        var validaFiltro = filters.Where(x => x.Value != null).ToList();
 
-        if (filtrotarjeta!.Value != null)
-        {
-            string tarjeta = filtrotarjeta.Value;
-            var listPF2 = await _tarjetasApiClient.GetBuscarTarjetasasync(tarjeta);
-
-                TarjetasResponse tarjetasResponse = new TarjetasResponse()
-                {
-                    clabe = listPF2.clabe!,
-                    Estatus = listPF2.Estatus ?? 0,
-                    idCliente = listPF2.idCliente ?? 0,
-                    idCuentaAhorro = listPF2.idCuentaAhorro ?? 0,
-                    nombreCompleto = listPF2.nombreCompleto!,
-                    proxyNumber = listPF2.proxyNumber!,
-                    tarjeta = listPF2.tarjeta!               
-                };
-            ListPF.Add(tarjetasResponse);
-
+        if (validaFiltro.Count != 0) {
+            (ListPF, paginacion) = await _tarjetasApiClient.GetTarjetasFilterAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), columna, tipoFiltro, filters);
         } else {
-
             (ListPF, paginacion) = await _tarjetasApiClient.GetTarjetasAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros),columna, tipoFiltro);
-
         }
-
 
         //Entorno local de pruebas
         //ListPF = GetList();
@@ -237,31 +220,6 @@ public class TarjetasController : Controller
             (x.tarjeta?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) 
             //(x.Estatus.ToString()?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
             ).ToList();
-        }
-
-        //Aplicacion de Filtros temporal, 
-        var filtronombreTitular = filters.FirstOrDefault(x => x.Key == "nombreTitular");
-        var filtrocuentaClabe = filters.FirstOrDefault(x => x.Key == "cuentaClabe");
-        var filtronumeroProxy = filters.FirstOrDefault(x => x.Key == "numeroProxy");
-
-        if (filtronombreTitular!.Value != null)
-        {
-            List = List.Where(x => x.nombreCompleto == Convert.ToString(filtronombreTitular.Value)).ToList();
-        }
-
-        if (filtrotarjeta.Value != null)
-        {
-            List = List.Where(x => x.tarjeta.Contains(Convert.ToString(filtrotarjeta.Value))).ToList();
-        }
-
-        if (filtrocuentaClabe!.Value != null)
-        {
-            List = List.Where(x => x.clabe == Convert.ToString(filtrocuentaClabe.Value)).ToList();
-        }
-
-        if (filtronumeroProxy!.Value != null)
-        {
-            List = List.Where(x => x.proxyNumber == Convert.ToString(filtronumeroProxy.Value)).ToList();
         }
 
         gridData.Data = List;

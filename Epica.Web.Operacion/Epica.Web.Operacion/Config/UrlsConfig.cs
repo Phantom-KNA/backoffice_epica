@@ -100,6 +100,7 @@ public class UrlsConfig
         public static string GetBuscarTarjeta(string noTarjeta) => $"/api/v1/tarjetas/buscar_tarjeta?noTarjeta={noTarjeta}";
         public static string GetTarjetasCliente(int idClientes) => $"/api/v1/tarjetas/clientes_tarjetas?idCliente={idClientes}";
         public static string GetTarjetas(int numberPage, int TotalRecords) => $"/api/v1/tarjetas/view_tarjetas?pageNumber={numberPage}&pageSize={TotalRecords}";
+        public static string GetTarjetasFilter(int numberPage, int TotalRecords) => $"/api/v1/tarjetas/buscar_filtro?pageNumber={numberPage}&pageSize={TotalRecords}";
         public static string GetTarjetasRegistra() => $"/api/v1/tarjetas/add_toka";
         public static string GetBloquearDesbloquearTarjeta(string numeroTarjeta, int estatus, string valida) => $"/api/v1/tarjetas/bloquear_desbloquear_tarjeta?numeroTarjeta={numeroTarjeta}&status={estatus}&valida={valida}";
     }

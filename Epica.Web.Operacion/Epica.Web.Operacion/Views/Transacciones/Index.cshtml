@@ -70,11 +70,11 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Fecha de Instrucción:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="fecha_instruccion" placeholder="Fecha de Instrucción" id="filtro_instruccion" />
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="fecha_instruccion" type="date" placeholder="Fecha de Instrucción" id="filtro_instruccion" />
                                         </div>
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Fecha de Autorización:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="fecha_autorizacion" placeholder="Fecha de Autorización" id="fecha_autorizacion" />
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="fecha_autorizacion" type="date" placeholder="Fecha de Autorización" id="fecha_autorizacion" />
                                         </div>
                                     </div>
                                     <br />
@@ -87,10 +87,10 @@
                                             <label class="form-label fs-5 fw-semibold mb-3">Estatus:</label>
                                             <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatus" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_tipo" data-minimum-results-for-search="Infinity">
                                                 <option></option>
-                                                <option value="0">En Proceso</option>
-                                                <option value="1">En Transito</option>
-                                                <option value="4">Liquidado</option>
-                                                <option value="5">Devuelto</option>
+                                                <option value="enproceso">En Proceso</option>
+                                                <option value="entransito">En Transito</option>
+                                                <option value="liquidado">Liquidado</option>
+                                                <option value="devuelto">Devuelto</option>
 
                                             </select>
                                         </div>

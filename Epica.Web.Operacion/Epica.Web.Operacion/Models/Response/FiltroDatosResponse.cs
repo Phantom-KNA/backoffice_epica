@@ -30,3 +30,9 @@ public class FiltroDatosResponseTransaccionesBatch
     public List<CargaBachRequest> listaResultado { get; set; }
     public int? cantidadEncontrada { get; set; }
 }
+
+public class FiltroDatosResponseTarjetas
+{
+    public List<TarjetasResponse> listaResultado { get; set; }
+    public int? cantidadEncontrada { get; set; }
+}
