@@ -10,7 +10,7 @@
                             <label class="col-md-3 form-label"><p><strong>Cuenta Beneficiario:</strong></p> &nbsp;</label>
                             <div class="col-md-9">
                                 <div class="fv-row">
-                                    <input asp-for="@Model.CuentaBeneficiario" class="form-control form-control-sm form-control-solid" id="CuentaBeneficiario" type="text" value="@(Model?.CuentaBeneficiario ?? "")" autocomplete="off" required />
+                                <input asp-for="@Model.CuentaBeneficiario" class="form-control form-control-sm form-control-solid" id="CuentaBeneficiario" onkeypress="return SoloNumeros(event)" maxlength="18" type="text" value="@(Model?.CuentaBeneficiario ?? "")" autocomplete="off" required />
                                 </div>
                             </div>
                         </div>
@@ -22,7 +22,7 @@
                             <label class="col-md-3 form-label"><p><strong>Cuenta Ordenante:</strong></p> &nbsp;</label>
                             <div class="col-md-9">
                                 <div class="fv-row">
-                                    <input asp-for="@Model!.Ordenante" class="form-control form-control-sm form-control-solid" id="Ordenante" type="text" value="@(Model?.Ordenante ?? "")" autocomplete="off" required />
+                                    <input asp-for="@Model!.Ordenante" class="form-control form-control-sm form-control-solid" id="Ordenante" onkeypress="return SoloNumeros(event)" maxlength="16" type="text" value="@(Model?.Ordenante ?? "")" autocomplete="off" required />
                                 </div>
                             </div>
                         </div>
@@ -34,7 +34,7 @@
                             <label class="col-md-3 form-label"><p><strong>Clave Rastreo:</strong></p> &nbsp;</label>
                             <div class="col-md-9">
                                 <div class="fv-row">
-                                    <input asp-for="@Model!.ClaveRastreo" class="form-control form-control-sm form-control-solid" id="ClaveRastreo" type="text" value="@(Model?.ClaveRastreo ?? "")" autocomplete="off" required />
+                                    <input asp-for="@Model!.ClaveRastreo" class="form-control form-control-sm form-control-solid" id="ClaveRastreo" onkeypress="return SinCaracteresEspeciales(event)" maxlength="25" type="text" value="@(Model?.ClaveRastreo ?? "")" autocomplete="off" required />
                                 </div>
                             </div>
                         </div>
@@ -46,7 +46,7 @@
                             <label class="col-md-3 form-label"><p><strong>Concepto:</strong></p> &nbsp;</label>
                             <div class="col-md-9">
                                 <div class="fv-row">
-                                    <input asp-for="@Model!.ConceptoPago" class="form-control form-control-sm form-control-solid" id="ConceptoPago" type="text" value="@(Model?.ConceptoPago ?? "")" autocomplete="off" required />
+                                    <input asp-for="@Model!.ConceptoPago" class="form-control form-control-sm form-control-solid" id="ConceptoPago" onkeypress="return SinCaracteresEspeciales(event)" maxlength="30" type="text" value="@(Model?.ConceptoPago ?? "")" autocomplete="off" required />
                                 </div>
                             </div>
                         </div>
@@ -58,7 +58,7 @@
                             <label class="col-md-3 form-label"><p><strong>Monto:</strong></p> &nbsp;</label>
                             <div class="col-md-9">
                                 <div class="fv-row">
-                                    <input asp-for="@Model!.Monto" class="form-control form-control-sm form-control-solid" id="Monto" type="number" value="@(Model!.Monto)" autocomplete="off" required />
+                                    <input asp-for="@Model!.Monto" class="form-control form-control-sm form-control-solid" id="Monto" type="number" min="0" value="@(Model!.Monto)" autocomplete="off" required />
                                 </div>
                             </div>
                         </div>

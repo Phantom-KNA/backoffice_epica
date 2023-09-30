@@ -295,6 +295,10 @@ function EliminarTransaccionBatch(idRegistro) {
                             'error'
                         )
                     } else {
+                        if (data.detalle == "0") {
+                            $("#area_CancelarTransacciones").hide();
+                            $("#area_CargarTransacciones").show();
+                        }
                         datatable_transaccion.ajax.reload();
                         Swal.fire(
                             'Eliminar Transacción',
@@ -466,8 +470,12 @@ function CancelarTransacciones(idUsuario) {
                         )
                     } else {    
                         datatable_transaccion.ajax.reload();
-                        $("#area_CancelarTransacciones").hide();
-                        $("#area_CargarTransacciones").show();
+
+                        if (data.detalle == "0") {
+                            $("#area_CancelarTransacciones").hide();
+                            $("#area_CargarTransacciones").show();
+                        }
+
                         Swal.fire(
                             'Carga Masiva Transacciones',
                             'Se han cargado las transacciones de forma exitosa.',

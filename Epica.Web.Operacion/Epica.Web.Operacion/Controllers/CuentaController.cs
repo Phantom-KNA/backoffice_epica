@@ -154,17 +154,17 @@ public class CuentaController : Controller
                 Acciones = await this.RenderViewToStringAsync("~/Views/Cuenta/_Acciones.cshtml", row)
             });
         }
-        if (!string.IsNullOrEmpty(request.Busqueda))
-        {
-            List = List.Where(x =>
-            (x.idCuenta.ToString().ToUpper() ?? "").Contains(request.Busqueda.ToUpper()) ||
-            (x.nombrePersona?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-            (x.noCuenta?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-            (x.saldo.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-            (x.estatus.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-            (x.tipoPersona?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
-            ).ToList();
-        }
+        //if (!string.IsNullOrEmpty(request.Busqueda))
+        //{
+        //    List = List.Where(x =>
+        //    (x.idCuenta.ToString().ToUpper() ?? "").Contains(request.Busqueda.ToUpper()) ||
+        //    (x.nombrePersona?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+        //    (x.noCuenta?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+        //    (x.saldo.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+        //    (x.estatus.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+        //    (x.tipoPersona?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
+        //    ).ToList();
+        //}
 
         gridData.Data = List;
         gridData.RecordsTotal = paginacion;

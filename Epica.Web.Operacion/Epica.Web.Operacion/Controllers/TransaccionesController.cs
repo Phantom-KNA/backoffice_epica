@@ -484,6 +484,7 @@ namespace Epica.Web.Operacion.Controllers
                 DataSet resultExcel = new DataSet();
                 DataTable tablaDatos = new DataTable();
                 var filePath = pathTemp + "" + FilenameSave;
+                List<string> listaClavesRastreo = new List<string>();
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
@@ -526,57 +527,91 @@ namespace Epica.Web.Operacion.Controllers
                     {
                         CargaBachRequest RegistrarTransaccion = new CargaBachRequest();
 
+                        RegistrarTransaccion.estatus = 2;
+
                         if (rowData.ItemArray[0].ToString().ToLower() == "in") {
                             RegistrarTransaccion.TipoOperacion = 1;
                             RegistrarTransaccion.Comision = 0;
                         } else if (rowData.ItemArray[0].ToString().ToLower() == "out") {
                             RegistrarTransaccion.TipoOperacion = 2;
                             RegistrarTransaccion.Comision = 0;
-                        } else {
+                        } else if (rowData.ItemArray[0].ToString().ToLower() == "comision"){
                             RegistrarTransaccion.TipoOperacion = 3;
                             RegistrarTransaccion.Comision = 1;
+                        } else {
+                            RegistrarTransaccion.observaciones = "El Tipo de Operación no es válido.";
+                            RegistrarTransaccion.estatus = 1;
                         }
 
                         bool validarCuentaBeneficiario = ValidaCadena(rowData.ItemArray[1].ToString(), 18);
                         if (validarCuentaBeneficiario == true) {
                             RegistrarTransaccion.observaciones = "La cuenta Clabe no es válida.";
-                            continue;
+                            RegistrarTransaccion.estatus = 1;
+                        } else {
+                            RegistrarTransaccion.CuentaBeneficiario = rowData.ItemArray[1].ToString();
                         }
 
                         bool validarCuentaOrdenante = ValidaCadena(rowData.ItemArray[7].ToString(), 16);
                         if (validarCuentaOrdenante == true) {
                             RegistrarTransaccion.observaciones = "La Cuenta Ordenante no es válida.";
-                            continue;
+                            RegistrarTransaccion.estatus = 1;
+                        } else {
+                            RegistrarTransaccion.Ordenante = rowData.ItemArray[7].ToString();
                         }
 
                         bool validarMonto = ValidarMontos(rowData.ItemArray[2].ToString());
                         if (validarMonto == true) {
                             RegistrarTransaccion.observaciones = "El monto no es válida.";
-                            continue;
+                            RegistrarTransaccion.estatus = 1;
+                        } else {
+                            RegistrarTransaccion.Monto = Convert.ToDouble(rowData.ItemArray[2]);
                         }
 
                         bool validarconceptoPago = ValidarCaracteresEspeciales(rowData.ItemArray[3].ToString(), 30);
                         if (validarconceptoPago == true) {
                             RegistrarTransaccion.observaciones = "El concepto de pago no es válido.";
-                            continue;
+                            RegistrarTransaccion.estatus = 1;
+                        } else {
+                            RegistrarTransaccion.ConceptoPago = rowData.ItemArray[3].ToString();
                         }
 
                         bool validarclaverastreo = ValidarCaracteresEspeciales(rowData.ItemArray[5].ToString(), 25);
                         if (validarclaverastreo == true) {
                             RegistrarTransaccion.observaciones = "La clave de rastreo no es válido.";
-                            continue;
+                            RegistrarTransaccion.estatus = 1;
+                        } else {
+                            RegistrarTransaccion.ClaveRastreo = rowData.ItemArray[5].ToString();
                         }
 
-                        RegistrarTransaccion.FechaOperacion = Convert.ToDateTime(rowData.ItemArray[4]);
-                        RegistrarTransaccion.CuentaBeneficiario = rowData.ItemArray[1].ToString();
-                        RegistrarTransaccion.Monto = Convert.ToDouble(rowData.ItemArray[2]);
-                        RegistrarTransaccion.ConceptoPago = rowData.ItemArray[3].ToString();
-                        RegistrarTransaccion.MedioPago = Convert.ToInt32(rowData.ItemArray[6]);
-                        RegistrarTransaccion.Ordenante = rowData.ItemArray[7].ToString();
-                        RegistrarTransaccion.ClaveRastreo = rowData.ItemArray[5].ToString();
-                        RegistrarTransaccion.IdUsuario = Convert.ToInt32(loginResponse.IdUsuario.ToString());
+                        bool validaFecha = ValidarFecha(rowData.ItemArray[4].ToString());
+                        if (validaFecha == true) {
+                            RegistrarTransaccion.observaciones = "La fecha no es válida.";
+                            RegistrarTransaccion.estatus = 1;
+                        } else {
+                            RegistrarTransaccion.FechaOperacion = Convert.ToDateTime(rowData.ItemArray[4]);
+                        }
 
+                        int result;
+                        bool validaMedioPago = int.TryParse(rowData.ItemArray[6].ToString(), out result);
+                        if (validaMedioPago == false) {
+                            RegistrarTransaccion.observaciones = "El medio de pago no es válida.";
+                            RegistrarTransaccion.estatus = 1;
+                        } else {
+                            RegistrarTransaccion.MedioPago = Convert.ToInt32(rowData.ItemArray[6]);
+                        }
+
+                        var match = listaClavesRastreo.FirstOrDefault(x => x.Contains(rowData.ItemArray[5].ToString()));
+
+                        if (match != null) {
+                            RegistrarTransaccion.observaciones = "La clave de Rastreo ya existe en el documento cargado.";
+                            RegistrarTransaccion.estatus = 1;
+                        }
+
+                        //para este punto, las transacciones seran validas 
+                        RegistrarTransaccion.IdUsuario = Convert.ToInt32(loginResponse.IdUsuario.ToString());
+                       
                         ListaBach.Add(RegistrarTransaccion);
+                        listaClavesRastreo.Add(RegistrarTransaccion.ClaveRastreo);
 
                     } catch (Exception ex) {
                         continue;
@@ -1022,12 +1057,15 @@ namespace Epica.Web.Operacion.Controllers
         [HttpPost]
         public async Task<JsonResult> EliminarTransaccionBatch(int idRegistrio)
         {
-            //var loginResponse = _userContextService.GetLoginResponse();
+            var loginResponse = _userContextService.GetLoginResponse();
             MensajeResponse response = new MensajeResponse();
 
             try
             {
                 response = await _transaccionesApiClient.GetEliminarTransaccionBatchAsync(idRegistrio);
+                var validaButton = await _transaccionesApiClient.GetTotalTransaccionesBatchAsync(Convert.ToInt32(loginResponse.IdUsuario.ToString()));
+
+                response.Detalle = validaButton.ToString();
             }
             catch (Exception ex)
             {
@@ -1077,6 +1115,50 @@ namespace Epica.Web.Operacion.Controllers
             MensajeResponse respuesta = new MensajeResponse();
             try
             {
+                model.estatus = 2;
+
+                bool validarCuentaBeneficiario = ValidaCadena(model.CuentaBeneficiario, 18);
+                if (validarCuentaBeneficiario == true)
+                {
+                    model.observaciones = "La cuenta Clabe no es válida.";
+                    model.estatus = 1;
+                }
+
+                bool validarCuentaOrdenante = ValidaCadena(model.Ordenante, 16);
+                if (validarCuentaOrdenante == true)
+                {
+                    model.observaciones = "La Cuenta Ordenante no es válida.";
+                    model.estatus = 1;
+                }
+
+                bool validarMonto = ValidarMontos(model.Monto.ToString());
+                if (validarMonto == true)
+                {
+                    model.observaciones = "El monto no es válida.";
+                    model.estatus = 1;
+                }
+
+                bool validarconceptoPago = ValidarCaracteresEspeciales(model.ConceptoPago, 30);
+                if (validarconceptoPago == true)
+                {
+                    model.observaciones = "El concepto de pago no es válido.";
+                    model.estatus = 1;
+                }
+
+                bool validarclaverastreo = ValidarCaracteresEspeciales(model.ClaveRastreo, 25);
+                if (validarclaverastreo == true)
+                {
+                    model.observaciones = "La clave de rastreo no es válido.";
+                    model.estatus = 1;
+                }
+
+                bool validaFecha = ValidarFecha(model.FechaOperacion.ToString());
+                if (validaFecha == true)
+                {
+                    model.observaciones = "La fecha no es válida.";
+                    model.estatus = 1;
+                }
+
                 response = await _transaccionesApiClient.GetModificaTransaccionBatchAsync(model);
 
                 if (response == "EXITO")
@@ -1146,6 +1228,9 @@ namespace Epica.Web.Operacion.Controllers
             try
             {
                 response = await _transaccionesApiClient.GetEliminarTransaccionesBatchAsync(idUsuario);
+                var validaButton = await _transaccionesApiClient.GetTotalTransaccionesBatchAsync(idUsuario);
+
+                response.Detalle = validaButton.ToString();
             }
             catch (Exception ex)
             {
@@ -1197,12 +1282,13 @@ namespace Epica.Web.Operacion.Controllers
 
             try
             {
-                //Validar que la cadena no tenga caracteres especiales
-                bool isValid = Regex.IsMatch(cadena, "^[a-zA-Z]*$");
-                if (isValid == true)
-                {
+
+                var regexItem = new Regex("[^a-zA-Z0-9\\s]+");
+                bool validSpecialCharacter = regexItem.IsMatch(cadena);
+
+                if (validSpecialCharacter == true) {
                     error = true;
-                }
+                } 
 
                 if (cadena.Length > tamaño) {
                     error = true;
@@ -1265,6 +1351,28 @@ namespace Epica.Web.Operacion.Controllers
                     error = true;
                 }
 
+
+            }
+            catch (Exception ex)
+            {
+                return true;
+            }
+
+            return error;
+        }
+
+        private bool ValidarFecha(string cadena)
+        {
+
+            bool error = false;
+
+            try
+            {
+                //Validar que la cadena tenga una secuencia de fecha valido
+                DateTime temp;
+                if (!DateTime.TryParse(cadena, out temp)){
+                    error = true;
+                }
 
             }
             catch (Exception ex)
