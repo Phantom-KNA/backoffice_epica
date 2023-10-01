@@ -188,6 +188,8 @@ var KTDatatableRemoteAjax = function () {
 
     $(".btn-filtrar").click(function () {
         recargar();
+        $(".filtro-control").val('');
+        $(".filtro-control-select").val(null).trigger('change');;
     })
 
     $(".btn_limpiar_filtros").click(function () {
@@ -219,6 +221,48 @@ var KTDatatableRemoteAjax = function () {
 jQuery(document).ready(function () {
     KTDatatableRemoteAjax.init();
 });
+function validateNumbersInput(inputElement) {
+    var inputValue = inputElement.value;
+    var cleanValue = '';
+    var prevChar = '';
+
+    for (var i = 0; i < inputValue.length; i++) {
+        var char = inputValue[i];
+
+        if (!isNaN(char) && char !== ' ') {
+            cleanValue += char;
+        }
+    }
+
+    inputElement.value = cleanValue;
+}
+
+function validateLettersInput(inputElement) {
+    var inputValue = inputElement.value;
+    var cleanValue = '';
+    var hasSpace = false;
+
+    for (var i = 0; i < inputValue.length; i++) {
+        var char = inputValue[i];
+
+        if (/[a-zA-Z]/.test(char) && cleanValue.length < 40) {
+            cleanValue += char;
+            hasSpace = false;
+        } else if (char === ' ' && !hasSpace) {
+            cleanValue += char;
+            hasSpace = true;
+        }
+    }
+
+    if (cleanValue.length < 3) {
+        cleanValue = cleanValue.slice(0, 3);
+    } else if (cleanValue.length > 40) {
+        cleanValue = cleanValue.slice(0, 40);
+    }
+
+    inputElement.value = cleanValue;
+}
+
 
 function GestionarTarjeta(numgen, estatus, id) {
     Swal.fire({
@@ -291,7 +335,7 @@ function GestionarTarjeta(numgen, estatus, id) {
                             );
                         }
                     },
-                    error: function () {
+                    error: function () { 
                     }
                 });
             } else {

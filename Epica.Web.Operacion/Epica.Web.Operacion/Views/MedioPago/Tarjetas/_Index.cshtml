@@ -49,22 +49,22 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Nombre del Titular:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreTitular" placeholder="Nombre del Titular" id="filtro_nombreTitular" />
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreTitular" placeholder="Nombre del Titular" id="filtro_nombreTitular" oninput="validateLettersInput(this)" data-error-message="Nombre del Titular" minlength="3" maxlength="40" />
                                         </div>
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Tarjeta:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="tarjeta" placeholder="Tarjeta" id="filtro_tarjeta" />
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="tarjeta" placeholder="Tarjeta" id="filtro_tarjeta" oninput="validateNumbersInput(this)" data-error-message="Número de Tarjeta" minlength="14" maxlength="16" />
                                         </div>
                                     </div>
                                     <br />
                                     <div class="row">
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Cuenta Clabe:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="cuentaClabe" placeholder="Cuenta Clabe" id="filtro_cuentaClabe" />
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="cuentaClabe" placeholder="Cuenta Clabe" id="filtro_cuentaClabe" oninput="validateNumbersInput(this)" data-error-message="Cuenta Clabe" minlength="18" maxlength="18" />
                                         </div>
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Número de Proxy:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="numeroProxy" placeholder="Número de Proxy" id="filtro_numeroProxy" />
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="numeroProxy" placeholder="Número de Proxy" id="filtro_numeroProxy" oninput="validateNumbersInput(this)" data-error-message="Número de Proxy" minlength="11" maxlength="11" />
                                         </div>
                                     </div>
                                     <br />
