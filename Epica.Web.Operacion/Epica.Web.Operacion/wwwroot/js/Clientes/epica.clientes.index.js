@@ -205,11 +205,10 @@ function GestionarClienteWeb(AccountID, estatus) {
         text: 'Por favor, ingrese su token y código de seguridad:',
         html:
             '<label for="swal-input1" class="swal-label"><b>Token:</b></label>' +
-            '<input id="swal-input1" class="swal2-input" style="font-size:14px;width:250px"  placeholder="Token">' +
+            '<input id="swal-input1" class="swal2-input" style="font-size:14px;width:250px"  placeholder="Token" oninput="validateInput(this)" maxlength="6">' +
             '<div style="margin-top: 20px;"></div>' +
             '<label for="swal-input2" class="swal-label"><b>Código de Seguridad:</b></label>' +
-            '<input id="swal-input2" class="swal2-input" style="font-size:14px;width:250px" type="password" placeholder="Código de Seguridad">',
-        showCancelButton: true,
+            '<input id="swal-input2" class="swal2-input" style="font-size:14px;width:250px" type="password" placeholder="Código de Seguridad" oninput="validateInput(this)" maxlength="6">',
         showCancelButton: true,
         confirmButtonColor: '#0493a8',
         confirmButtonText: 'Aceptar',
@@ -223,7 +222,7 @@ function GestionarClienteWeb(AccountID, estatus) {
         if (result.isConfirmed) {
             const [tokenInput, codigoInput] = result.value;
 
-            // Realiza la validación del token y código de seguridad
+            if (isValidInput(tokenInput) && isValidInput(codigoInput)) {
             $.ajax({
                 url: '/Autenticacion/ValidarTokenYCodigo',
                 async: true,
@@ -262,7 +261,6 @@ function GestionarClienteWeb(AccountID, estatus) {
                             }
                         });
                     } else {
-                        // Token o código de seguridad incorrectos, muestra un mensaje de error
                         Swal.fire(
                             'Error',
                             'Token o código de seguridad incorrectos. Inténtalo de nuevo.',
@@ -273,20 +271,34 @@ function GestionarClienteWeb(AccountID, estatus) {
                 error: function () {
                 }
             });
+            } else {
+                Swal.fire(
+                    'Error',
+                    'Los campos Token y Código de Seguridad deben contener 6 números.',
+                    'error'
+                );
+            }
         }
     });
 }
 
+function validateInput(inputElement) {
+    inputElement.value = inputElement.value.replace(/[^0-9]/g, '');
+}
+
+function isValidInput(input) {
+    return input.length === 6 && !isNaN(input);
+}
 function GestionarClienteTotal(AccountID, estatus) {
     Swal.fire({
         title: '<span class="swal-title-custom"><b>Valida tu identidad</b></span>',
         text: 'Por favor, ingrese su token y código de seguridad:',
         html:
             '<label for="swal-input1" class="swal-label"><b>Token:</b></label>' +
-            '<input id="swal-input1" class="swal2-input" style="font-size:14px;width:250px"  placeholder="Token">' +
+            '<input id="swal-input1" class="swal2-input" style="font-size:14px;width:250px"  placeholder="Token" oninput="validateInput(this)" maxlength="6">' +
             '<div style="margin-top: 20px;"></div>' +
             '<label for="swal-input2" class="swal-label"><b>Código de Seguridad:</b></label>' +
-            '<input id="swal-input2" class="swal2-input" style="font-size:14px;width:250px" type="password" placeholder="Código de Seguridad">',
+            '<input id="swal-input2" class="swal2-input" style="font-size:14px;width:250px" type="password" placeholder="Código de Seguridad" oninput="validateInput(this)" maxlength="6">',
         showCancelButton: true,
         confirmButtonColor: '#0493a8',
         confirmButtonText: 'Aceptar',
@@ -300,7 +312,7 @@ function GestionarClienteTotal(AccountID, estatus) {
         if (result.isConfirmed) {
             const [tokenInput, codigoInput] = result.value;
 
-            // Realiza la validación del token y código de seguridad
+            if (isValidInput(tokenInput) && isValidInput(codigoInput)) {
             $.ajax({
                 url: '/Autenticacion/ValidarTokenYCodigo',
                 async: true,
@@ -341,7 +353,6 @@ function GestionarClienteTotal(AccountID, estatus) {
         }
     });
                     } else {
-                        // Token o código de seguridad incorrectos, muestra un mensaje de error
                         Swal.fire(
                             'Error',
                             'Token o código de seguridad incorrectos. Inténtalo de nuevo.',
@@ -352,6 +363,13 @@ function GestionarClienteTotal(AccountID, estatus) {
                 error: function () {
                 }
             });
+            } else {
+                Swal.fire(
+                    'Error',
+                    'Los campos Token y Código de Seguridad deben contener 6 números.',
+                    'error'
+                );
+            }
         }
     });
 }
@@ -412,10 +430,10 @@ function ResetContrasenaEmail(Email, ID) {
         text: 'Por favor, ingrese su token y código de seguridad:',
         html:
             '<label for="swal-input1" class="swal-label"><b>Token:</b></label>' +
-            '<input id="swal-input1" class="swal2-input" style="font-size:14px;width:250px"  placeholder="Token">' +
+            '<input id="swal-input1" class="swal2-input" style="font-size:14px;width:250px"  placeholder="Token" oninput="validateInput(this)" maxlength="6">' +
             '<div style="margin-top: 20px;"></div>' +
             '<label for="swal-input2" class="swal-label"><b>Código de Seguridad:</b></label>' +
-            '<input id="swal-input2" class="swal2-input" style="font-size:14px;width:250px" type="password" placeholder="Código de Seguridad">',
+            '<input id="swal-input2" class="swal2-input" style="font-size:14px;width:250px" type="password" placeholder="Código de Seguridad" oninput="validateInput(this)" maxlength="6">',
         showCancelButton: true,
         confirmButtonColor: '#0493a8',
         confirmButtonText: 'Aceptar',
@@ -429,7 +447,7 @@ function ResetContrasenaEmail(Email, ID) {
         if (result.isConfirmed) {
             const [tokenInput, codigoInput] = result.value;
 
-            // Realiza la validación del token y código de seguridad
+            if (isValidInput(tokenInput) && isValidInput(codigoInput)) {
             $.ajax({
                 url: '/Autenticacion/ValidarTokenYCodigo',
                 async: true,
@@ -475,7 +493,6 @@ function ResetContrasenaEmail(Email, ID) {
         }
     });
                     } else {
-                        // Token o código de seguridad incorrectos, muestra un mensaje de error
                         Swal.fire(
                             'Error',
                             'Token o código de seguridad incorrectos. Inténtalo de nuevo.',
@@ -486,6 +503,13 @@ function ResetContrasenaEmail(Email, ID) {
                 error: function () {
                 }
             });
+            } else {
+                Swal.fire(
+                    'Error',
+                    'Los campos Token y Código de Seguridad deben contener 6 números.',
+                    'error'
+                );
+            }
         }
     });
 }
@@ -496,10 +520,10 @@ function ResetContrasenaTelefono(Telefono, ID) {
         text: 'Por favor, ingrese su token y código de seguridad:',
         html:
             '<label for="swal-input1" class="swal-label"><b>Token:</b></label>' +
-            '<input id="swal-input1" class="swal2-input" style="font-size:14px;width:250px"  placeholder="Token">' +
+            '<input id="swal-input1" class="swal2-input" style="font-size:14px;width:250px"  placeholder="Token" oninput="validateInput(this)" maxlength="6">' +
             '<div style="margin-top: 20px;"></div>' +
             '<label for="swal-input2" class="swal-label"><b>Código de Seguridad:</b></label>' +
-            '<input id="swal-input2" class="swal2-input" style="font-size:14px;width:250px" type="password" placeholder="Código de Seguridad">',
+            '<input id="swal-input2" class="swal2-input" style="font-size:14px;width:250px" type="password" placeholder="Código de Seguridad" oninput="validateInput(this)" maxlength="6">',
         showCancelButton: true,
         confirmButtonColor: '#0493a8',
         confirmButtonText: 'Aceptar',
@@ -513,7 +537,7 @@ function ResetContrasenaTelefono(Telefono, ID) {
         if (result.isConfirmed) {
             const [tokenInput, codigoInput] = result.value;
 
-            // Realiza la validación del token y código de seguridad
+            if (isValidInput(tokenInput) && isValidInput(codigoInput)) {
             $.ajax({
                 url: '/Autenticacion/ValidarTokenYCodigo',
                 async: true,
@@ -559,7 +583,6 @@ function ResetContrasenaTelefono(Telefono, ID) {
         }
     });
                     } else {
-                        // Token o código de seguridad incorrectos, muestra un mensaje de error
                         Swal.fire(
                             'Error',
                             'Token o código de seguridad incorrectos. Inténtalo de nuevo.',
@@ -570,6 +593,13 @@ function ResetContrasenaTelefono(Telefono, ID) {
                 error: function () {
                 }
             });
+            } else {
+                Swal.fire(
+                    'Error',
+                    'Los campos Token y Código de Seguridad deben contener 6 números.',
+                    'error'
+                );
+            }
         }
     });
 }
