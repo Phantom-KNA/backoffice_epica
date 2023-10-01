@@ -65,6 +65,24 @@ function validateRFC(inputElement) {
     }
 }
 
+//function formatDate(inputElement) {
+//    var dateValue = inputElement.value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
+//    var formattedDate = '';
+
+//    if (dateValue.length > 2) {
+//        formattedDate += dateValue.substring(0, 2) + '/';
+//    }
+
+//    if (dateValue.length > 4) {
+//        formattedDate += dateValue.substring(2, 4) + '/';
+//    }
+
+//    if (dateValue.length > 8) {
+//        formattedDate += dateValue.substring(4, 8);
+//    }
+
+//    inputElement.value = formattedDate;
+//}
 function validateCURP(inputElement) {
     var curpValue = inputElement.value;
     var curpPattern = /^[A-Z]{4}\d{6}[HM]{1}[A-Z]{5}[0-9]{2}$/;
@@ -203,12 +221,12 @@ var Init = function () {
                 }
                 if (field.id === "Ine") {
                     var ineValue = field.value;
-                    var inePattern = /^[A-Z]{6}\d{8}[HM][A-Z]{2}[A-Z0-9]{1}$/;
+                    var ineLength = ineValue.length;
 
-                    if (!inePattern.test(ineValue)) {
+                    if (ineLength !== 12 && ineLength !== 13) {
                         var errorMessage = field.getAttribute("data-error-message") || "INE";
                         if (!firstErrorMessage) {
-                            firstErrorMessage = errorMessage + ' no es válido';
+                            firstErrorMessage = errorMessage + ' debe tener 12 o 13 caracteres';
                         }
                         validationFailed = true;
                     }
