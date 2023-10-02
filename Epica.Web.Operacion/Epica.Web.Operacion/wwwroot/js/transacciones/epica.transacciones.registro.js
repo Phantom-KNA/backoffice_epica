@@ -3,11 +3,28 @@ toastr.options.preventDuplicates = true;
 
 function validateInput(inputElement) {
     var inputValue = inputElement.value;
-    var cleanValue = inputValue.replace(/[^A-Za-z]/g, '');
+    var cleanValue = '';
+    var hasSpace = false;
 
-    if (cleanValue !== inputValue) {
-        inputElement.value = cleanValue;
+    for (var i = 0; i < inputValue.length; i++) {
+        var char = inputValue[i];
+
+        if (/[a-zA-Z]/.test(char) && cleanValue.length < 40) {
+            cleanValue += char;
+            hasSpace = false;
+        } else if (char === ' ' && !hasSpace) {
+            cleanValue += char;
+            hasSpace = true;
+        }
     }
+
+    if (cleanValue.length < 3) {
+        cleanValue = cleanValue.slice(0, 3);
+    } else if (cleanValue.length > 40) {
+        cleanValue = cleanValue.slice(0, 40);
+    }
+
+    inputElement.value = cleanValue;
 }
 
 function validateNumbersInput(inputElement) {
@@ -17,6 +34,31 @@ function validateNumbersInput(inputElement) {
     if (cleanValue !== inputValue) {
         inputElement.value = cleanValue;
     }
+}
+
+function validateMontoInput(inputElement) {
+    var inputValue = inputElement.value;
+
+    var cleanValue = inputValue.replace(/[^0-9.]/g, '');
+
+    cleanValue = cleanValue.replace(/(\..*)\./g, '$1');
+
+    inputElement.value = cleanValue;
+}
+
+function validateClaveInput(inputElement) {
+    var inputValue = inputElement.value;
+    var cleanValue = '';
+
+    for (var i = 0; i < inputValue.length; i++) {
+        var char = inputValue[i];
+
+        if (/^[a-zA-Z0-9]*$/.test(char)) {
+            cleanValue += char;
+        }
+    }
+
+    inputElement.value = cleanValue;
 }
 
 var Init = function () {
@@ -55,25 +97,54 @@ var Init = function () {
                     }
                 }
 
-                if (field.id === "NombreOrdenante" || field.id === "Concepto") {
-                    if (field.value.length < 3 || field.value.length > 20) {
+                if (field.id === "NoCuentaBeneficiario") {
+                    if (field.value.length < 16 || field.value.length > 18) {
                         var errorMessage = field.getAttribute("data-error-message") || "Este campo";
                         if (!firstErrorMessage) {
-                            firstErrorMessage = errorMessage + ' Ingresa un nombre válido';
+                            firstErrorMessage = ' Ingresa un número de Cuenta válido';
                         }
                         validationFailed = true;
                     }
                 }
 
-                if (field.id === "NoCuentaBeneficiario") {
-                    if (field.value.length < 16 || field.value.length > 18) {
+                if (field.id === "ClaveRastreo") {
+                    if (field.value.length < 25 || field.value.length > 25) {
                         var errorMessage = field.getAttribute("data-error-message") || "Este campo";
                         if (!firstErrorMessage) {
-                            firstErrorMessage = errorMessage + ' Ingresa un número de cuenta válido';
+                            firstErrorMessage = ' Ingresa una clave de Rastreo válida';
                         }
                         validationFailed = true;
                     }
                 }
+                if (field.id === "FechaOperacion") {
+                    var inputValue = field.value;
+
+                    var minDate = new Date(2000, 0, 1);
+                    var maxDate = new Date();
+
+                    var inputDate = new Date(inputValue);
+
+                    if (isNaN(inputDate.getTime()) || inputDate < minDate || inputDate > maxDate) {
+                        var errorMessage = field.getAttribute("data-error-message") || "Este campo";
+                        if (!firstErrorMessage) {
+                            firstErrorMessage = ' Ingresa una Fecha válida ';
+                        }
+                        validationFailed = true;
+                    }
+                }
+
+                if (field.id === "Monto") {
+                    var monto = parseFloat(field.value.replace(/,/g, ''));
+
+                    if (isNaN(monto) || monto < 0.0001 || monto > 999999999) {
+                        var errorMessage = field.getAttribute("data-error-message") || "Este campo";
+                        if (!firstErrorMessage) {
+                            firstErrorMessage = ' Ingresa un Monto válido';
+                        }
+                        validationFailed = true;
+                    }
+                }
+
             });
 
 
@@ -93,6 +164,46 @@ var Init = function () {
         }
     };
 }();
+
+$('#confirmSave').on('click', function () {
+    var formData = $('form').serialize();
+
+    $.ajax({
+        type: 'POST',
+        async: true,
+        url: 'Transacciones/RegistrarTransaccion',
+        data: formData,
+        success: function (response) {
+            if (response.succes) {
+
+                toastr.success("Operación exitosa");
+            } else {
+
+                toastr.error("Operación Fallida");
+
+            }
+        },
+        error: function () {
+            toastr.error("Operación Fallida");
+        }
+    });
+    const medioPago = document.getElementById('MedioPago');
+    const tipoOperacion = document.getElementById('TipoOperacion');
+    const Comision = document.getElementById('Comision');
+
+    $('#ClaveRastreo').val('');
+    $('#NombreOrdenante').val('');
+    $('#NoCuentaBeneficiario').val('');
+    $('#Monto').val('');
+    $('#Concepto').val('');
+    $('#FechaOperacion').val('');
+    medioPago.innerHTML = '';
+    tipoOperacion.innerHTML = '';
+    Comision.innerHTML = '';
+    $('#confirmModal').modal('hide');
+    return false;
+
+});
 
 $(document).ready(function () {
     Init.init();

@@ -275,6 +275,7 @@ namespace Epica.Web.Operacion.Controllers
 
         [Authorize]
         [HttpPost]
+
         public async Task<IActionResult> RegistrarTransaccion(TransaccionesRegistroViewModel model)
         {
             var loginResponse = _userContextService.GetLoginResponse();
@@ -315,16 +316,16 @@ namespace Epica.Web.Operacion.Controllers
 
                     if (response.Codigo == "200")
                     {
-                        return RedirectToAction("Index");
+                        return Ok();
                     }
                     else
                     {
-                        return RedirectToAction("Registro");
+                        return BadRequest();
                     }
                 }
                 catch (Exception ex)
                 {
-                    return View();
+                    return BadRequest();
                 }
             }
 

@@ -188,6 +188,8 @@ var KTDatatableRemoteAjax = function () {
 
     $(".btn-filtrar").click(function () {
         recargar();
+        $(".filtro-control").val('');
+        $(".filtro-control-select").val(null).trigger('change');;
     })
 
     $(".btn_limpiar_filtros").click(function () {
@@ -219,6 +221,48 @@ var KTDatatableRemoteAjax = function () {
 jQuery(document).ready(function () {
     KTDatatableRemoteAjax.init();
 });
+function validateNumbersInput(inputElement) {
+    var inputValue = inputElement.value;
+    var cleanValue = '';
+    var prevChar = '';
+
+    for (var i = 0; i < inputValue.length; i++) {
+        var char = inputValue[i];
+
+        if (!isNaN(char) && char !== ' ') {
+            cleanValue += char;
+        }
+    }
+
+    inputElement.value = cleanValue;
+}
+
+function validateLettersInput(inputElement) {
+    var inputValue = inputElement.value;
+    var cleanValue = '';
+    var hasSpace = false;
+
+    for (var i = 0; i < inputValue.length; i++) {
+        var char = inputValue[i];
+
+        if (/[a-zA-Z]/.test(char) && cleanValue.length < 40) {
+            cleanValue += char;
+            hasSpace = false;
+        } else if (char === ' ' && !hasSpace) {
+            cleanValue += char;
+            hasSpace = true;
+        }
+    }
+
+    if (cleanValue.length < 3) {
+        cleanValue = cleanValue.slice(0, 3);
+    } else if (cleanValue.length > 40) {
+        cleanValue = cleanValue.slice(0, 40);
+    }
+
+    inputElement.value = cleanValue;
+}
+
 
 function GestionarTarjeta(numgen, estatus, id) {
     Swal.fire({
@@ -226,11 +270,10 @@ function GestionarTarjeta(numgen, estatus, id) {
         text: 'Por favor, ingrese su token y código de seguridad:',
         html:
             '<label for="swal-input1" class="swal-label"><b>Token:</b></label>' +
-            '<input id="swal-input1" class="swal2-input" style="font-size:14px;width:250px"  placeholder="Token">' +
+            '<input id="swal-input1" class="swal2-input" style="font-size:14px;width:250px"  placeholder="Token" oninput="validateInput(this)" maxlength="6">' +
             '<div style="margin-top: 20px;"></div>' +
             '<label for="swal-input2" class="swal-label"><b>Código de Seguridad:</b></label>' +
-            '<input id="swal-input2" class="swal2-input" style="font-size:14px;width:250px" type="password" placeholder="Código de Seguridad">',
-        showCancelButton: true,
+            '<input id="swal-input2" class="swal2-input" style="font-size:14px;width:250px" type="password" placeholder="Código de Seguridad" oninput="validateInput(this)" maxlength="6">',
         showCancelButton: true,
         confirmButtonColor: '#0493a8',
         confirmButtonText: 'Aceptar',
@@ -244,62 +287,74 @@ function GestionarTarjeta(numgen, estatus, id) {
         if (result.isConfirmed) {
             const [tokenInput, codigoInput] = result.value;
 
-            // Realiza la validación del token y código de seguridad
-            $.ajax({
-                url: '/Autenticacion/ValidarTokenYCodigo',
-                async: true,
-                cache: false,
-                type: 'POST',
-                data: { token: tokenInput, codigo: codigoInput },
-                success: function (validationResult) {
-                    if (validationResult.mensaje === true) {
-                        Swal.fire({
-                            title: (estatus.toLowerCase() === 'true' ? 'Desbloqueo de Tarjetas' : 'Bloqueo de Tarjetas'),
-                            text: (estatus.toLowerCase() === 'true' ? "¿Estás seguro que deseas desbloquear esta tarjeta?" : "¿Estás seguro que deseas bloquear esta tarjeta?" ),
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Aceptar'
-                        }).then((result) => {
-        if (result.isConfirmed) {
+            if (isValidInput(tokenInput) && isValidInput(codigoInput)) {
+                $.ajax({
+                    url: '/Autenticacion/ValidarTokenYCodigo',
+                    async: true,
+                    cache: false,
+                    type: 'POST',
+                    data: { token: tokenInput, codigo: codigoInput },
+                    success: function (validationResult) {
+                        if (validationResult.mensaje === true) {
+                            Swal.fire({
+                                title: (estatus.toLowerCase() === 'true' ? 'Desbloqueo de Tarjetas' : 'Bloqueo de Tarjetas'),
+                                text: (estatus.toLowerCase() === 'true' ? "¿Estás seguro que deseas desbloquear esta tarjeta?" : "¿Estás seguro que deseas bloquear esta tarjeta?"),
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Aceptar'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    toastr.info('Aplicando Devolución a transacción...', "");
 
-            toastr.info('Aplicando Devolución a transacción...', "");
-
-            $.ajax({
-                url: 'Tarjetas/GestionarEstatusTarjetas',
-                async: true,
-                cache: false,
-                type: 'POST',
-                data: { NumGen: numgen, estatus: estatus, id: id },
-                success: function (data) {
-
-                    datatable.ajax.reload();
-                    Swal.fire(
-                        'Estatus Actualizado',
-                        'Se ha actualizado el estatus de la tarjeta con éxito.',
-                        'success'
-                    )
-                },
-                error: function (xhr, status, error) {
-                }
-            });
-        }
-    })
-                    } else {
-                        // Token o código de seguridad incorrectos, muestra un mensaje de error
-                        Swal.fire(
-                            'Error',
-                            'Token o código de seguridad incorrectos. Inténtalo de nuevo.',
-                            'error'
-                        );
+                                    $.ajax({
+                                        url: 'Tarjetas/GestionarEstatusTarjetas',
+                                        async: true,
+                                        cache: false,
+                                        type: 'POST',
+                                        data: { NumGen: numgen, estatus: estatus, id: id },
+                                        success: function (data) {
+                                            datatable.ajax.reload();
+                                            Swal.fire(
+                                                'Estatus Actualizado',
+                                                'Se ha actualizado el estatus de la tarjeta con éxito.',
+                                                'success'
+                                            );
+                                        },
+                                        error: function (xhr, status, error) {
+                                        }
+                                    });
+                                }
+                            });
+                        } else {
+                            Swal.fire(
+                                'Error',
+                                'Token o código de seguridad incorrectos. Inténtalo de nuevo.',
+                                'error'
+                            );
+                        }
+                    },
+                    error: function () { 
                     }
-                },
-                error: function () {
-                }
-            });
+                });
+            } else {
+                Swal.fire(
+                    'Error',
+                    'Los campos Token y Código de Seguridad deben contener 6 números.',
+                    'error'
+                );
+            }
         }
     });
+}
+
+function validateInput(inputElement) {
+    inputElement.value = inputElement.value.replace(/[^0-9]/g, '');
+}
+
+function isValidInput(input) {
+    return input.length === 6 && !isNaN(input);
 }
 
 //function Registro() {

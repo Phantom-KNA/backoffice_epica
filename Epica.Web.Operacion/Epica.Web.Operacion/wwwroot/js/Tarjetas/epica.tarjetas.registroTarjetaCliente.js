@@ -4,11 +4,17 @@ toastr.options.preventDuplicates = true;
 function validateLettersInput(inputElement) {
     var inputValue = inputElement.value;
     var cleanValue = '';
+    var hasSpace = false;
 
     for (var i = 0; i < inputValue.length; i++) {
         var char = inputValue[i];
+
         if (/[a-zA-Z]/.test(char) && cleanValue.length < 20) {
             cleanValue += char;
+            hasSpace = false; 
+        } else if (char === ' ' && !hasSpace) {
+            cleanValue += char;
+            hasSpace = true; 
         }
     }
 
@@ -24,14 +30,14 @@ function validateLettersInput(inputElement) {
 function validateNumbersInput(inputElement) {
     var inputValue = inputElement.value;
     var cleanValue = '';
-
-    var prevChar = ''; 
+    var prevChar = '';
 
     for (var i = 0; i < inputValue.length; i++) {
         var char = inputValue[i];
-        if (!isNaN(char) && char !== prevChar) {
+
+        if (!isNaN(char) && char !== ' ' && char !== prevChar) {
             cleanValue += char;
-            prevChar = char; 
+            prevChar = char;
         }
     }
 
@@ -101,9 +107,6 @@ $(document).on('click', '#btnBuscarCliente', function () {
     const inputNombreCliente = document.getElementById('nombreCliente');
     const nombreCliente = inputNombreCliente.value;
 
-    toastr.info("Localizando clientes.").preventDuplicates;
-    toastr.clear();
-
     $.ajax({
         url: "/Clientes/BuscarClientes",
         type: "POST",
@@ -123,6 +126,8 @@ $(document).on('click', '#btnBuscarCliente', function () {
         },
         error: function (error) {
             toastr.error("No se pudieron localizar los clientes.").preventDuplicates;
+            selectClientes.innerHTML = '';
+            inputNombreCliente.value = '';
         }
     });
 });

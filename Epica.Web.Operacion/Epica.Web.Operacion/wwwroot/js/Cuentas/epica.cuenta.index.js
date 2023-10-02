@@ -404,11 +404,10 @@ function GestionarCuenta(AccountID, estatus) {
         text: 'Por favor, ingrese su token y código de seguridad:',
         html:
             '<label for="swal-input1" class="swal-label"><b>Token:</b></label>' +
-            '<input id="swal-input1" class="swal2-input" style="font-size:14px;width:250px"  placeholder="Token">' +
+            '<input id="swal-input1" class="swal2-input" style="font-size:14px;width:250px"  placeholder="Token" oninput="validateInput(this)" maxlength="6">' +
             '<div style="margin-top: 20px;"></div>' +
             '<label for="swal-input2" class="swal-label"><b>Código de Seguridad:</b></label>' +
-            '<input id="swal-input2" class="swal2-input" style="font-size:14px;width:250px" type="password" placeholder="Código de Seguridad">',
-        showCancelButton: true,
+            '<input id="swal-input2" class="swal2-input" style="font-size:14px;width:250px" type="password" placeholder="Código de Seguridad" oninput="validateInput(this)" maxlength="6">',
         showCancelButton: true,
         confirmButtonColor: '#0493a8',
         confirmButtonText: 'Aceptar',
@@ -423,6 +422,7 @@ function GestionarCuenta(AccountID, estatus) {
     }).then((result) => {
         if (result.isConfirmed) {
             const [tokenInput, codigoInput] = result.value;
+            if (isValidInput(tokenInput) && isValidInput(codigoInput)) {
 
             // Realiza la validación del token y código de seguridad
             $.ajax({
@@ -471,9 +471,8 @@ function GestionarCuenta(AccountID, estatus) {
                 }
             });
         }
-    })
+    });
                     } else {
-                        // Token o código de seguridad incorrectos, muestra un mensaje de error
                         Swal.fire(
                             'Error',
                             'Token o código de seguridad incorrectos. Inténtalo de nuevo.',
@@ -484,8 +483,23 @@ function GestionarCuenta(AccountID, estatus) {
                 error: function () {
                 }
             });
+            } else {
+                Swal.fire(
+                    'Error',
+                    'Los campos Token y Código de Seguridad deben contener 6 números.',
+                    'error'
+                );
+            }
         }
     });
+}
+
+function validateInput(inputElement) {
+    inputElement.value = inputElement.value.replace(/[^0-9]/g, '');
+}
+
+function isValidInput(input) {
+    return input.length === 6 && !isNaN(input);
 }
 
 function GestionarCuentaSpeiOut(AccountID, estatus) {
@@ -496,11 +510,10 @@ function GestionarCuentaSpeiOut(AccountID, estatus) {
         text: 'Por favor, ingrese su token y código de seguridad:',
         html:
             '<label for="swal-input1" class="swal-label"><b>Token:</b></label>' +
-            '<input id="swal-input1" class="swal2-input" style="font-size:14px;width:250px"  placeholder="Token">' +
+            '<input id="swal-input1" class="swal2-input" style="font-size:14px;width:250px"  placeholder="Token" oninput="validateInput(this)" maxlength="6">' +
             '<div style="margin-top: 20px;"></div>' +
             '<label for="swal-input2" class="swal-label"><b>Código de Seguridad:</b></label>' +
-            '<input id="swal-input2" class="swal2-input" style="font-size:14px;width:250px" type="password" placeholder="Código de Seguridad">',
-        showCancelButton: true,
+            '<input id="swal-input2" class="swal2-input" style="font-size:14px;width:250px" type="password" placeholder="Código de Seguridad" oninput="validateInput(this)" maxlength="6">',
         showCancelButton: true,
         confirmButtonColor: '#0493a8',
         confirmButtonText: 'Aceptar',
@@ -515,6 +528,7 @@ function GestionarCuentaSpeiOut(AccountID, estatus) {
     }).then((result) => {
         if (result.isConfirmed) {
             const [tokenInput, codigoInput] = result.value;
+            if (isValidInput(tokenInput) && isValidInput(codigoInput)) {
 
             // Realiza la validación del token y código de seguridad
             $.ajax({
@@ -563,9 +577,8 @@ function GestionarCuentaSpeiOut(AccountID, estatus) {
                                     }
                                 });
                             }
-                        })
+                        });
                     } else {
-                        // Token o código de seguridad incorrectos, muestra un mensaje de error
                         Swal.fire(
                             'Error',
                             'Token o código de seguridad incorrectos. Inténtalo de nuevo.',
@@ -576,6 +589,13 @@ function GestionarCuentaSpeiOut(AccountID, estatus) {
                 error: function () {
                 }
             });
+            } else {
+                Swal.fire(
+                    'Error',
+                    'Los campos Token y Código de Seguridad deben contener 6 números.',
+                    'error'
+                );
+            }
         }
     });
 }

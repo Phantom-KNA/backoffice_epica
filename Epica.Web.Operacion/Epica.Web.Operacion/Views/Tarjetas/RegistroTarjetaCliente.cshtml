@@ -59,7 +59,7 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Mes de vigencia: &nbsp;</label>
                         <div class="position-relative">
-                            <select asp-for="@Model!.TarjetasDetalles.mesVigencia" class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" data-minimum-results-for-search="Infinity" required id="mesVigencia" autocomplete="off" required>
+                            <select asp-for="@Model!.TarjetasDetalles.mesVigencia" class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" data-minimum-results-for-search="Infinity" required id="mesVigencia" autocomplete="off">
                                 <option value="">Selecciona un mes</option>
                                 <option value="01">01</option>
                                 <option value="02">02</option>
@@ -112,13 +112,13 @@
     <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmModalLabel">Confirmar Guardado</h5>
-                    <button type="button" class="close" data-dismiss="modal" id="btnCerrarModal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                <div class="modal-header header-modal">
+                    <h1 class="modal-title text-header-modal fs-5" id="confirmModalLabel">Confirmar Guardado</h1>
+                    <button type="button" class="custom-close-button" data-dismiss="modal" id="btnCerrarModal" aria-label="Close">
+                        <span>✕</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body header-modal">
                     ¿Estás seguro que deseas guardar la información?
                 </div>
                 <div class="modal-footer">
@@ -153,3 +153,35 @@
     <script src="~/js/Tarjetas/epica.tarjetas.registroTarjetaCliente.js" asp-append-version="true"></script>
 
 }
+
+<style>
+
+    .header-modal {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .text-header-modal {
+        color: white;
+    }
+
+    .custom-close-button {
+        color: white;
+        background-color: transparent;
+        border: none;
+        opacity: 1;
+        padding: 0;
+        font-size: 1rem;
+        line-height: 1;
+        cursor: pointer;
+        transition: color 0.3s, opacity 0.3s;
+        position: absolute;
+        right: 0;
+        padding: 21px;
+    }
+
+        .custom-close-button:hover {
+            opacity: 0.8;
+        }
+</style>
