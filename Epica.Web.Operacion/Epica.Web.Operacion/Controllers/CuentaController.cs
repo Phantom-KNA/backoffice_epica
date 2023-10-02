@@ -337,9 +337,8 @@ public class CuentaController : Controller
         }
 
 
-        gridData.Data = List;
         gridData.RecordsTotal = List.Count;
-        gridData.Data = gridData.Data.Skip(skip).Take(pageSize).ToList();
+        gridData.Data = List.Skip(skip).Take(pageSize).ToList();
         filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.Data.Count;
         gridData.RecordsFiltered = filterRecord;
         gridData.Draw = draw;

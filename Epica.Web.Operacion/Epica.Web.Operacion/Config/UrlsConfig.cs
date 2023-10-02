@@ -40,6 +40,7 @@ public class UrlsConfig
         public static string GetComprobanteTransaccion(int cuentaAhorro, int Transaccion, string valida) => $"/api/v1/transacciones/imprimir_voucher?idCuentaAhorro={cuentaAhorro}&idTransaccion={Transaccion}&valida={valida}";
         public static string GetTransaccionesBatchTotalPorUsuario(int idUsuario) => $"/api/v1/cargabach/total?usuario={idUsuario}";
         public static string GetEliminarTransaccionBatchPorUsuario(int idUsuario, int estatus) => $"/api/v1/cargabach/remover_multiples_resgistro/{idUsuario}/{estatus}";
+        public static string GetValidaExistenciaTransaccionBatch(int idUsuario, string claveRastreo) => $"/api/v1/cargabach/validar_existencia?Usuario={idUsuario}&claveRastreo={claveRastreo}";
 
 
     }

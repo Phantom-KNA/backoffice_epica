@@ -24,6 +24,7 @@ namespace Epica.Web.Operacion.Models.Response
         public string? DispositivoAcceso { get; set; }
         [JsonPropertyName("fechaUltimoAcceso")]
         public string? FechaUltimoAcceso { get; set; }
+        public string? email { get; set; }
         public bool validarpermiso { get; set; }
     }
 }

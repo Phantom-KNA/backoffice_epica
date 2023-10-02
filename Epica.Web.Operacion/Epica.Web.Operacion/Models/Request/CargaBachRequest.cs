@@ -25,6 +25,7 @@ namespace Epica.Web.Operacion.Models.Request
         [JsonPropertyName("ordenante")]
         public string? Ordenante { get; set; }
         [JsonPropertyName("idUsuario")]
+        //public string? FechaFormat {  get; set; }
         public int IdUsuario { get; set; }
         public int estatus { get; set; }
         public string descripcionOperacion { get; set; }

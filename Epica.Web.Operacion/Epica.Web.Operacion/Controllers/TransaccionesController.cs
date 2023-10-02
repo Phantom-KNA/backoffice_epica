@@ -1086,6 +1086,8 @@ namespace Epica.Web.Operacion.Controllers
                 var listaMediosPago = await _catalogosApiClient.GetMediosPagoAsync();
                 detalleTransaccion = await _transaccionesApiClient.GetTransaccionBatchAsync(idRegistro);
 
+                //detalleTransaccion.FechaFormat = detalleTransaccion.FechaOperacion.ToString("yyyy-MM-dd");
+
                 detalleTransaccion.ListaMediosPago = listaMediosPago;
                 if (detalleTransaccion != null)
                 {
@@ -1110,7 +1112,7 @@ namespace Epica.Web.Operacion.Controllers
         [HttpPost]
         public async Task<JsonResult> EditarTransaccionBatch(CargaBachRequest model)
         {
-            //var loginResponse = _userContextService.GetLoginResponse();
+            var loginResponse = _userContextService.GetLoginResponse();
             string response = "";
             MensajeResponse respuesta = new MensajeResponse();
             try
@@ -1156,6 +1158,12 @@ namespace Epica.Web.Operacion.Controllers
                 if (validaFecha == true)
                 {
                     model.observaciones = "La fecha no es válida.";
+                    model.estatus = 1;
+                }
+
+                bool validaExistencia = await _transaccionesApiClient.GetValidaExistenciaTranBatch(loginResponse.IdUsuario, model.ClaveRastreo);
+                if (validaExistencia == true) {
+                    model.observaciones = "La clave de Rastreo ya existe en el documento cargado.";
                     model.estatus = 1;
                 }
 

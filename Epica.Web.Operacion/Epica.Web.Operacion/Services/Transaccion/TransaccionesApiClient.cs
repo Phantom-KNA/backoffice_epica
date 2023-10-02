@@ -769,5 +769,30 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
             return respuesta;
         }
+
+        public async Task<bool> GetValidaExistenciaTranBatch(int idUsuario, string ClaveRastreo)
+        {
+            bool respuesta = false;
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetValidaExistenciaTransaccionBatch(idUsuario, ClaveRastreo);
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    respuesta = JsonConvert.DeserializeObject<bool>(jsonResponse)!;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return true;
+            }
+
+            return respuesta;
+        }
     }
 }

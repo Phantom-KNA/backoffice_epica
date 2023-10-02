@@ -98,6 +98,7 @@ namespace Epica.Web.Operacion.Controllers
                     FechaAlta = row.FechaAlta,
                     FechaUltimoAcceso = row.FechaUltimoAcceso,
                     estatus = row.Estatus,
+                    email = row.email,
                     Acciones = await this.RenderViewToStringAsync("~/Views/Usuarios/_Acciones.cshtml", row)
                 });
             }
@@ -107,6 +108,7 @@ namespace Epica.Web.Operacion.Controllers
                 (x.Username?.ToUpper() ?? "").Contains(request.Busqueda.ToUpper()) ||
                 (x.DescripcionRol?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
                 (x.FechaAlta?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.email?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
                 (x.FechaUltimoAcceso?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
                 ).ToList();
             }
@@ -116,6 +118,7 @@ namespace Epica.Web.Operacion.Controllers
             var filtroRol = filters.FirstOrDefault(x => x.Key == "rol");
             var filtroFechaAlta = filters.FirstOrDefault(x => x.Key == "fechaAlta");
             var filtroFechaUltimoAcceso = filters.FirstOrDefault(x => x.Key == "fechaUltimoAcceso");
+            var filtrocorreo = filters.FirstOrDefault(x => x.Key == "filtro_email");
 
             if (filtroUser?.Value != null)
             {
@@ -137,9 +140,13 @@ namespace Epica.Web.Operacion.Controllers
                 List = List.Where(x => x.FechaUltimoAcceso.Contains(Convert.ToString(filtroFechaUltimoAcceso.Value))).ToList();
             }
 
-            gridData.Data = List;
+            if (filtrocorreo?.Value != null)
+            {
+                List = List.Where(x => x.FechaUltimoAcceso.Contains(Convert.ToString(filtroFechaUltimoAcceso.Value))).ToList();
+            }
+
+            gridData.Data = List.Skip(skip).Take(pageSize).ToList(); 
             gridData.RecordsTotal = List.Count;
-            gridData.Data = gridData.Data.Skip(skip).Take(pageSize).ToList();
             filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.Data.Count;
             gridData.RecordsFiltered = filterRecord;
             gridData.Draw = draw;

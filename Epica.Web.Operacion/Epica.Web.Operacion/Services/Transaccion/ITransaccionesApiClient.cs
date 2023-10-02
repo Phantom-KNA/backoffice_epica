@@ -27,6 +27,6 @@ namespace Epica.Web.Operacion.Services.Transaccion
         Task<VoucherResponse> GetVoucherTransaccionAsync(int cuentaAhorro, int transaccion, string token);
         Task<int> GetTotalTransaccionesBatchAsync(int idUsuario);
         Task<MensajeResponse> GetEliminarTransaccionesBatchAsync(int idUsuario);
-
+        Task<bool> GetValidaExistenciaTranBatch(int idUsuario, string ClaveRastreo);
     }
 }

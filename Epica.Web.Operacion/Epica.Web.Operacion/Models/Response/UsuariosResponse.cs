@@ -13,6 +13,7 @@ public class UsuariosResponse
     public string DescripcionRol { get; set; }  
     public string FechaAlta { get; set; }
     public string FechaUltimoAcceso { get; set; }
+    public string email { get; set; }
     public int estatus { get; set; }
 }
 

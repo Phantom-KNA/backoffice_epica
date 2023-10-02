@@ -66,6 +66,7 @@ var KTDatatableRemoteAjax = function () {
             }],
             columns: [
                 { data: 'username', name: 'Username', title: 'Nombre de Usuario' },
+                { data: 'email', name: 'email', title: 'Correo Electrónico' },
                 { data: 'descripcionRol', name: 'DescripcionRol', title: 'Rol' },
                 { data: 'fechaAlta', name: 'FechaAlta', title: 'Fecha Alta' },
                 { data: 'fechaUltimoAcceso', name: 'FechaUltimoAcceso', title: 'Fecha Último Acceso' },
