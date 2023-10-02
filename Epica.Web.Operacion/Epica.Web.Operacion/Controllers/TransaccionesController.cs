@@ -316,11 +316,11 @@ namespace Epica.Web.Operacion.Controllers
 
                     if (response.Codigo == "200")
                     {
-                        return Ok();
+                        return Ok(new { success = true });
                     }
                     else
                     {
-                        return BadRequest();
+                        return Ok(new { success = false });
                     }
                 }
                 catch (Exception ex)

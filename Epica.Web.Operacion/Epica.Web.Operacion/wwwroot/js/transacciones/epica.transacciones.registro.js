@@ -108,7 +108,7 @@ var Init = function () {
                 }
 
                 if (field.id === "ClaveRastreo") {
-                    if (field.value.length < 25 || field.value.length > 25) {
+                    if (field.value.length < 20 || field.value.length > 25) {
                         var errorMessage = field.getAttribute("data-error-message") || "Este campo";
                         if (!firstErrorMessage) {
                             firstErrorMessage = ' Ingresa una clave de Rastreo válida';
@@ -169,44 +169,50 @@ $('#confirmSave').on('click', function () {
     var formData = $('form').serialize();
 
     $.ajax({
+        url: 'RegistrarTransaccion',
         type: 'POST',
-        async: true,
-        url: 'Transacciones/RegistrarTransaccion',
         data: formData,
         success: function (response) {
-            if (response.succes) {
-
-                toastr.success("Operación exitosa");
+            if (response.success === true) {
+                Swal.fire({
+                    title: 'Operación exitosa',
+                    icon: 'success',
+                    showCancelButton: false,
+                    confirmButtonText: 'Aceptar',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/Transacciones';
+                    }
+                });
             } else {
-
-                toastr.error("Operación Fallida");
-
+                Swal.fire({
+                    title: 'Operación fallida',
+                    text: 'Ocurrió un error durante la operación.',
+                    icon: 'error',
+                    showCancelButton: false,
+                    confirmButtonText: 'Aceptar',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/Transacciones/Registro';
+                    }
+                });
             }
         },
         error: function () {
-            toastr.error("Operación Fallida");
+            Swal.fire({
+                title: 'Error de comunicación con el servidor',
+                text: 'Por favor, inténtelo de nuevo más tarde.',
+                icon: 'error',
+                showCancelButton: false,
+                confirmButtonText: 'Aceptar',
+            });
         }
     });
-    const medioPago = document.getElementById('MedioPago');
-    const tipoOperacion = document.getElementById('TipoOperacion');
-    const Comision = document.getElementById('Comision');
-
-    $('#ClaveRastreo').val('');
-    $('#NombreOrdenante').val('');
-    $('#NoCuentaBeneficiario').val('');
-    $('#Monto').val('');
-    $('#Concepto').val('');
-    $('#FechaOperacion').val('');
-    medioPago.innerHTML = '';
-    tipoOperacion.innerHTML = '';
-    Comision.innerHTML = '';
-    $('#confirmModal').modal('hide');
-    return false;
-
 });
 
 $(document).ready(function () {
     Init.init();
+
 
     $('#confirmModal').on('hidden.bs.modal', function () {
     });
