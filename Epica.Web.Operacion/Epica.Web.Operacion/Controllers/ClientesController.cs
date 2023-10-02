@@ -1076,16 +1076,16 @@ public class ClientesController : Controller
 
                 if (response.Codigo == "200")
                 {
-                    return RedirectToAction("Index");
+                    return Ok(new { success = true });
                 }
                 else
                 {
-                    return RedirectToAction("Registro");
+                    return Ok(new { success = false });
                 }
             }
             catch (Exception ex)
             {
-                return View();
+                return BadRequest();
             }
         }
 
