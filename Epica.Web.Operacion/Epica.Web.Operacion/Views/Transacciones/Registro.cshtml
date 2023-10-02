@@ -81,7 +81,7 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Tipo de operación: &nbsp;</label>
                         <div class="position-relative">
-                            <select asp-for="@Model!.TransacccionDetalles.TipoOperacion" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción" data-minimum-results-for-search="Infinity" required data-error-message="Tipo de Operación">
+                            <select asp-for="@Model!.TransacccionDetalles.TipoOperacion" id="TipoOperacion" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción" data-minimum-results-for-search="Infinity" required data-error-message="Tipo de Operación">
                                 <option></option>
                                 @{
                                     if (Model != null)
@@ -132,7 +132,7 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Medio de pago: &nbsp;</label>
                         <div class="position-relative">
-                            <select asp-for="TransacccionDetalles.MedioPago" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" data-minimum-results-for-search="Infinity" required data-error-message="Medio de Pago">
+                            <select asp-for="TransacccionDetalles.MedioPago" id="MedioPago" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" data-minimum-results-for-search="Infinity" required data-error-message="Medio de Pago">
                                 <option></option>
                                 @foreach (var medioPago in Model!.ListaMediosPago!)
                                 {
@@ -144,7 +144,7 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Comisión: &nbsp;</label>
                         <div class="position-relative">
-                            <select asp-for="@Model!.TransacccionDetalles.Comision" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción" data-minimum-results-for-search="Infinity" required>
+                            <select asp-for="@Model!.TransacccionDetalles.Comision" id="Comision" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción" data-minimum-results-for-search="Infinity" required>
                                 <option></option>
                                 @{
                                     if (Model != null)
@@ -203,7 +203,6 @@
 @section Scripts{
     <script src="~/js/transacciones/epica.transacciones.registro.js" asp-append-version="true"></script>
 }
-
 <style>
 
     .header-modal {

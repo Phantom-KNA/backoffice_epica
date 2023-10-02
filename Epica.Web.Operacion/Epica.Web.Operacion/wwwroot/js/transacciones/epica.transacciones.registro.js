@@ -165,6 +165,46 @@ var Init = function () {
     };
 }();
 
+$('#confirmSave').on('click', function () {
+    var formData = $('form').serialize();
+
+    $.ajax({
+        type: 'POST',
+        async: true,
+        url: 'Transacciones/RegistrarTransaccion',
+        data: formData,
+        success: function (response) {
+            if (response.succes) {
+
+                toastr.success("Operación exitosa");
+            } else {
+
+                toastr.error("Operación Fallida");
+
+            }
+        },
+        error: function () {
+            toastr.error("Operación Fallida");
+        }
+    });
+    const medioPago = document.getElementById('MedioPago');
+    const tipoOperacion = document.getElementById('TipoOperacion');
+    const Comision = document.getElementById('Comision');
+
+    $('#ClaveRastreo').val('');
+    $('#NombreOrdenante').val('');
+    $('#NoCuentaBeneficiario').val('');
+    $('#Monto').val('');
+    $('#Concepto').val('');
+    $('#FechaOperacion').val('');
+    medioPago.innerHTML = '';
+    tipoOperacion.innerHTML = '';
+    Comision.innerHTML = '';
+    $('#confirmModal').modal('hide');
+    return false;
+
+});
+
 $(document).ready(function () {
     Init.init();
 
