@@ -45,23 +45,23 @@
             <div class="card-body pt-5">
                 <div class="d-flex mb-6 mt-6">
                     <div class="py-2 px-4 col-md-4 fv-row">
-                        <label class="form-label required">Clave de rastreo: &nbsp;</label>
-                        <div class="position-relative">
-                            <input asp-for="@Model.TransacccionDetalles.ClaveRastreo" class="form-control form-control-sm form-control-solid" id="ClaveRastreo" type="text" value="@(Model?.TransacccionDetalles.ClaveRastreo ?? "")" autocomplete="off" required />
-                            <span asp-validation-for="@Model.TransacccionDetalles.ClaveRastreo" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Nombre ordenante: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="@Model.TransacccionDetalles.NombreOrdenante" class="form-control form-control-sm form-control-solid" id="NombreOrdenante" type="text" value="@(Model?.TransacccionDetalles.NombreOrdenante ?? "")" autocomplete="off" required />
+                            <input asp-for="@Model.TransacccionDetalles.NombreOrdenante" class="form-control form-control-sm form-control-solid" id="NombreOrdenante" type="text" value="@(Model?.TransacccionDetalles.NombreOrdenante ?? "")" autocomplete="off" required oninput="validateLettersInput(this)" data-error-message="Nombre Ordenante" minlength="3" maxlength="40"/>
                             <span asp-validation-for="@Model.TransacccionDetalles.NombreOrdenante" class="text-danger"></span>
+                        </div>
+                    </div>
+                        <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Cuenta ordenante: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="@Model!.TransacccionDetalles.NoCuentaOrdenante" class="form-control form-control-sm form-control-solid" id="NoCuentaOrdenante" type="text" value="@(Model?.TransacccionDetalles.NoCuentaOrdenante ?? "")" autocomplete="off" required oninput="validateNumbersInput(this)" data-error-message="Cuenta Ordenante" minlength="16" maxlength="16" />
+                            <span asp-validation-for="@Model!.TransacccionDetalles.NoCuentaOrdenante" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Cuenta origen ordenante: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="@Model.TransacccionDetalles.CuentaOrigenOrdenante" class="form-control form-control-sm form-control-solid" id="CuentaOrigenOrdenante" type="text" value="@(Model?.TransacccionDetalles.NoCuentaBeneficiario ?? "")" autocomplete="off" required />
+                            <input asp-for="@Model.TransacccionDetalles.CuentaOrigenOrdenante" class="form-control form-control-sm form-control-solid" id="CuentaOrigenOrdenante" type="text" value="@(Model?.TransacccionDetalles.NoCuentaBeneficiario ?? "")" autocomplete="off" required oninput="validateNumbersInput(this)" data-error-message="Cuenta Origen Ordenante" minlength="16" maxlength="18" />
                             <span asp-validation-for="@Model.TransacccionDetalles.CuentaOrigenOrdenante" class="text-danger"></span>
                         </div>
                     </div>
@@ -70,37 +70,44 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Nombre beneficiario: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="@Model.TransacccionDetalles.NombreBeneficiario" class="form-control form-control-sm form-control-solid" id="NombreBeneficiario" type="text" value="@(Model?.TransacccionDetalles.NombreBeneficiario)" autocomplete="off" required />
+                            <input asp-for="@Model.TransacccionDetalles.NombreBeneficiario" class="form-control form-control-sm form-control-solid" id="NombreBeneficiario" type="text" value="@(Model?.TransacccionDetalles.NombreBeneficiario)" autocomplete="off" required oninput="validateLettersInput(this)" data-error-message="Nombre Beneficiario" minlength="3" maxlength="40"/>
                             <span asp-validation-for="@Model.TransacccionDetalles.NombreBeneficiario" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Cuenta beneficiario: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="@Model.TransacccionDetalles.NoCuentaBeneficiario" class="form-control form-control-sm form-control-solid" id="NoCuentaBeneficiario" type="text" value="@(Model?.TransacccionDetalles.NoCuentaBeneficiario ?? "")" autocomplete="off" required />
+                            <input asp-for="@Model.TransacccionDetalles.NoCuentaBeneficiario" class="form-control form-control-sm form-control-solid" id="NoCuentaBeneficiario" type="text" value="@(Model?.TransacccionDetalles.NoCuentaBeneficiario ?? "")" autocomplete="off" required oninput="validateNumbersInput(this)" data-error-message="Cuenta Beneficiario" minlength="16" maxlength="18" />
                             <span asp-validation-for="@Model.TransacccionDetalles.NoCuentaBeneficiario" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Cuenta destino beneficiario: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="@Model.TransacccionDetalles.CuentaDestinoBeneficiario" class="form-control form-control-sm form-control-solid" id="CuentaDestinoBeneficiario" type="text" value="@(Model?.TransacccionDetalles.CuentaDestinoBeneficiario ?? "")" autocomplete="off" required />
+                            <input asp-for="@Model.TransacccionDetalles.CuentaDestinoBeneficiario" class="form-control form-control-sm form-control-solid" id="CuentaDestinoBeneficiario" type="text" value="@(Model?.TransacccionDetalles.CuentaDestinoBeneficiario ?? "")" autocomplete="off" required oninput="validateNumbersInput(this)" data-error-message="Cuenta Destino Beneficiario" minlength="16" maxlength="18" />
                             <span asp-validation-for="@Model.TransacccionDetalles.CuentaDestinoBeneficiario" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
                 <div class="d-flex mb-6 mt-6">
                     <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Clave de rastreo: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="@Model.TransacccionDetalles.ClaveRastreo" class="form-control form-control-sm form-control-solid" id="ClaveRastreo" type="text" value="@(Model?.TransacccionDetalles.ClaveRastreo ?? "")" autocomplete="off" required oninput="validateClaveInput(this)" data-error-message="Clave Rastreo" minlength="20" maxlength="25"/>
+                            <span asp-validation-for="@Model.TransacccionDetalles.ClaveRastreo" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Concepto: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="@Model.TransacccionDetalles.Concepto" class="form-control form-control-sm form-control-solid" id="Concepto" type="text" value="@(Model?.TransacccionDetalles.Concepto ?? "")" autocomplete="off" required />
+                            <input asp-for="@Model.TransacccionDetalles.Concepto" class="form-control form-control-sm form-control-solid" id="Concepto" type="text" value="@(Model?.TransacccionDetalles.Concepto ?? "")" autocomplete="off" required oninput="validateLettersInput(this)" data-error-message="Concepto" minlength="3" maxlength="40"/>
                             <span asp-validation-for="@Model.TransacccionDetalles.Concepto" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Fecha de operación: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="TransacccionDetalles.FechaOperacion" class="form-control form-control-sm form-control-solid" type="date" required min="1990-01-01" max="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                            <input asp-for="TransacccionDetalles.FechaOperacion" class="form-control form-control-sm form-control-solid" type="date" id="FechaOperacion" required data-error-message="Fecha de Operación" min="1990-01-01" max="@DateTime.Now.ToString("yyyy-MM-dd")" />
                         </div>
                     </div>
                 </div>
@@ -110,18 +117,18 @@
     <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmModalLabel">Confirmar Guardado</h5>
-                    <button type="button" class="close" data-dismiss="modal" id="btnCerrarModal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                <div class="modal-header header-modal">
+                    <h1 class="modal-title text-header-modal fs-5" id="confirmModalLabel">Confirmar Guardado</h1>
+                    <button type="button" class="custom-close-button" data-dismiss="modal" id="btnCerrarModal" aria-label="Close">
+                        <span>✕</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body header-modal">
                     ¿Estás seguro que deseas guardar la información?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary btn-sm" id="btnCerrarModal2" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary btn-sm" id="confirmSave">Guardar</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="confirmSave2">Guardar</button>
                 </div>
             </div>
         </div>
@@ -131,3 +138,35 @@
 @section Scripts{
     <script src="~/js/transacciones/epica.transacciones.registro.js" asp-append-version="true"></script>
 }
+
+                <style>
+
+    .header-modal {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .text-header-modal {
+        color: white;
+    }
+
+    .custom-close-button {
+        color: white;
+        background-color: transparent;
+        border: none;
+        opacity: 1;
+        padding: 0;
+        font-size: 1rem;
+        line-height: 1;
+        cursor: pointer;
+        transition: color 0.3s, opacity 0.3s;
+        position: absolute;
+        right: 0;
+        padding: 21px;
+    }
+
+        .custom-close-button:hover {
+            opacity: 0.8;
+        }
+</style>
