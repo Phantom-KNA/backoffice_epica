@@ -111,16 +111,16 @@ public class TarjetasController : Controller
 
                 if (response.Codigo == "200")
                 {
-                    return RedirectToAction("Index");
+                    return Ok(new { success = true });
                 }
                 else
                 {
-                    return RedirectToAction("RegistroTarjetaCliente");
+                    return Ok(new { success = false });
                 }
             }
             catch (Exception ex)
             {
-                return View("RegistroTarjetaCliente");
+                return BadRequest();
             }
         }
 

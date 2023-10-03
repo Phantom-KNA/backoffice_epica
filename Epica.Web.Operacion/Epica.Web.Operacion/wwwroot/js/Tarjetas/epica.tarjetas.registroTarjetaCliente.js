@@ -138,3 +138,48 @@ $(document).on('keydown', '#nombreCliente', function (e) {
         $('#btnBuscarCliente').click();
     }
 });
+
+$('#confirmSave').on('click', function () {
+    var formData = $('form').serialize();
+
+    $.ajax({
+        url: 'RegistrarTarjetaCliente',
+        type: 'POST',
+        data: formData,
+        success: function (response) {
+            if (response.success === true) {
+                Swal.fire({
+                    title: 'Operación exitosa',
+                    icon: 'success',
+                    showCancelButton: false,
+                    confirmButtonText: 'Aceptar',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/Tarjetas';
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Operación fallida',
+                    text: 'Ocurrió un error durante la operación.',
+                    icon: 'error',
+                    showCancelButton: false,
+                    confirmButtonText: 'Aceptar',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/Tarjetas/RegistroTarjetaCliente';
+                    }
+                });
+            }
+        },
+        error: function () {
+            Swal.fire({
+                title: 'Error de comunicación con el servidor',
+                text: 'Por favor, inténtelo de nuevo más tarde.',
+                icon: 'error',
+                showCancelButton: false,
+                confirmButtonText: 'Aceptar',
+            });
+        }
+    });
+});
