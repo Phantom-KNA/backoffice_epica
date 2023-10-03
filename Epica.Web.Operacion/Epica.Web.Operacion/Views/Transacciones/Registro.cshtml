@@ -41,33 +41,41 @@
         </div>
         <div class="card-body pt-5">
             <div class="d-flex mb-6 mt-6">
-                    <div class="py-2 px-4 col-md-4 fv-row">
+                    <div class="py-2 px-4 col-md-3 fv-row">
                         <label class="form-label required">Clave de rastreo: &nbsp;</label>
                         <div class="position-relative">
                             <input asp-for="@Model.TransacccionDetalles.ClaveRastreo" class="form-control form-control-sm form-control-solid" id="ClaveRastreo" type="text" value="@(Model?.TransacccionDetalles.ClaveRastreo ?? "")" autocomplete="off" required oninput="validateClaveInput(this)" data-error-message="Clave Rastreo" minlength="20" maxlength="25" />
                             <span asp-validation-for="@Model!.TransacccionDetalles.ClaveRastreo" class="text-danger"></span>
                         </div>
                     </div>
-                    <div class="py-2 px-4 col-md-4 fv-row">
+                    <div class="py-2 px-4 col-md-3 fv-row">
                         <label class="form-label required">Nombre ordenante: &nbsp;</label>
                         <div class="position-relative">
                             <input asp-for="@Model!.TransacccionDetalles.NombreOrdenante" class="form-control form-control-sm form-control-solid" id="NombreOrdenante" type="text" value="@(Model?.TransacccionDetalles.NombreOrdenante ?? "")" autocomplete="off" required oninput="validateInput(this)" data-error-message="Nombre Ordenante" minlength="3" maxlength="40" />
                             <span asp-validation-for="@Model!.TransacccionDetalles.NombreOrdenante" class="text-danger"></span>
                         </div>
                     </div>
-                    <div class="py-2 px-4 col-md-4 fv-row">
+                    <div class="py-2 px-4 col-md-3 fv-row">
+                        <label class="form-label required">Cuenta ordenante: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="@Model!.TransacccionDetalles.cuentaOrdenante" class="form-control form-control-sm form-control-solid" id="CuentaOrdenante" type="text" value="@(Model?.TransacccionDetalles.cuentaOrdenante ?? "")" autocomplete="off" required oninput="validateNumbersInput(this)" data-error-message="Cuenta Ordenante" minlength="16" maxlength="18" />
+                            <span asp-validation-for="@Model!.TransacccionDetalles.cuentaOrdenante" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-3 fv-row">
                         <label class="form-label required">Cuenta beneficiario: &nbsp;</label>
                         <div class="position-relative">
                             <input asp-for="@Model!.TransacccionDetalles.NoCuentaBeneficiario" class="form-control form-control-sm form-control-solid" id="NoCuentaBeneficiario" type="text" value="@(Model?.TransacccionDetalles.NoCuentaBeneficiario ?? "")" autocomplete="off" required oninput="validateNumbersInput(this)" data-error-message="Cuenta Beneficiario" minlength="16" maxlength="18" />
                             <span asp-validation-for="@Model!.TransacccionDetalles.NoCuentaBeneficiario" class="text-danger"></span>
                         </div>
                     </div>
+
             </div>
             <div class="d-flex mb-6 mt-6">
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Monto: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="@Model!.TransacccionDetalles.Monto" class="form-control form-control-sm form-control-solid" id="Monto" type="number" value="@(Model?.TransacccionDetalles.Monto)" autocomplete="off" required data-error-message="Monto" type="text" autocomplete="off" oninput="validateMontoInput(this)" maxlength="20" />
+                            <input asp-for="@Model!.TransacccionDetalles.Monto" class="form-control form-control-sm form-control-solid" id="Monto" type="number" value="@(Model?.TransacccionDetalles.Monto.ToString() ?? "")" autocomplete="off" required data-error-message="Monto" type="text" autocomplete="off" oninput="validateMontoInput(this)" maxlength="20" />
                             <span asp-validation-for="@Model!.TransacccionDetalles.Monto" class="text-danger"></span>
                         </div>
                     </div>
@@ -126,7 +134,7 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Fecha de operación: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="TransacccionDetalles.FechaOperacion" id="FechaOperacion" class="form-control form-control-sm form-control-solid" type="date" required data-error-message="Fecha de Operación" />
+                            <input asp-for="TransacccionDetalles.FechaOperacion" id="FechaOperacion" class="form-control form-control-sm form-control-solid" type="date" required data-error-message="Fecha de Operación" min="1990-01-01" max="@DateTime.Now.ToString("yyyy-MM-dd")" />
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">

@@ -187,13 +187,58 @@ $('#confirmSave').on('click', function () {
             } else {
                 Swal.fire({
                     title: 'Operación fallida',
-                    text: 'Ocurrió un error durante la operación.',
+                    text: response.detalle,
                     icon: 'error',
                     showCancelButton: false,
                     confirmButtonText: 'Aceptar',
                 }).then((result) => {
                     if (result.isConfirmed) {
                         window.location.href = '/Transacciones/Registro';
+                    }
+                });
+            }
+        },
+        error: function () {
+            Swal.fire({
+                title: 'Error de comunicación con el servidor',
+                text: 'Por favor, inténtelo de nuevo más tarde.',
+                icon: 'error',
+                showCancelButton: false,
+                confirmButtonText: 'Aceptar',
+            });
+        }
+    });
+});
+
+$('#confirmSave2').on('click', function () {
+    var formData = $('form').serialize();
+
+    $.ajax({
+        url: 'ModificarTransaccion',
+        type: 'POST',
+        data: formData,
+        success: function (response) {
+            if (response.success === true) {
+                Swal.fire({
+                    title: 'Operación exitosa',
+                    icon: 'success',
+                    showCancelButton: false,
+                    confirmButtonText: 'Aceptar',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/Transacciones';
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Operación fallida',
+                    text: response.detalle,
+                    icon: 'error',
+                    showCancelButton: false,
+                    confirmButtonText: 'Aceptar',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/Transacciones';
                     }
                 });
             }

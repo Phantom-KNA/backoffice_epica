@@ -336,7 +336,7 @@ $('#confirmSave').on('click', function () {
             } else {
                 Swal.fire({
                     title: 'Operación fallida',
-                    text: 'Ocurrió un error durante la operación.',
+                    text: response.detalle,
                     icon: 'error',
                     showCancelButton: false,
                     confirmButtonText: 'Aceptar',

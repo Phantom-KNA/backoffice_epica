@@ -320,7 +320,7 @@ namespace Epica.Web.Operacion.Controllers
                     }
                     else
                     {
-                        return Ok(new { success = false });
+                        return Ok(new { success = false, response.Detalle });
                     }
                 }
                 catch (Exception ex)
@@ -410,16 +410,16 @@ namespace Epica.Web.Operacion.Controllers
 
                     if (response.Codigo == "200")
                     {
-                        return RedirectToAction("Index");
+                        return Ok(new { success = true });
                     }
                     else
                     {
-                        return RedirectToAction("Registro");
+                        return Ok(new { success = false, response.Detalle });
                     }
                 }
                 catch (Exception ex)
                 {
-                    return View();
+                    return BadRequest();
                 }
             }
 
