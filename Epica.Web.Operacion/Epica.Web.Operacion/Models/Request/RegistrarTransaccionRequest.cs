@@ -27,5 +27,6 @@ public class RegistrarTransaccionRequest
     public int Comision { get; set; }
     [JsonPropertyName("nombreOrdenante")]
     public string? NombreOrdenante { get; set; }
+    public string? cuentaOrdenante { get; set; }
 }
 
