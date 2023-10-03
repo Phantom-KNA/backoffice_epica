@@ -1080,7 +1080,7 @@ public class ClientesController : Controller
                 }
                 else
                 {
-                    return Ok(new { success = false });
+                    return Ok(new { success = false, response.Detalle});
                 }
             }
             catch (Exception ex)

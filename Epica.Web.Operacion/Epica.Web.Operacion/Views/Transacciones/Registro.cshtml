@@ -67,7 +67,7 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Monto: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="@Model!.TransacccionDetalles.Monto" class="form-control form-control-sm form-control-solid" id="Monto" type="number" value="@(Model?.TransacccionDetalles.Monto)" autocomplete="off" required data-error-message="Monto" type="text" autocomplete="off" oninput="validateMontoInput(this)" maxlength="20" />
+                            <input asp-for="@Model!.TransacccionDetalles.Monto" class="form-control form-control-sm form-control-solid" id="Monto" type="number" value="@(Model?.TransacccionDetalles.Monto.ToString() ?? "")" autocomplete="off" required data-error-message="Monto" type="text" autocomplete="off" oninput="validateMontoInput(this)" maxlength="20" />
                             <span asp-validation-for="@Model!.TransacccionDetalles.Monto" class="text-danger"></span>
                         </div>
                     </div>
@@ -126,7 +126,7 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Fecha de operación: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="TransacccionDetalles.FechaOperacion" id="FechaOperacion" class="form-control form-control-sm form-control-solid" type="date" required data-error-message="Fecha de Operación" />
+                            <input asp-for="TransacccionDetalles.FechaOperacion" id="FechaOperacion" class="form-control form-control-sm form-control-solid" type="date" required data-error-message="Fecha de Operación" min="1990-01-01" max="@DateTime.Now.ToString("yyyy-MM-dd")" />
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">

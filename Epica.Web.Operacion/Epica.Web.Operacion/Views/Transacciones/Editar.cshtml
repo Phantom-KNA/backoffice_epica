@@ -100,7 +100,7 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Fecha de operación: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="TransacccionDetalles.FechaOperacion" class="form-control form-control-sm form-control-solid" type="date" required />
+                            <input asp-for="TransacccionDetalles.FechaOperacion" class="form-control form-control-sm form-control-solid" type="date" required min="1990-01-01" max="@DateTime.Now.ToString("yyyy-MM-dd")" />
                         </div>
                     </div>
                 </div>
