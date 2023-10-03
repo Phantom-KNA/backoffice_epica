@@ -1355,7 +1355,7 @@ namespace Epica.Web.Operacion.Controllers
             try
             {
                 //Validar que la cadena tenga solo numeros
-                bool isNumeric = Regex.IsMatch(cadena, @"^\d+$");
+                bool isNumeric = Regex.IsMatch(cadena, "^\\d+\\.?\\d*$");
                 if (isNumeric != true)
                 {
                     error = true;

@@ -5,7 +5,7 @@
 }
 function SoloLetras(e) {
     var keyCode = e.keyCode || e.which;
-    var regex = /^[A-Za-z]+$/;
+    var regex = /^[A-Za-z? ]+$/;
 
     //Validate TextBox value against the Regex.
     var isValid = regex.test(String.fromCharCode(keyCode));
@@ -18,7 +18,7 @@ function SoloLetras(e) {
 
 function SinCaracteresEspeciales(e) {
     var keyCode = e.keyCode || e.which;
-    var regex = /^[A-Za-z0-9]+$/;
+    var regex = /^[A-Za-z0-9? ]+$/;
 
     //Validate TextBox value against the Regex.
     var isValid = regex.test(String.fromCharCode(keyCode));
