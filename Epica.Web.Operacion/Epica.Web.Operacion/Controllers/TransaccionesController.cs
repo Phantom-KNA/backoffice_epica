@@ -1218,7 +1218,17 @@ namespace Epica.Web.Operacion.Controllers
                 //    });
                 //}
 
-                respuesta = await _transaccionesApiClient.GetProcesaTransaccion(loginResponse.IdUsuario);
+                var validaButton = await _transaccionesApiClient.GetTotalTransaccionesBatchAsync(idUsuario);
+
+                if (validaButton == 0) {
+                    respuesta.Error = true;
+                    respuesta.message = "No existen transacciones pendientes para procesar";
+                } else {
+                    respuesta = await _transaccionesApiClient.GetProcesaTransaccion(loginResponse.IdUsuario);
+
+                    var transaccionesPendientes = await _transaccionesApiClient.GetTotalTransaccionesBatchAsync(idUsuario);
+                    respuesta.Detalle = transaccionesPendientes.ToString();
+                }      
             }
             catch (Exception ex)
             {

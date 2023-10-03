@@ -413,7 +413,7 @@ function AlmacenarTransacciones(idUsuario) {
                 dataType: 'json',
                 data: { 'idUsuario': idUsuario },
                 success: function (data) {
-
+                    console.log(data);
                     $('#kt_modal_Nuevo').modal('toggle');
 
                     if (data.error == true) {
@@ -424,8 +424,11 @@ function AlmacenarTransacciones(idUsuario) {
                         )
                     } else {
                         datatable_transaccion.ajax.reload();
-                        $("#area_CancelarTransacciones").show();
-                        $("#area_CargarTransacciones").hide();
+                        if (data.detalle == "0") {
+                            $("#area_CancelarTransacciones").hide();
+                            $("#area_CargarTransacciones").show();
+                        }
+
                         Swal.fire(
                             'Carga Masiva Transacciones',
                             'Se han cargado las transacciones de forma exitosa.',
