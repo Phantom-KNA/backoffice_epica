@@ -505,7 +505,7 @@ namespace Epica.Web.Operacion.Controllers
                 var ValidaEncabezado = tablaDatos.Rows[0];
                 if (ValidaEncabezado.ItemArray.Length != 8) {
                     response.Error = true;
-                    response.message = "El Archivo Excel no cuenta con la estructura correcta para poder ser procesado.";
+                    response.message = "El Archivo Excel no cuenta con la estructura correcta para poder ser procesado o el archivo tiene un formato diferente al indicado.";
                     return Json(response);
                 }
 
