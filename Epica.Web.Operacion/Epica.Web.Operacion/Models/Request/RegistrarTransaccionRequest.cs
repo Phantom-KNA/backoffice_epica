@@ -24,9 +24,8 @@ public class RegistrarTransaccionRequest
     [JsonPropertyName("medioPago")]
     public int MedioPago { get; set; }
     [JsonPropertyName("comision")]
-    public int Comision { get; set; }
-    [JsonPropertyName("nombreOrdenante")]
-    public string? NombreOrdenante { get; set; }
+    public int Comision { get; set; }    
     public string? cuentaOrdenante { get; set; }
+
 }
 
