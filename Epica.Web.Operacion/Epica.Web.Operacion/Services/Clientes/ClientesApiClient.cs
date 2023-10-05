@@ -63,6 +63,103 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return (listaClientes, paginacion);
         }
 
+        public async Task<MensajeResponse> GetClienteExisteTelefonoAsync(string telefono)
+        {
+            FiltroDatosResponse? responseDatos = new FiltroDatosResponse();
+            MensajeResponse mensajeResponse = new MensajeResponse
+            {
+                Error = false,
+                Detalle = "No hay resultados",
+                Codigo = "200",
+                message = "No hay resultados"
+            };
+
+            int pageNumber = 1;
+            int pageSize = 1;
+
+            var uri = Urls.Transaccion + UrlsConfig.ClientesOperations.GetClienteExiste(pageNumber, pageSize, telefono, "");
+
+            try
+            {
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    responseDatos = JsonConvert.DeserializeObject<FiltroDatosResponse>(jsonResponse);
+
+                    if (responseDatos?.cantidadEncontrada != 0)
+                    {
+                        mensajeResponse.Error = true;
+                        mensajeResponse.Detalle = "ya existe un registro con el mismo Teléfono";
+                        mensajeResponse.Codigo = "404";
+                        mensajeResponse.message = "Error al registrar";
+                    }
+                    return mensajeResponse;
+                }
+            }
+            catch (Exception ex)
+            {
+                mensajeResponse.Error = true;
+                mensajeResponse.Detalle = "Error en la solicitud";
+                mensajeResponse.Codigo = "500";
+                mensajeResponse.message = ex.Message;
+
+                return mensajeResponse;
+            }
+
+            return mensajeResponse;
+        }
+
+        public async Task<MensajeResponse> GetClienteExisteCorreoAsync(string correo)
+        {
+            FiltroDatosResponse? responseDatos = new FiltroDatosResponse();
+            MensajeResponse mensajeResponse = new MensajeResponse
+            {
+                Error = false,
+                Detalle = "No hay resultados",
+                Codigo = "200",
+                message = "No hay resultados"
+            };
+
+            int pageNumber = 1;
+            int pageSize = 1;
+
+            var uri = Urls.Transaccion + UrlsConfig.ClientesOperations.GetClienteExiste(pageNumber, pageSize, "", correo);
+
+            try
+            {
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    responseDatos = JsonConvert.DeserializeObject<FiltroDatosResponse>(jsonResponse);
+
+                    if (responseDatos?.cantidadEncontrada != 0)
+                    {
+                        mensajeResponse.Error = true;
+                        mensajeResponse.Detalle = "ya existe un registro con el mismo Correo";
+                        mensajeResponse.Codigo = "404";
+                        mensajeResponse.message = "Error al registrar";
+                    }
+                    return mensajeResponse;
+                }
+            }
+            catch (Exception ex)
+            {
+                mensajeResponse.Error = true;
+                mensajeResponse.Detalle = "Error en la solicitud";
+                mensajeResponse.Codigo = "500";
+                mensajeResponse.message = ex.Message;
+
+                return mensajeResponse;
+            }
+
+            return mensajeResponse;
+        }
         public async Task<(List<ClienteResponse>, int)> GetClientesFilterAsync(int pageNumber, int recordsTotal, int columna, bool ascendente, List<RequestListFilters> filters)
         {
             FiltroDatosResponse? responseDatos = new FiltroDatosResponse();

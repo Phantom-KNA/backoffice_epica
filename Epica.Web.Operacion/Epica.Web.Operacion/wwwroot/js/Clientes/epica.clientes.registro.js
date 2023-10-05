@@ -362,6 +362,8 @@ $(document).ready(function () {
 });
 
 $('#confirmSave').on('click', function () {
+    $(this).prop('disabled', true);
+
     var formData = $('form').serialize();
 
     $.ajax({
@@ -371,6 +373,8 @@ $('#confirmSave').on('click', function () {
         cache:false,
         data: formData,
         success: function (response) {
+            $('#confirmSave').prop('disabled', false);
+
             if (response.success === true) {
                 Swal.fire({
                     title: 'Operación exitosa',
@@ -391,18 +395,24 @@ $('#confirmSave').on('click', function () {
                     confirmButtonText: 'Aceptar',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = '/Clientes/Registro';
+                        $('#confirmModal').modal('hide');
                     }
                 });
             }
         },
         error: function () {
+            $('#confirmSave').prop('disabled', false);
+
             Swal.fire({
                 title: 'Error de comunicación con el servidor',
                 text: 'Por favor, inténtelo de nuevo más tarde.',
                 icon: 'error',
                 showCancelButton: false,
                 confirmButtonText: 'Aceptar',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#confirmModal').modal('hide');
+                }
             });
         }
     });
