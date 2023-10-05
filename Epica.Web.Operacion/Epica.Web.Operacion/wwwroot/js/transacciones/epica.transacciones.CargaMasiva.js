@@ -394,7 +394,37 @@ $(document).on('click', '#btnGuardarModificaciones', function (e) {
 });
 
 function AlmacenarTransacciones(idUsuario) {
+    Swal.fire({
+        title: '<span class="swal-title-custom"><b>Valida tu identidad</b></span>',
+        text: 'Por favor, ingrese su token y código de seguridad:',
+        html:
+            '<label for="swal-input1" class="swal-label"><b>Token:</b></label>' +
+            '<input id="swal-input1" class="swal2-input" style="font-size:14px;width:250px"  placeholder="Token" oninput="validateInput(this)" maxlength="6">' +
+            '<div style="margin-top: 20px;"></div>' +
+            '<label for="swal-input2" class="swal-label"><b>Código de Seguridad:</b></label>' +
+            '<input id="swal-input2" class="swal2-input" style="font-size:14px;width:250px" type="password" placeholder="Código de Seguridad" oninput="validateInput(this)" maxlength="6">',
+        showCancelButton: true,
+        confirmButtonColor: '#0493a8',
+        confirmButtonText: 'Aceptar',
+        cancelButtonText: 'Cancelar',
+        preConfirm: () => {
+            const swalInput1 = Swal.getPopup().querySelector('#swal-input1').value;
+            const swalInput2 = Swal.getPopup().querySelector('#swal-input2').value;
+            return [swalInput1, swalInput2];
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const [tokenInput, codigoInput] = result.value;
 
+            if (isValidInput(tokenInput) && isValidInput(codigoInput)) {
+                $.ajax({
+                    url: '/Autenticacion/ValidarTokenYCodigo',
+                    async: true,
+                    cache: false,
+                    type: 'POST',
+                    data: { token: tokenInput, codigo: codigoInput },
+                    success: function (validationResult) {
+                        if (validationResult.mensaje === true) {
     Swal.fire({
         title: 'Almacenar Cambios Transacción',
         text: "¿Estás seguro de que deseas almacenar estos cambios?",
@@ -440,9 +470,36 @@ function AlmacenarTransacciones(idUsuario) {
                 }
             });
         }
-    })
+    });
+                        } else {
+                            Swal.fire(
+                                'Error',
+                                'Token o código de seguridad incorrectos. Inténtalo de nuevo.',
+                                'error'
+                            );
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            } else {
+                Swal.fire(
+                    'Error',
+                    'Los campos Token y Código de Seguridad deben contener 6 números.',
+                    'error'
+                );
+            }
+        }
+    });
 }
 
+function validateInput(inputElement) {
+    inputElement.value = inputElement.value.replace(/[^0-9]/g, '');
+}
+
+function isValidInput(input) {
+    return input.length === 6 && !isNaN(input);
+}
 
 function CancelarTransacciones(idUsuario) {
 
