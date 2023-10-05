@@ -171,6 +171,8 @@ $('#confirmSave').on('click', function () {
     $.ajax({
         url: 'RegistrarTransaccion',
         type: 'POST',
+        async: true,
+        cache: false,
         data: formData,
         success: function (response) {
             if (response.success === true) {
@@ -216,6 +218,8 @@ $('#confirmSave2').on('click', function () {
     $.ajax({
         url: 'ModificarTransaccion',
         type: 'POST',
+        async: true,
+        cache: false,
         data: formData,
         success: function (response) {
             if (response.success === true) {

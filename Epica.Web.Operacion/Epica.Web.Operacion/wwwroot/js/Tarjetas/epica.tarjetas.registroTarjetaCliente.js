@@ -145,6 +145,8 @@ $('#confirmSave').on('click', function () {
     $.ajax({
         url: 'RegistrarTarjetaCliente',
         type: 'POST',
+        async: true,
+        cache: false,
         data: formData,
         success: function (response) {
             if (response.success === true) {

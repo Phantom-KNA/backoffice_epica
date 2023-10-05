@@ -45,6 +45,53 @@ function validateAlphanumericInput(inputElement) {
     }
 }
 
+function limitarDecimalesYDigitos(input) {
+    let valor = input.value;
+
+    // Reemplazar comas por puntos para tener el formato numérico adecuado.
+    valor = valor.replace(/,/g, '.');
+
+    // Eliminar caracteres no numéricos, excepto el primer punto decimal.
+    valor = valor.replace(/[^0-9.]+/g, match => {
+        if (match === '.') return match;
+        return '';
+    });
+
+    // Verificar si el valor es un número válido.
+    if (!isNaN(valor)) {
+        // Obtener la posición del primer punto decimal.
+        const puntoDecimalIndex = valor.indexOf('.');
+
+        if (puntoDecimalIndex !== -1) {
+            // Si hay un punto decimal, limitar a 2 decimales.
+            const parteDecimal = valor.slice(puntoDecimalIndex + 1);
+            const parteEntera = valor.slice(0, puntoDecimalIndex);
+
+            if (parteDecimal.length > 2) {
+                valor = parteEntera + '.' + parteDecimal.slice(0, 2);
+            }
+        }
+
+        // Limitar a 8 dígitos enteros.
+        const dígitosEnteros = valor.split('.')[0];
+        if (dígitosEnteros.length > 8) {
+            valor = dígitosEnteros.slice(0, 8) + '.' + (valor.split('.')[1] || '');
+        }
+
+        // Verificar el número máximo de caracteres (incluyendo dígitos y decimales).
+        if (valor.length <= 13) {
+            // Si cumple con los límites, establecer el valor limitado.
+            input.value = valor;
+        } else {
+            // Si excede el límite de 13 caracteres, recortar el valor.
+            input.value = valor.slice(0, 13);
+        }
+    } else {
+        // Si no es un número válido, eliminar caracteres no numéricos.
+        input.value = '';
+    }
+}
+
 function validateMontoInput(inputElement) {
     var inputValue = inputElement.value;
 
@@ -318,8 +365,10 @@ $('#confirmSave').on('click', function () {
     var formData = $('form').serialize();
 
     $.ajax({
-        url: 'Registro',
+        url: 'RegistrarCliente',
         type: 'POST',
+        async: true,
+        cache:false,
         data: formData,
         success: function (response) {
             if (response.success === true) {
