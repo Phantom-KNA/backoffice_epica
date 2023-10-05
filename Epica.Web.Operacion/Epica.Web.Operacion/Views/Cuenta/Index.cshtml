@@ -43,7 +43,7 @@
                                 <i class="bi bi-filter"></i>&nbsp;
                                 Filtrado
                             </button>
-                            <div class="menu menu-sub menu-sub-dropdown w-300px w-md-450px" data-kt-menu="true" id="kt-toolbar-filter">
+                            <div class="menu menu-sub menu-sub-dropdown w-300px w-md-500px" data-kt-menu="true" id="kt-toolbar-filter">
                                 <div class="px-7 py-5">
                                     <div class="fs-4 text-dark fw-bold">Filtros</div>
                                 </div>
@@ -52,22 +52,22 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Cuenta Clabe:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="cuentaClabe" placeholder="Cuenta Clabe" onkeypress="return SoloNumeros(event)" maxlength="18" id="filtro_cuenta_clabe" />
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="cuentaClabe" placeholder="Cuenta Clabe" onkeypress="return SoloNumeros(event)" oninput="validateNumbersInput(this)" maxlength="18" id="filtro_cuenta_clabe" />
                                         </div>
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Número de Cuenta:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="noCuenta" onkeypress="return SoloNumeros(event)" maxlength="16" placeholder="Número de Cuenta" id="filtro_no_cuenta" />
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="noCuenta" onkeypress="return SoloNumeros(event)" oninput="validateNumbersInput(this)" maxlength="16" placeholder="Número de Cuenta" id="filtro_no_cuenta" />
                                         </div>
                                     </div>
                                     <br />
                                     <div class="row">
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Nombre Persona:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreCliente" onkeypress="return SoloLetras(event)" maxlength="40" placeholder="Nombre Persona" id="filtro_nombre_cliente" />
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreCliente" onkeypress="return SoloLetras(event)" oninput="validateInput(this)" maxlength="40" placeholder="Nombre Persona" id="filtro_nombre_cliente" />
                                         </div>
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Saldo:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="saldo" type="number" min="0" maxlength="40" placeholder="Saldo" id="filtro_saldo" />
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="saldo" type="number" min="0" maxlength="8" placeholder="Saldo" id="filtro_saldo" />
                                         </div>
                                     </div>
                                     <br />
@@ -93,7 +93,7 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <label class="form-label fs-5 fw-semibold mb-3">Tipo de Persona:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="tipoPersona" onkeypress="return SoloLetras(event)" maxlength="50" placeholder="Tipo de Persona" id="filtro_tipoPersona" />
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="tipoPersona" onkeypress="return SoloLetras(event)" oninput="validateInput(this)" maxlength="50" placeholder="Tipo de Persona" id="filtro_tipoPersona" />
                                         </div>
                                     </div>
                                     <br />
@@ -195,6 +195,7 @@
 @section Scripts{
     <script asp-append-version="true" src="~/js/components/accounting.js"></script>
     <script asp-append-version="true" src="~/js/Cuentas/epica.cuenta.index.js"></script>
+    <script asp-append-version="true" src="~/js/components/utilerias.js"></script>
     <script>
         var TranID = '';
     </script>

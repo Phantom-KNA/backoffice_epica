@@ -56,18 +56,18 @@
                                     <div class="row">
                                         <div class="col-6">                     
                                             <label class="form-label fs-5 fw-semibold mb-3">Cuenta Ordenante:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="cuentaOrdenante" onkeypress="return SoloNumeros(event)" maxlength="18" placeholder="Cuenta Ordenante" id="filtro_cuenta_ordenante" />
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="cuentaOrdenante" onkeypress="return SoloNumeros(event)" oninput="validateNumbersInput(this)" maxlength="18" placeholder="Cuenta Ordenante" id="filtro_cuenta_ordenante" />
                                         </div>
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Cuenta Beneficiario:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="cuentaBeneficiario" onkeypress="return SoloNumeros(event)" maxlength="18" placeholder="Cuenta Beneficiario" id="filtro_cuenta_beneficiario" />
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="cuentaBeneficiario" onkeypress="return SoloNumeros(event)" oninput="validateNumbersInput(this)" maxlength="18" placeholder="Cuenta Beneficiario" id="filtro_cuenta_beneficiario" />
                                         </div>
                                     </div>
                                     <br />
                                     <div class="row">
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Clave de Rastreo:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="claveRastreo" onkeypress="return SinCaracteresEspeciales(event)" maxlength="50" placeholder="Clave de Rastreo" id="filtro_clave_rastreo" />
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="claveRastreo" onkeypress="return SinCaracteresEspeciales(event)" oninput="validateClaveInput(this)" maxlength="50" placeholder="Clave de Rastreo" id="filtro_clave_rastreo" />
                                         </div>
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Monto:</label>
@@ -94,7 +94,7 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Observaciones:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="observaciones" maxlength="100" onkeypress="return SinCaracteresEspeciales(event)"  placeholder="Observaciones" id="filtro_observaciones" />
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="observaciones" maxlength="100" onkeypress="return SinCaracteresEspeciales(event)" oninput="validateClaveInput(this)" placeholder="Observaciones" id="filtro_observaciones" />
                                         </div>
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Medio de Pago:</label>
@@ -114,7 +114,7 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <label class="form-label fs-5 fw-semibold mb-3">Concepto:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="concepto" placeholder="Concepto de la Transacción" id="filtro_concepto" />
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="concepto" maxlength="50" oninput="validateClaveInput(this)" placeholder="Concepto de la Transacción" id="filtro_concepto" />
                                         </div>
                                     </div>
                                     <br />

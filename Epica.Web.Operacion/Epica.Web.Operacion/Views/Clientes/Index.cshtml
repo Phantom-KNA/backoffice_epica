@@ -39,49 +39,61 @@
                                 <i class="bi bi-filter"></i>&nbsp;
                                 Filtrado
                             </button>
-                            <div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px" data-kt-menu="true" id="kt-toolbar-filter">
+                            <div class="menu menu-sub menu-sub-dropdown w-300px w-md-500px" data-kt-menu="true" id="kt-toolbar-filter">
                                 <div class="px-7 py-5">
                                     <div class="fs-4 text-dark fw-bold">Filtros</div>
                                 </div>
                                 <div class="separator border-gray-200"></div>
 
                                 <div class="px-7 py-5">
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Nombre:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreCliente" placeholder="Nombre" id="filtro_nombre_cliente" />
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Nombre:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" onkeypress="return SoloLetras(event)" oninput="validateInput(this)" maxlength="40" data-filtrar="nombreCliente" placeholder="Nombre" id="filtro_nombre_cliente" />
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Teléfono:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" onkeypress="return SoloNumeros(event)" oninput="validateNumbersInput(this)" maxlength="10" data-filtrar="telefono" placeholder="Teléfono" id="filtro_telefono" />
+                                        </div>
                                     </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Teléfono:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="telefono" placeholder="Teléfono" id="filtro_telefono" />
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Correo Electrónico:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="correoElectronico" maxlength="40" placeholder="Correo Electrónico" id="filtro_correo_electronico" />
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">CURP:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" onkeypress="return SoloLetras(event)" oninput="validateInput(this)" maxlength="18" data-filtrar="curp" placeholder="CURP" id="filtro_curp" />
+                                        </div>
                                     </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Correo Electrónico:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="correoElectronico" placeholder="Correo Electrónico" id="filtro_correo_electronico" />
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Estatus Web:</label>
+                                            <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatusWeb" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_estatus_web" data-minimum-results-for-search="Infinity">
+                                                <option></option>
+                                                <option value="1">Activo</option>
+                                                <option value="2">Desactivado</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Estatus Total:</label>
+                                            <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatusTotal" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_estatus_total" data-minimum-results-for-search="Infinity">
+                                                <option></option>
+                                                <option value="activo">Activo</option>
+                                                <option value="bloqueado">Desactivado</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">CURP:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="curp" placeholder="CURP" id="filtro_curp" />
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Organización:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="organizacion" onkeypress="return SoloLetras(event)" oninput="validateInput(this)" maxlength="30" placeholder="Organización" id="filtro_organizacion" />
+                                        </div>
                                     </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Organización:</label>
-                                        <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="organizacion" placeholder="Organización" id="filtro_organizacion" />
-                                    </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Estatus Web:</label>
-                                        <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatusWeb" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_estatus_web" data-minimum-results-for-search="Infinity">
-                                            <option></option>
-                                            <option value="1">Activo</option>
-                                            <option value="2">Desactivado</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-5">
-                                        <label class="form-label fs-5 fw-semibold mb-3">Estatus Total:</label>
-                                        <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatusTotal" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_estatus_total" data-minimum-results-for-search="Infinity">
-                                            <option></option>
-                                            <option value="activo">Activo</option>
-                                            <option value="bloqueado">Desactivado</option>
-                                        </select>
-                                    </div>
+                                    <br />
                                     <div class="d-flex justify-content-end">
                                         <button type="reset" class="btn btn-sm btn-light btn-active-light-primary me-2 btn_limpiar_filtros" data-kt-menu-dismiss="true" data-kt-customer-table-filter="reset">Limpiar</button>
                                         <button type="submit" class="btn btn-sm btn-primary btn-filtrar" data-kt-menu-dismiss="true" data-kt-customer-table-filter="filter">Aplicar</button>
@@ -185,7 +197,8 @@
 
 @section Scripts{
     <script src="~/js/Clientes/epica.clientes.index.js" asp-append-version="true"></script>
-    
+    <script asp-append-version="true" src="~/js/components/utilerias.js"></script>
+
 }
 
 <style>

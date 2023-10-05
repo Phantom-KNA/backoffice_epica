@@ -665,24 +665,24 @@ $('#kt_datatable').on('hide.bs.dropdown', function () {
     $('#kt_datatable').css("overflow", "auto");
 })
 
-function SoloNumeros(e) {
-    var charCode = (e.which) ? e.which : event.keyCode;
-    if (String.fromCharCode(charCode).match(/[^0-9]/g))
-        return false;
-}
-function SoloLetras(e) {
-    var keyCode = e.keyCode || e.which;
-    var regex = /^[A-Za-z]+$/;
+//function SoloNumeros(e) {
+//    var charCode = (e.which) ? e.which : event.keyCode;
+//    if (String.fromCharCode(charCode).match(/[^0-9]/g))
+//        return false;
+//}
+//function SoloLetras(e) {
+//    var keyCode = e.keyCode || e.which;
+//    var regex = /^[A-Za-z]+$/;
 
-    //Validate TextBox value against the Regex.
-    var isValid = regex.test(String.fromCharCode(keyCode));
-    if (!isValid) {
-        return false;
-    }
+//    //Validate TextBox value against the Regex.
+//    var isValid = regex.test(String.fromCharCode(keyCode));
+//    if (!isValid) {
+//        return false;
+//    }
 
-    return isValid;
+//    return isValid;
 
-}
+//}
 
 function atributoThemeCambiado(mutationsList) {
     //alert("cambio de tema");

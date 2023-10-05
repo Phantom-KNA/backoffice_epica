@@ -48,7 +48,7 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Cuenta Ordenante:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="cuentaOrdenante" onkeypress="return SoloNumeros(event)" maxlength="18" placeholder="Cuenta Ordenante" id="filtro_cuenta_ordenante" />
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="cuentaOrdenante" onkeypress="return SoloNumeros(event)" oninput="validateNumbersInput(this)" maxlength="18" placeholder="Cuenta Ordenante" id="filtro_cuenta_ordenante" />
                                         </div>
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Clave de Rastreo:</label>
@@ -59,11 +59,11 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Nombre Beneficiario:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreBeneficiario" onkeypress="return SoloLetras(event)" maxlength="50" placeholder="Nombre Del Beneficiario" id="filtro_nombreBeneficiario" />
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreBeneficiario" onkeypress="return SoloLetras(event)" oninput="validateInput(this)" maxlength="50" placeholder="Nombre Del Beneficiario" id="filtro_nombreBeneficiario" />
                                         </div>
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Nombre Ordenante:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreOrdenante" onkeypress="return SoloLetras(event)" maxlength="50" placeholder="Nombre del Ordenante" id="filtro_nombreOrdenante" />
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="nombreOrdenante" onkeypress="return SoloLetras(event)" oninput="validateInput(this)" maxlength="50" placeholder="Nombre del Ordenante" id="filtro_nombreOrdenante" />
                                         </div>
                                     </div>
                                     <br />
