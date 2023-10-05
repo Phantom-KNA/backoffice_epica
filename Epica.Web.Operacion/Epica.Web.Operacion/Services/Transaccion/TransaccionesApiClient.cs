@@ -749,7 +749,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
             try
             {
-                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetEliminarTransaccionBatchPorUsuario(idUsuario,2);
+                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetEliminarTransaccionBatchPorUsuario(idUsuario,3);
                 var response = await ApiClient.DeleteAsync(uri);
 
                 if (response.IsSuccessStatusCode)
@@ -770,9 +770,9 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return respuesta;
         }
 
-        public async Task<bool> GetValidaExistenciaTranBatch(int idUsuario, string ClaveRastreo)
+        public async Task<int> GetValidaExistenciaTranBatch(int idUsuario, string ClaveRastreo)
         {
-            bool respuesta = false;
+            int respuesta = 0;
 
             try
             {
@@ -783,13 +783,13 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    respuesta = JsonConvert.DeserializeObject<bool>(jsonResponse)!;
+                    respuesta = JsonConvert.DeserializeObject<int>(jsonResponse)!;
                 }
 
             }
             catch (Exception ex)
             {
-                return true;
+                return 0;
             }
 
             return respuesta;

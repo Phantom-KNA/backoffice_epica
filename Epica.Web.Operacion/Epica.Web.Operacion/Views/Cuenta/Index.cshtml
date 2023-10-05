@@ -67,7 +67,7 @@
                                         </div>
                                         <div class="col-6">
                                             <label class="form-label fs-5 fw-semibold mb-3">Saldo:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="saldo" type="number" min="0" maxlength="8" placeholder="Saldo" id="filtro_saldo" />
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="saldo" type="text" min="0" step="0.01" maxlength="8" oninput="validateMontoInput(this)" pattern="\d{1,10}(?:\.\d{1,2})?$" placeholder="Saldo" id="filtro_saldo" />
                                         </div>
                                     </div>
                                     <br />
@@ -76,7 +76,7 @@
                                             <label class="form-label fs-5 fw-semibold mb-3">Estatus Cuenta:</label>
                                             <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatusCuenta" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_estatus_cuenta" data-minimum-results-for-search="Infinity">
                                                 <option></option>
-                                                <option value="2">Activo</option>
+                                                <option value="0">Activo</option>
                                                 <option value="1">Desactivado</option>
                                             </select>
                                         </div>
@@ -84,7 +84,7 @@
                                             <label class="form-label fs-5 fw-semibold mb-3">Estatus Spei Out:</label>
                                             <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatusSpeiOut" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_estatus_speiout" data-minimum-results-for-search="Infinity">
                                                 <option></option>
-                                                <option value="2">Activo</option>
+                                                <option value="0">Activo</option>
                                                 <option value="1">Desactivado</option>
                                             </select>
                                         </div>
@@ -93,7 +93,7 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <label class="form-label fs-5 fw-semibold mb-3">Tipo de Persona:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="tipoPersona" onkeypress="return SoloLetras(event)" oninput="validateInput(this)" maxlength="50" placeholder="Tipo de Persona" id="filtro_tipoPersona" />
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="tipoPersona" onkeypress="return SoloLetras(event)" oninput="validateInput(this)" maxlength="30" placeholder="Tipo de Persona" id="filtro_tipoPersona" />
                                         </div>
                                     </div>
                                     <br />

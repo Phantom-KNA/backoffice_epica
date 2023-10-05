@@ -1162,8 +1162,8 @@ namespace Epica.Web.Operacion.Controllers
                     model.estatus = 1;
                 }
 
-                bool validaExistencia = await _transaccionesApiClient.GetValidaExistenciaTranBatch(loginResponse.IdUsuario, model.ClaveRastreo);
-                if (validaExistencia == true) {
+                int validaExistencia = await _transaccionesApiClient.GetValidaExistenciaTranBatch(loginResponse.IdUsuario, model.ClaveRastreo);
+                if (validaExistencia > 1) {
                     model.observaciones = "La clave de Rastreo ya existe en el documento cargado.";
                     model.estatus = 1;
                 }
