@@ -1048,30 +1048,8 @@ public class ClientesController : Controller
 
             try
             {
-                var existeClienteTelefono = await _clientesApiClient.GetClienteExisteTelefonoAsync(model?.ClientesDetalles?.Telefono ?? "");
-
-                if(existeClienteTelefono.Error == true)
-                {
-                    response = existeClienteTelefono;
-                    detalle = response.Detalle;
-                }
-
-                else
-                {
-                    var existeClienteCorreo = await _clientesApiClient.GetClienteExisteCorreoAsync(model?.ClientesDetalles?.Email ?? "");
-                    if (existeClienteCorreo.Error == true)
-                    {
-                        response = existeClienteCorreo;
-                        detalle = response.Detalle;
-                    }
-                    else
-                    {
-                        response = await _clientesApiClient.GetRegistroCliente(model.ClientesDetalles);
-                        detalle = response.Detalle;
-                    }
-
-                }
-
+                response = await _clientesApiClient.GetRegistroCliente(model.ClientesDetalles);
+                detalle = response.Detalle;
                 int idRegistro = 0;
 
                 try
@@ -1664,6 +1642,47 @@ public class ClientesController : Controller
         }
 
         return res;
+    }
+
+    public async Task<IActionResult> ValidarCorreo(string correo)
+    {
+        try
+        {
+            var response =  await _clientesApiClient.GetClienteExisteCorreoAsync(correo);
+            if (response.Codigo == "200")
+            {
+                return Ok(new { success = true });
+            }
+            else
+            {
+                return Ok(new { success = false, response.Detalle });
+            }
+        }
+        catch (Exception)
+        {
+            return BadRequest(new { success = false, mensaje = "Error de comunicación" });
+        }
+    }
+
+
+    public async Task<IActionResult> ValidarTelefono(string telefono)
+    {
+        try
+        {
+            var response = await _clientesApiClient.GetClienteExisteTelefonoAsync(telefono);
+            if (response.Codigo == "200")
+            {
+                return Ok(new { success = true });
+            }
+            else
+            {
+                return Ok(new { success = false, response.Detalle });
+            }
+        }
+        catch (Exception)
+        {
+            return BadRequest(new { success = false, mensaje = "Error de comunicación" });
+        }
     }
     #endregion
 }

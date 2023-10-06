@@ -162,6 +162,12 @@ var Init = function () {
         });
 
         $(document).on('click', '#btnGuardarCliente', function (e) {
+            if ($('#btnGuardarCliente').prop('disabled')) {
+                return; 
+            }
+
+            $('#btnGuardarCliente').prop('disabled', true);
+
             var requiredFields = document.querySelectorAll('[required]');
 
             var allFieldsFilled = true;
@@ -209,6 +215,8 @@ var Init = function () {
                         validationFailed = true;
                     }
                 }
+
+
                 if (field.id === "Rfc") {
                     var rfc = field.value;
                     var rfcPattern = /^[A-Z&Ñ]{3,4}\d{6}[A-Z\d]{3}$/;
@@ -337,9 +345,58 @@ var Init = function () {
 
             if (!allFieldsFilled || validationFailed) {
                 toastr.error(firstErrorMessage, "");
+                $('#btnGuardarCliente').prop('disabled', false);
+
             } else {
-                $('#confirmModal').modal('show');
+                var correo = $("#Email").val();
+
+                $.ajax({
+                    url: 'ValidarCorreo',
+                    type: 'POST',
+                    async: true,
+                    cache: false,
+                    data: { correo: correo },
+                    success: function (response) {
+
+                        if (response.success === true) {
+                            var telefono = $("#Telefono").val();
+
+                            $.ajax({
+                                url: 'ValidarTelefono',
+                                type: 'POST',
+                                async: true,
+                                cache: false,
+                                data: { telefono: telefono },
+                                success: function (response) {
+
+                                    if (response.success === true) {
+                                        $('#confirmModal').modal('show');
+                                    } else {
+                                        toastr.error("Ya existe un registro con el teléfono ingresado").preventDuplicates;
+                                        $('#btnGuardarCliente').prop('disabled', false);
+
+                                    }
+                                },
+                                error: function () {
+                                    toastr.error("Error, vuelva a intentar").preventDuplicates;
+                                    $('#btnGuardarCliente').prop('disabled', false);
+
+                                }
+                            });
+                        } else {
+                            toastr.error("Ya existe un registro con el correo ingresado").preventDuplicates;
+                            $('#btnGuardarCliente').prop('disabled', false);
+
+                        }
+                    },
+                    error: function () {
+                        toastr.error("Error, vuelva a intentar").preventDuplicates;
+                        $('#btnGuardarCliente').prop('disabled', false);
+
+                    }
+                });
             }
+            $('#btnGuardarCliente').prop('disabled', false);
         });
 
         $(document).on('click', '#btnCerrarModal, #btnCerrarModal2, .modal-close', function (e) {
