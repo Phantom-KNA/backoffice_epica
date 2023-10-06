@@ -458,3 +458,31 @@ function ReenviarTransaccion(claveRastreo) {
         }
     });
 }
+
+$(document).on('click', '#ValidarTransaccionAdd', function () {
+    const inputClaveRastreo = document.getElementById('add_clave_rastreo');
+    const clave = inputClaveRastreo.value;
+
+    if ((clave == null) || (clave == "")) {
+        toastr.warning("El valor ingresado, no es válido");
+        return false;
+    }
+
+    toastr.info("Localizando transacción.").preventDuplicates;
+    toastr.clear();
+
+    $.ajax({
+        url: "AgregarTransaccionReintentador",
+        type: "POST",
+        data: { ClaveRastreo: clave },
+        success: function (result) {
+
+            $("#add_clave_rastreo").empty();
+            toastr.info(result.message).preventDuplicates;
+
+        },
+        error: function (error) {
+            toastr.warning("No se pudo localizar al usuario.").preventDuplicates;
+        }
+    });
+});

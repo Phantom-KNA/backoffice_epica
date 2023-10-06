@@ -9,6 +9,6 @@ namespace Epica.Web.Operacion.Services.Log
         Task<MensajeResponse> GetDevolverTransaccionesAsync(List<string> request);
         Task<MensajeResponse> GetDevolverTransaccionAsync(string claveRastreo);
         Task<List<DevolucionesResponse>> GetTransaccionesDevolverReintentar();
-
+        Task<MensajeResponse> GetAgregarTransaccionReintentadorAsync(string claveRastreo);
     }
 }

@@ -851,6 +851,22 @@ namespace Epica.Web.Operacion.Controllers
             return Json(response);
         }
 
+        [HttpPost]
+        public async Task<JsonResult> AgregarTransaccionReintentador(string ClaveRastreo)
+        {
+            MensajeResponse response = new MensajeResponse();
+
+            try
+            {
+                response = await _reintentadorService.GetAgregarTransaccionReintentadorAsync(ClaveRastreo);
+            }
+            catch (Exception ex)
+            {
+                response.Error = true;
+            }
+
+            return Json(response);
+        }
 
         #endregion
 

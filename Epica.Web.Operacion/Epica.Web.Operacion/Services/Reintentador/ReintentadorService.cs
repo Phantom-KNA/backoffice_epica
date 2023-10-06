@@ -167,5 +167,36 @@ namespace Epica.Web.Operacion.Services.Log
 
             return listaTransacciones;
         }
+
+        public async Task<MensajeResponse> GetAgregarTransaccionReintentadorAsync(string claveRastreo)
+        {
+            MensajeResponse? respuesta = new MensajeResponse();
+            string? respuestaService = "";
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.ReintentadorOperations.AgregarTransaccion(claveRastreo);
+                var json = JsonConvert.SerializeObject("");
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await ApiClient.PostAsync(uri, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    respuesta.Error = false;
+                    respuesta.message = JsonConvert.DeserializeObject<string>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                respuesta.Error = true;
+                respuesta.message = "Hubo un problema al tratar de agregar esta transacción, Inténtelo más tarde.";
+                return respuesta;
+            }
+
+            return respuesta;
+        }
     }
 }
