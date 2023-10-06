@@ -1043,11 +1043,35 @@ public class ClientesController : Controller
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Insertar == 0);
         if (validacion == true)
         {
+            MensajeResponse response = new MensajeResponse();
+            string detalle = "";
+
             try
             {
-                var response = await _clientesApiClient.GetRegistroCliente(model.ClientesDetalles);
+                var existeClienteTelefono = await _clientesApiClient.GetClienteExisteTelefonoAsync(model?.ClientesDetalles?.Telefono ?? "");
 
-                string detalle = response.Detalle;
+                if(existeClienteTelefono.Error == true)
+                {
+                    response = existeClienteTelefono;
+                    detalle = response.Detalle;
+                }
+
+                else
+                {
+                    var existeClienteCorreo = await _clientesApiClient.GetClienteExisteCorreoAsync(model?.ClientesDetalles?.Email ?? "");
+                    if (existeClienteCorreo.Error == true)
+                    {
+                        response = existeClienteCorreo;
+                        detalle = response.Detalle;
+                    }
+                    else
+                    {
+                        response = await _clientesApiClient.GetRegistroCliente(model.ClientesDetalles);
+                        detalle = response.Detalle;
+                    }
+
+                }
+
                 int idRegistro = 0;
 
                 try
@@ -1068,7 +1092,7 @@ public class ClientesController : Controller
                     Accion = "Insertar",
                     Ip = loginResponse.DireccionIp,
                     Envio = JsonConvert.SerializeObject(model.ClientesDetalles),
-                    Respuesta = response.Error.ToString(),
+                    Respuesta = response.Error.ToString() ?? "Ya existe un Correo y/o Teléfono",
                     Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
                     IdRegistro = idRegistro
                 };
@@ -1083,7 +1107,7 @@ public class ClientesController : Controller
                     return Ok(new { success = false, response.Detalle});
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest();
             }

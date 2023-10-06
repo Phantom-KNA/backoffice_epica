@@ -270,10 +270,10 @@ function GestionarTarjeta(numgen, estatus, id) {
         text: 'Por favor, ingrese su token y código de seguridad:',
         html:
             '<label for="swal-input1" class="swal-label"><b>Token:</b></label>' +
-            '<input id="swal-input1" class="swal2-input" style="font-size:14px;width:250px"  placeholder="Token" oninput="validateInput(this)" maxlength="6">' +
+            '<input id="swal-input1" class="swal2-input" style="font-size:14px;width:250px"  placeholder="Token" oninput="validateInputToken(this)" maxlength="6">' +
             '<div style="margin-top: 20px;"></div>' +
             '<label for="swal-input2" class="swal-label"><b>Código de Seguridad:</b></label>' +
-            '<input id="swal-input2" class="swal2-input" style="font-size:14px;width:250px" type="password" placeholder="Código de Seguridad" oninput="validateInput(this)" maxlength="6">',
+            '<input id="swal-input2" class="swal2-input" style="font-size:14px;width:250px" type="password" placeholder="Código de Seguridad" oninput="validateInputToken(this)" maxlength="6">',
         showCancelButton: true,
         confirmButtonColor: '#0493a8',
         confirmButtonText: 'Aceptar',
@@ -349,7 +349,7 @@ function GestionarTarjeta(numgen, estatus, id) {
     });
 }
 
-function validateInput(inputElement) {
+function validateInputToken(inputElement) {
     inputElement.value = inputElement.value.replace(/[^0-9]/g, '');
 }
 
