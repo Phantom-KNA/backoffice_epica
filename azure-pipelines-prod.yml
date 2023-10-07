@@ -1,0 +1,87 @@
+# Deploy to Azure Kubernetes Service
+# Build and push image to Azure Container Registry; Deploy to Azure Kubernetes Service
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- main
+
+resources:
+- repo: self
+
+variables:
+
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: '3c2ca3b0-ecb6-41e6-94a5-379807f031a9'
+  imageRepository: 'webappoperacion'
+  containerRegistry: 'acralquimiaprod.azurecr.io'
+  dockerfilePath: '**/Dockerfile'
+  tag: '$(Build.BuildId)'
+  imagePullSecret: 'acralquimiaprodfa4e-auth'
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+stages:
+- stage: Build
+  displayName: Build stage
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - checkout: self
+      fetchDepth: 1
+    - task: Docker@0
+      displayName: Build an image
+      inputs:
+        azureSubscription: 'Azure subscription 1 (1bbd807f-3fcf-4844-8e40-760ec2cc71ad)'
+        azureContainerRegistry: '{"loginServer":"acralquimiaprod.azurecr.io", "id" : "/subscriptions/1bbd807f-3fcf-4844-8e40-760ec2cc71ad/resourceGroups/rg-alquimia-prod/providers/Microsoft.ContainerRegistry/registries/acralquimiaprod"}'
+        dockerFile: Epica.Web.Operacion/Epica.Web.Operacion/Dockerfile
+        defaultContext: false
+        context: Epica.Web.Operacion
+        includeLatestTag: true
+    - task: Docker@0
+      displayName: Push an image
+      inputs:
+        azureSubscription: 'Azure subscription 1 (1bbd807f-3fcf-4844-8e40-760ec2cc71ad)'
+        azureContainerRegistry: '{"loginServer":"acralquimiaprod.azurecr.io", "id" : "/subscriptions/1bbd807f-3fcf-4844-8e40-760ec2cc71ad/resourceGroups/rg-alquimia-prod/providers/Microsoft.ContainerRegistry/registries/acralquimiaprod"}'
+        action: Push an image
+
+    - upload: manifests
+      artifact: manifests
+
+- stage: Deploy
+  displayName: Deploy stage
+  dependsOn: Build
+
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: $(vmImageName)
+    environment: 'WebAppOperacion-1352.alquimia'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: KubernetesManifest@0
+            displayName: Create imagePullSecret
+            inputs:
+              action: createSecret
+              secretName: $(imagePullSecret)
+              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+
+          - task: KubernetesManifest@0
+            displayName: Deploy to Kubernetes cluster
+            inputs:
+              action: deploy
+              manifests: |
+                $(Pipeline.Workspace)/manifests/prod/deployment.yml
+                $(Pipeline.Workspace)/manifests/prod/service.yml
+                $(Pipeline.Workspace)/manifests/prod/ingress.yml
+              imagePullSecrets: |
+                $(imagePullSecret)
+              containers: |
+                $(containerRegistry)/$(imageRepository):$(tag)
+
