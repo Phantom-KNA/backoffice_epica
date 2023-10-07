@@ -1,0 +1,10 @@
+﻿@model Epica.Web.Operacion.Models.Request.CargaBachRequest
+<div class="dropdown dropdown-inline">
+    <button type="button" class="btn btn-sm btn-icon btn-light btn-active-light-primary me-2" onclick="EliminarTransaccionBatch(@Model.Id)" data-id="@Model.Id" title="Borrar Transacción">
+        <i class="bi bi-trash"></i>
+    </button>
+
+    <button type="button" class="btn btn-sm btn-icon btn-light btn-active-light-primary me-2" onclick="EditarTransaccionBatch(@Model.Id)" data-id="@Model.Id" title="Editar Transacción">
+        <i class="bi bi-pencil"></i>
+    </button>
+</div>

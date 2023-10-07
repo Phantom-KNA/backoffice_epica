@@ -1,0 +1,11 @@
+﻿@model Epica.Web.Operacion.Models.Response.UsuariosVinculadosResponse
+<div class="dropdown dropdown-inline">
+
+    @if (Model.validarpermiso == true)
+    {
+        <button type="button" class="btn btn-sm btn-icon btn-light btn-active-light-primary me-2" onclick="DesAsignarRol(@Model.IdUser)" data-id="@Model.IdUser" data-cliente="@Model.IdUser" title="Desvincular Rol de Usuario">
+            <i class="bi bi-trash"></i>
+        </button>
+    }
+
+</div>

@@ -1,0 +1,414 @@
+﻿@model Epica.Web.Operacion.Models.ViewModels.ClientesRegistroViewModel
+@{
+    ViewData["Title"] = @ViewBag.TituloForm;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section LogoPage{
+    <i class="bi bi-person fs-1 w-40px"></i>
+}
+
+@section breadcrumb{
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted">
+        <a class="text-muted" asp-controller="Clientes" asp-action="Index">Clientes</a>
+    </li>
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted">
+        @ViewData["Title"]
+    </li>
+}
+
+<form asp-controller="Clientes" asp-action= "@ViewBag.Accion" method="post">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h3 class="card-title">@ViewData["Title"]</h3>
+                @*<div class="separator separator-dashed border-light-secondary my-2"></div>*@
+                <div class="card-toolbar">
+                    <button href="javascript:void(0)" onclick="history.back();" type="button" class="btn btn-sm btn-light-primary me-2">
+                        Cancelar
+                    </button>
+                    <button type="button" class="btn btn-sm btn-light-primary me-2" id="btnGuardarCliente">
+                        Guardar
+                    </button>
+                    @{
+                        if (Model.ClientesDetalles != null)
+                        {
+                            <button  href="#" type="button" class="btn btn-sm btn-light-primary d-none" id="btnBloquearCliente">
+                                Bloquear
+                            </button>
+                        }
+                    }
+
+                </div>
+            </div>
+
+                <input asp-for="@Model.ClientesDetalles!.IdCliente" hidden class="form-control form-control-sm form-control-solid" id="IdCliente" type="hidden" value="@(Model?.ClientesDetalles!.IdCliente ?? 0)" autocomplete="off" />
+
+            <div class="card-body pt-5">
+                <div class="d-flex mb-6 mt-6">
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Nombre: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="@Model!.ClientesDetalles!.IdCliente" required hidden class="form-control form-control-sm form-control-solid" id="idCliente" type="text" value="@(Model?.ClientesDetalles!.IdCliente ?? 0)" autocomplete="off" />
+                            <input asp-for="ClientesDetalles!.Nombre" class="form-control form-control-sm form-control-solid" id="Nombre" type="text" value="@(Model?.ClientesDetalles!.Nombre ?? "")" autocomplete="off" required minlength="3" maxlength="40" pattern="^[A-Za-z]+$"  oninput="validateInput(this)" data-error-message="Nombre" />
+                            <span asp-validation-for="@Model!.ClientesDetalles!.Nombre" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Apellido paterno: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="ClientesDetalles!.ApellidoPaterno" class="form-control form-control-sm form-control-solid" id="ApellidoPaterno" type="text" value="@(Model?.ClientesDetalles!.ApellidoPaterno ?? "")" autocomplete="off" required minlength="3" maxlength="20" pattern="^[A-Za-z]+$" oninput="validateInput(this)" data-error-message="Apellido Paterno">
+                            <span asp-validation-for="ClientesDetalles!.ApellidoPaterno" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Apellido materno: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="ClientesDetalles!.ApellidoMaterno" class="form-control form-control-sm form-control-solid" required id="ApellidoMaterno" type="text" value="@(Model?.ClientesDetalles!.ApellidoMaterno ?? "")" autocomplete="off" minlength="3" maxlength="20" pattern="^[A-Za-z]+$" oninput="validateInput(this)" data-error-message="Apellido Materno" />
+                            <span asp-validation-for="ClientesDetalles!.ApellidoMaterno" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex mb-6 mt-6">
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Sexo: &nbsp;</label>
+                        <div class="position-relative">
+                            <select asp-for="ClientesDetalles!.Sexo" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción" data-minimum-results-for-search="Infinity" required data-error-message="Sexo">
+                                <option></option>
+                                @{
+                                    if (Model != null)
+                                    {
+                                        if (Model.ClientesDetalles!.Sexo == "M")
+                                        {
+                                            <option value="M" selected>M</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="M">M</option>
+                                        }
+                                        if (Model.ClientesDetalles.Sexo == "F")
+                                        {
+                                            <option value="F" selected>F</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="F">F</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option value="M">M</option>
+                                        <option value="F">F</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Email: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="ClientesDetalles!.Email" class="form-control form-control-sm form-control-solid" id="Email" type="email" value="@(Model?.ClientesDetalles!.Email ?? "")" autocomplete="off" required pattern="[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}" title="Ingresa una dirección de correo electrónico válida"  data-error-message="Email" />
+                            <span asp-validation-for="ClientesDetalles!.Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Teléfono Móvil: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="ClientesDetalles!.Telefono" class="form-control form-control-sm form-control-solid" id="Telefono" type="text" value="@(Model?.ClientesDetalles!.Telefono ?? "")" autocomplete="off" required data-error-message="Teléfono Móvil" oninput="validateNumbersInput(this)" minlenght="10" maxlength="10"/>
+                            <span asp-validation-for="ClientesDetalles!.Telefono" class="text-danger"></span>
+                            <input type="hidden" asp-for="ClientesDetalles!.TelefonoTipo" value="MOVIL" />
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex mb-6 mt-6">
+                    <div class="py-2 px-4 col-md-3 fv-row">
+                        <label class="form-label required">Curp: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="ClientesDetalles!.Curp" class="form-control form-control-sm form-control-solid" id="Curp" type="text" value="@(Model?.ClientesDetalles!.Curp ?? "")" autocomplete="off" required minlenght="18" maxlength="18" data-error-message="Curp"/>
+                            <span asp-validation-for="ClientesDetalles!.Curp" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-3 fv-row">
+                        <label class="form-label required">RFC: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="ClientesDetalles!.RFC" class="form-control form-control-sm form-control-solid" id="Rfc" type="text" value="@(Model?.ClientesDetalles!.RFC ?? "")" autocomplete="off" required data-error-message="RFC" minlength="12" maxlength="13" />
+                            <span asp-validation-for="ClientesDetalles!.RFC" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-3 fv-row">
+                        <label class="form-label required">INE: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="ClientesDetalles!.INE" class="form-control form-control-sm form-control-solid" id="Ine" type="text" value="@(Model?.ClientesDetalles!.INE ?? "")" autocomplete="off" required data-error-message="INE" oninput="validateNumbersInput(this)" minlength="12" maxlength="13"/>
+                            <span asp-validation-for="ClientesDetalles!.INE" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-3 fv-row">
+                        <label class="form-label">Fiel: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="ClientesDetalles!.Fiel" class="form-control form-control-sm form-control-solid" id="Fiel" type="text" value="@(Model?.ClientesDetalles!.Fiel ?? "")" autocomplete="off" data-error-message="Fiel" oninput="validateAlphanumericInput(this)" minlenght="8" maxlength="287" />
+                            <span asp-validation-for="ClientesDetalles!.Fiel" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex mb-6 mt-6">
+                    <div class="py-2 px-4 col-md-3 fv-row">
+                        <label class="form-label required">Fecha Nacimiento: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="ClientesDetalles!.FechaNacimiento" id="FechaNacimiento" class="form-control form-control-sm form-control-solid" type="date" required data-error-message="Fecha de Nacimiento" min="1900-01-01" max="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-3 fv-row">
+                        <label class="form-label required">País Nacimiento: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="ClientesDetalles!.PaisNacimiento" class="form-control form-control-sm form-control-solid" id="PaisNacimiento" type="text" value="@(Model?.ClientesDetalles!.PaisNacimiento ?? "")" autocomplete="off" required minlength="3" maxlength="40" pattern="^[A-Za-z]+$" oninput="validateInput(this)" data-error-message="País de Nacimiento" />
+                            <span asp-validation-for="ClientesDetalles!.PaisNacimiento" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-3 fv-row">
+                        <label class="form-label required">País: &nbsp;</label>
+                        <div class="position-relative">
+                            <select asp-for="ClientesDetalles!.IdPais" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" data-minimum-results-for-search="Infinity" required data-error-message="País">
+                                <option></option>
+                                @foreach (var pais in Model!.ListaPaises!)
+                                {
+                                    <option value="@pais.Value">@pais.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-3 fv-row">
+                        <label class="form-label required">Nacionalidad: &nbsp;</label>
+                        <div class="position-relative">
+                            <select asp-for="ClientesDetalles!.IdNacionalidad" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required data-minimum-results-for-search="Infinity" data-error-message="Nacionalidad">
+                                <option></option>
+                                @foreach (var nacionalidad in Model!.ListaNacionalidades!)
+                                {
+                                    <option value="@nacionalidad.Id">@nacionalidad.Descripcion</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex mb-6 mt-6">
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Colonia: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="ClientesDetalles!.Colonia" class="form-control form-control-sm form-control-solid" id="Colonia" type="text" value="@(Model?.ClientesDetalles!.Colonia ?? "")" autocomplete="off" required minlength="3" maxlength="40" pattern="^[A-Za-z]+$" oninput="validateInput(this)" data-error-message="Colonia" />
+                            <span asp-validation-for="ClientesDetalles!.Colonia" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Delegación/Municipio: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="ClientesDetalles!.DelegacionMunicipio" class="form-control form-control-sm form-control-solid" id="DelegacionMunicipio" type="text" value="@(Model?.ClientesDetalles!.DelegacionMunicipio ?? "")" autocomplete="off" required minlength="3" maxlength="40" pattern="^[A-Za-z]+$" oninput="validateInput(this)" data-error-message="Delegación/ Municipio" />
+                            <span asp-validation-for="ClientesDetalles!.DelegacionMunicipio" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-2 fv-row">
+                        <label class="form-label required">Código postal: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="ClientesDetalles!.CodigoPostal" class="form-control form-control-sm form-control-solid" id="CodigoPostal" type="text" value="@(Model?.ClientesDetalles!.CodigoPostal ?? "")" autocomplete="off" required oninput="validateNumbersInput(this)" data-error-message="Código Postal" minlength="5" maxlength="5" />
+                            <span asp-validation-for="ClientesDetalles!.CodigoPostal" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-2 fv-row">
+                        <label class="form-label required">No Interior: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="ClientesDetalles!.NoInterior" class="form-control form-control-sm form-control-solid" id="NoInterior" type="text" value="@(Model?.ClientesDetalles!.NoInterior ?? "")" autocomplete="off" required data-error-message="N° Interior" minlenght="1" maxlength="6" oninput="validateNumbersInput(this)" />
+                            <span asp-validation-for="ClientesDetalles!.NoInterior" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex mb-6 mt-6">
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Ciudad estado: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="ClientesDetalles!.CiudadEstado" class="form-control form-control-sm form-control-solid" id="CiudadEstado" type="text" value="@(Model?.ClientesDetalles!.CiudadEstado ?? "")" autocomplete="off" required minlength="3" maxlength="40" pattern="^[A-Za-z]+$" oninput="validateInput(this)" data-error-message="Ciudad Estado" />
+                            <span asp-validation-for="ClientesDetalles!.CiudadEstado" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label">Calle Número: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="ClientesDetalles!.CalleNumero" class="form-control form-control-sm form-control-solid" id="CalleNumero" type="text" value="@(Model?.ClientesDetalles!.CalleNumero ?? "")" autocomplete="off" data-error-message="Calle Número" oninput="validateNumbersInput(this)" minleght="3" maxlength="6" />
+                            <span asp-validation-for="ClientesDetalles!.CalleNumero" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label">Observaciones: &nbsp;</label>
+                        <div class="position-relative">
+                            <textarea asp-for="ClientesDetalles!.Observaciones" class="form-control form-control-sm form-control-solid" id="Observaciones" rows="1" autocomplete="off" pattern="^[A-Za-z]+$" data-error-message="Observaciones" minlenght="5" maxlenght="40" oninput="validateInput(this)" style="resize: none; "></textarea>
+                            <span asp-validation-for="ClientesDetalles!.Observaciones" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex mb-6 mt-6">
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Calle: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="ClientesDetalles!.Calle" class="form-control form-control-sm form-control-solid" id="Calle" type="text" value="@(Model?.ClientesDetalles!.Calle ?? "")" autocomplete="off" required minlength="3" maxlength="40" pattern="^[A-Za-z]+$" oninput="validateInput(this)" data-error-message="Calle" />
+                            <span asp-validation-for="ClientesDetalles!.Calle" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label">Primera Calle: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="ClientesDetalles!.EntreCallePrimera" class="form-control form-control-sm form-control-solid" id="PrimeraCalle" type="text" value="@(Model?.ClientesDetalles!.EntreCallePrimera ?? "")" autocomplete="off" minlength="3" maxlength="40" pattern="^[A-Za-z]+$" oninput="validateInput(this)" data-error-message="Primera Calle" />
+                            <span asp-validation-for="ClientesDetalles!.EntreCallePrimera" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label">Segunda Calle: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="ClientesDetalles!.EntreCalleSegunda" class="form-control form-control-sm form-control-solid" id="SegundaCalle" type="text" value="@(Model?.ClientesDetalles!.EntreCalleSegunda ?? "")" autocomplete="off" minlength="3" maxlength="40" pattern="^[A-Za-z]+$" oninput="validateInput(this)" data-error-message="Segunda Calle" />
+                            <span asp-validation-for="ClientesDetalles!.EntreCalleSegunda" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex mb-6 mt-6">
+                    <div class="py-2 px-4 col-md-3 fv-row">
+                        <label class="form-label required">Ocupación: &nbsp;</label>
+                        <div class="position-relative">
+                            <select asp-for="ClientesDetalles!.IdOcupacion" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required data-minimum-results-for-search="Infinity" data-error-message="Ocupación">
+                                <option></option>
+                                @foreach (var ocupacion in Model!.ListaOcupaciones!)
+                                {
+                                    <option value="@ocupacion.Id">@ocupacion.Descripcion</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-3 fv-row">
+                        <label class="form-label required">Puesto: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="ClientesDetalles!.Puesto" class="form-control form-control-sm form-control-solid" id="Puesto" type="text" value="@(Model?.ClientesDetalles!.Puesto ?? "")" autocomplete="off" required minlength="3" maxlength="30" pattern="^[A-Za-z]+$" oninput="validateInput(this)" data-error-message="Puesto" />
+                            <span asp-validation-for="ClientesDetalles!.Puesto" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-3 fv-row">
+                        <label class="form-label required">Ingreso Mensual: &nbsp;</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">$</span>
+                            <input asp-for="ClientesDetalles!.IngresoMensual" class="form-control form-control-sm form-control-solid" id="IngresoMensual" type="text" autocomplete="off" required data-error-message="Ingreso Mensual" oninput="limitarDecimalesYDigitos(this)" maxlength="13" />
+                            <span asp-validation-for="ClientesDetalles!.IngresoMensual" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-3 fv-row">
+                        <label class="form-label required">Monto Máximo: &nbsp;</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">$</span>
+                            <input asp-for="ClientesDetalles!.MontoMaximo" class="form-control form-control-sm form-control-solid" id="MontoMaximo" type="text" autocomplete="off" required data-error-message="Monto Máximo" oninput="limitarDecimalesYDigitos(this)" maxlength="13" />
+                            <span asp-validation-for="ClientesDetalles!.MontoMaximo" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex mb-6 mt-6">
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Empresa: &nbsp;</label>
+                        <div class="position-relative">
+                            <select asp-for="ClientesDetalles!.Empresa" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required data-minimum-results-for-search="Infinity" data-error-message="Empresa">
+                                <option></option>
+                                @foreach (var empresa in Model!.ListaEmpresas!)
+                                {
+                                    <option value="@empresa.Id">@empresa.Descripcion</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Rol: &nbsp;</label>
+                        <div class="position-relative">
+                            <select asp-for="ClientesDetalles!.Rol" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" required data-minimum-results-for-search="Infinity" data-error-message="Rol">
+                                <option></option>
+                                @foreach (var rol in Model!.ListaRoles!)
+                                {
+                                    <option value="@rol.Descripcion">@rol.Descripcion</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Apoderado legal: &nbsp;</label>
+                        <div class="position-relative">
+                            <select asp-for="ClientesDetalles!.ApoderadoLegal" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" data-minimum-results-for-search="Infinity" required data-minimum-results-for-search="Infinity" data-error-message="Apoderado Legal">
+                                <option></option>
+                                @foreach (var apoderadoLegal in Model!.ApoderadoLegalOpciones!)
+                                {
+                                    <option value="@apoderadoLegal.Id">@apoderadoLegal.Descripcion</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header header-modal">
+                    <h1 class="modal-title text-header-modal fs-5" id="confirmModalLabel">Confirmar Guardado</h1>
+                    <button type="button" class="custom-close-button" data-dismiss="modal" id="btnCerrarModal" aria-label="Close">
+                        <span>✕</span>
+                    </button>
+                </div>
+                <div class="modal-body header-modal">
+                    ¿Estás seguro que deseas guardar la información?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" id="btnCerrarModal2" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="confirmSave">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts{
+    <script src="~/js/Clientes/epica.clientes.registro.js" asp-append-version="true"></script>
+}
+
+<style>
+
+    .header-modal {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .text-header-modal {
+        color: white;
+    }
+
+    .custom-close-button {
+        color: white;
+        background-color: transparent;
+        border: none;
+        opacity: 1;
+        padding: 0;
+        font-size: 1rem;
+        line-height: 1;
+        cursor: pointer;
+        transition: color 0.3s, opacity 0.3s;
+        position: absolute;
+        right: 0;
+        padding: 21px;
+    }
+
+        .custom-close-button:hover {
+            opacity: 0.8;
+        }
+</style>
+
+
+
+
+

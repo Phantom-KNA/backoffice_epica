@@ -1,0 +1,238 @@
+﻿@model Epica.Web.Operacion.Models.ViewModels.TransaccionesRegistroViewModel
+
+@{
+    ViewData["Title"] = ViewBag.TituloForm;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section LogoPage{
+    <i class="bi bi-cash fs-1 w-40px"></i>
+}
+
+@section breadcrumb{
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted">
+        <a class="text-muted" asp-controller="Transacciones" asp-action="Index">Transacciones</a>
+    </li>
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted">
+        @ViewData["Title"]
+    </li>
+}
+
+<form asp-controller="Transacciones" asp-action= "@ViewBag.Accion" method="post">
+<div class="col-md-12">
+    <div class="card shadow-sm">
+        <div class="card-header">
+                <h3 class="card-title">@ViewBag.TituloForm</h3>
+                <div class="separator separator-dashed border-light-secondary my-2"></div>
+            <div class="card-toolbar">
+                <button href="javascript:void(0)" onclick="history.back();" type="button" class="btn btn-sm btn-light-primary me-2">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-sm btn-light-primary me-2" id="btnGuardarTransaccion">
+                    Guardar
+                </button>
+            </div>
+        </div>
+        <div class="card-body pt-5">
+            <div class="d-flex mb-6 mt-6">
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Clave de rastreo: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="@Model.TransacccionDetalles.ClaveRastreo" class="form-control form-control-sm form-control-solid" id="ClaveRastreo" type="text" value="@(Model?.TransacccionDetalles.ClaveRastreo ?? "")" autocomplete="off" required oninput="validateClaveInput(this)" data-error-message="Clave Rastreo" minlength="20" maxlength="25" />
+                            <span asp-validation-for="@Model!.TransacccionDetalles.ClaveRastreo" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Cuenta ordenante: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="@Model!.TransacccionDetalles.cuentaOrdenante" class="form-control form-control-sm form-control-solid" id="CuentaOrdenante" type="text" value="@(Model?.TransacccionDetalles.cuentaOrdenante ?? "")" autocomplete="off" required oninput="validateNumbersInput(this)" data-error-message="Cuenta Ordenante" minlength="16" maxlength="18" />
+                            <span asp-validation-for="@Model!.TransacccionDetalles.cuentaOrdenante" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Cuenta beneficiario: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="@Model!.TransacccionDetalles.NoCuentaBeneficiario" class="form-control form-control-sm form-control-solid" id="NoCuentaBeneficiario" type="text" value="@(Model?.TransacccionDetalles.NoCuentaBeneficiario ?? "")" autocomplete="off" required oninput="validateNumbersInput(this)" data-error-message="Cuenta Beneficiario" minlength="16" maxlength="18" />
+                            <span asp-validation-for="@Model!.TransacccionDetalles.NoCuentaBeneficiario" class="text-danger"></span>
+                        </div>
+                    </div>
+
+            </div>
+            <div class="d-flex mb-6 mt-6">
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Monto: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="@Model!.TransacccionDetalles.Monto" class="form-control form-control-sm form-control-solid" id="Monto" type="number" value="@(Model?.TransacccionDetalles.Monto.ToString() ?? "")" autocomplete="off" required data-error-message="Monto" type="text" autocomplete="off" oninput="validateMontoInput(this)" maxlength="20" />
+                            <span asp-validation-for="@Model!.TransacccionDetalles.Monto" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Concepto: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="@Model!.TransacccionDetalles.Concepto" class="form-control form-control-sm form-control-solid" id="Concepto" type="text" value="@(Model?.TransacccionDetalles.Concepto ?? "")" autocomplete="off" required data-error-message="Concepto" oninput="validateInput(this)" minlength="3" maxlength="40" />
+                            <span asp-validation-for="@Model!.TransacccionDetalles.Concepto" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Tipo de operación: &nbsp;</label>
+                        <div class="position-relative">
+                            <select asp-for="@Model!.TransacccionDetalles.TipoOperacion" id="TipoOperacion" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción" data-minimum-results-for-search="Infinity" required data-error-message="Tipo de Operación">
+                                <option></option>
+                                @{
+                                    if (Model != null)
+                                    {
+                                        if (Model.TransacccionDetalles.TipoOperacion == 1)
+                                        {
+                                            <option value="1" selected>In</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="1">In</option>
+                                        }
+                                        if (Model.TransacccionDetalles.TipoOperacion == 2)
+                                        {
+                                            <option value="2" selected>Out</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="2">Out</option>
+                                        }
+                                        if (Model.TransacccionDetalles.TipoOperacion == 3)
+                                        {
+                                            <option value="3" selected>Comisión</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="3">Comisión</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option value="1">In</option>
+                                        <option value="2">Out</option>
+                                        <option value="2">Comisión</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+            </div>
+            <div class="d-flex mb-6 mt-6">
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Fecha de operación: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="TransacccionDetalles.FechaOperacion" id="FechaOperacion" class="form-control form-control-sm form-control-solid" type="date" required data-error-message="Fecha de Operación" min="1990-01-01" max="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Medio de pago: &nbsp;</label>
+                        <div class="position-relative">
+                            <select asp-for="TransacccionDetalles.MedioPago" id="MedioPago" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" data-minimum-results-for-search="Infinity" required data-error-message="Medio de Pago">
+                                <option></option>
+                                @foreach (var medioPago in Model!.ListaMediosPago!)
+                                {
+                                    <option value="@medioPago.Id">@medioPago.Descripcion</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Comisión: &nbsp;</label>
+                        <div class="position-relative">
+                            <select asp-for="@Model!.TransacccionDetalles.Comision" id="Comision" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción" data-minimum-results-for-search="Infinity" required>
+                                <option></option>
+                                @{
+                                    if (Model != null)
+                                    {
+                                        if (Model.TransacccionDetalles.Comision == 1)
+                                        {
+                                            <option value="1" selected>Si</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="1">Si</option>
+                                        }
+                                        if (Model.TransacccionDetalles.Comision == 0)
+                                        {
+                                            <option value="0" selected>No</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="0">No</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option value="1">Si</option>
+                                        <option value="0">No</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header header-modal">
+                    <h1 class="modal-title text-header-modal fs-5" id="confirmModalLabel">Confirmar Guardado</h1>
+                    <button type="button" class="custom-close-button" data-dismiss="modal" id="btnCerrarModal" aria-label="Close">
+                        <span>✕</span>
+                    </button>
+                </div>
+                <div class="modal-body header-modal">
+                    ¿Estás seguro que deseas guardar la información?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" id="btnCerrarModal2" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="confirmSave">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script src="~/js/transacciones/epica.transacciones.registro.js" asp-append-version="true"></script>
+}
+
+<style>
+
+    .header-modal {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .text-header-modal {
+        color: white;
+    }
+
+    .custom-close-button {
+        color: white;
+        background-color: transparent;
+        border: none;
+        opacity: 1;
+        padding: 0;
+        font-size: 1rem;
+        line-height: 1;
+        cursor: pointer;
+        transition: color 0.3s, opacity 0.3s;
+        position: absolute;
+        right: 0;
+        padding: 21px;
+    }
+
+        .custom-close-button:hover {
+            opacity: 0.8;
+        }
+</style>

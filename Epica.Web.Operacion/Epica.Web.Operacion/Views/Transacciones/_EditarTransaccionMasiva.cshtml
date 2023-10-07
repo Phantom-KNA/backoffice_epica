@@ -1,0 +1,158 @@
+﻿@model Epica.Web.Operacion.Models.Request.CargaBachRequest
+
+<form asp-controller="Transacciones" asp-action="EditarTransaccionBatch" method="post" id="EditTransaccionBatchForm">
+    <input asp-for="@Model.Id" hidden class="form-control form-control-sm form-control-solid" id="idCliente" readonly value="@Model.Id" type="text" autocomplete="off" />
+    <div class="modal-content">
+        <div class="modal-body ">
+            <div class="card-body">
+                    <div class="row mb-5 mt-5">
+                        <div class="form-group input-group-sm col-md-12 row">
+                            <label class="col-md-3 form-label"><p><strong>Cuenta Beneficiario:</strong></p> &nbsp;</label>
+                            <div class="col-md-9">
+                                <div class="fv-row">
+                                <input asp-for="@Model.CuentaBeneficiario" class="form-control form-control-sm form-control-solid" id="CuentaBeneficiario" onkeypress="return SoloNumeros(event)" maxlength="18" type="text" value="@(Model?.CuentaBeneficiario ?? "")" autocomplete="off" required />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                <div class="d-flex flex-stack row">
+                    <div class="row mb-5 mt-5">
+                        <div class="form-group input-group-sm col-md-12 row">
+                            <label class="col-md-3 form-label"><p><strong>Cuenta Ordenante:</strong></p> &nbsp;</label>
+                            <div class="col-md-9">
+                                <div class="fv-row">
+                                    <input asp-for="@Model!.Ordenante" class="form-control form-control-sm form-control-solid" id="Ordenante" onkeypress="return SoloNumeros(event)" maxlength="16" type="text" value="@(Model?.Ordenante ?? "")" autocomplete="off" required />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-stack row">
+                    <div class="row mb-5 mt-5">
+                        <div class="form-group input-group-sm col-md-12 row">
+                            <label class="col-md-3 form-label"><p><strong>Clave Rastreo:</strong></p> &nbsp;</label>
+                            <div class="col-md-9">
+                                <div class="fv-row">
+                                    <input asp-for="@Model!.ClaveRastreo" class="form-control form-control-sm form-control-solid" id="ClaveRastreo" onkeypress="return SinCaracteresEspeciales(event)" maxlength="25" type="text" value="@(Model?.ClaveRastreo ?? "")" autocomplete="off" required />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-stack row">
+                    <div class="row mb-5 mt-5">
+                        <div class="form-group input-group-sm col-md-12 row">
+                            <label class="col-md-3 form-label"><p><strong>Concepto:</strong></p> &nbsp;</label>
+                            <div class="col-md-9">
+                                <div class="fv-row">
+                                    <input asp-for="@Model!.ConceptoPago" class="form-control form-control-sm form-control-solid" id="ConceptoPago" onkeypress="return SinCaracteresEspeciales(event)" maxlength="30" type="text" value="@(Model?.ConceptoPago ?? "")" autocomplete="off" required />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-stack row">
+                    <div class="row mb-5 mt-5">
+                        <div class="form-group input-group-sm col-md-12 row">
+                            <label class="col-md-3 form-label"><p><strong>Monto:</strong></p> &nbsp;</label>
+                            <div class="col-md-9">
+                                <div class="fv-row">
+                                    <input asp-for="@Model!.Monto" class="form-control form-control-sm form-control-solid" id="Monto" type="number" min="0" value="@(Model!.Monto)" autocomplete="off" required />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-stack row">
+                    <div class="row mb-5 mt-5">
+                        <div class="form-group input-group-sm col-md-12 row">
+                            <label class="col-md-3 form-label"><p><strong>Fecha de Operación:</strong></p> &nbsp;</label>
+                            <div class="col-md-9">
+                                <div class="fv-row">
+                                    <input asp-for="@Model.FechaOperacion" class="form-control form-control-sm form-control-solid" type="datetime-local" value="@Model.FechaOperacion.ToString("yyyy-MM-ddTHH:mm:ss")" required />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-stack row">
+                    <div class="row mb-5 mt-5">
+                        <div class="form-group input-group-sm col-md-12 row">
+                            <label class="col-md-3 form-label"><p><strong>Tipo de Transacción:</strong></p> &nbsp;</label>
+                            <div class="col-md-9">
+                                <div class="fv-row">
+                                    <select asp-for="@Model!.TipoOperacion" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción" data-minimum-results-for-search="Infinity"  required>
+                                        <option></option>
+                                        @{
+                                            if (Model != null)
+                                            {
+                                                if (Model.TipoOperacion == 1)
+                                                {
+                                                    <option value="1" selected>In</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="1">In</option>
+                                                }
+                                                if (Model.TipoOperacion == 2)
+                                                {
+                                                    <option value="2" selected>Out</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="2">Out</option>
+                                                }
+                                                if (Model.TipoOperacion == 3)
+                                                {
+                                                    <option value="3" selected>Comisión</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="3">Comisión</option>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <option value="1">In</option>
+                                                <option value="2">Out</option>
+                                                <option value="2">Comisión</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-stack row">
+                    <div class="row mb-5 mt-5">
+                        <div class="form-group input-group-sm col-md-12 row">
+                            <label class="col-md-3 form-label"><p><strong>Medio de Pago:</strong></p> &nbsp;</label>
+                            <div class="col-md-9">
+                                <div class="fv-row">
+                                    <select asp-for="@Model.MedioPago" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" data-minimum-results-for-search="Infinity" required>
+                                        <option></option>
+                                        @foreach (var medios in Model!.ListaMediosPago!)
+                                        {
+                                            if (Model.MedioPago == @medios.Id) {
+                                                <option value="@medios.Id" selected>@medios.Descripcion</option>
+                                            } else {
+                                                <option value="@medios.Id">@medios.Descripcion</option>
+                                            }
+
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+

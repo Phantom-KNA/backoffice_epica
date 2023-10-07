@@ -1,7 +1,7 @@
 ﻿"use strict";
 
 function validar2() {
-    var user = document.getElementById("username").value;
+    var user = document.getElementById("email").value;
     if (user.length <= 0) {
         document.getElementById("messageEmail").innerHTML = "Es necesario ingresar un usuario.";
         document.querySelector("#validacion").disabled = true;
@@ -11,6 +11,17 @@ function validar2() {
         document.querySelector("#validacion").disabled = false;
     }
 }
+
+document.getElementById('kt_sign_in_form').addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        if (document.getElementById('staticBackdrop').classList.contains('show')) {
+            document.getElementById('kt_sign_in_submit').click();
+        } else {
+            document.getElementById('validacion').click();
+        }
+    }
+});
 
 var signin = function () {
     var form;
@@ -103,4 +114,11 @@ var signin = function () {
 jQuery(document).ready(function () {
     document.querySelector("#validacion").disabled = true;
     signin.init();
+
+    $('#staticBackdrop').on('shown.bs.modal', function () {
+        $('#password').focus();
+    });
+    $('#staticBackdrop').on('hidden.bs.modal', function () {
+        $('#password').val('');
+    });
 });

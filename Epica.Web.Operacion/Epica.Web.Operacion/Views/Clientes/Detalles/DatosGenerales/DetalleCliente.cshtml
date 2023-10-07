@@ -1,0 +1,183 @@
+﻿@model Epica.Web.Operacion.Models.ViewModels.ClientesDetallesViewModel
+@{
+    //ViewData["Title"] = "Persona Fisica";
+    ViewData["Title"] = ViewBag.NombrePascal + " - Datos Generales";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section LogoPage{
+    <i class="bi bi-person fs-1 w-40px"></i>
+}
+@section breadcrumb{
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted">
+        <a class="text-muted" asp-controller="Clientes" asp-action="Index">Personas Físicas</a>
+    </li>
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted">
+        Datos Generales
+    </li>
+}
+
+<partial name="~/Views/Clientes/_PartialClienteHeaderDetalles.cshtml" model="@ViewBag.Info" />
+
+<div class="card">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="card-body pt-5 pb-5 mb-5 col-md-12">
+                <div class="card-header pt-5 pb-5">
+                    <div class="card-title">
+                        <h2 class="card-label fw-bold fs-3 mb-1">Datos generales</h2>
+                    </div>
+
+                    <div class="card-toolbar">
+                        <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
+                            @if (Model.Email != null)
+                            {
+                                <div class="m-0">
+                                    <button data-bs-toggle="modal" data-bs-target="#kt_modal_1" onclick="ResetContrasenaEmail('@Model.Email', @Model.IdCliente)" title="Restablecer Contraseña por Correo Electrónico" class="btn btn-sm btn-primary me-3">
+                                        <i class="bi bi-envelope"></i>&nbsp;R.P Email
+                                    </button>
+                                </div>                         
+                            }
+                            
+                            @if (Model.Telefono != null)
+                            {
+                                <div class="m-0">
+                                    <button data-bs-toggle="modal" data-bs-target="#kt_modal_1" onclick="ResetContrasenaTelefono('@Model.Telefono', @Model.IdCliente)" title="Restablecer Contraseña por Teléfono" class="btn btn-sm btn-primary me-3">
+                                        <i class="bi bi-phone"></i>&nbsp;R.P Tel.
+                                    </button>
+                                </div>
+                            }
+                            @{
+                                if (ViewBag.ValEdicion == true)
+                                {
+                                    <div class="m-0">
+                                        <a href="/Clientes/Detalle/Modificar?id=@Model.IdCliente" class="btn btn-sm btn-primary">
+                                            <i class="bi bi-pencil"></i>&nbsp;Editar Persona Física
+                                        </a>
+                                    </div>
+
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body pt-5 pb-5 mt-3">
+                    <div class="mb-5">
+                        @*<h5 class="mb-4">Datos Económicos generales</h5>*@
+                        <div class="d-flex flex-wrap py-5">
+                            <div class="flex-equal me-5">
+                                <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-gray-400">No. Cliente:</td>
+                                            <td class="text-gray-800">
+                                                @(@Model.IdCliente)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Nombre Completo:</td>
+                                            <td class="text-gray-800">
+                                                @(@Model?.Nombre ?? "")
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Correo Electrónico:</td>
+                                            <td class="text-gray-800">@(@Model?.Email ?? "")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">RFC:</td>
+                                            <td class="text-gray-800">@(@Model?.RFC ?? "")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">País de Nacimiento:</td>
+                                            <td class="text-gray-800">@(@Model?.PaisNacimiento ?? "")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Fecha de Nacimiento:</td>
+                                            <td class="text-gray-800">@(@Model?.FechaNacimiento ?? "")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Género:</td>
+                                            <td class="text-gray-800">@(@Model?.Sexo ?? "")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">CURP:</td>
+                                            <td class="text-gray-800">@(@Model?.CURP ?? "")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Nacionalidad:</td>
+                                            <td class="text-gray-800">@(@Model?.Nacionalidad ?? "")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Télefono:</td>
+                                            <td class="text-gray-800">@(@Model?.Telefono ?? "")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Región:</td>
+                                            <td class="text-gray-800">No aplica</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Observaciones:</td>
+                                            <td class="text-gray-800">@(@Model?.Observaciones ?? "")</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="flex-equal">
+                                <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-gray-400">Colonia:</td>
+                                            <td class="text-gray-800">
+                                                @(@Model?.Colonia ?? "")
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">No. Interior/Exterior:</td>
+                                            <td class="text-gray-800">
+                                                N/A/623
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Alcaldía/Municipio:</td>
+                                            <td class="text-gray-800">
+                                                @(@Model?.Municipio ?? "")
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Ciudad/Estado:</td>
+                                            <td class="text-gray-800">@(@Model?.Estado ?? "")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Calle:</td>
+                                            <td class="text-gray-800">@(@Model?.Calle ?? "")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Código Postal:</td>
+                                            <td class="text-gray-800">@(@Model?.CodigoPostal ?? "")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-gray-400">Identificación Oficial:</td>
+                                            <td class="text-gray-800">INE</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script asp-append-version="true" src="~/js/Clientes/epica.clientes.detalles.js"></script>
+}

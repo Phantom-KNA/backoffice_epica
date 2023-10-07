@@ -1,0 +1,184 @@
+﻿@model Epica.Web.Operacion.Models.ViewModels.TarjetasRegistroTarjetaClienteViewModel
+
+
+@{
+    ViewData["Title"] = "Registrar Tarjeta Toka";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section LogoPage{
+    <i class=" bi bi-person-vcard fs-1 w-40px"></i>
+}
+
+@section breadcrumb{
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted">
+        <a class="text-muted" asp-controller="Tarjetas" asp-action="Index">Tarjetas</a>
+    </li>
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted">
+        @ViewData["Title"]
+    </li>
+}
+
+<form asp-controller="Tarjetas" asp-action= "@ViewBag.Accion" method="post">
+<div class="col-md-12">
+    <div class="card shadow-sm">
+        <div class="card-header">
+                <h3 class="card-title">Registrar Tarjeta Toka</h3>
+            <div class="separator separator-dashed border-light-secondary my-2"></div>
+            <div class="card-toolbar">
+                <button href="javascript:void(0)" onclick="history.back();" type="button" class="btn btn-sm btn-light-primary me-2">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-sm btn-light-primary" id="btnGuardarTarjeta">
+                    Guardar
+                </button>
+            </div>
+        </div>
+        <div class="card-body pt-5">
+            <div class="d-flex mb-6 mt-6">
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Número de tarjeta: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="@Model.TarjetasDetalles.numeroTarjeta" class="form-control form-control-sm form-control-solid" id="NumeroTarjeta" type="text" value="@(Model?.TarjetasDetalles.numeroTarjeta ?? "")" autocomplete="off" required oninput="validateNumbersInput(this)" data-error-message="Número de Tarjeta" minlength="14" maxlength="16" />
+                            <span asp-validation-for="@Model!.TarjetasDetalles.numeroTarjeta" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Número proxy: &nbsp;</label>
+                        <div class="position-relative">
+                            <input asp-for="@Model!.TarjetasDetalles.proxyNumber" class="form-control form-control-sm form-control-solid" id="proxyNumber" type="text" value="@(Model?.TarjetasDetalles.proxyNumber ?? "")" autocomplete="off" required oninput="validateNumbersInput(this)" data-error-message="Número de Proxy" minlength="11" maxlength="11" />
+                            <span asp-validation-for="@Model!.TarjetasDetalles.proxyNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Mes de vigencia: &nbsp;</label>
+                        <div class="position-relative">
+                            <select asp-for="@Model!.TarjetasDetalles.mesVigencia" class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" data-minimum-results-for-search="Infinity" required id="mesVigencia" autocomplete="off">
+                                <option value="">Selecciona un mes</option>
+                                <option value="01">01</option>
+                                <option value="02">02</option>
+                                <option value="03">03</option>
+                                <option value="04">04</option>
+                                <option value="05">05</option>
+                                <option value="06">06</option>
+                                <option value="07">07</option>
+                                <option value="08">08</option>
+                                <option value="09">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                            </select>
+                            <span asp-validation-for="@Model!.TarjetasDetalles.mesVigencia" class="text-danger"></span>
+                        </div>
+                    </div>
+            </div>
+            <div class="d-flex mb-6 mt-6">
+                    <div class="py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Año de vigencia: &nbsp;</label>
+                        <div class="position-relative">
+                            <select asp-for="@Model!.TarjetasDetalles.yearVigencia" id="yearVigencia" autocomplete="off" class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" data-minimum-results-for-search="Infinity" required>
+                                <option value="">Seleccione un año</option>
+                                @for (var year = DateTime.Now.Year; year <= DateTime.Now.Year + 5; year++)
+                                {
+                                    <option value="@year">@year</option>
+                                }
+                            </select>
+                            <span asp-validation-for="@Model!.TarjetasDetalles.yearVigencia" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group input-group-sm py-2 px-4 col-md-4 fv-row">
+                        <label class="form-label required">Buscar Persona: &nbsp;</label>
+
+                        <input type="text" id="nombreCliente" name="nombreCliente" class="form-control form-control-sm form-control-solid" placeholder="Buscar nombre" autocomplete="off" oninput="validateLettersInput(this)" data-error-message="Persona Física" minlength="3" maxlength="20" />
+                        <button type="button" class="btn btn-sm btn-primary align-center" id="btnBuscarCliente">Buscar</button>
+                        <select asp-for="TarjetasDetalles.idCliente" id="selectClientes" class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-kt-select2="true"  data-placeholder="Seleciona una opción" data-minimum-results-for-search="Infinity" required>
+                                <option></option>
+                            </select>
+
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header header-modal">
+                    <h1 class="modal-title text-header-modal fs-5" id="confirmModalLabel">Confirmar Guardado</h1>
+                    <button type="button" class="custom-close-button" data-dismiss="modal" id="btnCerrarModal" aria-label="Close">
+                        <span>✕</span>
+                    </button>
+                </div>
+                <div class="modal-body header-modal">
+                    ¿Estás seguro que deseas guardar la información?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" id="btnCerrarModal2" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="confirmSave">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        // Inicialmente, deshabilita el select
+        $("#selectClientes").prop("disabled", true);
+
+        $("#btnBuscarCliente").click(function () {
+            var nombreCliente = $("#selectClientes").val();
+
+            // Verificar si hay datos en el campo "nombreCliente"
+            if (nombreCliente.trim() !== "") {
+                // Habilitar el select si hay datos
+                $("#selectClientes").prop("disabled", false);
+            } else {
+                // Deshabilitar el select si no hay datos
+                $("#selectClientes").prop("disabled", true);
+            }
+        });
+    });
+</script>
+@section Scripts{
+    <script src="~/js/Tarjetas/epica.tarjetas.registroTarjetaCliente.js" asp-append-version="true"></script>
+
+}
+
+<style>
+
+    .header-modal {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .text-header-modal {
+        color: white;
+    }
+
+    .custom-close-button {
+        color: white;
+        background-color: transparent;
+        border: none;
+        opacity: 1;
+        padding: 0;
+        font-size: 1rem;
+        line-height: 1;
+        cursor: pointer;
+        transition: color 0.3s, opacity 0.3s;
+        position: absolute;
+        right: 0;
+        padding: 21px;
+    }
+
+        .custom-close-button:hover {
+            opacity: 0.8;
+        }
+</style>

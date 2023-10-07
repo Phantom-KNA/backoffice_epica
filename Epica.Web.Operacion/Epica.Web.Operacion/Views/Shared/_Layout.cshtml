@@ -1,10 +1,16 @@
-﻿
+﻿@using Epica.Web.Operacion.Extensions
+@{
+    var loginResponse = Context.Session.GetObject<Epica.Web.Operacion.Models.Response.LoginResponse>("LoginResponse");
+}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Epica </title>
+    <title>
+        @ViewData["Title"] - Epica.Web.Operaciones;
+    </title>
     @*   <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Epica.Web.Banca.styles.css" asp-append-version="true" />*@
@@ -18,10 +24,43 @@
     <!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
     <link href="/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="/css/jquery.filer.css" rel="stylesheet" type="text/css" />
     <!--end::Global Stylesheets Bundle-->
     <style>
         .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
             max-width: 100% !important;
+        }
+
+        .table.gy-5 td, .table.gy-5 th {
+            padding-top: 0.9rem !important;
+            padding-bottom: 0.9rem !important;
+            font-size: 0.9em;
+        }
+
+        table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control, table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control {
+            padding-left: 0px;
+        }
+
+        .obligatorio {
+            color: var(--kt-danger);
+        }
+
+        .lottie-loader2 {
+            width: 180px !important;
+            height: 180px !important;
+        }
+
+        .modal-header {
+            background-color: var(--kt-app-sidebar-primary-base-bg-color) !important;
+        }
+
+        .dataTable {
+            border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+            border-radius: .475rem !important;
+        }
+
+        .table td:first-child, .table th:first-child, .table tr:first-child {
+            padding-left: 10px !important;
         }
     </style>
 
@@ -72,7 +111,7 @@
             <div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper">
                 <!--begin::Sidebar-->
                 <div id="kt_app_sidebar" class="app-sidebar" data-kt-drawer="true" data-kt-drawer-name="app-sidebar" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="300px" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_app_sidebar_mobile_toggle">
-                    <partial name="~/Views/Shared/_SidebarPrimary.cshtml" />
+                    <partial name="~/Views/Shared/_SidebarPrimary.cshtml", model="loginResponse"/>
                     
                 </div>
                 <!--end::Sidebar-->
@@ -107,7 +146,7 @@
                                         <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
                                             <!--begin::Item-->
                                             <li class="breadcrumb-item text-muted">
-                                                <a href=".." class="text-muted text-hover-primary">Home</a>
+                                                <a href="/" class="text-muted text-hover-primary">Home</a>
                                             </li>
                                             <!--end::Item-->
                                             @RenderSection("Breadcrumb",false)

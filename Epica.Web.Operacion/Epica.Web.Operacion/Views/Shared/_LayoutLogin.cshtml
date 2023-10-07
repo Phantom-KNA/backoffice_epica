@@ -1,10 +1,10 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <!--begin::Head-->
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login - Epica.Web.Banca</title>
+    <title>Login - Epica.Web.Backoffice</title>
     @*   <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Epica.Web.Banca.styles.css" asp-append-version="true" />*@
@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
     <!--end::Fonts-->
     <!--begin::Vendor Stylesheets(used for this page only)-->
+
     <link href="/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
     <link href="/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
     <!--end::Vendor Stylesheets-->
@@ -22,18 +23,55 @@
     <script>
         var siteLocation = window.location.href.split('/').slice(0, 3).join('/') + "/";
     </script>
+    <style>
+        .carousel-indicators [data-bs-target] {
+            position: relative;
+            width: 60px;
+            height: 6px;
+            border: none;
+            border-radius: 24px;
+        }
+
+            .carousel-indicators [data-bs-target] span {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 0;
+                height: 100%;
+                background: #7952b3;
+                border-radius: inherit;
+            }
+
+        .carousel-control-prev-icon, .carousel-control-next-icon {
+            height: 100px;
+            width: 100px;
+            background-size: 60%, 70%;
+            border-radius: 50%;
+        }
+
+        .modal-header {
+            background-color: var(--kt-app-sidebar-primary-base-bg-color) !important;
+        }
+
+        /*.carousel-control-next {
+                    right: -30px;
+                }
+
+                .carousel-control-prev {
+                    left: -45px;
+                }*/
+    </style>
 </head>
 <!--end::Head-->
 <!--begin::Body-->
 <body id="kt_body" class="app-blank app-blank bgi-size-cover bgi-position-center bgi-no-repeat" style="max-height:100vh;">
-    <div class="d-flex flex-row flex-column-fluid h-150">
+    <div class="d-flex flex-column flex-lg-row flex-column-fluid vh-100">
         <!--begin::Body-->
-        
-        <!--end::Body-->
-        <div class="d-flex flex-column flex-lg-row-fluid w-lg-50 overflow-auto">
+        <div class="d-flex flex-lg-row-fluid w-lg-50 bgi-size-cover bgi-position-center order-2 order-lg-1">
+            @*        <div class="d-flex flex-column scroll-y bgi-size-cover bgi-position-center order-2 order-lg-1">*@
 
-            <!--begin::Carousel-->
-            <div id="carouselExampleIndicators" class="carousel slide h-100" data-bs-ride="carousel">
+            <div id="carouselExampleIndicators" class="carousel slide carousel-fade h-100" data-bs-ride="carousel">
                 <ol class="carousel-indicators">
                     <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></li>
                     <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></li>
@@ -41,54 +79,45 @@
                 </ol>
                 <div class="carousel-inner h-100">
                     <div class="carousel-item active h-100" data-bs-interval="5000">
-                        <img class="d-block w-100 h-100 img-fluid" src="/images/slider/transferencias-internacionales.png" alt="First slide">
-                        <div class="carousel-caption">
-                            @*<p>
-                            <h1 class="text-light"><span class="fw-bold">Wallet Negocios</span></h1>
-
-                            Cuentas para grandes negocios y PyMES. Sin costos adicionales (sin costo de apertura, edo. de cuenta, softoken y más), paga según tus ingresos. Se parte de Alquimia Pay, agiliza tu negocio y migra a la tecnología.
-                            </p>*@
-                        </div>
+                        <img class="d-block h-100 img-fluid" id="img1" src="/images/slider/transferencias-internacionales.png" alt="First slide">
                     </div>
                     <div class="carousel-item h-100" data-bs-interval="5000">
-                        <img class="d-block w-100 h-100 img-fluid" src="/images/slider/alquimia-wallet.png" alt="Second slide">
-                        <div class="carousel-caption">
-                            @* <p>
-                            <h1 class="text-light">Alquimia Wallet</h1>
-                            Párrafo de texto para la segunda imagen.
-                            </p>*@
-                        </div>
+                        <img class="d-block h-100 img-fluid" src="/images/slider/alquimia-wallet.png" alt="Second slide">
                     </div>
                     <div class="carousel-item h-100" data-bs-interval="5000">
-                        <img class="d-block w-100 h-100 img-fluid" src="/images/slider/alquimia-wallet-negocios1.png" alt="Third slide">
-                        <div class="carousel-caption">
-                            @*<h1 class="text-light">Tarjeta de gasto empresarial</h1>
-                            <p>Párrafo de texto para la tercera imagen.</p>*@
-                        </div>
+                        <img class="d-block h-100 img-fluid" src="/images/slider/alquimia-wallet-negocios1.png" alt="Third slide">
                     </div>
+                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Anterior</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Siguiente</span>
+                    </a>
                 </div>
             </div>
-            <!--end::Carousel-->
-            <!-- Agregar recuadro verde encima del carrusel -->
-            @*<div class="position-fixed top-0 p-6" style="right:0;">
-            <img src="/images/logo/AP-blanco-logo.png" alt="Logo Alquimia" style="width: 90px; height: 60px;" />
-            </div>*@
-        </div>
 
-        <div class="d-flex flex-column flex-lg-row-fluid w-lg-50 overflow-auto">
-            @RenderBody()
         </div>
-        <!--begin::Javascript-->
-        <script>var hostUrl = "assets/";</script>
-        <!--begin::Global Javascript Bundle(mandatory for all pages)-->
-        <script src="/assets/plugins/global/plugins.bundle.js"></script>
-        <script src="/assets/js/scripts.bundle.js"></script>
-        <!--end::Global Javascript Bundle-->
-        <!--begin::Custom Javascript(used for this page only)-->
-        <script src="~/js/account/epica.account.login.js" asp-append-version="true"></script>
-        <!--end::Custom Javascript-->
-        <!--end::Javascript-->
+        <div class="d-flex flex-lg-row-fluid w-lg-50 bgi-size-cover bgi-position-center order-1 order-lg-2" style="background-image: url(/metronic8/demo1/assets/media/misc/auth-bg.png)">
+            <!--begin::Content-->
+            <div class="d-flex flex-column flex-center py-7 py-lg-15 px-5 px-md-15 w-100">
+                @RenderBody()
+            </div>
+            <!--end::Content-->
+        </div>
     </div>
+    <!--begin::Javascript-->
+    <script>var hostUrl = "assets/";</script>
+    <!--begin::Global Javascript Bundle(mandatory for all pages)-->
+    <script src="/assets/plugins/global/plugins.bundle.js"></script>
+    <script src="/assets/js/scripts.bundle.js"></script>
+    <!--end::Global Javascript Bundle-->
+    <!--begin::Custom Javascript(used for this page only)-->
+    <script src="~/js/account/epica.account.login.js" asp-append-version="true"></script>
+    <!--end::Custom Javascript-->
+    <!--end::Javascript-->
+
 </body>
 <!--end::Body-->
 </html>

@@ -1,0 +1,92 @@
+﻿@model Epica.Web.Operacion.Models.Response.DatosCuentaResponse
+
+<div class="modal-content">
+    <div class="modal-body ">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-6">
+                    <p><strong>Número de Cuenta:</strong></p>
+                    <label>@Model.NoCuenta</label>
+                </div>
+                <div class="col-6">
+                    <h2 class="fs-2x fw-bold mb-0">Saldo: $@String.Format("{0:#,#.00}", Model.Saldo)</h2>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-6">
+                    <p><strong>Nombre:</strong></p>
+                    <label>@Model.NombrePersona</label>
+                </div>
+                <div class="col-2">
+                    <p><strong>Estatus:</strong></p>
+                    @if (Model.Estatus == 1){
+                        <span class='badge badge-light-danger'>Desactivado</span>
+                    } else {
+                        <span class='badge badge-light-success'>Activo</span>
+                    }
+
+                </div>
+                <div class="col-4">
+                    <p><strong>Estatus Spei Out:</strong></p>
+                    @if (Model.Estatus == 1)
+                    {
+                        <span class='badge badge-light-danger'>Desactivado</span>
+                    }
+                    else
+                    {
+                        <span class='badge badge-light-success'>Activo</span>
+                    }
+
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-6">
+                    <p><strong>Cuenta AlquimiaPay:</strong></p>
+                    <label>@Model.CuentaAlquimiaPay</label>
+                </div>
+                <div class="col-6">
+                    <p><strong>Clabe:</strong></p>
+                    <label>@Model.Clabe</label>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-6">
+                    <p><strong>Institución:</strong></p>
+                    <label>@Model.descripcionInstitucion</label>
+                </div>
+                <div class="col-6">
+                    <p><strong>Producto:</strong></p>
+                    <label>@Model.Producto</label>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-6">
+                    <p><strong>Alias:</strong></p>
+                    <label>@Model.Alias</label>
+                </div>
+                <div class="col-6">
+                    <p><strong>Tipo de Persona:</strong></p>
+                    <label>@Model.TipoPersona</label>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-6">
+                    <p><strong>Fecha Alta:</strong></p>
+                    <label>@Model.FechaAlta</label>
+                </div>
+                <div class="col-6">
+                    <p><strong>Fecha de Actualización:</strong></p>
+                    <label>@Model.FechaActualizacion</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

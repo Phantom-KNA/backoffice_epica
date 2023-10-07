@@ -1,0 +1,138 @@
+﻿@{
+    //ViewData["Title"] = "Persona Fisica";
+    ViewData["Title"] = ViewBag.NombrePascal + " - Transacciones";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section LogoPage{
+    <i class="bi bi-person fs-1 w-40px"></i>
+}
+@section breadcrumb{
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted">
+        <a class="text-muted" asp-controller="Clientes" asp-action="Index">Personas Físicas</a>
+    </li>
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted">
+        Transacciones
+    </li>
+}
+
+<partial name="~/Views/Clientes/_PartialClienteHeaderDetalles.cshtml" model="@ViewBag.Info" />
+
+<div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
+    <div class="card-header cursor-pointer">
+        <div class="card-title m-0">
+
+            <div class="d-flex align-items-center position-relative my-1">
+                <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor"></rect>
+                        <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor"></path>
+                    </svg>
+                </span>
+                <input type="text" id="search_input" data-kt-customer-table-filter="search" class="form-control form-control-sm w-250px ps-15" placeholder="Buscar clave de rastreo...">
+            </div>
+        </div>
+        <div class="card-toolbar">
+            <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
+                <button data-bs-toggle="modal" data-bs-target="#kt_modal_1" id="OpenFormRegistroTransaccion" class="btn btn-primary me-3 d-none">
+                    <i class="bi bi-plus-lg"></i>&nbsp;Nueva Transacción
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-9">
+        <div class="bottom-buffer">
+            <div class="datatable datatable-bordered datatable-head-custom">
+                <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" id="kt_datatable">
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="kt_modal_1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Crear Nueva Transacción</h3>
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <span class="svg-icon svg-icon-1"></span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <partial name="~/Views/Transacciones/_PartialRenderRegistroTransaccion.cshtml" model="ViewBag.DatosRef" />
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal" id="btnCerrarCuenta">Cerrar</button>
+                <button type="button" class="btn btn-light-primary" id="GuardarCuenta">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_detalle" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header header-modal">
+                <h1 class="modal-title fs-5 text-header-modal" id="modalLabelTitle"></h1>
+                <button type="button" class="custom-close-button" data-bs-dismiss="modal" aria-label="Close">
+                    <span>✕</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer" style="padding:10px">
+                <button type="button" class="btn btn-success btn-sm font-weight-bold" data-bs-dismiss="modal" aria-label="Close" id="btnCerrar">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script asp-append-version="true" src="~/js/Cuentas/epica.cuenta.movimientos.js"></script>
+    <script asp-append-version="true" src="~/js/components/accounting.js"></script>
+    <script>
+        var AccountId = '@ViewBag.AccountID';
+        var NumCuenta = '@ViewBag.NumCuenta';
+        var TipoConsulta = '@ViewBag.TipoConsulta';
+    </script>
+}
+
+
+<style>
+
+    .header-modal {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .text-header-modal {
+        color: white;
+    }
+
+    .custom-close-button {
+        color: white;
+        background-color: transparent;
+        border: none;
+        opacity: 1;
+        padding: 0;
+        font-size: 1rem;
+        line-height: 1;
+        cursor: pointer;
+        transition: color 0.3s, opacity 0.3s;
+        position: absolute;
+        right: 0;
+        padding: 21px;
+    }
+
+        .custom-close-button:hover {
+            opacity: 0.8;
+        }
+</style>

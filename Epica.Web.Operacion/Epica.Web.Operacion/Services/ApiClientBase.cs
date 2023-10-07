@@ -8,12 +8,16 @@ namespace Epica.Web.Operacion.Services;
 public class ApiClientBase
 {
     protected readonly HttpClient ApiClient;
+    //protected readonly HttpClient ApiClientUser;
     protected readonly ILogger Logger;
     protected readonly UrlsConfig Urls;
     protected readonly IHttpContextAccessor HttpContext;
     protected readonly JsonSerializerOptions SerializerOptions;
     protected readonly IUserResolver UserResolver;
-
+    protected readonly string? _apiKey;
+    protected readonly string? UsernameApi;
+    protected readonly string? PasswordApi;
+    protected readonly string? UrlApi;
     public ApiClientBase(HttpClient httpClient,
     ILogger logger,
     IOptions<UrlsConfig> config,
@@ -31,6 +35,10 @@ public class ApiClientBase
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
         UserResolver = userResolver;
-        ApiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserResolver.GetToken());
+        _apiKey = configuration.GetValue<string>("credential:ApiKey");
+        ApiClient.DefaultRequestHeaders.Add("Api-Key", _apiKey);
+        UsernameApi = configuration.GetValue<string>("CredentialsApi:Username");
+        PasswordApi = configuration.GetValue<string>("CredentialsApi:Password");
+        UrlApi = configuration.GetValue<string>("CredentialsApi:Url");
     }
 }

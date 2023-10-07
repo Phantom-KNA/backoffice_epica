@@ -1,0 +1,107 @@
+﻿@model Epica.Web.Operacion.Models.Response.TransaccionResponse
+
+<div class="modal-content">
+    <div class="modal-body">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    <p><strong>Clave Rastreo:</strong></p>
+                    <label>@(string.IsNullOrEmpty(Model.ClaveRastreo) ? "-" : Model.ClaveRastreo)</label>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-6">
+                    <p><strong>Nombre Ordenante:</strong></p>
+                    <label>@(string.IsNullOrEmpty(Model.nombreOrdenante) ? "-" : Model.nombreOrdenante)</label>
+                </div>
+                <div class="col-6">
+                    <p><strong>Cuenta Origen Ordenante:</strong></p>
+                    <label>@(string.IsNullOrEmpty(Model.cuetaOrigenOrdenante) ? "-" : Model.cuetaOrigenOrdenante)</label>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-6">
+                    <p><strong>Cuenta Destino Beneficiario:</strong></p>
+                    <label>@(string.IsNullOrEmpty(Model.CuentaDestinoBeneficiario) ? "-" : Model.CuentaDestinoBeneficiario)</label>
+                </div>
+                <div class="col-6">
+                    <p><strong>Nombre del Beneficiario:</strong></p>
+                    <label>@(string.IsNullOrEmpty(Model.NombreBeneficiario) ? "-" : Model.NombreBeneficiario)</label>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-6">
+                    <p><strong>Alias:</strong></p>
+                    <label>@(string.IsNullOrEmpty(Model.Alias) ? "-" : Model.Alias)</label>
+                </div>
+                <div class="col-6">
+                    <p><strong>Medio de pago:</strong></p>
+                    <label>@(string.IsNullOrEmpty(Model.DescripcionMedioPago) ? "-" : Model.DescripcionMedioPago)</label>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-6">
+                    <p><strong>Monto:</strong></p>
+                    <label>@(string.IsNullOrEmpty(Model.Monto?.ToString()) ? "-" : String.Format("{0:#,#.00}", Model.Monto))</label>
+                </div>
+                <div class="col-6">
+                    <p><strong>Clabe de Cobranza:</strong></p>
+                    <label>@(string.IsNullOrEmpty(Model.ClabeCobranza) ? "-" : Model.ClabeCobranza)</label>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-6">
+                    <p><strong>Concepto:</strong></p>
+                    <label>@(string.IsNullOrEmpty(Model.Concepto) ? "-" : Model.Concepto)</label>
+                </div>
+                <div class="col-6">
+                    <p><strong>Estatus:</strong></p>
+                    @if ((Model.Estatus == 0) || (Model.Estatus == null))
+                    {
+                        <span class="badge badge-light-info">En Proceso</span>
+                    }
+                    else if ((Model.Estatus == 1) || (Model.Estatus == 2))
+                    {
+                        <span class='badge badge-light-warning'>En Tránsito</span>
+                    }
+                    else if (Model.Estatus == 4)
+                    {
+                        <span class='badge badge-light-success'>Liquidada</span>
+                    }
+                    else if (Model.Estatus == 5)
+                    {
+                        <span class='badge badge-light-danger'>Devuelto</span>
+                    }
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-6">
+                    <p><strong>Fecha Alta:</strong></p>
+                    <label>@(string.IsNullOrEmpty(Model.FechaAlta) ? "-" : Model.FechaAlta)</label>
+                </div>
+                <div class="col-6">
+                    <p><strong>Fecha de Actualización:</strong></p>
+                    <label>@(string.IsNullOrEmpty(Model.FechaActualizacion) ? "-" : Model.FechaActualizacion)</label>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-6">
+                    <p><strong>Fecha Instrucción:</strong></p>
+                    <label>@(string.IsNullOrEmpty(Model.FechaInstruccion) ? "-" : Model.FechaInstruccion)</label>
+                </div>
+                <div class="col-6">
+                    <p><strong>Fecha Autorización:</strong></p>
+                    <label>@(string.IsNullOrEmpty(Model.FechaAutorizacion) ? "-" : Model.FechaAutorizacion)</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

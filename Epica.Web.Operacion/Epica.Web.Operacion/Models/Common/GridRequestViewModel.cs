@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace Epica.Web.Operacion.Models.Common;
 
+/// <summary>
+/// Modelo que representa una solicitud de cuadrícula de datos.
+/// </summary>
 public class GridRequestViewModel
 {
     public int Page { get; set; }
@@ -14,6 +17,9 @@ public class GridRequestViewModel
     public int Skip { get; set; }
 }
 
+/// <summary>
+/// Clase que representa una solicitud de lista con opciones de paginación, búsqueda y ordenamiento.
+/// </summary>
 
 public class RequestLista
 {
@@ -25,6 +31,10 @@ public class RequestLista
     public string Ordenamiento { get; set; }
 }
 
+/// <summary>
+/// Clase que representa una solicitud de lista con opciones de paginación, búsqueda, ordenamiento y filtros.
+/// </summary>
+/// 
 public class RequestList
 {
     [JsonProperty("Id")]
@@ -50,7 +60,9 @@ public class RequestList
     public List<RequestListFilters>? Filtros { get; set; }
 
 }
-
+/// <summary>
+/// Esta clase representa un filtro utilizado en una solicitud de lista.
+/// </summary>
 public class RequestListFilters
 {
     [JsonProperty("key")]
@@ -58,6 +70,9 @@ public class RequestListFilters
     [JsonProperty("value")]
     public string Value { get; set; }
 }
+/// <summary>
+/// Clase genérica que representa la respuesta de una cuadrícula (grid) con datos paginados y filtrados.
+/// </summary>
 
 public class ResponseGrid<T>
 {
