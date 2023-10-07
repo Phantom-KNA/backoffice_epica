@@ -35,7 +35,7 @@ stages:
     - task: Docker@0
       displayName: Build an image
       inputs:
-        azureSubscription: 'Azure subscription 1 (1bbd807f-3fcf-4844-8e40-760ec2cc71ad)'
+        azureSubscription: 'Azure subscription 1 - Prod'
         azureContainerRegistry: '{"loginServer":"acralquimiaprod.azurecr.io", "id" : "/subscriptions/1bbd807f-3fcf-4844-8e40-760ec2cc71ad/resourceGroups/rg-alquimia-prod/providers/Microsoft.ContainerRegistry/registries/acralquimiaprod"}'
         dockerFile: Epica.Web.Operacion/Epica.Web.Operacion/Dockerfile
         defaultContext: false
@@ -44,7 +44,7 @@ stages:
     - task: Docker@0
       displayName: Push an image
       inputs:
-        azureSubscription: 'Azure subscription 1 (1bbd807f-3fcf-4844-8e40-760ec2cc71ad)'
+        azureSubscription: 'Azure subscription 1 - Prod'
         azureContainerRegistry: '{"loginServer":"acralquimiaprod.azurecr.io", "id" : "/subscriptions/1bbd807f-3fcf-4844-8e40-760ec2cc71ad/resourceGroups/rg-alquimia-prod/providers/Microsoft.ContainerRegistry/registries/acralquimiaprod"}'
         action: Push an image
 
