@@ -347,11 +347,13 @@ namespace Epica.Web.Operacion.Controllers
                         ClaveRastreo = transaccionResponse.value.ClaveRastreo ?? "",
                         Concepto = transaccionResponse.value.Concepto ?? "",
                         NombreOrdenante = transaccionResponse.value.nombreOrdenante ?? "",
-                        FechaOperacion = transaccionResponse.value.FechaActualizacion,
+                        FechaOperacion = transaccionResponse.value.FechaAlta,
                         CuentaOrigenOrdenante = transaccionResponse.value.cuetaOrigenOrdenante ?? "",
+                        NoCuentaOrdenante = transaccionResponse.value.cuetaOrigenOrdenante ?? "",
                         IdTrasaccion = id,
                         NombreBeneficiario = transaccionResponse.value.NombreBeneficiario ?? "",
                         CuentaDestinoBeneficiario = transaccionResponse.value.CuentaDestinoBeneficiario ?? "",
+                        NoCuentaBeneficiario = transaccionResponse.value.CuentaDestinoBeneficiario ?? ""
                     };
 
                     var listaMediosPago = await _catalogosApiClient.GetMediosPagoAsync();
