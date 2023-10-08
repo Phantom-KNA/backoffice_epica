@@ -3,6 +3,7 @@ using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.Login;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -63,12 +64,15 @@ namespace Epica.Web.Operacion.Controllers
         [Authorize]
         public async Task<IActionResult> Logout()
         {
-            await _loginApiClient.LogoutAsync(_httpContextAccessor.HttpContext);
             HttpContext.Session.Clear();
             HttpContext.Response.Clear();
-            await _httpContextAccessor.HttpContext.SignOutAsync("EpicaWebEsquema");
-            Response.Cookies.Delete(".AspNetCore.Session");
-            Response.Cookies.Delete(".AspNetCore.Antiforgery.J");
+
+            HttpContext.Response.Cookies.Delete(".AspNetCore.Session");
+            HttpContext.Response.Cookies.Delete(".AspNetCore.Cookies");
+            
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+
             return RedirectToAction("Login", "Account");
         }
     }
