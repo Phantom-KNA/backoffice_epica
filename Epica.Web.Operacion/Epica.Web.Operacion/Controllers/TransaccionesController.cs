@@ -243,17 +243,10 @@ namespace Epica.Web.Operacion.Controllers
             var result = new JsonResultDto();
 
             TransaccionDetailsResponse detalleTransaccion = new TransaccionDetailsResponse();
+
             try
             {
-                if (Estatus == "0")
-                {
-                    detalleTransaccion = await _transaccionesApiClient.GetTransaccionDetalleByCobranzaAsync(ClabeCobranza);
-                }
-                else
-                {
-                    detalleTransaccion = await _transaccionesApiClient.GetTransaccionDetalleAsync(Convert.ToInt32(Id));
-                }
-
+                detalleTransaccion = await _transaccionesApiClient.GetTransaccionDetalleAsync(Convert.ToInt32(Id));
 
                 if (detalleTransaccion != null)
                 {
