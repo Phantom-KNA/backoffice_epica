@@ -23,13 +23,13 @@ namespace Epica.Web.Operacion.Controllers;
 
 public class ClientesController : Controller
 {
-    private readonly ILogsApiClient _logsApiClient;
     #region "Locales"
     private readonly IClientesApiClient _clientesApiClient;
     private readonly ICuentaApiClient _cuentaApiClient;
     private readonly ITarjetasApiClient _tarjetasApiClient;
     private readonly UserContextService _userContextService;
     private readonly ICatalogosApiClient _catalogosApiClient;
+    private readonly ILogsApiClient _logsApiClient;
     #endregion
 
     #region "Constructores"
@@ -427,6 +427,8 @@ public class ClientesController : Controller
     #endregion
 
     #region Detalles Cliente
+
+    #region Tap Datos Generales
     [Authorize]
     [Route("Clientes/Detalle/DatosGenerales")]
     public async Task<IActionResult> DatosGenerales(int id)
@@ -458,7 +460,7 @@ public class ClientesController : Controller
                 PaisNacimiento = user.value.PaisNacimiento,
                 Nacionalidad = user.value.Nacionalidad,
                 Fiel = user.value.Fiel,
-                SalarioNetoMensual =user.value.SalarioMensual,
+                SalarioNetoMensual = user.value.SalarioMensual,
                 MontoMaximo = user.value.MontoMaximo,
                 Calle = user.value.Calle,
                 NoInt = user.value.NoInt,
@@ -497,7 +499,9 @@ public class ClientesController : Controller
             if (validacionEdicion == true)
             {
                 ViewBag.ValEdicion = true;
-            } else {
+            }
+            else
+            {
                 ViewBag.ValEdicion = false;
             }
 
@@ -506,7 +510,9 @@ public class ClientesController : Controller
         }
         return NotFound();
     }
+    #endregion
 
+    #region Tap Cuentas
     [Authorize]
     [Route("Clientes/Detalle/Cuentas")]
     public async Task<IActionResult> Cuentas(int id)
@@ -542,7 +548,7 @@ public class ClientesController : Controller
                 IdCliente = user.value.IdCliente,
                 ListaRoles = listaRoles,
                 ListaEmpresa = listaEmpresa
-            }; 
+            };
 
             ViewBag.Info = header;
             ViewBag.Nombre = header.NombreCompleto;
@@ -629,9 +635,12 @@ public class ClientesController : Controller
 
         if (!string.IsNullOrEmpty(request.Busqueda))
         {
-            if (request.Busqueda.ToLower() == "activo") {
+            if (request.Busqueda.ToLower() == "activo")
+            {
                 request.Busqueda = "2";
-            } else if (request.Busqueda.ToLower() == "desactivado") {
+            }
+            else if (request.Busqueda.ToLower() == "desactivado")
+            {
                 request.Busqueda = "1";
             }
 
@@ -654,6 +663,102 @@ public class ClientesController : Controller
         return Json(gridData);
     }
 
+    [Authorize]
+    [HttpPost]
+    public async Task<ActionResult> BuscarCuenta(string NoCuenta)
+    {
+        var listaClientes = await _cuentaApiClient.GetDetalleCuentasSinAsignarAsync(NoCuenta);
+
+        return Json(listaClientes.First());
+    }
+
+    [Authorize]
+    [Route("Clientes/Detalle/Cuentas/RegistrarAsignacionCuenta")]
+    [HttpPost]
+    public async Task<JsonResult> RegistrarAsignacionCuenta(AsignarCuentaDetailsResponse model)
+    {
+        var loginResponse = _userContextService.GetLoginResponse();
+        MensajeResponse response = new MensajeResponse();
+
+        try
+        {
+            AsignarCuentaResponse asignarCuentaResponse = new AsignarCuentaResponse
+            {
+                idCliente = model.IdCliente,
+                idCuenta = model.IdCuenta,
+                descripcionRol = model.Rol,
+                idEmpresa = model.IdEmpresa
+            };
+
+            response = await _clientesApiClient.GetRegistroAsignacionCuentaCliente(asignarCuentaResponse);
+
+            LogRequest logRequest = new LogRequest
+            {
+                IdUser = loginResponse.IdUsuario.ToString(),
+                Modulo = "Clientes",
+                Fecha = HoraHelper.GetHoraCiudadMexico(),
+                NombreEquipo = loginResponse.NombreDispositivo,
+                Accion = "Asignar Cuenta",
+                Ip = loginResponse.DireccionIp,
+                Envio = JsonConvert.SerializeObject(asignarCuentaResponse),
+                Respuesta = response.Error.ToString(),
+                Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
+                IdRegistro = model.IdCliente
+            };
+            await _logsApiClient.InsertarLogAsync(logRequest);
+        }
+        catch (Exception ex)
+        {
+            response.Detalle = ex.Message;
+        }
+
+        return Json(response);
+    }
+
+    [Authorize]
+    [Route("Clientes/Detalle/Cuentas/DesvincularCuenta")]
+    [HttpPost]
+    public async Task<JsonResult> DesvincularCuentaCliente(int idCuenta, int idCliente)
+    {
+        var loginResponse = _userContextService.GetLoginResponse();
+        MensajeResponse response = new MensajeResponse();
+
+        try
+        {
+            DesvincularCuentaResponse asignarCuentaResponse = new DesvincularCuentaResponse
+            {
+                idCliente = idCliente,
+                idCuenta = idCuenta,
+                descripcionRol = "admin", //---> se deja por defecto para desvincular
+            };
+
+            response = await _clientesApiClient.GetRegistroDesvincularCuentaCliente(asignarCuentaResponse);
+
+            LogRequest logRequest = new LogRequest
+            {
+                IdUser = loginResponse.IdUsuario.ToString(),
+                Modulo = "Clientes",
+                Fecha = HoraHelper.GetHoraCiudadMexico(),
+                NombreEquipo = loginResponse.NombreDispositivo,
+                Accion = "Desasignar Cuenta",
+                Ip = loginResponse.DireccionIp,
+                Envio = JsonConvert.SerializeObject(asignarCuentaResponse),
+                Respuesta = response.Error.ToString(),
+                Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
+                IdRegistro = idCliente
+            };
+            await _logsApiClient.InsertarLogAsync(logRequest);
+        }
+        catch (Exception ex)
+        {
+            response.Detalle = ex.Message;
+        }
+
+        return Json(response);
+    }
+    #endregion
+
+    #region Tap Transacciones
     [Authorize]
     [Route("Clientes/Detalle/Movimientos")]
     public async Task<IActionResult> Transacciones(int id, int cliente, string noCuenta)
@@ -689,10 +794,13 @@ public class ClientesController : Controller
 
             ViewBag.NumCuenta = noCuenta;
 
-            if ((id == 0) && (noCuenta == null)) {
+            if ((id == 0) && (noCuenta == null))
+            {
                 ViewBag.TipoConsulta = "IsGeneral";
                 ViewBag.AccountID = cliente;
-            } else {
+            }
+            else
+            {
                 ViewBag.TipoConsulta = "IsEspecific";
                 ViewBag.AccountID = id;
             }
@@ -709,6 +817,9 @@ public class ClientesController : Controller
         return RedirectToAction("Index", "Home");
     }
 
+    #endregion
+
+    #region Tap Tarjetas
     [Authorize]
     [Route("Clientes/Detalle/Tarjetas")]
     public async Task<IActionResult> Tarjetas(int id)
@@ -801,7 +912,7 @@ public class ClientesController : Controller
             (x.nombreCompleto?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
             (x.proxyNumber?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
             (x.clabe?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-            (x.tarjeta?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) 
+            (x.tarjeta?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
             ).ToList();
         }
 
@@ -814,6 +925,10 @@ public class ClientesController : Controller
 
         return Json(gridData);
     }
+
+    #endregion
+
+    #region Tap Documentos
 
     [Authorize]
     [Route("Clientes/Detalle/Documentos")]
@@ -898,107 +1013,135 @@ public class ClientesController : Controller
 
             response = await _clientesApiClient.GetInsertaDocumentoClienteAsync(sendDocumento);
 
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             response.Error = true;
         }
-      
+
         return Json(response);
     }
 
-
     [Authorize]
     [HttpPost]
-    public async Task<ActionResult> BuscarCuenta(string NoCuenta)
+    public async Task<JsonResult> ConsultarListadoDocumentos(string idAccount)
     {
-        var listaClientes = await _cuentaApiClient.GetDetalleCuentasSinAsignarAsync(NoCuenta);
 
-        return Json(listaClientes.First());
-    }
-
-    [Authorize]
-    [Route("Clientes/Detalle/Cuentas/RegistrarAsignacionCuenta")]
-    [HttpPost]
-    public async Task<JsonResult> RegistrarAsignacionCuenta(AsignarCuentaDetailsResponse model)
-    {
-        var loginResponse = _userContextService.GetLoginResponse();
-        MensajeResponse response = new MensajeResponse();
+        var gridData = new ResponseGrid<DocumentosClienteResponseGrid>();
 
         try
         {
-            AsignarCuentaResponse asignarCuentaResponse = new AsignarCuentaResponse
-            { 
-               idCliente = model.IdCliente,
-               idCuenta = model.IdCuenta,
-               descripcionRol = model.Rol,
-               idEmpresa = model.IdEmpresa
-            };
+            var request = new RequestList();
 
-            response = await _clientesApiClient.GetRegistroAsignacionCuentaCliente(asignarCuentaResponse);
+            int totalRecord = 0;
+            int filterRecord = 0;
 
-            LogRequest logRequest = new LogRequest
+            var draw = Request.Form["draw"].FirstOrDefault();
+            int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
+            int skip = Convert.ToInt32(Request.Form["start"].FirstOrDefault() ?? "0");
+
+            request.Pagina = skip / pageSize + 1;
+            request.Registros = pageSize;
+            request.Busqueda = Request.Form["search[value]"].FirstOrDefault();
+            request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+            request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
+
+            DocumentosClienteDetailsResponse ListPF = new DocumentosClienteDetailsResponse();
+            ListPF = await _clientesApiClient.GetDocumentosClienteAsync(Convert.ToInt32(idAccount));
+
+            var List = new List<DocumentosClienteResponseGrid>();
+            foreach (var row in ListPF.value)
             {
-                IdUser = loginResponse.IdUsuario.ToString(),
-                Modulo = "Clientes",
-                Fecha = HoraHelper.GetHoraCiudadMexico(),
-                NombreEquipo = loginResponse.NombreDispositivo,
-                Accion = "Asignar Cuenta",
-                Ip = loginResponse.DireccionIp,
-                Envio = JsonConvert.SerializeObject(asignarCuentaResponse),
-                Respuesta = response.Error.ToString(),
-                Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
-                IdRegistro = model.IdCliente
-            };
-            await _logsApiClient.InsertarLogAsync(logRequest);
+                var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(row.ruta_documento);
+                var ally = System.Convert.ToBase64String(plainTextBytes);
+
+                row.urlAlly = ally;
+
+                List.Add(new DocumentosClienteResponseGrid
+                {
+                    IdCliente = row.IdCliente,
+                    DescripcionDocumento = row.DescripcionDocumento,
+                    tipo_documento = row.tipo_documento,
+                    fechaalta = row.fecha_alta.ToString(),
+                    fechaactualizacion = row.fecha_actualizacion.ToString(),
+                    Observaciones = row.Observaciones,
+                    urlAlly = ally,
+                    Acciones = await this.RenderViewToStringAsync("~/Views/Clientes/_AccionesDocumentos.cshtml", row)
+                });
+            }
+
+            if (!string.IsNullOrEmpty(request.Busqueda))
+            {
+                List = List.Where(x =>
+                (x.DescripcionDocumento?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.fechaalta.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.fechaactualizacion.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.Observaciones?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
+                ).ToList();
+            }
+
+            gridData.RecordsTotal = List.Count;
+            gridData.Data = List.Skip(skip).Take(pageSize).ToList();
+            filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.Data.Count;
+            gridData.RecordsFiltered = filterRecord;
+            gridData.Draw = draw;
+
         }
         catch (Exception ex)
         {
-            response.Detalle = ex.Message;
+            return Json(gridData);
         }
 
-        return Json(response);
+        return Json(gridData);
     }
 
-    [Authorize]
-    [Route("Clientes/Detalle/Cuentas/DesvincularCuenta")]
+    [Route("Clientes/Detalle/Documentos/VerDocumentoCliente")]
     [HttpPost]
-    public async Task<JsonResult> DesvincularCuentaCliente(int idCuenta, int idCliente)
+    public async Task<JsonResult> VerDocumentoCliente(string DocAlly)
     {
-        var loginResponse = _userContextService.GetLoginResponse();
-        MensajeResponse response = new MensajeResponse();
+
+        MensajeArchivoResponse? result = new MensajeArchivoResponse();
 
         try
         {
-            DesvincularCuentaResponse asignarCuentaResponse = new DesvincularCuentaResponse
-            {
-                idCliente = idCliente,
-                idCuenta = idCuenta,
-                descripcionRol = "admin", //---> se deja por defecto para desvincular
-            };
+            var base64EncodedBytes = System.Convert.FromBase64String(DocAlly);
+            var url = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
 
-            response = await _clientesApiClient.GetRegistroDesvincularCuentaCliente(asignarCuentaResponse);
+            DocumentoShowResponse response = await _clientesApiClient.GetVisualizarDocumentosClienteAsync(url);
 
-            LogRequest logRequest = new LogRequest
+            var ArchivoUsuario = File(response.Documento, response.MimeType, response.Nombre);
+
+            byte[] bytes;
+            using (var memoryStream = new MemoryStream())
             {
-                IdUser = loginResponse.IdUsuario.ToString(),
-                Modulo = "Clientes",
-                Fecha = HoraHelper.GetHoraCiudadMexico(),
-                NombreEquipo = loginResponse.NombreDispositivo,
-                Accion = "Desasignar Cuenta",
-                Ip = loginResponse.DireccionIp,
-                Envio = JsonConvert.SerializeObject(asignarCuentaResponse),
-                Respuesta = response.Error.ToString(),
-                Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
-                IdRegistro = idCliente
-            };
-            await _logsApiClient.InsertarLogAsync(logRequest);
+                ArchivoUsuario.FileStream.CopyTo(memoryStream);
+                bytes = memoryStream.ToArray();
+            }
+
+            if (response.MimeType == "application/pdf")
+            {
+                result.Codigo = "PDF";
+            }
+            else
+            {
+                result.Codigo = "image";
+            }
+
+            result.Error = false;
+            result.Archivo64 = Convert.ToBase64String(bytes);
+
         }
         catch (Exception ex)
         {
-            response.Detalle = ex.Message;
+            result.Error = true;
         }
 
-        return Json(response);
+        return Json(result);
+
     }
+
+    #endregion
+
     #endregion
 
     #region Registro Clientes
@@ -1095,26 +1238,7 @@ public class ClientesController : Controller
     }
     #endregion
 
-    [Authorize]
-    [HttpPost]
-    public async Task<ActionResult> BuscarClientes(string nombreCliente)
-    {
-        var listaClientes = await _clientesApiClient.GetClientesbyNombreAsync(nombreCliente);
-        if (listaClientes.Count == 0)
-        {
-            return BadRequest();
-        }
-        return Json(listaClientes);
-    }
-
-    [Authorize]
-    [HttpPost]
-    public async Task<ActionResult> BuscarCoincidenciaNombre(string nombreCompleto)
-    {
-        var listaClientes = await _clientesApiClient.GetDetallesClientesByNombresAsync(nombreCompleto);
-        return Json(listaClientes);
-    }
-
+    #region Modificar Cliente
     [Authorize]
     [HttpPost]
     public async Task<IActionResult> ModificarCliente(ClientesRegistroViewModel model)
@@ -1159,55 +1283,6 @@ public class ClientesController : Controller
 
         return NotFound();
     }
-   
-    #endregion
-    //[Authorize]
-    //public async Task<IActionResult> GestionarDocumentos(string AccountID = "")
-    //{
-    //    var loginResponse = _userContextService.GetLoginResponse();
-    //    if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Editar")) == true)
-    //    {
-    //        if (AccountID == "")
-    //        {
-    //            return RedirectToAction("Index");
-    //        }
-
-    //public async Task<IActionResult> GestionarDocumentos(string AccountID = "")
-    //{
-    //    var loginResponse = _userContextService.GetLoginResponse();
-    //    var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Editar == 0);
-    //    {
-    //        if (AccountID == "")
-    //        {
-    //            return RedirectToAction("Index");
-    //        }
-
-    //        var GetDatosCliente = await _clientesApiClient.GetClienteAsync(Convert.ToInt32(AccountID));
-
-    //        ViewBag.AccountID = AccountID;
-
-    //        if (GetDatosCliente.NombreCompleto == null)
-    //        {
-    //            ViewBag.Nombre = "S/N";
-    //        }
-    //        else
-    //        {
-    //            ViewBag.Nombre = GetDatosCliente.NombreCompleto;
-    //        }
-
-            //string nombreCompleto = GetDatosCliente.Nombre + " " + GetDatosCliente.ApellidoPaterno ?? "" + " " + GetDatosCliente.ApellidoMaterno ?? "";
-
-            //if (nombreCompleto == null)
-            //{
-            //    ViewBag.Nombre = "S/N";
-            //}
-            //else
-            //{
-            //    ViewBag.Nombre = nombreCompleto;
-            //}
-
-    //    return NotFound();
-    //}
 
     [Authorize]
     [Route("Clientes/Detalle/Modificar")]
@@ -1236,7 +1311,7 @@ public class ClientesController : Controller
                     ApellidoMaterno = cliente.value.ApellidoMaterno,
                     ApellidoPaterno = cliente.value.ApellidoPaterno,
                     CodigoPostal = cliente.value.CodigoPostal,
-                    Colonia= cliente.value.Colonia,
+                    Colonia = cliente.value.Colonia,
                     Observaciones = cliente.value.Observaciones,
                     RFC = cliente.value.RFC,
                     Fiel = cliente.value.Fiel,
@@ -1295,354 +1370,38 @@ public class ClientesController : Controller
         return NotFound();
 
     }
+    #endregion
 
-    //[Authorize]
-    //[HttpPost]
-    //public async Task<IActionResult> ModificarCliente(ClientesRegistroViewModel model)
-    //{
-    //    var loginResponse = _userContextService.GetLoginResponse();
-    //    if (loginResponse?.AccionesPorModulo.Any(modulo => modulo.Modulo == "Clientes" && modulo.Acciones.Contains("Insertar")) == true)
-    //    {
-    //        RegistrarModificarClienteResponse response = new RegistrarModificarClienteResponse();
-
-    //        try
-    //        {
-    //            response = await _clientesApiClient.GetModificaCliente(model.ClientesDetalles);
-
-    //            if (response.codigo == "200")
-    //            {
-    //                return RedirectToAction("Index");
-    //            }
-    //            else
-    //            {
-    //                return RedirectToAction("Registro");
-    //            }
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            return View();
-    //        }
-    //    }
-
-    //    return NotFound();
-    //}
+    #region Auxiliares
+    [Authorize]
+    [HttpPost]
+    public async Task<ActionResult> BuscarClientes(string nombreCliente)
+    {
+        var listaClientes = await _clientesApiClient.GetClientesbyNombreAsync(nombreCliente);
+        if (listaClientes.Count == 0)
+        {
+            return BadRequest();
+        }
+        return Json(listaClientes);
+    }
 
     [Authorize]
     [HttpPost]
-    public async Task<JsonResult> ConsultarListadoDocumentos(string idAccount)
+    public async Task<ActionResult> BuscarCoincidenciaNombre(string nombreCompleto)
     {
-
-        var gridData = new ResponseGrid<DocumentosClienteResponseGrid>();
-
-        try
-        {
-            var request = new RequestList();
-
-            int totalRecord = 0;
-            int filterRecord = 0;
-
-            var draw = Request.Form["draw"].FirstOrDefault();
-            int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
-            int skip = Convert.ToInt32(Request.Form["start"].FirstOrDefault() ?? "0");
-
-            request.Pagina = skip / pageSize + 1;
-            request.Registros = pageSize;
-            request.Busqueda = Request.Form["search[value]"].FirstOrDefault();
-            request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-            request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
-
-            DocumentosClienteDetailsResponse ListPF = new DocumentosClienteDetailsResponse();
-            ListPF = await _clientesApiClient.GetDocumentosClienteAsync(Convert.ToInt32(idAccount));
-
-            var List = new List<DocumentosClienteResponseGrid>();
-            foreach (var row in ListPF.value)
-            {
-                var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(row.ruta_documento);
-                var ally = System.Convert.ToBase64String(plainTextBytes);
-
-                row.urlAlly = ally;
-
-                List.Add(new DocumentosClienteResponseGrid
-                {
-                    IdCliente = row.IdCliente,
-                    DescripcionDocumento = row.DescripcionDocumento,
-                    tipo_documento = row.tipo_documento,
-                    fechaalta = row.fecha_alta.ToString(),
-                    fechaactualizacion = row.fecha_actualizacion.ToString(),
-                    Observaciones = row.Observaciones,
-                    urlAlly = ally,
-                    Acciones = await this.RenderViewToStringAsync("~/Views/Clientes/_AccionesDocumentos.cshtml", row)
-                });
-            }
-
-            if (!string.IsNullOrEmpty(request.Busqueda))
-            {
-                List = List.Where(x =>
-                (x.DescripcionDocumento?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-                (x.fechaalta.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-                (x.fechaactualizacion.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-                (x.Observaciones?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
-                ).ToList();
-            }
-
-            gridData.RecordsTotal = List.Count;
-            gridData.Data = List.Skip(skip).Take(pageSize).ToList(); 
-            filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.Data.Count;
-            gridData.RecordsFiltered = filterRecord;
-            gridData.Draw = draw;
-
-        } catch (Exception ex) {
-            return Json(gridData);
-        }
-
-        return Json(gridData);
-    }
-
-    [Route("Clientes/Detalle/Documentos/VerDocumentoCliente")]
-    [HttpPost]
-    public async Task<JsonResult> VerDocumentoCliente(string DocAlly)
-    {
-
-        MensajeArchivoResponse? result = new MensajeArchivoResponse();
-
-        try
-        {
-            var base64EncodedBytes = System.Convert.FromBase64String(DocAlly);
-            var url = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
-
-            DocumentoShowResponse response = await _clientesApiClient.GetVisualizarDocumentosClienteAsync(url);
-
-            var ArchivoUsuario = File(response.Documento, response.MimeType, response.Nombre);
-
-            byte[] bytes;
-            using (var memoryStream = new MemoryStream())
-            {
-                ArchivoUsuario.FileStream.CopyTo(memoryStream);
-                bytes = memoryStream.ToArray();
-            }
-            
-            if (response.MimeType == "application/pdf") {
-                result.Codigo = "PDF";
-            } else {
-                result.Codigo = "image";
-            }
-
-            result.Error = false;
-            result.Archivo64 = Convert.ToBase64String(bytes);
-
-        } catch (Exception ex) {
-            result.Error = true;
-        }
-
-        return Json(result);
-
-    }
-
-    #region "Modelos"
-
-    public class GenerarNombreResponse
-    {
-        public string Nombre { get; set; }
-        public string NombreCompleto { get; set; }
+        var listaClientes = await _clientesApiClient.GetDetallesClientesByNombresAsync(nombreCompleto);
+        return Json(listaClientes);
     }
 
     #endregion
 
+    #endregion
+
+    #region "Modelos"
+
+    #endregion
+
     #region "Funciones Auxiliares"
-
-    private GenerarNombreResponse generarnombre(int i)
-    {
-        var res = new GenerarNombreResponse();
-        Random rnd = new Random((int)DateTime.Now.Ticks);
-
-        i = i - 1;
-
-        String[] nombres = { "Juan", "Pablo", "Paco", "Jose", "Alberto", "Roberto", "Genaro", "Andrea", "Maria", "Carmen" };
-        String[] apellidos = { "Sanchez", "Perez", "Lopez", "Torres", "Alvarez", "Martinez", "Guzman", "Rodriguez", "Flores", "Vazquez" };
-        String[] apellidosM = { "Vazquez", "Flores", "Rodriguez", "Guzman", "Martinez", "Alvarez", "Torres", "Lopez", "Perez", "Sanchez" };
-
-        var genNombre = nombres[i];
-
-        String gen = genNombre + " " + apellidos[i] + " " + apellidos[i];
-
-        res.Nombre = genNombre;
-        res.NombreCompleto = gen;
-
-        return res;
-    }
-
-    private string generarNombreArchivo(int i)
-    {
-        Random rnd = new Random((int)DateTime.Now.Ticks);
-
-        i = i - 1;
-
-        String[] nombres = { "INE", "Comprobante de Domicilio", "RFC", "CURP", "CARNET" };
-        var genNombre = nombres[i];
-
-        String gen = genNombre;
-
-        return gen;
-    }
-
-    public static string GenNumeroTelefono(int length)
-    {
-        if (length > 0)
-        {
-            var sb = new StringBuilder();
-
-            var rnd = SeedRandom();
-            for (int i = 0; i < length; i++)
-            {
-                sb.Append(rnd.Next(0, 9).ToString());
-            }
-
-            return sb.ToString();
-        }
-
-        return string.Empty;
-    }
-
-    public static string GenerarEmail()
-    {
-        //return string.Format("{0}@{1}.com", GenerateRandomAlphabetString(10), GenerateRandomAlphabetString(10));
-        return string.Format("{0}@{1}.com", GenerateRandomAlphabetString(10), "gmail");
-    }
-    /// <summary>
-    /// Gets a string from the English alphabet at random
-    /// </summary>
-    public static string GenerateRandomAlphabetString(int length)
-    {
-        string allowedChars = "abcdefghijklmnopqrstuvwyxzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        var rnd = SeedRandom();
-
-        char[] chars = new char[length];
-        for (int i = 0; i < length; i++)
-        {
-            chars[i] = allowedChars[rnd.Next(allowedChars.Length)];
-        }
-
-        return new string(chars);
-    }
-    private static Random SeedRandom()
-    {
-        return new Random(Guid.NewGuid().GetHashCode());
-    }
-
-    public List<ClienteResponse> GetList()
-    {
-
-
-        var List = new List<ClienteResponse>();
-        Random rnd = new Random();
-        const string characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-        String[] characters2 = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
-
-        try
-        {
-            for (int i = 1; i <= 10; i++)
-            {
-                var gen = generarnombre(i);
-
-                var pf = new ClienteResponse();
-                pf.id = i;
-                pf.nombreCompleto = gen.NombreCompleto;
-                pf.telefono = GenNumeroTelefono(10);
-                pf.email = GenerarEmail();
-                pf.CURP = "DOOM982834HMCRNS07";
-                pf.organizacion = "Doom Organizacion";
-                pf.membresia = "Negocios";
-                pf.sexo = "Masculino";
-                pf.estatus = 1;
-
-                List.Add(pf);
-            }
-        }
-        catch (Exception e)
-        {
-            List = new List<ClienteResponse>();
-        }
-
-        return List;
-    }
-
-    public async Task<List<DocumentosClienteResponse>> GetListArchivos(int idUser)
-    {
-        var List = new List<DocumentosClienteResponse>();
-
-        try
-        {
-            for (int i = 1; i <= 4; i++)
-            {
-                var gen = generarNombreArchivo(i);
-
-                var pf = new DocumentosClienteResponse();
-                //pf.idCliente = i;
-                //pf.idDocApodLeg = 100 + i;
-                //pf.tipoDocumento = i;
-                //pf.documento = GenNumeroTelefono(5);
-                //pf.numeroIdentificacion = GenNumeroTelefono(20);
-                //pf.nombreDocumento = generarNombreArchivo(i);
-
-                List.Add(pf);
-            }
-        }
-        catch (Exception e)
-        {
-            List = new List<DocumentosClienteResponse>();
-        }
-
-        return List;
-    }
-
-    public async Task<List<UserPermissionResponse>> GetListUser()
-    {
-        var List = new List<UserPermissionResponse>();
-        Random rnd = new Random();
-        try
-        {
-            for (int i = 1; i <= 5; i++)
-            {
-                var gen = generarnombre(i);
-
-                var pf = new UserPermissionResponse();
-                pf.id = i;
-                pf.nombreRol = gen.NombreCompleto;
-                pf.listaGen = generarListaPermisos();
-                List.Add(pf);
-            }
-        }
-        catch (Exception e)
-        {
-            List = new List<UserPermissionResponse>();
-        }
-
-        return List;
-    }
-
-    private List<ListUserPermissionResponse> generarListaPermisos()
-    {
-        var res = new List<ListUserPermissionResponse>();
-        String[] catalogoVista = { "Clientes", "Transacciones", "Tarjetas", "Cuentas"};
-
-        for (int i = 0; i <= 3; i++)
-        {
-            var genPermisos = catalogoVista[i];
-
-            var pf = new ListUserPermissionResponse();
-            pf.IdPermiso = i;
-            pf.vista = genPermisos;
-            pf.Escritura = false;
-            pf.Lectura = true;
-            pf.Eliminar = false;
-            pf.Actualizar = true;
-
-            res.Add(pf);
-        }
-
-        return res;
-    }
 
     public async Task<IActionResult> ValidarCorreo(string correo)
     {
@@ -1663,7 +1422,6 @@ public class ClientesController : Controller
             return BadRequest(new { success = false, mensaje = "Error de comunicación" });
         }
     }
-
 
     public async Task<IActionResult> ValidarTelefono(string telefono)
     {

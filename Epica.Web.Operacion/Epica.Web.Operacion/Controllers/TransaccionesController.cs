@@ -51,6 +51,8 @@ namespace Epica.Web.Operacion.Controllers
         #endregion
 
         #region "Funciones"
+
+        #region Consultar Transacciones
         [Authorize]
         public IActionResult Index(string AccountID = "")
         {
@@ -66,71 +68,6 @@ namespace Epica.Web.Operacion.Controllers
 
 
             return NotFound();
-        }
-
-        [Authorize]
-        public async Task<ActionResult> Registro()
-        {
-            var loginResponse = _userContextService.GetLoginResponse();
-            var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Insertar == 0);
-            if (validacion == true)
-            {
-                var listaMediosPago = await _catalogosApiClient.GetMediosPagoAsync();
-
-                TransaccionesRegistroViewModel transaccionesRegistroViewModel = new TransaccionesRegistroViewModel
-                {
-                    TransacccionDetalles = new RegistrarTransaccionRequest(),
-                    ListaMediosPago = listaMediosPago
-                };
-
-                ViewBag.Accion = "RegistrarTransaccion";
-                ViewBag.TituloForm = "Registrar Transacción";
-
-                return View(transaccionesRegistroViewModel);
-            }
-
-
-            return NotFound();
-        }
-
-        //[Authorize]
-        //public async Task<IActionResult> Transacciones()
-        //{
-        //    var loginResponse = _userContextService.GetLoginResponse();
-        //    var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Ver == 0);
-        //    if (validacion == true)
-        //    {
-        //        var recibir = await _transaccionesApiClient.GetTransaccionesAsync(1, 100);
-        //        return Json(recibir);
-        //    }
-        //    return NotFound();
-
-        //}
-
-        public async Task<IActionResult> DescargarVoucherTransaccion(int CuentaAhorro, int Transaccion)
-        {
-            VoucherResponse? respuesta = new VoucherResponse();
-
-            try
-            {
-                respuesta = await _transaccionesApiClient.GetVoucherTransaccionAsync(CuentaAhorro, Transaccion, _userContextService.GetLoginResponse().Token);
-
-                if (respuesta == null) {
-                    return RedirectToAction("index", "home");
-                }
-
-                byte[] bytes = Convert.FromBase64String(respuesta.archivo);
-                MemoryStream Archivo = new MemoryStream(bytes);
-
-                var contentType = "APPLICATION/octet-stream";
-                var fileName = string.Format("comprobante_{0}_{1}.pdf", CuentaAhorro.ToString(), Transaccion.ToString());
-
-                return File(Archivo, contentType, fileName);
-
-            } catch (Exception ex) {
-                return RedirectToAction("index", "home");
-            }
-
         }
 
         [Authorize]
@@ -158,32 +95,52 @@ namespace Epica.Web.Operacion.Controllers
 
             if (request.ColumnaOrdenamiento != null)
             {
-                if (request.ColumnaOrdenamiento == "cuetaOrigenOrdenante") {
+                if (request.ColumnaOrdenamiento == "cuetaOrigenOrdenante")
+                {
                     columna = 1;
-                } else if (request.ColumnaOrdenamiento == "vinculo") {
+                }
+                else if (request.ColumnaOrdenamiento == "vinculo")
+                {
                     columna = 2;
-                } else if (request.ColumnaOrdenamiento == "NombreCuenta") {
+                }
+                else if (request.ColumnaOrdenamiento == "NombreCuenta")
+                {
                     columna = 3;
-                } else if (request.ColumnaOrdenamiento == "Institucion") {
+                }
+                else if (request.ColumnaOrdenamiento == "Institucion")
+                {
                     columna = 4;
-                } else if (request.ColumnaOrdenamiento == "Concepto") {
+                }
+                else if (request.ColumnaOrdenamiento == "Concepto")
+                {
                     columna = 5;
-                } else if (request.ColumnaOrdenamiento == "Monto") {
+                }
+                else if (request.ColumnaOrdenamiento == "Monto")
+                {
                     columna = 6;
-                } else if (request.ColumnaOrdenamiento == "FechaInstruccion") {
+                }
+                else if (request.ColumnaOrdenamiento == "FechaInstruccion")
+                {
                     columna = 7;
-                }  else if (request.ColumnaOrdenamiento == "FechaAutorizacion") {
+                }
+                else if (request.ColumnaOrdenamiento == "FechaAutorizacion")
+                {
                     columna = 8;
-                } else if (request.ColumnaOrdenamiento == "Estatus") {
+                }
+                else if (request.ColumnaOrdenamiento == "Estatus")
+                {
                     columna = 9;
                 }
             }
 
             if (request.Ordenamiento != null)
             {
-                if (request.Ordenamiento == "asc") {
+                if (request.Ordenamiento == "asc")
+                {
                     tipoFiltro = true;
-                } else {
+                }
+                else
+                {
                     tipoFiltro = false;
                 }
             }
@@ -191,7 +148,8 @@ namespace Epica.Web.Operacion.Controllers
             var gridData = new ResponseGrid<ResumenTransaccionResponseGrid>();
             List<TransaccionesResponse> ListPF = new List<TransaccionesResponse>();
 
-            if (!string.IsNullOrEmpty(request.Busqueda)) {
+            if (!string.IsNullOrEmpty(request.Busqueda))
+            {
 
                 filters.RemoveAll(x => x.Key == "claveRastreo");
 
@@ -205,12 +163,15 @@ namespace Epica.Web.Operacion.Controllers
             //Validar si hay algun filtro con valor ingresado
             var validaFiltro = filters.Where(x => x.Value != null).ToList();
 
-            if (validaFiltro.Count != 0) { 
+            if (validaFiltro.Count != 0)
+            {
                 (ListPF, paginacion) = await _transaccionesApiClient.GetTransaccionesFilterAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), columna, tipoFiltro, filters);
 
-            } else {
-                (ListPF, paginacion) = await _transaccionesApiClient.GetTransaccionesAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros),columna,tipoFiltro);
-            
+            }
+            else
+            {
+                (ListPF, paginacion) = await _transaccionesApiClient.GetTransaccionesAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), columna, tipoFiltro);
+
             }
 
             var List = new List<ResumenTransaccionResponseGrid>();
@@ -218,9 +179,12 @@ namespace Epica.Web.Operacion.Controllers
             {
                 var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Editar == 0);
 
-                if (validacion == true) {
+                if (validacion == true)
+                {
                     row.permiso = true;
-                } else {
+                }
+                else
+                {
                     row.permiso = false;
                 }
 
@@ -241,7 +205,7 @@ namespace Epica.Web.Operacion.Controllers
                     //fechaAlta = row.fechaAlta,
                     fechaInstruccion = row.fechaInstruccion,
                     fechaAutorizacion = row.fechaAutorizacion,
-                    alias= row.alias,
+                    alias = row.alias,
                     clabeCobranza = row.clabeCobranza,
                     cuetaOrigenOrdenante = row.cuetaOrigenOrdenante,
                     descripcionMedioPago = row.descripcionMedioPago,
@@ -274,8 +238,79 @@ namespace Epica.Web.Operacion.Controllers
         }
 
         [Authorize]
-        [HttpPost]
+        public async Task<IActionResult> DetalleTransaccion(string Id, string Estatus, string ClabeCobranza)
+        {
+            var result = new JsonResultDto();
 
+            TransaccionDetailsResponse detalleTransaccion = new TransaccionDetailsResponse();
+            try
+            {
+                if (Estatus == "0")
+                {
+                    detalleTransaccion = await _transaccionesApiClient.GetTransaccionDetalleByCobranzaAsync(ClabeCobranza);
+                }
+                else
+                {
+                    detalleTransaccion = await _transaccionesApiClient.GetTransaccionDetalleAsync(Convert.ToInt32(Id));
+                }
+
+
+                if (detalleTransaccion != null)
+                {
+                    result.Error = false;
+                    result.Result = await this.RenderViewToStringAsync("~/Views/Transacciones/_Detalle.cshtml", detalleTransaccion.value);
+
+                    var loginResponse = _userContextService.GetLoginResponse();
+                    var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Editar == 0);
+                    if (validacion == true)
+                    {
+                        result.permiso = true;
+                    }
+                }
+                else
+                {
+                    result.Error = true;
+                    result.ErrorDescription = "ERROR";
+                    return Json(result);
+                }
+            }
+            catch (Exception)
+            {
+                result.Error = true;
+                result.ErrorDescription = "Error1";
+            }
+            return Json(result);
+        }
+        #endregion
+
+        #region Registrar Transacciones
+        [Authorize]
+        public async Task<ActionResult> Registro()
+        {
+            var loginResponse = _userContextService.GetLoginResponse();
+            var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Insertar == 0);
+            if (validacion == true)
+            {
+                var listaMediosPago = await _catalogosApiClient.GetMediosPagoAsync();
+
+                TransaccionesRegistroViewModel transaccionesRegistroViewModel = new TransaccionesRegistroViewModel
+                {
+                    TransacccionDetalles = new RegistrarTransaccionRequest(),
+                    ListaMediosPago = listaMediosPago
+                };
+
+                ViewBag.Accion = "RegistrarTransaccion";
+                ViewBag.TituloForm = "Registrar Transacción";
+
+                return View(transaccionesRegistroViewModel);
+            }
+
+
+            return NotFound();
+        }
+
+        [Authorize]
+        [HttpPost]
         public async Task<IActionResult> RegistrarTransaccion(TransaccionesRegistroViewModel model)
         {
             var loginResponse = _userContextService.GetLoginResponse();
@@ -331,7 +366,9 @@ namespace Epica.Web.Operacion.Controllers
 
             return NotFound();
         }
+        #endregion
 
+        #region Modificar Transacciones
         [Authorize]
         public async Task<ActionResult> Modificar(int id)
         {
@@ -427,229 +464,7 @@ namespace Epica.Web.Operacion.Controllers
 
             return NotFound();
         }
-
-        [Authorize]
-        public async Task<IActionResult> DetalleTransaccion(string Id, string Estatus, string ClabeCobranza)
-        {
-            var result = new JsonResultDto();
-
-            TransaccionDetailsResponse detalleTransaccion = new TransaccionDetailsResponse();
-            try
-            {
-                if (Estatus == "0") {
-                    detalleTransaccion = await _transaccionesApiClient.GetTransaccionDetalleByCobranzaAsync(ClabeCobranza);
-                } else {
-                    detalleTransaccion = await _transaccionesApiClient.GetTransaccionDetalleAsync(Convert.ToInt32(Id));
-                }
-
-
-                if (detalleTransaccion != null)
-                {
-                    result.Error = false;
-                    result.Result = await this.RenderViewToStringAsync("~/Views/Transacciones/_Detalle.cshtml", detalleTransaccion.value);
-
-                    var loginResponse = _userContextService.GetLoginResponse();
-                    var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Editar == 0);
-                    if (validacion == true) {
-                        result.permiso = true;
-                    }
-                }
-                else
-                {
-                    result.Error = true;
-                    result.ErrorDescription = "ERROR";
-                    return Json(result);
-                }
-            }
-            catch (Exception)
-            {
-                result.Error = true;
-                result.ErrorDescription = "Error1";
-            }
-            return Json(result);
-        }
-
-        [HttpPost]
-        public async Task<JsonResult> CargarDocumentoMasivoTransacciones(CargarDocumentoTransaccionesViewModel model)
-        {
-
-            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            MensajeResponse response = new MensajeResponse();
-            List<CargaBachRequest> ListaBach = new List<CargaBachRequest>();
-            var loginResponse = _userContextService.GetLoginResponse();
-
-            try
-            {
-                var filenameTemp = Path.GetFileNameWithoutExtension(Path.GetTempFileName());
-                var extension = Path.GetExtension(model.documento.FileName);
-                var pathTemp = Path.GetTempPath();
-                var FilenameSave = filenameTemp + extension;
-                DataSet resultExcel = new DataSet();
-                DataTable tablaDatos = new DataTable();
-                var filePath = pathTemp + "" + FilenameSave;
-                List<string> listaClavesRastreo = new List<string>();
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await model.documento.CopyToAsync(stream);
-                    stream.Close();
-                }
-
-                using (var streamExcel = System.IO.File.Open(filePath, FileMode.Open, FileAccess.Read))
-                {
-                    IExcelDataReader reader = ExcelDataReader.ExcelReaderFactory.CreateOpenXmlReader(streamExcel);
-                    resultExcel = reader.AsDataSet(new ExcelDataSetConfiguration());
-                    reader.Close();
-                    tablaDatos = resultExcel.Tables[0];
-                }
-
-                //Validamos el encabezado, que no posea mas de ocho columnas
-                var ValidaEncabezado = tablaDatos.Rows[0];
-                if (ValidaEncabezado.ItemArray.Length != 8) {
-                    response.Error = true;
-                    response.message = "El Archivo Excel no cuenta con la estructura correcta para poder ser procesado o el archivo tiene un formato diferente al indicado.";
-                    return Json(response);
-                }
-
-                if (tablaDatos.Rows.Count == 1) {
-                    response.Error = true;
-                    response.message = "El Archivo Excel no cuenta con registros válidos.";
-                    return Json(response);
-                }
-
-                for (var rowCell = 0; rowCell <= tablaDatos.Rows.Count - 1; rowCell++)
-                {
-                    var rowData = tablaDatos.Rows[rowCell];
-
-                    //Remover Encabezado
-                    if (rowCell < 1) {
-                        continue;
-                    }
-
-                    try
-                    {
-                        CargaBachRequest RegistrarTransaccion = new CargaBachRequest();
-
-                        RegistrarTransaccion.estatus = 2;
-
-                        if (rowData.ItemArray[0].ToString().ToLower() == "in") {
-                            RegistrarTransaccion.TipoOperacion = 1;
-                            RegistrarTransaccion.Comision = 0;
-                        } else if (rowData.ItemArray[0].ToString().ToLower() == "out") {
-                            RegistrarTransaccion.TipoOperacion = 2;
-                            RegistrarTransaccion.Comision = 0;
-                        } else if (rowData.ItemArray[0].ToString().ToLower() == "comision"){
-                            RegistrarTransaccion.TipoOperacion = 3;
-                            RegistrarTransaccion.Comision = 1;
-                        } else {
-                            RegistrarTransaccion.observaciones = "El Tipo de Operación no es válido.";
-                            RegistrarTransaccion.estatus = 1;
-                        }
-
-                        bool validarCuentaBeneficiario = ValidaCadena(rowData.ItemArray[1].ToString(), 18);
-                        if (validarCuentaBeneficiario == true) {
-                            RegistrarTransaccion.observaciones = "La cuenta Clabe no es válida.";
-                            RegistrarTransaccion.estatus = 1;
-                        } else {
-                            RegistrarTransaccion.CuentaBeneficiario = rowData.ItemArray[1].ToString();
-                        }
-
-                        bool validarCuentaOrdenante = ValidaCadena(rowData.ItemArray[7].ToString(), 16);
-                        if (validarCuentaOrdenante == true) {
-                            RegistrarTransaccion.observaciones = "La Cuenta Ordenante no es válida.";
-                            RegistrarTransaccion.estatus = 1;
-                        } else {
-                            RegistrarTransaccion.Ordenante = rowData.ItemArray[7].ToString();
-                        }
-
-                        bool validarMonto = ValidarMontos(rowData.ItemArray[2].ToString());
-                        if (validarMonto == true) {
-                            RegistrarTransaccion.observaciones = "El monto no es válida.";
-                            RegistrarTransaccion.estatus = 1;
-                        } else {
-                            RegistrarTransaccion.Monto = Convert.ToDouble(rowData.ItemArray[2]);
-                        }
-
-                        bool validarconceptoPago = ValidarCaracteresEspeciales(rowData.ItemArray[3].ToString(), 30);
-                        if (validarconceptoPago == true) {
-                            RegistrarTransaccion.observaciones = "El concepto de pago no es válido.";
-                            RegistrarTransaccion.estatus = 1;
-                        } else {
-                            RegistrarTransaccion.ConceptoPago = rowData.ItemArray[3].ToString();
-                        }
-
-                        bool validarclaverastreo = ValidarCaracteresEspeciales(rowData.ItemArray[5].ToString(), 25);
-                        if (validarclaverastreo == true) {
-                            RegistrarTransaccion.observaciones = "La clave de rastreo no es válido.";
-                            RegistrarTransaccion.estatus = 1;
-                        } else {
-                            RegistrarTransaccion.ClaveRastreo = rowData.ItemArray[5].ToString();
-                        }
-
-                        bool validaFecha = ValidarFecha(rowData.ItemArray[4].ToString());
-                        if (validaFecha == true) {
-                            RegistrarTransaccion.observaciones = "La fecha no es válida.";
-                            RegistrarTransaccion.estatus = 1;
-                        } else {
-                            RegistrarTransaccion.FechaOperacion = Convert.ToDateTime(rowData.ItemArray[4]);
-                        }
-
-                        int result;
-                        bool validaMedioPago = int.TryParse(rowData.ItemArray[6].ToString(), out result);
-                        if (validaMedioPago == false) {
-                            RegistrarTransaccion.observaciones = "El medio de pago no es válida.";
-                            RegistrarTransaccion.estatus = 1;
-                        } else {
-                            RegistrarTransaccion.MedioPago = Convert.ToInt32(rowData.ItemArray[6]);
-                        }
-
-                        var match = listaClavesRastreo.FirstOrDefault(x => x.Contains(rowData.ItemArray[5].ToString()));
-
-                        if (match != null) {
-                            RegistrarTransaccion.observaciones = "La clave de Rastreo ya existe en el documento cargado.";
-                            RegistrarTransaccion.estatus = 1;
-                        }
-
-                        //para este punto, las transacciones seran validas 
-                        RegistrarTransaccion.IdUsuario = Convert.ToInt32(loginResponse.IdUsuario.ToString());
-                       
-                        ListaBach.Add(RegistrarTransaccion);
-                        listaClavesRastreo.Add(RegistrarTransaccion.ClaveRastreo);
-
-                    } catch (Exception ex) {
-                        continue;
-                    }
-                }
-
-                if (ListaBach.Count == 0) {
-                    response.Error = true;
-                    response.message = "No se pudo cargar las transacciones, debido a que los datos proporcionados no son válidos.";
-                } else {
-                    response = await _transaccionesApiClient.GetInsertaTransaccionesBatchAsync(ListaBach);
-                }
-
-            } catch (Exception ex) {
-                response.Error = true;
-                response.message = "Hubo un problema al cargar las transacciones, verifique que el documento sea válido.";
-            }
-
-            return Json(response);
-        }
-
-        public IActionResult GetBlobDownloadFormat()
-        {
-            var net = new System.Net.WebClient();
-
-            string webRootPath = _webHostEnvironment.WebRootPath;
-            string path = Path.Combine(webRootPath, "Formatos");
-
-            string FolderPath = Path.Combine(path, "Formato_Carga_Masiva_Transacciones.xlsx"); // <-- Error here
-            var data = net.DownloadData(FolderPath);
-            var content = new System.IO.MemoryStream(data);
-            var contentType = "APPLICATION/octet-stream";
-            var fileName = "Formato_Carga_Masiva_Transacciones.xlsx";
-            return File(content, contentType, fileName);
-        }
+        #endregion
 
         #region Devoluciones
 
@@ -873,6 +688,227 @@ namespace Epica.Web.Operacion.Controllers
         #endregion
 
         #region Carga Masiva
+
+        [HttpPost]
+        public async Task<JsonResult> CargarDocumentoMasivoTransacciones(CargarDocumentoTransaccionesViewModel model)
+        {
+
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            MensajeResponse response = new MensajeResponse();
+            List<CargaBachRequest> ListaBach = new List<CargaBachRequest>();
+            var loginResponse = _userContextService.GetLoginResponse();
+
+            try
+            {
+                var filenameTemp = Path.GetFileNameWithoutExtension(Path.GetTempFileName());
+                var extension = Path.GetExtension(model.documento.FileName);
+                var pathTemp = Path.GetTempPath();
+                var FilenameSave = filenameTemp + extension;
+                DataSet resultExcel = new DataSet();
+                DataTable tablaDatos = new DataTable();
+                var filePath = pathTemp + "" + FilenameSave;
+                List<string> listaClavesRastreo = new List<string>();
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.documento.CopyToAsync(stream);
+                    stream.Close();
+                }
+
+                using (var streamExcel = System.IO.File.Open(filePath, FileMode.Open, FileAccess.Read))
+                {
+                    IExcelDataReader reader = ExcelDataReader.ExcelReaderFactory.CreateOpenXmlReader(streamExcel);
+                    resultExcel = reader.AsDataSet(new ExcelDataSetConfiguration());
+                    reader.Close();
+                    tablaDatos = resultExcel.Tables[0];
+                }
+
+                //Validamos el encabezado, que no posea mas de ocho columnas
+                var ValidaEncabezado = tablaDatos.Rows[0];
+                if (ValidaEncabezado.ItemArray.Length != 8)
+                {
+                    response.Error = true;
+                    response.message = "El Archivo Excel no cuenta con la estructura correcta para poder ser procesado o el archivo tiene un formato diferente al indicado.";
+                    return Json(response);
+                }
+
+                if (tablaDatos.Rows.Count == 1)
+                {
+                    response.Error = true;
+                    response.message = "El Archivo Excel no cuenta con registros válidos.";
+                    return Json(response);
+                }
+
+                for (var rowCell = 0; rowCell <= tablaDatos.Rows.Count - 1; rowCell++)
+                {
+                    var rowData = tablaDatos.Rows[rowCell];
+
+                    //Remover Encabezado
+                    if (rowCell < 1)
+                    {
+                        continue;
+                    }
+
+                    try
+                    {
+                        CargaBachRequest RegistrarTransaccion = new CargaBachRequest();
+
+                        RegistrarTransaccion.estatus = 2;
+
+                        if (rowData.ItemArray[0].ToString().ToLower() == "in")
+                        {
+                            RegistrarTransaccion.TipoOperacion = 1;
+                            RegistrarTransaccion.Comision = 0;
+                        }
+                        else if (rowData.ItemArray[0].ToString().ToLower() == "out")
+                        {
+                            RegistrarTransaccion.TipoOperacion = 2;
+                            RegistrarTransaccion.Comision = 0;
+                        }
+                        else if (rowData.ItemArray[0].ToString().ToLower() == "comision")
+                        {
+                            RegistrarTransaccion.TipoOperacion = 3;
+                            RegistrarTransaccion.Comision = 1;
+                        }
+                        else
+                        {
+                            RegistrarTransaccion.observaciones = "El Tipo de Operación no es válido.";
+                            RegistrarTransaccion.estatus = 1;
+                        }
+
+                        bool validarCuentaBeneficiario = ValidaCadena(rowData.ItemArray[1].ToString(), 18);
+                        if (validarCuentaBeneficiario == true)
+                        {
+                            RegistrarTransaccion.observaciones = "La cuenta Clabe no es válida.";
+                            RegistrarTransaccion.estatus = 1;
+                        }
+                        else
+                        {
+                            RegistrarTransaccion.CuentaBeneficiario = rowData.ItemArray[1].ToString();
+                        }
+
+                        bool validarCuentaOrdenante = ValidaCadena(rowData.ItemArray[7].ToString(), 16);
+                        if (validarCuentaOrdenante == true)
+                        {
+                            RegistrarTransaccion.observaciones = "La Cuenta Ordenante no es válida.";
+                            RegistrarTransaccion.estatus = 1;
+                        }
+                        else
+                        {
+                            RegistrarTransaccion.Ordenante = rowData.ItemArray[7].ToString();
+                        }
+
+                        bool validarMonto = ValidarMontos(rowData.ItemArray[2].ToString());
+                        if (validarMonto == true)
+                        {
+                            RegistrarTransaccion.observaciones = "El monto no es válida.";
+                            RegistrarTransaccion.estatus = 1;
+                        }
+                        else
+                        {
+                            RegistrarTransaccion.Monto = Convert.ToDouble(rowData.ItemArray[2]);
+                        }
+
+                        bool validarconceptoPago = ValidarCaracteresEspeciales(rowData.ItemArray[3].ToString(), 30);
+                        if (validarconceptoPago == true)
+                        {
+                            RegistrarTransaccion.observaciones = "El concepto de pago no es válido.";
+                            RegistrarTransaccion.estatus = 1;
+                        }
+                        else
+                        {
+                            RegistrarTransaccion.ConceptoPago = rowData.ItemArray[3].ToString();
+                        }
+
+                        bool validarclaverastreo = ValidarCaracteresEspeciales(rowData.ItemArray[5].ToString(), 25);
+                        if (validarclaverastreo == true)
+                        {
+                            RegistrarTransaccion.observaciones = "La clave de rastreo no es válido.";
+                            RegistrarTransaccion.estatus = 1;
+                        }
+                        else
+                        {
+                            RegistrarTransaccion.ClaveRastreo = rowData.ItemArray[5].ToString();
+                        }
+
+                        bool validaFecha = ValidarFecha(rowData.ItemArray[4].ToString());
+                        if (validaFecha == true)
+                        {
+                            RegistrarTransaccion.observaciones = "La fecha no es válida.";
+                            RegistrarTransaccion.estatus = 1;
+                        }
+                        else
+                        {
+                            RegistrarTransaccion.FechaOperacion = Convert.ToDateTime(rowData.ItemArray[4]);
+                        }
+
+                        int result;
+                        bool validaMedioPago = int.TryParse(rowData.ItemArray[6].ToString(), out result);
+                        if (validaMedioPago == false)
+                        {
+                            RegistrarTransaccion.observaciones = "El medio de pago no es válida.";
+                            RegistrarTransaccion.estatus = 1;
+                        }
+                        else
+                        {
+                            RegistrarTransaccion.MedioPago = Convert.ToInt32(rowData.ItemArray[6]);
+                        }
+
+                        var match = listaClavesRastreo.FirstOrDefault(x => x.Contains(rowData.ItemArray[5].ToString()));
+
+                        if (match != null)
+                        {
+                            RegistrarTransaccion.observaciones = "La clave de Rastreo ya existe en el documento cargado.";
+                            RegistrarTransaccion.estatus = 1;
+                        }
+
+                        //para este punto, las transacciones seran validas 
+                        RegistrarTransaccion.IdUsuario = Convert.ToInt32(loginResponse.IdUsuario.ToString());
+
+                        ListaBach.Add(RegistrarTransaccion);
+                        listaClavesRastreo.Add(RegistrarTransaccion.ClaveRastreo);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        continue;
+                    }
+                }
+
+                if (ListaBach.Count == 0)
+                {
+                    response.Error = true;
+                    response.message = "No se pudo cargar las transacciones, debido a que los datos proporcionados no son válidos.";
+                }
+                else
+                {
+                    response = await _transaccionesApiClient.GetInsertaTransaccionesBatchAsync(ListaBach);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                response.Error = true;
+                response.message = "Hubo un problema al cargar las transacciones, verifique que el documento sea válido.";
+            }
+
+            return Json(response);
+        }
+
+        public IActionResult GetBlobDownloadFormat()
+        {
+            var net = new System.Net.WebClient();
+
+            string webRootPath = _webHostEnvironment.WebRootPath;
+            string path = Path.Combine(webRootPath, "Formatos");
+
+            string FolderPath = Path.Combine(path, "Formato_Carga_Masiva_Transacciones.xlsx"); // <-- Error here
+            var data = net.DownloadData(FolderPath);
+            var content = new System.IO.MemoryStream(data);
+            var contentType = "APPLICATION/octet-stream";
+            var fileName = "Formato_Carga_Masiva_Transacciones.xlsx";
+            return File(content, contentType, fileName);
+        }
 
         [Authorize]
         public async Task<IActionResult> ConsultarCargaMasiva()
@@ -1278,6 +1314,37 @@ namespace Epica.Web.Operacion.Controllers
         }
         #endregion
 
+        #region Auxiliar
+        public async Task<IActionResult> DescargarVoucherTransaccion(int CuentaAhorro, int Transaccion)
+        {
+            VoucherResponse? respuesta = new VoucherResponse();
+
+            try
+            {
+                respuesta = await _transaccionesApiClient.GetVoucherTransaccionAsync(CuentaAhorro, Transaccion, _userContextService.GetLoginResponse().Token);
+
+                if (respuesta == null)
+                {
+                    return RedirectToAction("index", "home");
+                }
+
+                byte[] bytes = Convert.FromBase64String(respuesta.archivo);
+                MemoryStream Archivo = new MemoryStream(bytes);
+
+                var contentType = "APPLICATION/octet-stream";
+                var fileName = string.Format("comprobante_{0}_{1}.pdf", CuentaAhorro.ToString(), Transaccion.ToString());
+
+                return File(Archivo, contentType, fileName);
+
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("index", "home");
+            }
+
+        }
+        #endregion
+
         #endregion
 
         #region "Modelos"
@@ -1418,57 +1485,6 @@ namespace Epica.Web.Operacion.Controllers
             }
 
             return error;
-        }
-
-        private string generarnombreBanco(int i)
-        {
-            Random rnd = new Random((int)DateTime.Now.Ticks);
-
-            i = i - 1;
-
-            System.String[] nombres = { "BBVA", "BANAMEX", "BANCOPPEL", "SANTANDER", "NU", "FARABELA", "PALACIO DE HIERRO", "JP MORGAN", "HSBC", "BANREGIO" };
-
-            var genNombre = nombres[i];
-
-            return genNombre;
-        }
-
-        public List<DevolucionesResponse> QAGetListDevoluciones()
-        {
-
-
-            var List = new List<DevolucionesResponse>();
-            Random rnd = new Random();
-            const string characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-            System.String[] characters2 = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
-
-            try
-            {
-                for (int i = 1; i <= 10; i++)
-                {
-                    var gen = generarnombreBanco(i);
-
-                    var pf = new DevolucionesResponse();
-                    pf.Id = i;
-                    pf.ClaveRastreo = string.Format("AQPAY0000{0}{1}", DateTime.Now.ToString("yyyyMMdd"), i);
-                    pf.CuentaOrigen = string.Format("46000047896324{0}", i);
-                    pf.Monto = Convert.ToDecimal(rnd.Next(0001, 99999));
-                    pf.Concepto = string.Format("Test De Transacciones {0}", i);
-                    pf.FechaAlta = DateTime.Now;
-                    pf.CuentaDestino = string.Format("112311234324{0}", i);
-                    pf.CanDevolver = true;
-                    pf.BancoTxt = gen;
-
-                    List.Add(pf);
-                }
-            }
-            catch (Exception e)
-            {
-                List = new List<DevolucionesResponse>();
-            }
-
-            return List;
         }
         #endregion
     }

@@ -174,6 +174,119 @@ public class CuentaController : Controller
 
         return Json(gridData);
     }
+
+    [Authorize]
+    [HttpPost]
+    public async Task<JsonResult> GestionarEstatusCuentas(int id, string Estatus, int token, string cs)
+    {
+        MensajeResponse respuesta = new MensajeResponse();
+        var loginResponse = _userContextService.GetLoginResponse();
+        var accion = "";
+
+        try
+        {
+
+            if (Estatus == "True")
+            {
+                respuesta = await _cuentaApiClient.BloqueoCuentaAsync(id, 0, token, cs);
+                accion = "Desbloquear Cuenta";
+            }
+            else if (Estatus == "False")
+            {
+                respuesta = await _cuentaApiClient.BloqueoCuentaAsync(id, 1, token, cs);
+                accion = "Bloquear Cuenta";
+            }
+            else
+            {
+                //Deteccion de posible cambio en codigo HTML a través de inspeccionar elemento
+                return Json(BadRequest());
+            }
+
+            LogRequest logRequest = new LogRequest
+            {
+                IdUser = loginResponse.IdUsuario.ToString(),
+                Modulo = "Cuentas",
+                Fecha = HoraHelper.GetHoraCiudadMexico(),
+                NombreEquipo = loginResponse.NombreDispositivo,
+                Accion = accion,
+                Ip = loginResponse.DireccionIp,
+                Envio = JsonConvert.SerializeObject(id),
+                Respuesta = respuesta.Error.ToString(),
+                Error = respuesta.Error ? JsonConvert.SerializeObject(respuesta.Detalle) : string.Empty,
+                IdRegistro = id
+            };
+
+            await _logsApiClient.InsertarLogAsync(logRequest);
+
+        }
+        catch (Exception ex)
+        {
+
+            return Json(BadRequest());
+        }
+
+        return Json(Ok());
+    }
+
+    [HttpPost]
+    public async Task<JsonResult> GestionarEstatusSpeiOutCuentas(int id, string Estatus, int token, string cs)
+    {
+        MensajeResponse respuesta = new MensajeResponse();
+        var loginResponse = _userContextService.GetLoginResponse();
+        var accion = "";
+
+        try
+        {
+
+            if (Estatus == "True")
+            {
+                respuesta = await _cuentaApiClient.BloqueoCuentaSpeiOutAsync(id, 0, token, cs);
+                accion = "Desbloquear Spei Out";
+            }
+            else if (Estatus == "False")
+            {
+                respuesta = await _cuentaApiClient.BloqueoCuentaSpeiOutAsync(id, 1, token, cs);
+                accion = "Bloquear Spei Out";
+            }
+            else
+            {
+                //Deteccion de posible cambio en codigo HTML a través de inspeccionar elemento
+                return Json(BadRequest());
+            }
+
+            LogRequest logRequest = new LogRequest
+            {
+                IdUser = loginResponse.IdUsuario.ToString(),
+                Modulo = "Cuentas",
+                Fecha = HoraHelper.GetHoraCiudadMexico(),
+                NombreEquipo = loginResponse.NombreDispositivo,
+                Accion = accion,
+                Ip = loginResponse.DireccionIp,
+                Envio = JsonConvert.SerializeObject(id),
+                Respuesta = respuesta.Error.ToString(),
+                Error = respuesta.Error ? JsonConvert.SerializeObject(respuesta.Detalle) : string.Empty,
+                IdRegistro = id
+            };
+
+            await _logsApiClient.InsertarLogAsync(logRequest);
+        }
+        catch (Exception ex)
+        {
+
+            return Json(BadRequest());
+        }
+
+        return Json(Ok());
+    }
+
+    [Authorize]
+    [HttpPost]
+    public async Task<JsonResult> ConsultarSubCuentas(int id)
+    {
+        var ListPF = await _cuentaApiClient.GetCobranzaReferenciadaAsync(id);
+        //var ListPF = GetList();
+        return Json(ListPF);
+    }
     #endregion
 
     #region Detalle Cuenta
@@ -222,46 +335,6 @@ public class CuentaController : Controller
 
         return NotFound();
     }
-
-    //[Authorize]
-    //[Route("Cuentas/Detalle/CobranzaReferenciada")]
-    //public async Task<IActionResult> CobranzaReferenciada(int id, int cliente, string noCuenta)
-    //{
-    //    var loginResponse = _userContextService.GetLoginResponse();
-    //    var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Cuentas" && modulo.Ver == 0);
-    //    if (validacion == true)
-    //    {
-    //        ClienteDetailsResponse user = await _usuariosApiClient.GetDetallesCliente(cliente);
-
-    //        if (user.value == null)
-    //        {
-    //            return RedirectToAction("Index");
-    //        }
-
-    //        ViewBag.UrlView = "Movimientos";
-    //        ClientesHeaderViewModel header = new ClientesHeaderViewModel
-    //        {
-    //            Id = user.value.IdCliente,
-    //            NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
-    //            Telefono = user.value.Telefono,
-    //            Correo = user.value.Email,
-    //            Curp = user.value.CURP,
-    //            Organizacion = user.value.Organizacion,
-    //            Rfc = user.value.RFC,
-    //            Sexo = user.value.Sexo,
-    //            NoCuenta = noCuenta
-    //        };
-    //        ViewBag.Info = header;
-    //        ViewBag.Nombre = header.NombreCompleto;
-    //        ViewBag.AccountID = id;
-    //        ViewBag.NumCuenta = noCuenta;
-    //        ViewBag.Cliente = cliente;
-
-    //        return View("~/Views/Cuenta/DetallesCuenta/Transacciones/DetalleMovimientos.cshtml");
-    //    }
-
-    //    return NotFound();
-    //}
 
     [HttpPost]
     public async Task<JsonResult> ConsultaCuentas(string id, string TipoConsulta)
@@ -347,39 +420,6 @@ public class CuentaController : Controller
     }
 
     [Authorize]
-    [Route("Cuentas/Detalle/Transacciones/RegistrarTransaccion")]
-    [HttpPost]
-    public async Task<JsonResult> RegistrarTransaccion(RegistrarTransaccionRequest model)
-    {
-        MensajeResponse responses = new MensajeResponse();
-
-        try
-        {
-            model.FechaOperacion = DateTime.Now.ToString("dd/mm/yyyy");
-            //model.CuentaOrigenOrdenante = model.NoCuentaOrdenante;
-            //model.CuentaDestinoBeneficiario = model.NoCuentaBeneficiario;
-
-            responses = await _transaccionesApiClient.GetRegistroTransaccion(model);
-
-        } catch (Exception ex) {
-            responses.Error = true;
-            responses.Detalle = ex.Message;
-        }
-
-        return Json(model);
-    }
-    #endregion
-
-
-    [Authorize]
-    [HttpPost]
-    public async Task<JsonResult> ConsultarSubCuentas(int id)
-    {
-        var ListPF = await _cuentaApiClient.GetCobranzaReferenciadaAsync(id);
-        //var ListPF = GetList();
-        return Json(ListPF);
-    }
-    [Authorize]
     public async Task<IActionResult> DetalleCuenta(string numCuenta)
     {
         var result = new JsonResultDto();
@@ -406,177 +446,15 @@ public class CuentaController : Controller
         }
         return Json(result);
     }
+    #endregion
 
-    [Authorize]
-    [HttpPost]
-    public async Task<JsonResult> GestionarEstatusCuentas(int id, string Estatus, int token, string cs)
-    {
-        MensajeResponse respuesta = new MensajeResponse();
-        var loginResponse = _userContextService.GetLoginResponse();
-        var accion = "";
-
-        try
-        {
-
-            if (Estatus == "True") {
-                respuesta = await _cuentaApiClient.BloqueoCuentaAsync(id,0,token,cs);
-                accion = "Desbloquear Cuenta";
-            } else if (Estatus == "False") {
-                respuesta = await _cuentaApiClient.BloqueoCuentaAsync(id, 1, token, cs);
-                accion = "Bloquear Cuenta";
-            }
-            else {
-                //Deteccion de posible cambio en codigo HTML a través de inspeccionar elemento
-                return Json(BadRequest());
-            }
-
-            LogRequest logRequest = new LogRequest
-            {
-                IdUser = loginResponse.IdUsuario.ToString(),
-                Modulo = "Cuentas",
-                Fecha = HoraHelper.GetHoraCiudadMexico(),
-                NombreEquipo = loginResponse.NombreDispositivo,
-                Accion = accion,
-                Ip = loginResponse.DireccionIp,
-                Envio = JsonConvert.SerializeObject(id),
-                Respuesta = respuesta.Error.ToString(),
-                Error = respuesta.Error ? JsonConvert.SerializeObject(respuesta.Detalle) : string.Empty,
-                IdRegistro = id
-            };
-
-            await _logsApiClient.InsertarLogAsync(logRequest);
-
-        } catch (Exception ex) {
-
-            return Json(BadRequest());
-        }
-
-        return Json(Ok());
-    }
-
-    [HttpPost]
-    public async Task<JsonResult> GestionarEstatusSpeiOutCuentas(int id, string Estatus, int token, string cs)
-    {
-        MensajeResponse respuesta = new MensajeResponse();
-        var loginResponse = _userContextService.GetLoginResponse();
-        var accion = "";
-
-        try
-        {
-
-            if (Estatus == "True")
-            {
-                respuesta = await _cuentaApiClient.BloqueoCuentaSpeiOutAsync(id, 0, token, cs);
-                accion = "Desbloquear Spei Out";
-            }
-            else if (Estatus == "False")
-            {
-                respuesta = await _cuentaApiClient.BloqueoCuentaSpeiOutAsync(id, 1, token, cs);
-                accion = "Bloquear Spei Out";
-            }
-            else
-            {
-                //Deteccion de posible cambio en codigo HTML a través de inspeccionar elemento
-                return Json(BadRequest());
-            }
-
-            LogRequest logRequest = new LogRequest
-            {
-                IdUser = loginResponse.IdUsuario.ToString(),
-                Modulo = "Cuentas",
-                Fecha = HoraHelper.GetHoraCiudadMexico(),
-                NombreEquipo = loginResponse.NombreDispositivo,
-                Accion = accion,
-                Ip = loginResponse.DireccionIp,
-                Envio = JsonConvert.SerializeObject(id),
-                Respuesta = respuesta.Error.ToString(),
-                Error = respuesta.Error ? JsonConvert.SerializeObject(respuesta.Detalle) : string.Empty,
-                IdRegistro = id
-            };
-
-            await _logsApiClient.InsertarLogAsync(logRequest);
-        }
-        catch (Exception ex)
-        {
-
-            return Json(BadRequest());
-        }
-
-        return Json(Ok());
-    }
     #endregion
 
     #region "Modelos"
-
-    public class GenerarNombreResponse
-    {
-        public string Nombre { get; set; }
-        public string NombreCompleto { get; set; }
-    }
 
     #endregion
 
     #region "Funciones Auxiliares"
 
-    //private GenerarNombreResponse generarnombre(int i)
-    //{
-    //    var res = new GenerarNombreResponse();
-    //    Random rnd = new Random((int)DateTime.Now.Ticks);
-
-    //    i = i - 1;
-
-
-
-
-    //    String[] nombres = { "Juan", "Pablo", "Paco", "Jose", "Alberto", "Roberto", "Genaro", "Andrea", "Maria", "Carmen" };
-    //    String[] apellidos = { "Sanchez", "Perez", "Lopez", "Torres", "Alvarez", "Martinez", "Guzman", "Rodriguez", "Flores", "Vazquez" };
-    //    String[] apellidosM = { "Vazquez", "Flores", "Rodriguez", "Guzman", "Martinez", "Alvarez", "Torres", "Lopez", "Perez", "Sanchez" };
-
-
-
-    //    var genNombre = nombres[i];
-
-    //    String gen = genNombre + " " + apellidos[i] + " " + apellidos[i];
-
-    //    res.Nombre = genNombre;
-    //    res.NombreCompleto = gen;
-
-    //    return res;
-    //}
-
-    //public List<CuentasResponse> GetList()
-    //{
-
-
-    //    var List = new List<CuentasResponse>();
-    //    Random rnd = new Random();
-    //    const string characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-    //    String[] characters2 = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
-
-    //    try
-    //    {
-    //        for (int i = 1; i <= 10; i++)
-    //        {
-    //            var gen = generarnombre(i);
-
-    //            var pf = new CuentasResponse();
-    //            pf.idCuenta = i;
-    //            pf.nombrePersona = gen.NombreCompleto;
-    //            pf.noCuenta = string.Format("465236478963245{0}", i);
-    //            pf.saldo = Convert.ToDecimal(rnd.Next(0001, 99999).ToString("C2"));
-    //            pf.estatus = 1;
-    //            pf.tipoPersona = "Persona fisica";
-
-    //            List.Add(pf);
-    //        }
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        List = new List<CuentasResponse>();
-    //    }
-
-    //    return List;
-    //}
     #endregion
 }
