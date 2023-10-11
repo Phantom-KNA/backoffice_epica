@@ -44,12 +44,16 @@ builder.WebHost.ConfigureKestrel(options =>
 
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultChallengeScheme = "EpicaWebEsquema";
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 })
-.AddCookie("EpicaWebEsquema", options =>
+.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
 {
     options.AccessDeniedPath = "/Account/Login";
     options.LoginPath = "/Account/Login";
+
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(Convert.ToUInt32(builder.Configuration["TiempoExpiracionSesion"]));
 });
 
 

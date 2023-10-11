@@ -2,6 +2,7 @@
 using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.UserResolver;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Security.Claims;
@@ -46,9 +47,9 @@ namespace Epica.Web.Operacion.Services.Login
                         new Claim(ClaimTypes.Name, loginResponse.Usuario!)
                     };
 
-                    var claimsIdentity = new ClaimsIdentity(claims, "EpicaWebEsquema"); 
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                    await HttpContext.HttpContext!.SignInAsync("EpicaWebEsquema", new ClaimsPrincipal(claimsIdentity));
+                    await HttpContext.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
                     userContextService.SetLoginResponse(loginResponse);
 
                 }

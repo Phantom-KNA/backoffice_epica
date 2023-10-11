@@ -1,6 +1,7 @@
 ﻿using Epica.Web.Operacion.Helpers;
 using Epica.Web.Operacion.Models.Common;
 using Epica.Web.Operacion.Models.Request;
+using Epica.Web.Operacion.Models.Response;
 using Epica.Web.Operacion.Models.ViewModels;
 using Epica.Web.Operacion.Services.Catalogos;
 using Epica.Web.Operacion.Services.Log;
@@ -39,6 +40,8 @@ public class TarjetasController : Controller
     #endregion
 
     #region "Funciones"
+
+    #region Consulta Tarjetas
     [Authorize]
     public IActionResult Index()
     {
@@ -50,6 +53,189 @@ public class TarjetasController : Controller
         return NotFound();
     }
 
+    [Authorize]
+    [HttpPost]
+    public async Task<JsonResult> Consulta(List<RequestListFilters> filters)
+    {
+        var request = new RequestList();
+
+        int totalRecord = 0;
+        int filterRecord = 0;
+        int paginacion = 0;
+        int columna = 0;
+        bool tipoFiltro = false;
+
+        var draw = Request.Form["draw"].FirstOrDefault();
+        int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
+        int skip = Convert.ToInt32(Request.Form["start"].FirstOrDefault() ?? "0");
+
+        request.Pagina = skip / pageSize + 1;
+        request.Registros = pageSize;
+        request.Busqueda = Request.Form["search[value]"].FirstOrDefault();
+        request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+        request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
+
+        if (request.ColumnaOrdenamiento != null)
+        {
+            if (request.ColumnaOrdenamiento == "Vinculo")
+            {
+                columna = 1;
+            }
+            else if (request.ColumnaOrdenamiento == "tarjeta")
+            {
+                columna = 2;
+            }
+            else if (request.ColumnaOrdenamiento == "clabe")
+            {
+                columna = 3;
+            }
+            else if (request.ColumnaOrdenamiento == "proxyNumber")
+            {
+                columna = 4;
+            }
+            else if (request.ColumnaOrdenamiento == "Estatus")
+            {
+                columna = 5;
+            }
+        }
+
+        if (request.Ordenamiento != null)
+        {
+            if (request.Ordenamiento == "asc")
+            {
+                tipoFiltro = true;
+            }
+            else
+            {
+                tipoFiltro = false;
+            }
+        }
+
+        var gridData = new ResponseGrid<TarjetasResponseGrid>();
+        List<TarjetasResponse> ListPF = new List<TarjetasResponse>();
+
+        if (!string.IsNullOrEmpty(request.Busqueda))
+        {
+            filters.RemoveAll(x => x.Key == "tarjeta");
+
+            filters.Add(new RequestListFilters
+            {
+                Key = "tarjeta",
+                Value = request.Busqueda
+            });
+        }
+
+        //Validar si hay algun filtro con valor ingresado
+        var validaFiltro = filters.Where(x => x.Value != null).ToList();
+
+        if (validaFiltro.Count != 0)
+        {
+            (ListPF, paginacion) = await _tarjetasApiClient.GetTarjetasFilterAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), columna, tipoFiltro, filters);
+        }
+        else
+        {
+            (ListPF, paginacion) = await _tarjetasApiClient.GetTarjetasAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), columna, tipoFiltro);
+        }
+
+        //Entorno local de pruebas
+        //ListPF = GetList();
+
+        var List = new List<TarjetasResponseGrid>();
+        foreach (var row in ListPF)
+        {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(row.tarjeta);
+            var ally = System.Convert.ToBase64String(plainTextBytes);
+
+            row.cadena = ally;
+            row.nombreCompleto = row.nombreCompleto == null ? "N/A" : row.nombreCompleto;
+            List.Add(new TarjetasResponseGrid
+            {
+                idCuentaAhorro = row.idCuentaAhorro,
+                idCliente = row.idCliente,
+                Vinculo = row.nombreCompleto + "|" + row.idCliente.ToString(),
+                nombreCompleto = row.nombreCompleto,
+                proxyNumber = row.proxyNumber,
+                clabe = row.clabe,
+                tarjeta = row.tarjeta,
+                Estatus = row.Estatus,
+                Acciones = await this.RenderViewToStringAsync("~/Views/Tarjetas/_Acciones.cshtml", row)
+            });
+        }
+        //if (!string.IsNullOrEmpty(request.Busqueda))
+        //{
+        //    List = List.Where(x =>
+        //    (x.idCuentaAhorro.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+        //    (x.idCliente.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+        //    (x.nombreCompleto?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+        //    (x.proxyNumber?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+        //    (x.clabe?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+        //    (x.tarjeta?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
+        //    //(x.Estatus.ToString()?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
+        //    ).ToList();
+        //}
+
+        gridData.Data = List;
+        gridData.RecordsTotal = paginacion;
+        filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.Data.Count;
+        gridData.RecordsFiltered = filterRecord;
+        gridData.Draw = draw;
+
+        return Json(gridData);
+    }
+
+    [HttpPost]
+    public async Task<JsonResult> GestionarEstatusTarjetas(string NumGen, string estatus, int id)
+    {
+        var base64EncodedBytes = System.Convert.FromBase64String(NumGen);
+        var tarjeta = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+
+        var loginResponse = _userContextService.GetLoginResponse();
+        MensajeResponse response = new MensajeResponse();
+        int EstatusTarjeta = 0;
+
+        try
+        {
+            string accion = "";
+
+            if (estatus == "False")
+            {
+                EstatusTarjeta = 2;
+                accion = "Bloquear Tarjeta";
+            }
+            else if (estatus == "True")
+            {
+                EstatusTarjeta = 1;
+                accion = "Desbloquear Tarjeta";
+            }
+
+            response = await _tarjetasApiClient.GetBloqueoTarjeta(tarjeta, EstatusTarjeta, loginResponse.Token!);
+
+            LogRequest logRequest = new LogRequest
+            {
+                IdUser = loginResponse.IdUsuario.ToString(),
+                Modulo = "Tarjetas",
+                Fecha = HoraHelper.GetHoraCiudadMexico(),
+                NombreEquipo = loginResponse.NombreDispositivo,
+                Accion = accion,
+                Ip = loginResponse.DireccionIp,
+                Envio = JsonConvert.SerializeObject(NumGen),
+                Respuesta = response.Error.ToString(),
+                Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
+                IdRegistro = id
+            };
+            await _logsApiClient.InsertarLogAsync(logRequest);
+
+        }
+        catch (Exception ex)
+        {
+            response.Detalle = ex.Message;
+        }
+
+        return Json(response);
+    }
+    #endregion
+
+    #region Registrar Tarjeta
     [Authorize]
     public async Task<ActionResult> RegistroTarjetaCliente()
     {
@@ -128,145 +314,43 @@ public class TarjetasController : Controller
     }
 
     [Authorize]
-    [HttpPost]
-    public async Task<JsonResult> Consulta(List<RequestListFilters> filters)
-    {
-        var request = new RequestList();
-
-        int totalRecord = 0;
-        int filterRecord = 0;
-        int paginacion = 0;
-        int columna = 0;
-        bool tipoFiltro = false;
-
-        var draw = Request.Form["draw"].FirstOrDefault();
-        int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
-        int skip = Convert.ToInt32(Request.Form["start"].FirstOrDefault() ?? "0");
-
-        request.Pagina = skip / pageSize + 1;
-        request.Registros = pageSize;
-        request.Busqueda = Request.Form["search[value]"].FirstOrDefault();
-        request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-        request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
-
-        if (request.ColumnaOrdenamiento != null)
-        {
-            if (request.ColumnaOrdenamiento == "Vinculo") {
-                columna = 1;
-            } else if (request.ColumnaOrdenamiento == "tarjeta") {
-                columna = 2;
-            } else if (request.ColumnaOrdenamiento == "clabe") {
-                columna = 3;
-            } else if (request.ColumnaOrdenamiento == "proxyNumber") {
-                columna = 4;
-            } else if (request.ColumnaOrdenamiento == "Estatus") {
-                columna = 5;
-            }
-        }
-
-        if (request.Ordenamiento != null)
-        {
-            if (request.Ordenamiento == "asc") {
-                tipoFiltro = true;
-            } else {
-                tipoFiltro = false;
-            }
-        }
-
-        var gridData = new ResponseGrid<TarjetasResponseGrid>();
-        List<TarjetasResponse> ListPF = new List<TarjetasResponse>();
-
-        if (!string.IsNullOrEmpty(request.Busqueda))
-        {
-            filters.RemoveAll(x => x.Key == "tarjeta");
-
-            filters.Add(new RequestListFilters
-            {
-                Key = "tarjeta",
-                Value = request.Busqueda
-            });
-        }
-
-        //Validar si hay algun filtro con valor ingresado
-        var validaFiltro = filters.Where(x => x.Value != null).ToList();
-
-        if (validaFiltro.Count != 0) {
-            (ListPF, paginacion) = await _tarjetasApiClient.GetTarjetasFilterAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), columna, tipoFiltro, filters);
-        } else {
-            (ListPF, paginacion) = await _tarjetasApiClient.GetTarjetasAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros),columna, tipoFiltro);
-        }
-
-        //Entorno local de pruebas
-        //ListPF = GetList();
-
-        var List = new List<TarjetasResponseGrid>();
-        foreach (var row in ListPF)
-        {
-            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(row.tarjeta);
-            var ally = System.Convert.ToBase64String(plainTextBytes);
-
-            row.cadena = ally;
-            row.nombreCompleto = row.nombreCompleto == null ? "N/A" : row.nombreCompleto;
-            List.Add(new TarjetasResponseGrid
-            {
-                idCuentaAhorro = row.idCuentaAhorro,
-                idCliente = row.idCliente,
-                Vinculo = row.nombreCompleto + "|" + row.idCliente.ToString(),
-                nombreCompleto = row.nombreCompleto,
-                proxyNumber = row.proxyNumber,
-                clabe = row.clabe,
-                tarjeta = row.tarjeta,
-                Estatus = row.Estatus,
-                Acciones = await this.RenderViewToStringAsync("~/Views/Tarjetas/_Acciones.cshtml", row)
-            });
-        }
-        if (!string.IsNullOrEmpty(request.Busqueda))
-        {
-            List = List.Where(x =>
-            (x.idCuentaAhorro.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-            (x.idCliente.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-            (x.nombreCompleto?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-            (x.proxyNumber?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-            (x.clabe?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-            (x.tarjeta?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) 
-            //(x.Estatus.ToString()?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
-            ).ToList();
-        }
-
-        gridData.Data = List;
-        gridData.RecordsTotal = paginacion;
-        filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.Data.Count;
-        gridData.RecordsFiltered = filterRecord;
-        gridData.Draw = draw;
-
-        return Json(gridData);
-    }
-
-    [Authorize]
     [Route("Clientes/Detalle/Tarjetas/RegistrarTarjetas")]
     [HttpPost]
     public async Task<JsonResult> RegistrarTarjetas(RegistrarTarjetaRequest model)
     {
-        //var loginResponse = _userContextService.GetLoginResponse();
+        var loginResponse = _userContextService.GetLoginResponse();
         MensajeResponse response = new MensajeResponse();
 
         try
         {
             response = await _tarjetasApiClient.GetRegistroTarjetaAsync(model);
 
-            //LogRequest logRequest = new LogRequest
-            //{
-            //    IdUser = loginResponse.IdUsuario.ToString(),
-            //    Modulo = "Tarjetas",
-            //    Fecha = HoraHelper.GetHoraCiudadMexico(),
-            //    NombreEquipo = Environment.MachineName,
-            //    Accion = "Insertar",
-            //    Ip = PublicIpHelper.GetPublicIp() ?? "0.0.0.0",
-            //    Envio = JsonConvert.SerializeObject(model),
-            //    Respuesta = response.Error.ToString(),
-            //    Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
-            //    IdRegistro = idRegistro
-            //};
+            string detalle = response.Detalle ?? "";
+            int idRegistro = 0;
+
+            try
+            {
+                idRegistro = int.Parse(detalle);
+            }
+            catch (FormatException)
+            {
+                idRegistro = 0;
+            }
+
+            LogRequest logRequest = new LogRequest
+            {
+                IdUser = loginResponse.IdUsuario.ToString(),
+                Modulo = "Tarjetas",
+                Fecha = HoraHelper.GetHoraCiudadMexico(),
+                NombreEquipo = loginResponse.NombreDispositivo,
+                Accion = "Insertar",
+                Ip = loginResponse.DireccionIp,
+                Envio = JsonConvert.SerializeObject(model),
+                Respuesta = response.Error.ToString(),
+                Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
+                IdRegistro = idRegistro
+            };
+            await _logsApiClient.InsertarLogAsync(logRequest);
             //await _logsApiClient.InsertarLogAsync(logRequest);
         }
         catch (Exception ex)
@@ -276,168 +360,15 @@ public class TarjetasController : Controller
 
         return Json(response);
     }
-
-    [HttpPost]
-    public async Task<JsonResult> GestionarEstatusTarjetas(string NumGen, string estatus, int id)
-    {
-        var base64EncodedBytes = System.Convert.FromBase64String(NumGen);
-        var tarjeta = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
-
-        var loginResponse = _userContextService.GetLoginResponse();
-        MensajeResponse response = new MensajeResponse();
-        int EstatusTarjeta = 0;
-
-        try
-        {
-            string accion = "";
-
-            if (estatus == "False") {
-                EstatusTarjeta = 2;
-                accion = "Bloquear Tarjeta";
-            } else if (estatus == "True") {
-                EstatusTarjeta = 1;
-                accion = "Desbloquear Tarjeta";
-            }
-
-            response = await _tarjetasApiClient.GetBloqueoTarjeta(tarjeta, EstatusTarjeta, loginResponse.Token!);
-
-            LogRequest logRequest = new LogRequest
-            {
-                IdUser = loginResponse.IdUsuario.ToString(),
-                Modulo = "Tarjetas",
-                Fecha = HoraHelper.GetHoraCiudadMexico(),
-                NombreEquipo = loginResponse.NombreDispositivo,
-                Accion = accion,
-                Ip = loginResponse.DireccionIp,
-                Envio = JsonConvert.SerializeObject(NumGen),
-                Respuesta = response.Error.ToString(),
-                Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
-                IdRegistro = id
-            };
-            await _logsApiClient.InsertarLogAsync(logRequest);
-
-        }
-        catch (Exception ex)
-        {
-            response.Detalle = ex.Message;
-        }
-
-        return Json(response);
-    }
+    #endregion
 
     #endregion
 
     #region "Modelos"
 
-    public class GenerarNombreResponse
-    {
-        public string? Nombre { get; set; }
-        public string? NombreCompleto { get; set; }
-    }
-
     #endregion
 
     #region "Funciones Auxiliares"
 
-    private GenerarNombreResponse generarnombre(int i)
-    {
-        var res = new GenerarNombreResponse();
-        Random rnd = new Random((int)DateTime.Now.Ticks);
-
-        i = i - 1;
-
-        String[] nombres = { "Juan", "Pablo", "Paco", "Jose", "Alberto", "Roberto", "Genaro", "Andrea", "Maria", "Carmen" };
-        String[] apellidos = { "Sanchez", "Perez", "Lopez", "Torres", "Alvarez", "Martinez", "Guzman", "Rodriguez", "Flores", "Vazquez" };
-        String[] apellidosM = { "Vazquez", "Flores", "Rodriguez", "Guzman", "Martinez", "Alvarez", "Torres", "Lopez", "Perez", "Sanchez" };
-
-        var genNombre = nombres[i];
-
-        String gen = genNombre + " " + apellidos[i] + " " + apellidos[i];
-
-        res.Nombre = genNombre;
-        res.NombreCompleto = gen;
-
-        return res;
-    }
-
-    public static string GenNumeroTelefono(int length)
-    {
-        if (length > 0)
-        {
-            var sb = new StringBuilder();
-
-            var rnd = SeedRandom();
-            for (int i = 0; i < length; i++)
-            {
-                sb.Append(rnd.Next(0, 9).ToString());
-            }
-
-            return sb.ToString();
-        }
-
-        return string.Empty;
-    }
-
-    public static string GenerarEmail()
-    {
-        //return string.Format("{0}@{1}.com", GenerateRandomAlphabetString(10), GenerateRandomAlphabetString(10));
-        return string.Format("{0}@{1}.com", GenerateRandomAlphabetString(10), "gmail");
-    }
-    /// <summary>
-    /// Gets a string from the English alphabet at random
-    /// </summary>
-    public static string GenerateRandomAlphabetString(int length)
-    {
-        string allowedChars = "abcdefghijklmnopqrstuvwyxzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        var rnd = SeedRandom();
-
-        char[] chars = new char[length];
-        for (int i = 0; i < length; i++)
-        {
-            chars[i] = allowedChars[rnd.Next(allowedChars.Length)];
-        }
-
-        return new string(chars);
-    }
-    private static Random SeedRandom()
-    {
-        return new Random(Guid.NewGuid().GetHashCode());
-    }
-
-    public List<TarjetasResponse> GetList()
-    {
-
-
-        var List = new List<TarjetasResponse>();
-        Random rnd = new Random();
-        const string characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-        String[] characters2 = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
-
-        try
-        {
-            for (int i = 1; i <= 10; i++)
-            {
-                var gen = generarnombre(i);
-
-                var pf = new TarjetasResponse();
-                pf.idCuentaAhorro = i;
-                pf.idCliente = i+10;
-                pf.nombreCompleto = gen.NombreCompleto;
-                pf.proxyNumber = string.Format("02{0}",i);
-                pf.clabe = string.Format("01232002769794212{0}",i);
-                pf.tarjeta = string.Format("547016034567123{0}", i);
-                //pf.Estatus = 1;
-
-                List.Add(pf);
-            }
-        }
-        catch (Exception e)
-        {
-            List = new List<TarjetasResponse>();
-        }
-
-        return List;
-    }
     #endregion
 }

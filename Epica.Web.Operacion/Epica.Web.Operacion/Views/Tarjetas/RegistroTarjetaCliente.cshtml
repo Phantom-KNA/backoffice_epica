@@ -128,23 +128,13 @@
 </form>
 
 <script>
-    $(document).ready(function () {
-        // Inicialmente, deshabilita el select
-        $("#selectClientes").prop("disabled", true);
-
-        $("#btnBuscarCliente").click(function () {
-            var nombreCliente = $("#selectClientes").val();
-
-            // Verificar si hay datos en el campo "nombreCliente"
-            if (nombreCliente.trim() !== "") {
-                // Habilitar el select si hay datos
-                $("#selectClientes").prop("disabled", false);
-            } else {
-                // Deshabilitar el select si no hay datos
-                $("#selectClientes").prop("disabled", true);
-            }
-        });
-    });
+    //$("#selectClientes").select2({
+    //    language: {
+    //        noResults: function () {
+    //            return "No hay resultados";
+    //        }
+    //    }
+    //});
 </script>
 @section Scripts{
     <script src="~/js/Tarjetas/epica.tarjetas.registroTarjetaCliente.js" asp-append-version="true"></script>

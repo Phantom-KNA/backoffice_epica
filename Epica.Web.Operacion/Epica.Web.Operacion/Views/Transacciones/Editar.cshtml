@@ -47,7 +47,7 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Nombre ordenante: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="@Model.TransacccionDetalles.NombreOrdenante" class="form-control form-control-sm form-control-solid" id="NombreOrdenante" type="text" value="@(Model?.TransacccionDetalles.NombreOrdenante ?? "")" autocomplete="off" required oninput="validateLettersInput(this)" data-error-message="Nombre Ordenante" minlength="3" maxlength="40"/>
+                            <input asp-for="@Model.TransacccionDetalles.NombreOrdenante" class="form-control form-control-sm form-control-solid" id="NombreOrdenante" type="text" value="@(Model?.TransacccionDetalles.NombreOrdenante ?? "")" autocomplete="off" required oninput="validateInput(this)" data-error-message="Nombre Ordenante" minlength="3" maxlength="40"/>
                             <span asp-validation-for="@Model.TransacccionDetalles.NombreOrdenante" class="text-danger"></span>
                         </div>
                     </div>
@@ -61,7 +61,7 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Cuenta origen ordenante: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="@Model.TransacccionDetalles.CuentaOrigenOrdenante" class="form-control form-control-sm form-control-solid" id="CuentaOrigenOrdenante" type="text" value="@(Model?.TransacccionDetalles.NoCuentaBeneficiario ?? "")" autocomplete="off" required oninput="validateNumbersInput(this)" data-error-message="Cuenta Origen Ordenante" minlength="16" maxlength="18" />
+                            <input asp-for="@Model.TransacccionDetalles.CuentaOrigenOrdenante" class="form-control form-control-sm form-control-solid" id="CuentaOrigenOrdenante" type="text" value="@(Model?.TransacccionDetalles.CuentaOrigenOrdenante ?? "")" autocomplete="off" required oninput="validateNumbersInput(this)" data-error-message="Cuenta Origen Ordenante" minlength="16" maxlength="18" />
                             <span asp-validation-for="@Model.TransacccionDetalles.CuentaOrigenOrdenante" class="text-danger"></span>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Nombre beneficiario: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="@Model.TransacccionDetalles.NombreBeneficiario" class="form-control form-control-sm form-control-solid" id="NombreBeneficiario" type="text" value="@(Model?.TransacccionDetalles.NombreBeneficiario)" autocomplete="off" required oninput="validateLettersInput(this)" data-error-message="Nombre Beneficiario" minlength="3" maxlength="40"/>
+                            <input asp-for="@Model.TransacccionDetalles.NombreBeneficiario" class="form-control form-control-sm form-control-solid" id="NombreBeneficiario" type="text" value="@(Model?.TransacccionDetalles.NombreBeneficiario)" autocomplete="off" required oninput="validateInput(this)" data-error-message="Nombre Beneficiario" minlength="3" maxlength="40" />
                             <span asp-validation-for="@Model.TransacccionDetalles.NombreBeneficiario" class="text-danger"></span>
                         </div>
                     </div>
@@ -105,9 +105,13 @@
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
-                        <label class="form-label required">Fecha de operación: &nbsp;</label>
+                        <label class="form-label required">Fecha alta operación: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="TransacccionDetalles.FechaOperacion" class="form-control form-control-sm form-control-solid" type="date" id="FechaOperacion" required data-error-message="Fecha de Operación" min="1990-01-01" max="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                            @{
+                                DateTime fechaOperacion;
+                                DateTime.TryParse(Model?.TransacccionDetalles.FechaOperacion, out fechaOperacion);
+                            }
+                            <input asp-for="@Model.TransacccionDetalles.FechaOperacion" class="form-control form-control-sm form-control-solid" type="date" id="FechaOperacion" value="@fechaOperacion.ToString("yyyy-MM-dd")" required data-error-message="Fecha de Operación" min="1990-01-01" max="@DateTime.Now.ToString("yyyy-MM-dd")" required />
                         </div>
                     </div>
                 </div>
