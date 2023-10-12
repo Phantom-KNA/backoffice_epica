@@ -5,7 +5,7 @@ metadata:
   namespace: alquimia
   annotations:
     kubernetes.io/ingress.class: azure/application-gateway
-    appgw.ingress.kubernetes.io/override-frontend-port: "8090"
+    appgw.ingress.kubernetes.io/override-frontend-port: "8081"
 spec:
   rules:
   - http:
