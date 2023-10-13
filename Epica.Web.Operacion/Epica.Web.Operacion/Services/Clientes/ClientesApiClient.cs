@@ -296,7 +296,18 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    result = int.Parse(jsonResponse);
+                    if (!int.TryParse(jsonResponse, out result))
+                    {
+                        result = 0;
+                    }
+                    else
+                    {
+                        result = int.Parse(jsonResponse);
+                    }
+                }
+                else
+                {
+                    return result;
                 }
 
             }
