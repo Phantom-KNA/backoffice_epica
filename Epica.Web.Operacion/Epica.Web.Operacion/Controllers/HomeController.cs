@@ -34,7 +34,7 @@ public class HomeController : Controller
         _cuentaApiClient = cuentaApiClient;
     }
 
-    public async Task<ActionResult> Index()
+    public IActionResult Index()
     {
         if (HttpContext.Session.GetString("CurrentSession") == null)
         {
@@ -45,9 +45,9 @@ public class HomeController : Controller
 
             HomeIndexViewModel indexViewModel = new HomeIndexViewModel()
             {
-                ClientesTotal = await _clientesApiClient.GetTotalClientesAsync(),
-                TransaccionesTotal = await _transaccionesApiClient.GetTotalTransaccionesAsync(),
-                CuentasTotal = await _cuentaApiClient.GetTotalCuentasAsync(),
+                //ClientesTotal = await _clientesApiClient.GetTotalClientesAsync(),
+                //TransaccionesTotal = await _transaccionesApiClient.GetTotalTransaccionesAsync(),
+                //CuentasTotal = await _cuentaApiClient.GetTotalCuentasAsync(),
                 FechaActual = DateTime.Now
 
             }; 
