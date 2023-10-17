@@ -30,6 +30,15 @@ function SinCaracteresEspeciales(e) {
 
 }
 
+function validateAlphanumericInput(inputElement) {
+    var inputValue = inputElement.value;
+    var cleanValue = inputValue.replace(/[^a-zA-Z0-9]/g, '');
+
+    if (cleanValue !== inputValue) {
+        inputElement.value = cleanValue;
+    }
+}
+
 function validateNumbersInput(inputElement) {
     var inputValue = inputElement.value;
     var cleanValue = inputValue.replace(/[^0-9? ]/g, '');
