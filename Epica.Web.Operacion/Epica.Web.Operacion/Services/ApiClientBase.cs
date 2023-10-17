@@ -37,8 +37,6 @@ public class ApiClientBase
         UserResolver = userResolver;
         _apiKey = configuration.GetValue<string>("credential:ApiKey");
         ApiClient.DefaultRequestHeaders.Add("Api-Key", _apiKey);
-        UsernameApi = configuration.GetValue<string>("CredentialsApi:Username");
-        PasswordApi = configuration.GetValue<string>("CredentialsApi:Password");
-        UrlApi = configuration.GetValue<string>("CredentialsApi:Url");
+        UrlApi = configuration.GetValue<string>("urls:authenticate");
     }
 }

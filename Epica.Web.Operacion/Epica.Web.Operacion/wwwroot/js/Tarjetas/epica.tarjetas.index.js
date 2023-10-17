@@ -306,7 +306,7 @@ function GestionarTarjeta(numgen, estatus, id) {
                                 confirmButtonText: 'Aceptar'
                             }).then((result) => {
                                 if (result.isConfirmed) {
-                                    toastr.info('Aplicando Devolución a transacción...', "");
+                                    toastr.info('Procesando...', "");
 
                                     $.ajax({
                                         url: 'Tarjetas/GestionarEstatusTarjetas',
