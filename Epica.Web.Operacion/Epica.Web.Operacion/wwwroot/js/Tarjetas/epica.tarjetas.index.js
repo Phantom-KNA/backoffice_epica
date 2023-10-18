@@ -89,7 +89,7 @@ var KTDatatableRemoteAjax = function () {
                 {
                     data: 'estatus', name: 'Estatus', title: 'Estatus',
                     render: function (data, type, row) {
-                        return data == 1 ?
+                        return data == 2 ?
                             "<span class='badge badge-light-success' >Activo</span>" : "<span class='badge badge-light-danger' >Desactivado</span>";
                     }
                 },
@@ -297,8 +297,8 @@ function GestionarTarjeta(numgen, estatus, id) {
                     success: function (validationResult) {
                         if (validationResult.mensaje === true) {
                             Swal.fire({
-                                title: (estatus.toLowerCase() === 'true' ? 'Desbloqueo de Tarjetas' : 'Bloqueo de Tarjetas'),
-                                text: (estatus.toLowerCase() === 'true' ? "¿Estás seguro que deseas desbloquear esta tarjeta?" : "¿Estás seguro que deseas bloquear esta tarjeta?"),
+                                title: (estatus.toLowerCase() === 'true' ? 'Bloqueo de Tarjetas' : 'Desbloqueo de Tarjetas'),
+                                text: (estatus.toLowerCase() === 'true' ? "¿Estás seguro que deseas bloquear esta tarjeta?" : "¿Estás seguro que deseas desbloquear esta tarjeta?"),
                                 icon: 'warning',
                                 showCancelButton: true,
                                 confirmButtonColor: '#3085d6',
