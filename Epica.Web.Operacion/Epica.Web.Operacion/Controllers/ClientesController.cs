@@ -145,15 +145,15 @@ public class ClientesController : Controller
             List.Add(new ClienteResponseGrid
             {
                 id = row.id,
-                nombreCompleto = (row.nombreCompleto + "|" + row.id.ToString()).ToUpper(),
-                telefono = row.telefono,
-                email = row.email,
-                CURP = row.CURP,
-                organizacion = row.organizacion,
-                membresia = row.membresia,
-                sexo = row.sexo,
+                nombreCompleto = !string.IsNullOrWhiteSpace(row.nombreCompleto) ? (row.nombreCompleto + "|" + row.id.ToString()).ToUpper() : "-",
+                telefono = !string.IsNullOrWhiteSpace(row.telefono) ? row.telefono: "-",
+                email = !string.IsNullOrWhiteSpace(row.email) ? row.email: "-",
+                CURP = !string.IsNullOrWhiteSpace(row.CURP) ? row.CURP : "-",
+                organizacion = !string.IsNullOrWhiteSpace(row.organizacion) ? row.organizacion: "-",
+                membresia = !string.IsNullOrWhiteSpace(row.membresia) ? row.membresia: "-",
+                sexo = !string.IsNullOrWhiteSpace(row.sexo) ? row.sexo: "-",
                 estatus = row.estatus,
-                estatusweb = row.estatusweb,
+                estatusweb = !string.IsNullOrWhiteSpace(row.estatusweb) ? row.estatusweb: "-",
                 Acciones = await this.RenderViewToStringAsync("~/Views/Clientes/_Acciones.cshtml", row)
             });
         }

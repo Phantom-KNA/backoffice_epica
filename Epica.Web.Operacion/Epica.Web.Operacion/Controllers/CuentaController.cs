@@ -143,13 +143,13 @@ public class CuentaController : Controller
             List.Add(new CuentasResponseGrid
             {
                 idCuenta = row.idCuenta,
-                nombrePersona = row.nombrePersona,
+                nombrePersona = !string.IsNullOrWhiteSpace(row.nombrePersona) ? row.nombrePersona: "-",
                 noCuenta = row.noCuenta + "|" + row.idCuenta.ToString() + "|" + row.idCliente.ToString(),
                 saldo = row.saldo,
                 estatus = row.estatus,
-                tipoPersona = row.tipoPersona,
+                tipoPersona = !string.IsNullOrWhiteSpace(row.tipoPersona) ? row.tipoPersona : "-",
                 alias = "",
-                clabe = row.clabe,
+                clabe = !string.IsNullOrWhiteSpace(row.clabe) ? row.clabe : "-",
                 bloqueoSPEIOut = row.bloqueoSPEIOut,
                 Acciones = await this.RenderViewToStringAsync("~/Views/Cuenta/_Acciones.cshtml", row)
             });
