@@ -433,82 +433,91 @@ public class ClientesController : Controller
     [Route("Clientes/Detalle/DatosGenerales")]
     public async Task<IActionResult> DatosGenerales(int id)
     {
-        var loginResponse = _userContextService.GetLoginResponse();
-        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
-        if (validacion == true)
+        try
         {
-            ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(id);
-
-            if (user.value == null)
+            var loginResponse = _userContextService.GetLoginResponse();
+            var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
+            if (validacion == true)
             {
-                return RedirectToAction("Index");
+                ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(id);
+
+                if (user.value == null)
+                {
+                    return RedirectToAction("Index");
+                }
+
+                ClientesDetallesViewModel clientesDetallesViewModel = new ClientesDetallesViewModel
+                {
+                    IdCliente = user.value.IdCliente,
+                    Nombre = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
+                    Telefono = user.value.Telefono,
+                    Email = user.value.Email,
+                    CURP = user.value.CURP,
+                    Organizacion = user.value.Organizacion,
+                    Sexo = user.value.Sexo,
+                    RFC = user.value.RFC,
+                    INE = user.value.INE,
+                    FechaNacimiento = user.value.FechaNacimiento,
+                    Observaciones = user.value.Observaciones,
+                    PaisNacimiento = user.value.PaisNacimiento,
+                    Nacionalidad = user.value.Nacionalidad,
+                    Fiel = user.value.Fiel,
+                    SalarioNetoMensual = user.value.SalarioMensual,
+                    MontoMaximo = user.value.MontoMaximo,
+                    Calle = user.value.Calle,
+                    NoInt = user.value.NoInt,
+                    CalleSecundaria = user.value.CalleSecundaria,
+                    CalleSecundaria2 = user.value.CalleSecundaria2,
+                    Colonia = user.value.Colonia,
+                    CodigoPostal = user.value.CodigoPostal,
+                    Puesto = user.value.Puesto,
+                    AntiguedadLaboral = user.value.AntiguedadLaboral,
+                    Estado = user.value.Estado,
+                    Rol = user.value.Rol,
+                    Municipio = user.value.Municipio,
+                    NSS = user.value.NSS,
+                    Membresia = user.value.Membresia,
+                    TipoTrabajador = user.value.TipoTrabajador,
+                    EntidadNacimiento = user.value.EntidadNacimiento,
+                    CalleNumero = user.value.CalleNumero
+                };
+
+                ClientesHeaderViewModel header = new ClientesHeaderViewModel
+                {
+                    Id = user.value.IdCliente,
+                    NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
+                    Telefono = user.value.Telefono,
+                    Correo = user.value.Email,
+                    Curp = user.value.CURP,
+                    Organizacion = user.value.Organizacion,
+                    Rfc = user.value.RFC,
+                    Sexo = user.value.Sexo
+                };
+                ViewBag.Info = header;
+                ViewBag.UrlView = "DatosGenerales";
+                ViewBag.NombrePascal = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(header.NombreCompleto.ToString().ToLower());
+
+                var validacionEdicion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Editar == 0);
+                if (validacionEdicion == true)
+                {
+                    ViewBag.ValEdicion = true;
+                }
+                else
+                {
+                    ViewBag.ValEdicion = false;
+                }
+
+
+                return View("~/Views/Clientes/Detalles/DatosGenerales/DetalleCliente.cshtml", clientesDetallesViewModel);
             }
 
-            ClientesDetallesViewModel clientesDetallesViewModel = new ClientesDetallesViewModel
-            {
-                IdCliente = user.value.IdCliente,
-                Nombre = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
-                Telefono = user.value.Telefono,
-                Email = user.value.Email,
-                CURP = user.value.CURP,
-                Organizacion = user.value.Organizacion,
-                Sexo = user.value.Sexo,
-                RFC = user.value.RFC,
-                INE = user.value.INE,
-                FechaNacimiento = user.value.FechaNacimiento,
-                Observaciones = user.value.Observaciones,
-                PaisNacimiento = user.value.PaisNacimiento,
-                Nacionalidad = user.value.Nacionalidad,
-                Fiel = user.value.Fiel,
-                SalarioNetoMensual = user.value.SalarioMensual,
-                MontoMaximo = user.value.MontoMaximo,
-                Calle = user.value.Calle,
-                NoInt = user.value.NoInt,
-                CalleSecundaria = user.value.CalleSecundaria,
-                CalleSecundaria2 = user.value.CalleSecundaria2,
-                Colonia = user.value.Colonia,
-                CodigoPostal = user.value.CodigoPostal,
-                Puesto = user.value.Puesto,
-                AntiguedadLaboral = user.value.AntiguedadLaboral,
-                Estado = user.value.Estado,
-                Rol = user.value.Rol,
-                Municipio = user.value.Municipio,
-                NSS = user.value.NSS,
-                Membresia = user.value.Membresia,
-                TipoTrabajador = user.value.TipoTrabajador,
-                EntidadNacimiento = user.value.EntidadNacimiento,
-                CalleNumero = user.value.CalleNumero
-            };
+            return RedirectToAction("Index");
 
-            ClientesHeaderViewModel header = new ClientesHeaderViewModel
-            {
-                Id = user.value.IdCliente,
-                NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
-                Telefono = user.value.Telefono,
-                Correo = user.value.Email,
-                Curp = user.value.CURP,
-                Organizacion = user.value.Organizacion,
-                Rfc = user.value.RFC,
-                Sexo = user.value.Sexo
-            };
-            ViewBag.Info = header;
-            ViewBag.UrlView = "DatosGenerales";
-            ViewBag.NombrePascal = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(header.NombreCompleto.ToString().ToLower());
-
-            var validacionEdicion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Editar == 0);
-            if (validacionEdicion == true)
-            {
-                ViewBag.ValEdicion = true;
-            }
-            else
-            {
-                ViewBag.ValEdicion = false;
-            }
-
-
-            return View("~/Views/Clientes/Detalles/DatosGenerales/DetalleCliente.cshtml", clientesDetallesViewModel);
+        } catch (Exception ex)
+        {
+            return RedirectToAction("Index");
         }
-        return NotFound();
+       
     }
     #endregion
 
