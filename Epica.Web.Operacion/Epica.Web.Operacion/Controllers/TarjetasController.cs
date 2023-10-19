@@ -152,11 +152,11 @@ public class TarjetasController : Controller
             {
                 idCuentaAhorro = row.idCuentaAhorro,
                 idCliente = row.idCliente,
-                Vinculo = row.nombreCompleto + "|" + row.idCliente.ToString(),
-                nombreCompleto = row.nombreCompleto,
-                proxyNumber = row.proxyNumber,
-                clabe = row.clabe,
-                tarjeta = row.tarjeta,
+                Vinculo = !string.IsNullOrWhiteSpace(row.nombreCompleto) ? (row.nombreCompleto + "|" + row.idCliente.ToString()).ToUpper() : "-",
+                nombreCompleto = !string.IsNullOrWhiteSpace(row.nombreCompleto) ? row.nombreCompleto: "-",
+                proxyNumber = !string.IsNullOrWhiteSpace(row.proxyNumber) ? row.proxyNumber: "-",
+                clabe = !string.IsNullOrWhiteSpace(row.clabe) ? row.clabe : "-",
+                tarjeta = !string.IsNullOrWhiteSpace(row.tarjeta) ? row.tarjeta : "-",
                 Estatus = row.Estatus,
                 Acciones = await this.RenderViewToStringAsync("~/Views/Tarjetas/_Acciones.cshtml", row)
             });
