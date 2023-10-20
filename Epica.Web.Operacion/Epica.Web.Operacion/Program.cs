@@ -117,7 +117,8 @@ var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
+    app.UseExceptionHandler("/Home");
+    app.UseStatusCodePagesWithRedirects("/Home");
     app.UseHsts();
 }
 

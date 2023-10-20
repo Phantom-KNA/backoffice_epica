@@ -71,7 +71,7 @@ var KTDatatableRemoteAjax = function () {
                         var partes = data.split("|"); // Separar la parte entera y decimal
                         var Nombre = partes[0];
                         var ID = partes[1]
-                        return "<a href='/Clientes/Detalle/DatosGenerales?id="+ID+"'>" + Nombre +"</a>";
+                        return "<a href='/Clientes/Detalle/DatosGenerales?id=" + ID + "' id='Redireccion'>" + Nombre +"</a>";
                     }
                 },
                 { data: 'telefono', name: 'Telefono', title: 'Teléfono' },
@@ -165,6 +165,8 @@ var KTDatatableRemoteAjax = function () {
     }
 
     $(".btn-filtrar").click(function () {
+        $('#search_input').val('');
+        datatable.search('').draw();
         recargar();
     })
 
@@ -603,3 +605,6 @@ function ResetContrasenaTelefono(Telefono, ID) {
         }
     });
 }
+$(document).on("click", "#Redireccion", function () {
+    toastr.info("Accediendo a información.");
+});

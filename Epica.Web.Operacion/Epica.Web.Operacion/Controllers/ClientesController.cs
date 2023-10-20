@@ -159,7 +159,8 @@ public class ClientesController : Controller
         }
 
         //Filtro TextBox Busqueda Rapida
-        if (!string.IsNullOrEmpty(request.Busqueda)) {
+        if (!string.IsNullOrEmpty(request.Busqueda))
+        {
             List = List.Where(x =>
             (x.nombreCompleto?.ToUpper() ?? "").Contains(request.Busqueda.ToUpper()) ||
             (x.telefono?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
@@ -171,10 +172,11 @@ public class ClientesController : Controller
 
         gridData.Data = List;
         gridData.RecordsTotal = paginacion;
-        filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.Data.Count;
+        filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.RecordsTotal ?? 0;
         gridData.RecordsFiltered = filterRecord;
         gridData.Draw = draw;
 
+        request.Busqueda = "";
         return Json(gridData);
     }
 
