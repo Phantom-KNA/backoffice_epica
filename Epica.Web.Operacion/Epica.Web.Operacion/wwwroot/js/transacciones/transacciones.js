@@ -72,8 +72,14 @@ var KTDatatableTransacciones = (function () {
                 },
                 { data: "nombreOrdenante", name: "NombreCuenta", title: "NOMBRE ORDENANTE" },
                 { data: "nombreBeneficiario", name: "Institucion", title: "NOMBRE BENEFICIARIO" },
-                { data: "concepto", name: "Concepto", title: "CONCEPTO" },
                 {
+                    data: "concepto",
+                    name: "Concepto",
+                    title: "CONCEPTO",
+                    render: function (data, type, row) {
+                        return '<div class="multiline-text" style="max-width: 150px; white-space: normal; word-wrap: break-word;">' + data + '</div>';
+                    }
+                },                {
                     data: "monto",
                     name: "Monto",
                     title: "MONTO",
