@@ -342,7 +342,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                //throw new Exception(ex.Message);
             }
 
             return cliente!;
