@@ -145,7 +145,13 @@ var KTDatatableRemoteAjax = function () {
     var handleSearchDatatable = function () {
         var filterSearch = document.getElementById('search_input');
         filterSearch.addEventListener('keyup', function (e) {
-            datatable.search(e.target.value).draw();
+            if (e.key === 'Enter') {
+                if (e.target.value.length >= 3 && e.target.value.length <= 40) {
+                    datatable.search(e.target.value).draw();
+                }
+            } else if (e.target.value === '') {
+                datatable.search(e.target.value).draw();
+            }
         });
     }
 

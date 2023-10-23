@@ -140,7 +140,13 @@ var KTDatatableRemoteAjax = function () {
     var handleSearchDatatable = function () {
         const filterSearch = document.querySelector('[data-kt-customer-table-filter="search"]');
         filterSearch.addEventListener('keyup', function (e) {
-            datatable.search(e.target.value).draw();
+            if (e.key === 'Enter') {
+                if (e.target.value.length >= 4 && e.target.value.length <= 16) {
+                    datatable.search(e.target.value).draw();
+                }
+            } else if (filterSearch.value === '') {
+                datatable.search(e.target.value).draw();
+            }
         });
     }
 
