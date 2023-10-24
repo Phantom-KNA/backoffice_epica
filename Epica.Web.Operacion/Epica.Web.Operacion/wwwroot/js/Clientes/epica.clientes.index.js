@@ -66,12 +66,17 @@ var KTDatatableRemoteAjax = function () {
             columns: [
                 //{ data: 'id', name: 'Id', title: 'Id Usuario' },
                 {
-                    data: 'nombreCompleto', name: 'NombreCompleto', title: 'Nombre',
+                    data: 'vinculo', name: 'vinculo', title: 'Nombre',
                     render: function (data, type, row) {
                         var partes = data.split("|"); // Separar la parte entera y decimal
                         var Nombre = partes[0];
-                        var ID = partes[1]
-                        return "<a href='/Clientes/Detalle/DatosGenerales?id=" + ID + "' id='Redireccion'>" + Nombre +"</a>";
+                        var ID = partes[1];
+
+                        if (Nombre == "-") {
+                            return Nombre;
+                        } else {
+                            return "<a href='/Clientes/Detalle/DatosGenerales?id=" + ID + "' id='Redireccion'>" + Nombre + "</a>";
+                        }
                     }
                 },
                 { data: 'telefono', name: 'Telefono', title: 'Teléfono' },

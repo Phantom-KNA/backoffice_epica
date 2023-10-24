@@ -141,11 +141,13 @@ public class ClientesController : Controller
         var List = new List<ClienteResponseGrid>();
         foreach (var row in ListPF)
         {
+
             
             List.Add(new ClienteResponseGrid
             {
                 id = row.id,
-                nombreCompleto = !string.IsNullOrWhiteSpace(row.nombreCompleto) ? (row.nombreCompleto + "|" + row.id.ToString()).ToUpper() : "-",
+                nombreCompleto = row.nombreCompleto == null ? "-" : row.nombreCompleto,
+                vinculo = !string.IsNullOrWhiteSpace(row.nombreCompleto) ? (row.nombreCompleto + "|" + row.id.ToString()).ToUpper() : "-",
                 telefono = !string.IsNullOrWhiteSpace(row.telefono) ? row.telefono: "-",
                 email = !string.IsNullOrWhiteSpace(row.email) ? row.email: "-",
                 CURP = !string.IsNullOrWhiteSpace(row.CURP) ? row.CURP : "-",

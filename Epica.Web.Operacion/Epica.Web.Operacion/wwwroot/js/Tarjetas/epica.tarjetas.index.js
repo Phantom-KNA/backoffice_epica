@@ -71,7 +71,7 @@ var KTDatatableRemoteAjax = function () {
                         var nombreCompleto = partes[0];
                         var idCliente = partes[1];
 
-                        if (nombreCompleto == "N/A") {
+                        if (nombreCompleto == "-") {
                             return nombreCompleto;
                         } else {
                             return "<a href='/Clientes/Detalle/Tarjetas?id=" + idCliente + "'>" + nombreCompleto + "</a>";
