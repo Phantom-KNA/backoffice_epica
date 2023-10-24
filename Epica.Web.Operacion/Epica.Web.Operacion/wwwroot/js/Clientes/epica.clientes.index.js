@@ -66,12 +66,17 @@ var KTDatatableRemoteAjax = function () {
             columns: [
                 //{ data: 'id', name: 'Id', title: 'Id Usuario' },
                 {
-                    data: 'nombreCompleto', name: 'NombreCompleto', title: 'Nombre',
+                    data: 'vinculo', name: 'vinculo', title: 'Nombre',
                     render: function (data, type, row) {
                         var partes = data.split("|"); // Separar la parte entera y decimal
                         var Nombre = partes[0];
-                        var ID = partes[1]
-                        return "<a href='/Clientes/Detalle/DatosGenerales?id=" + ID + "' id='Redireccion'>" + Nombre +"</a>";
+                        var ID = partes[1];
+
+                        if (Nombre == "-") {
+                            return Nombre;
+                        } else {
+                            return "<a href='/Clientes/Detalle/DatosGenerales?id=" + ID + "' id='Redireccion'>" + Nombre + "</a>";
+                        }
                     }
                 },
                 { data: 'telefono', name: 'Telefono', title: 'Teléfono' },
@@ -145,7 +150,13 @@ var KTDatatableRemoteAjax = function () {
     var handleSearchDatatable = function () {
         var filterSearch = document.getElementById('search_input');
         filterSearch.addEventListener('keyup', function (e) {
-            datatable.search(e.target.value).draw();
+            if (e.key === 'Enter') {
+                if (e.target.value.length >= 3 && e.target.value.length <= 40) {
+                    datatable.search(e.target.value).draw();
+                }
+            } else if (e.target.value === '') {
+                datatable.search(e.target.value).draw();
+            }
         });
     }
 

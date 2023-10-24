@@ -18,6 +18,7 @@ public class ClienteResponse
     public string sexo { get; set; }
     public int estatus { get; set; }
     public string estatusweb { get; set; }
+    public string vinculo { get; set; }
 }
 
 public class ClienteResponseGrid : ClienteResponse
