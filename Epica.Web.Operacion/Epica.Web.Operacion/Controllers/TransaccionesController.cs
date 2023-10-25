@@ -202,6 +202,7 @@ namespace Epica.Web.Operacion.Controllers
                     concepto = !string.IsNullOrWhiteSpace(row.concepto) ? row.concepto: "-",
                     idMedioPago = row.idMedioPago,
                     idCuentaAhorro = row.idCuentaAhorro,
+                    fechaAlta = !string.IsNullOrWhiteSpace(row.fechaAlta) ? row.fechaAlta : "-",
                     fechaInstruccion = !string.IsNullOrWhiteSpace(row.fechaInstruccion) ? row.fechaInstruccion : "-",
                     fechaAutorizacion = !string.IsNullOrWhiteSpace(row.fechaAutorizacion) ? row.fechaAutorizacion : "-",
                     alias = row.alias,
