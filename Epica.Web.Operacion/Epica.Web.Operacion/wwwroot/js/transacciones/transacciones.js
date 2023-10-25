@@ -36,6 +36,9 @@ var KTDatatableTransacciones = (function () {
             ajax: {
                 url: "Transacciones/Consulta",
                 type: "POST",
+                error: function (jqXHR, textStatus, errorThrown) {
+                    toastr.error("No se pudo encontrar información disponible.");
+                },
                 data: function (d) {
                     var filtros = [];
                     $(".filtro-control").each(function () {
@@ -187,6 +190,11 @@ var KTDatatableTransacciones = (function () {
         datatable_myAccounts.ajax.reload();
     };
 
+    var ErrorControl = function () {
+        dataTable.ext.errMode = 'throw';
+    };
+
+
     return {
         init: function () {
             table = document.querySelector("#kt_datatable_movements");
@@ -207,6 +215,9 @@ var KTDatatableTransacciones = (function () {
         },
         reload: function () {
             reload();
+        },
+        ErrorControl: function () {
+            ErrorControl();
         },
     };
 })();
