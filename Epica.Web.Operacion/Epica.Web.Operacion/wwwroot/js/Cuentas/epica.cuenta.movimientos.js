@@ -181,6 +181,10 @@ var KTDatatableRemoteAjax = function () {
         datatable.ajax.reload();
     }
 
+    //var ErrorControl = function () {
+    //    dataTable.ext.errMode = 'throw';
+    //}
+
     return {
         init: function () {
             //init();
@@ -198,6 +202,9 @@ var KTDatatableRemoteAjax = function () {
         recargar: function () {
             recargar();
         }
+        //ErrorControl: function () {
+        //    ErrorControl();
+        //}
     };
 }();
 
@@ -214,6 +221,8 @@ $(document).on('click', '.btnDetalle', function (e) {
     var parametros = id + "|" + claveCobranza + "|" + estatus;
     ModalDetalle.init(parametros);
 });
+
+
 
 var ModalDetalle = function () {
 
