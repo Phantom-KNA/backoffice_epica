@@ -39,6 +39,9 @@ var KTDatatableRemoteAjax = function () {
             ajax: {
                 url: siteLocation + 'Cuenta/ConsultaCuentas',
                 type: 'POST',
+                error: function (jqXHR, textStatus, errorThrown) {
+                    toastr.error("No se pudo encontrar información disponible.");
+                },
                 data: function (d) {
                     d.id = AccountId,
                     d.TipoConsulta = TipoConsulta;
