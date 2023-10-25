@@ -249,7 +249,7 @@ function validateLettersInput(inputElement) {
     for (var i = 0; i < inputValue.length; i++) {
         var char = inputValue[i];
 
-        if (/[a-zA-Z]/.test(char) && cleanValue.length < 40) {
+        if (/[a-zA-ZÀÁàáÒÓòóÈÉèéÌÍìíÙÚùúÑñ]/.test(char) && cleanValue.length < 40) {
             cleanValue += char;
             hasSpace = false;
         } else if (char === ' ' && !hasSpace) {
