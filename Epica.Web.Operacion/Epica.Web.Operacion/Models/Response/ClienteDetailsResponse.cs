@@ -39,7 +39,7 @@ public class DatosClienteResponse
     [JsonPropertyName("entidadNacimiento")]
     public string? EntidadNacimiento { get; set; }
     [JsonPropertyName("idNacionalidad")]
-    public int IdNacionalidad { get; set; }
+    public int? IdNacionalidad { get; set; }
     [JsonPropertyName("membresia")]
     public string? Membresia { get; set; }
     [JsonPropertyName("sexo")]
@@ -53,7 +53,7 @@ public class DatosClienteResponse
     [JsonPropertyName("observaciones")]
     public string? Observaciones { get; set; }
     [JsonPropertyName("idOcupacion")]
-    public int IdOcupacion { get; set; }
+    public int? IdOcupacion { get; set; }
     [JsonPropertyName("nacionalidad")]
     public string? Nacionalidad { get; set; }
     [JsonPropertyName("fiel")]
@@ -79,7 +79,7 @@ public class DatosClienteResponse
     [JsonPropertyName("calleSecundaria2")]
     public string? CalleSecundaria2 { get; set; }
     [JsonPropertyName("tipoVivienda")]
-    public int TipoVivienda { get; set; }
+    public int? TipoVivienda { get; set; }
     [JsonPropertyName("tiempoVivienda")]
     public string? TiempoVivienda { get; set; }
     [JsonPropertyName("tipoTrabajador")]
@@ -91,7 +91,7 @@ public class DatosClienteResponse
     [JsonPropertyName("antiguedadLaboral")]
     public string? AntiguedadLaboral { get; set; }
     [JsonPropertyName("active")]
-    public int Active { get; set; }//= default(bool?);
+    public int? Active { get; set; }//= default(bool?);
     [JsonPropertyName("idEmpresa")]
     public int? IdEmpresa { get; set; }
     [JsonPropertyName("idPais")]
@@ -101,5 +101,5 @@ public class DatosClienteResponse
     [JsonPropertyName("rol")]
     public string? Rol { get; set; }
     [JsonPropertyName("apoderadoLegal")] 
-    public int ApoderadoLegal { get; set; }
+    public int? ApoderadoLegal { get; set; }
 }
