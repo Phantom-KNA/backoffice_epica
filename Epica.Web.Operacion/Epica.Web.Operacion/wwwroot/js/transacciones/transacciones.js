@@ -37,6 +37,7 @@ var KTDatatableTransacciones = (function () {
                 url: "Transacciones/Consulta",
                 type: "POST",
                 error: function (jqXHR, textStatus, errorThrown) {
+                    $(".dataTables_processing").hide();
                     toastr.error("No se pudo encontrar información disponible.");
                 },
                 data: function (d) {
@@ -74,7 +75,7 @@ var KTDatatableTransacciones = (function () {
                     }
                 },
                 { data: "nombreOrdenante", name: "NombreCuenta", title: "NOMBRE ORDENANTE" },
-                { data: "nombreBeneficiario", name: "Institucion", title: "NOMBRE BENEFICIARIO" },
+                { data: "nombreBeneficiario", name: "nombreBeneficiario", title: "NOMBRE BENEFICIARIO" },
                 {
                     data: "concepto",
                     name: "Concepto",
