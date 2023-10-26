@@ -298,7 +298,7 @@ public class CuentaController : Controller
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Cuentas" && modulo.Ver == 0);
         if (validacion == true)
         {
-            ClienteDetailsResponse user = await _usuariosApiClient.GetDetallesCliente(cliente);
+            ClienteDetailsResponse user = await _usuariosApiClient.GetDetallesGeneralesClienteAsync(cliente);
 
             if (user.value == null)
             {
@@ -310,12 +310,12 @@ public class CuentaController : Controller
             {
                 Id = user.value.IdCliente,
                 NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
-                Telefono = user.value.Telefono,
-                Correo = user.value.Email,
-                Curp = user.value.CURP,
-                Organizacion = user.value.Organizacion,
-                Rfc = user.value.RFC,
-                Sexo = user.value.Sexo,
+                Telefono = user.value.Telefono ?? "",
+                Correo = user.value.Email ?? "",
+                Curp = user.value.CURP ?? "",
+                Organizacion = user.value.Organizacion ?? "",
+                Rfc = user.value.RFC ?? "",
+                Sexo = user.value.Sexo ?? "",
                 NoCuenta = noCuenta
             };
             ViewBag.Info = header;

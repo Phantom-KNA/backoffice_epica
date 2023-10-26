@@ -465,37 +465,26 @@ public class ClientesController : Controller
                     Observaciones = user.value.Observaciones,
                     PaisNacimiento = user.value.PaisNacimiento,
                     Nacionalidad = user.value.Nacionalidad,
-                    Fiel = user.value.Fiel,
-                    SalarioNetoMensual = user.value.SalarioMensual,
-                    MontoMaximo = user.value.MontoMaximo,
                     Calle = user.value.Calle,
                     NoInt = user.value.NoInt,
-                    CalleSecundaria = user.value.CalleSecundaria,
-                    CalleSecundaria2 = user.value.CalleSecundaria2,
                     Colonia = user.value.Colonia,
                     CodigoPostal = user.value.CodigoPostal,
-                    Puesto = user.value.Puesto,
-                    AntiguedadLaboral = user.value.AntiguedadLaboral,
                     Estado = user.value.Estado,
-                    Rol = user.value.Rol,
                     Municipio = user.value.Municipio,
-                    NSS = user.value.NSS,
-                    Membresia = user.value.Membresia,
-                    TipoTrabajador = user.value.TipoTrabajador,
                     EntidadNacimiento = user.value.EntidadNacimiento,
-                    CalleNumero = user.value.CalleNumero
+                    CalleNumero = user.value.CalleNumero,
                 };
 
                 ClientesHeaderViewModel header = new ClientesHeaderViewModel
                 {
                     Id = user.value.IdCliente,
                     NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
-                    Telefono = user.value.Telefono,
-                    Correo = user.value.Email,
-                    Curp = user.value.CURP,
-                    Organizacion = user.value.Organizacion,
-                    Rfc = user.value.RFC,
-                    Sexo = user.value.Sexo
+                    Telefono = user.value.Telefono ?? "",
+                    Correo = user.value.Email ?? "",
+                    Curp = user.value.CURP ?? "",
+                    Organizacion = user.value.Organizacion ?? "",
+                    Rfc = user.value.RFC ?? "",
+                    Sexo = user.value.Sexo ?? ""
                 };
                 ViewBag.Info = header;
                 ViewBag.UrlView = "DatosGenerales";
@@ -534,7 +523,7 @@ public class ClientesController : Controller
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
         if (validacion == true)
         {
-            ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(id);
+            ClienteDetailsResponse user = await _clientesApiClient.GetDetallesGeneralesClienteAsync(id);
             var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
             var listaEmpresa = await _catalogosApiClient.GetEmpresasAsync();
 
@@ -548,12 +537,12 @@ public class ClientesController : Controller
             {
                 Id = user.value.IdCliente,
                 NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
-                Telefono = user.value.Telefono,
-                Correo = user.value.Email,
-                Curp = user.value.CURP,
-                Organizacion = user.value.Organizacion,
-                Rfc = user.value.RFC,
-                Sexo = user.value.Sexo
+                Telefono = user.value.Telefono ?? "",
+                Correo = user.value.Email ?? "",
+                Curp = user.value.CURP ?? "",
+                Organizacion = user.value.Organizacion ??"",
+                Rfc = user.value.RFC ?? "",
+                Sexo = user.value.Sexo ?? ""
             };
 
             AsignarCuentaDetailsResponse asign = new AsignarCuentaDetailsResponse
@@ -780,7 +769,7 @@ public class ClientesController : Controller
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
         if (validacion == true)
         {
-            ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(cliente);
+            ClienteDetailsResponse user = await _clientesApiClient.GetDetallesGeneralesClienteAsync(cliente);
 
             if (user.value == null)
             {
@@ -792,12 +781,12 @@ public class ClientesController : Controller
             {
                 Id = user.value.IdCliente,
                 NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
-                Telefono = user.value.Telefono,
-                Correo = user.value.Email,
-                Curp = user.value.CURP,
-                Organizacion = user.value.Organizacion,
-                Rfc = user.value.RFC,
-                Sexo = user.value.Sexo,
+                Telefono = user.value.Telefono ?? "",
+                Correo = user.value.Email ?? "",
+                Curp = user.value.CURP ?? "",
+                Organizacion = user.value.Organizacion ?? "",
+                Rfc = user.value.RFC ?? "",
+                Sexo = user.value.Sexo ?? "",
                 NoCuenta = noCuenta
             };
             ViewBag.Info = header;
@@ -841,7 +830,7 @@ public class ClientesController : Controller
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
         if (validacion == true)
         {
-            ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(id);
+            ClienteDetailsResponse user = await _clientesApiClient.GetDetallesGeneralesClienteAsync(id);
 
             if (user.value == null)
             {
@@ -853,12 +842,12 @@ public class ClientesController : Controller
             {
                 Id = user.value.IdCliente,
                 NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
-                Telefono = user.value.Telefono,
-                Correo = user.value.Email,
-                Curp = user.value.CURP,
-                Organizacion = user.value.Organizacion,
-                Rfc = user.value.RFC,
-                Sexo = user.value.Sexo
+                Telefono = user.value.Telefono ?? "",
+                Correo = user.value.Email ?? "",
+                Curp = user.value.CURP ?? "",
+                Organizacion = user.value.Organizacion ?? "",
+                Rfc = user.value.RFC ?? "", 
+                Sexo = user.value.Sexo ?? ""
             };
 
             RegistrarTarjetaRequest renderRef = new RegistrarTarjetaRequest
@@ -951,7 +940,7 @@ public class ClientesController : Controller
         var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
         if (validacion == true)
         {
-            ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(id);
+            ClienteDetailsResponse user = await _clientesApiClient.GetDetallesGeneralesClienteAsync(id);
             var listaDocumentos = await _catalogosApiClient.GetTipoDocumentosAsync();
 
             if (user.value == null)
@@ -964,12 +953,12 @@ public class ClientesController : Controller
             {
                 Id = user.value.IdCliente,
                 NombreCompleto = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
-                Telefono = user.value.Telefono,
-                Correo = user.value.Email,
-                Curp = user.value.CURP,
-                Organizacion = user.value.Organizacion,
-                Rfc = user.value.RFC,
-                Sexo = user.value.Sexo
+                Telefono = user.value.Telefono ?? "",
+                Correo = user.value.Email ?? "",
+                Curp = user.value.CURP ?? "",
+                Organizacion = user.value.Organizacion ?? "",
+                Rfc = user.value.RFC ?? "",
+                Sexo = user.value.Sexo ?? ""
             };
 
             DocumentosClienteRegistro renderRef = new DocumentosClienteRegistro
@@ -1330,7 +1319,7 @@ public class ClientesController : Controller
                     Fiel = cliente.value.Fiel,
                     PaisNacimiento = cliente.value.PaisNacimiento,
                     IngresoMensual = cliente.value.SalarioMensual.ToString(),
-                    ApoderadoLegal = cliente.value.ApoderadoLegal,
+                    ApoderadoLegal = cliente.value.ApoderadoLegal ?? 0,
                     NoInterior = cliente.value.NoInt,
                     Puesto = cliente.value.Puesto,
                     FechaNacimiento = cliente.value.FechaNacimiento != null
@@ -1338,8 +1327,8 @@ public class ClientesController : Controller
                     : null,
                     DelegacionMunicipio = cliente.value.Municipio,
                     TelefonoTipo = cliente.value.TelefonoRecado,
-                    IdNacionalidad = cliente.value.IdNacionalidad,
-                    IdOcupacion = cliente.value.IdOcupacion,
+                    IdNacionalidad = cliente.value.IdNacionalidad ?? 0,
+                    IdOcupacion = cliente.value.IdOcupacion ?? 0,
                     CiudadEstado = cliente.value.Estado,
                     Rol = cliente.value.Rol,
                     Empresa = cliente.value.IdEmpresa ?? 0,
