@@ -41,6 +41,10 @@ var KTDatatableRemoteAjax = function () {
             ajax: {
                 url: siteLocation + 'Clientes/ConsultarListadoDocumentos',
                 type: 'POST',
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $(".dataTables_processing").hide();
+                    toastr.error("No se pudo encontrar información disponible.");
+                },
                 data: function (d) {
                     d.idAccount = AccountId;
                 },
@@ -91,6 +95,10 @@ var KTDatatableRemoteAjax = function () {
         datatable.ajax.reload();
     }
 
+    var ErrorControl = function () {
+        dataTable.ext.errMode = 'throw';
+    };
+
     return {
         init: function () {
             //init();
@@ -107,7 +115,10 @@ var KTDatatableRemoteAjax = function () {
         },
         recargar: function () {
             recargar();
-        }
+        },
+        ErrorControl: function () {
+            ErrorControl();
+        },
     };
 }();
 
