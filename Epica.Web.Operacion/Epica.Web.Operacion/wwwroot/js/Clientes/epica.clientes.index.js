@@ -39,6 +39,10 @@ var KTDatatableRemoteAjax = function () {
             ajax: {
                 url: siteLocation + 'Clientes/Consulta',
                 type: 'POST',
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $(".dataTables_processing").hide();
+                    toastr.error("No se pudo encontrar información disponible.");
+                },
                 data: function (d) {
                     var filtros = [];
                     $(".filtro-control").each(function () {
@@ -174,6 +178,9 @@ var KTDatatableRemoteAjax = function () {
     var recargar = function () {
         datatable.ajax.reload();
     }
+    var ErrorControl = function () {
+        dataTable.ext.errMode = 'throw';
+    };
 
     $(".btn-filtrar").click(function () {
         $('#search_input').val('');
@@ -204,7 +211,10 @@ var KTDatatableRemoteAjax = function () {
         },
         recargar: function () {
             recargar();
-        }
+        },
+        ErrorControl: function () {
+            ErrorControl();
+        },
     };
 }();
 
