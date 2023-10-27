@@ -647,14 +647,14 @@ public class ClientesController : Controller
                 noCuenta = row.noCuenta,
                 saldo = row.saldo,
                 estatus = row.estatus,
-                tipoPersona = row.tipoPersona,
+                tipoPersona = row.tipoPersona ?? "-",
                 alias = !string.IsNullOrEmpty(row.alias) ? row.alias : "-",
-                fechaActualizacion = row.fechaActualizacion,
-                fechaAlta = row.fechaAlta,
-                email = row.email,
-                telefono = row.telefono,
-                fechaActualizacionformat = row.fechaActualizacion.ToString(),
-                fechaAltaFormat = row.fechaAlta.ToString(),
+                fechaActualizacion = row.fechaActualizacion ?? "-",
+                fechaAlta = row.fechaAlta ?? "-",
+                email = row.email ?? "-",
+                telefono = row.telefono ?? "-",
+                fechaActualizacionformat = row.fechaActualizacion?.ToString(),
+                fechaAltaFormat = row.fechaAlta?.ToString(),
                 Acciones = await this.RenderViewToStringAsync("~/Views/Clientes/Detalles/Cuentas/_Acciones.cshtml", row)
             });
         }
