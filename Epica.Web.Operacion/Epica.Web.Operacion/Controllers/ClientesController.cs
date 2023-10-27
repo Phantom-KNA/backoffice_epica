@@ -138,10 +138,25 @@ public class ClientesController : Controller
             (ListPF, paginacion) = await _clientesApiClient.GetClientesAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros),columna, tipoFiltro);
         }
 
+        var discs = ListPF.DistinctBy(x => x.id).ToList();
+
         var List = new List<ClienteResponseGrid>();
-        foreach (var row in ListPF)
+        foreach (var row in discs)
         {
 
+            var Organizaciones = "";
+
+            if (!string.IsNullOrWhiteSpace(row.organizacion)) {
+                var OrganizacionesCliente = (from n in ListPF where n.id == row.id select n.organizacion).ToList();
+
+                foreach (var org in OrganizacionesCliente)
+                {
+                    Organizaciones += org + "/";
+                }
+
+            } else {
+                Organizaciones = "-";
+            }
             
             List.Add(new ClienteResponseGrid
             {
@@ -151,7 +166,7 @@ public class ClientesController : Controller
                 telefono = !string.IsNullOrWhiteSpace(row.telefono) ? row.telefono: "-",
                 email = !string.IsNullOrWhiteSpace(row.email) ? row.email: "-",
                 CURP = !string.IsNullOrWhiteSpace(row.CURP) ? row.CURP : "-",
-                organizacion = !string.IsNullOrWhiteSpace(row.organizacion) ? row.organizacion: "-",
+                organizacion = Organizaciones,
                 membresia = !string.IsNullOrWhiteSpace(row.membresia) ? row.membresia: "-",
                 sexo = !string.IsNullOrWhiteSpace(row.sexo) ? row.sexo: "-",
                 estatus = row.estatus,
