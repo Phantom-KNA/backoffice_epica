@@ -91,9 +91,13 @@
                                     </div>
                                     <br />
                                     <div class="row">
-                                        <div class="col-12">
-                                            <label class="form-label fs-5 fw-semibold mb-3">Tipo de Persona:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="tipoPersona" onkeypress="return SoloLetras(event)" oninput="validateInput(this)" maxlength="30" placeholder="Tipo de Persona" id="filtro_tipoPersona" />
+                                        <label class="form-label fs-5 fw-semibold mb-3">Tipo de Persona:</label>
+                                        <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="tipoPersona" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" data-minimum-results-for-search="Infinity" id="tipo_persona" name="tipo_persona">
+                                            <option></option>
+                                            <option value="0">Persona Física</option>
+                                            <option value="1">Persona Moral</option>
+                                            <option value="2">Persona Física con Actividad Empresarial</option>
+                                        </select>
                                         </div>
                                     </div>
                                     <br />

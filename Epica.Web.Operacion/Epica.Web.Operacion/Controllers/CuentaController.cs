@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using static Epica.Web.Operacion.Controllers.TransaccionesController;
@@ -136,6 +137,8 @@ public class CuentaController : Controller
 
         //Entorno local de pruebas
         //ListPF = GetList();
+
+        
 
         var List = new List<CuentasResponseGrid>();
         foreach (var row in ListPF)

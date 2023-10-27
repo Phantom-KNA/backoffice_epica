@@ -18,6 +18,7 @@ using Epica.Web.Operacion.Services.Log;
 using System.Globalization;
 using Epica.Web.Operacion.Models.Response;
 using System.IO;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Epica.Web.Operacion.Controllers;
 
@@ -138,10 +139,25 @@ public class ClientesController : Controller
             (ListPF, paginacion) = await _clientesApiClient.GetClientesAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros),columna, tipoFiltro);
         }
 
+        var discs = ListPF.DistinctBy(x => x.id).ToList();
+
         var List = new List<ClienteResponseGrid>();
-        foreach (var row in ListPF)
+        foreach (var row in discs)
         {
 
+            var Organizaciones = "";
+
+            if (!string.IsNullOrWhiteSpace(row.organizacion)) {
+                var OrganizacionesCliente = (from n in ListPF where n.id == row.id select n.organizacion).ToList();
+
+                foreach (var org in OrganizacionesCliente)
+                {
+                    Organizaciones += org + "/";
+                }
+
+            } else {
+                Organizaciones = "-";
+            }
             
             List.Add(new ClienteResponseGrid
             {
@@ -151,7 +167,7 @@ public class ClientesController : Controller
                 telefono = !string.IsNullOrWhiteSpace(row.telefono) ? row.telefono: "-",
                 email = !string.IsNullOrWhiteSpace(row.email) ? row.email: "-",
                 CURP = !string.IsNullOrWhiteSpace(row.CURP) ? row.CURP : "-",
-                organizacion = !string.IsNullOrWhiteSpace(row.organizacion) ? row.organizacion: "-",
+                organizacion = Organizaciones,
                 membresia = !string.IsNullOrWhiteSpace(row.membresia) ? row.membresia: "-",
                 sexo = !string.IsNullOrWhiteSpace(row.sexo) ? row.sexo: "-",
                 estatus = row.estatus,
@@ -454,25 +470,25 @@ public class ClientesController : Controller
                 {
                     IdCliente = user.value.IdCliente,
                     Nombre = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
-                    Telefono = user.value.Telefono,
-                    Email = user.value.Email,
-                    CURP = user.value.CURP,
-                    Organizacion = user.value.Organizacion,
-                    Sexo = user.value.Sexo,
-                    RFC = user.value.RFC,
-                    INE = user.value.INE,
-                    FechaNacimiento = user.value.FechaNacimiento,
-                    Observaciones = user.value.Observaciones,
-                    PaisNacimiento = user.value.PaisNacimiento,
-                    Nacionalidad = user.value.Nacionalidad,
-                    Calle = user.value.Calle,
-                    NoInt = user.value.NoInt,
-                    Colonia = user.value.Colonia,
-                    CodigoPostal = user.value.CodigoPostal,
-                    Estado = user.value.Estado,
-                    Municipio = user.value.Municipio,
-                    EntidadNacimiento = user.value.EntidadNacimiento,
-                    CalleNumero = user.value.CalleNumero,
+                    Telefono = user.value.Telefono.IsNullOrEmpty() ? "-" : user.value.Telefono,
+                    Email = user.value.Email.IsNullOrEmpty() ? "-" : user.value.Email,
+                    CURP = user.value.CURP.IsNullOrEmpty() ? "-" : user.value.CURP,
+                    Organizacion = user.value.Organizacion ?? "-",
+                    Sexo = user.value.Sexo.IsNullOrEmpty() ? "-" : user.value.Sexo,
+                    RFC = user.value.RFC.IsNullOrEmpty() ? "-" : user.value.RFC,
+                    INE = user.value.INE.IsNullOrEmpty() ? "-" : user.value.INE,
+                    FechaNacimiento = user.value.FechaNacimiento.IsNullOrEmpty() ? "-" : user.value.FechaNacimiento,
+                    Observaciones = user.value.Observaciones.IsNullOrEmpty() ? "-" : user.value.Observaciones,
+                    PaisNacimiento = user.value.PaisNacimiento.IsNullOrEmpty() ? "-" : user.value.PaisNacimiento,
+                    Nacionalidad = user.value.Nacionalidad.IsNullOrEmpty() ? "-" : user.value.Nacionalidad,
+                    Calle = user.value.Calle.IsNullOrEmpty() ? "-" : user.value.Calle,
+                    NoInt = user.value.NoInt.IsNullOrEmpty() ? "-" : user.value.NoInt,
+                    Colonia = user.value.Colonia.IsNullOrEmpty() ? "-" : user.value.Colonia,
+                    CodigoPostal = user.value.CodigoPostal.IsNullOrEmpty() ? "-" : user.value.CodigoPostal,
+                    Estado = user.value.Estado.IsNullOrEmpty() ? "-" : user.value.Estado,
+                    Municipio = user.value.Municipio.IsNullOrEmpty() ? "-" : user.value.Municipio,
+                    EntidadNacimiento = user.value.EntidadNacimiento.IsNullOrEmpty() ? "-" : user.value.EntidadNacimiento,
+                    CalleNumero = user.value.CalleNumero.IsNullOrEmpty() ? "-" : user.value.CalleNumero,
                 };
 
                 ClientesHeaderViewModel header = new ClientesHeaderViewModel
