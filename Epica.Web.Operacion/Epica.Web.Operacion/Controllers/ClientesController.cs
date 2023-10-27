@@ -148,11 +148,19 @@ public class ClientesController : Controller
             var Organizaciones = "";
 
             if (!string.IsNullOrWhiteSpace(row.organizacion)) {
+
                 var OrganizacionesCliente = (from n in ListPF where n.id == row.id select n.organizacion).ToList();
 
-                foreach (var org in OrganizacionesCliente)
-                {
-                    Organizaciones += org + "/";
+                foreach (var org in OrganizacionesCliente) {
+
+                    if (!string.IsNullOrWhiteSpace(org)){
+                        if (org == OrganizacionesCliente.Last()) {
+                            Organizaciones += org;
+                        } else {
+                            Organizaciones += org + " / ";
+                        }
+
+                    }
                 }
 
             } else {
