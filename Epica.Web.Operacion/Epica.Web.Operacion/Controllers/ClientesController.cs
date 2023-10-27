@@ -18,6 +18,7 @@ using Epica.Web.Operacion.Services.Log;
 using System.Globalization;
 using Epica.Web.Operacion.Models.Response;
 using System.IO;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Epica.Web.Operacion.Controllers;
 
@@ -454,25 +455,25 @@ public class ClientesController : Controller
                 {
                     IdCliente = user.value.IdCliente,
                     Nombre = user.value.Nombre + " " + user.value.ApellidoPaterno + " " + user.value.ApellidoMaterno,
-                    Telefono = user.value.Telefono,
-                    Email = user.value.Email,
-                    CURP = user.value.CURP,
-                    Organizacion = user.value.Organizacion,
-                    Sexo = user.value.Sexo,
-                    RFC = user.value.RFC,
-                    INE = user.value.INE,
-                    FechaNacimiento = user.value.FechaNacimiento,
-                    Observaciones = user.value.Observaciones,
-                    PaisNacimiento = user.value.PaisNacimiento,
-                    Nacionalidad = user.value.Nacionalidad,
-                    Calle = user.value.Calle,
-                    NoInt = user.value.NoInt,
-                    Colonia = user.value.Colonia,
-                    CodigoPostal = user.value.CodigoPostal,
-                    Estado = user.value.Estado,
-                    Municipio = user.value.Municipio,
-                    EntidadNacimiento = user.value.EntidadNacimiento,
-                    CalleNumero = user.value.CalleNumero,
+                    Telefono = user.value.Telefono.IsNullOrEmpty() ? "-" : user.value.Telefono,
+                    Email = user.value.Email.IsNullOrEmpty() ? "-" : user.value.Email,
+                    CURP = user.value.CURP.IsNullOrEmpty() ? "-" : user.value.CURP,
+                    Organizacion = user.value.Organizacion ?? "-",
+                    Sexo = user.value.Sexo.IsNullOrEmpty() ? "-" : user.value.Sexo,
+                    RFC = user.value.RFC.IsNullOrEmpty() ? "-" : user.value.RFC,
+                    INE = user.value.INE.IsNullOrEmpty() ? "-" : user.value.INE,
+                    FechaNacimiento = user.value.FechaNacimiento.IsNullOrEmpty() ? "-" : user.value.FechaNacimiento,
+                    Observaciones = user.value.Observaciones.IsNullOrEmpty() ? "-" : user.value.Observaciones,
+                    PaisNacimiento = user.value.PaisNacimiento.IsNullOrEmpty() ? "-" : user.value.PaisNacimiento,
+                    Nacionalidad = user.value.Nacionalidad.IsNullOrEmpty() ? "-" : user.value.Nacionalidad,
+                    Calle = user.value.Calle.IsNullOrEmpty() ? "-" : user.value.Calle,
+                    NoInt = user.value.NoInt.IsNullOrEmpty() ? "-" : user.value.NoInt,
+                    Colonia = user.value.Colonia.IsNullOrEmpty() ? "-" : user.value.Colonia,
+                    CodigoPostal = user.value.CodigoPostal.IsNullOrEmpty() ? "-" : user.value.CodigoPostal,
+                    Estado = user.value.Estado.IsNullOrEmpty() ? "-" : user.value.Estado,
+                    Municipio = user.value.Municipio.IsNullOrEmpty() ? "-" : user.value.Municipio,
+                    EntidadNacimiento = user.value.EntidadNacimiento.IsNullOrEmpty() ? "-" : user.value.EntidadNacimiento,
+                    CalleNumero = user.value.CalleNumero.IsNullOrEmpty() ? "-" : user.value.CalleNumero,
                 };
 
                 ClientesHeaderViewModel header = new ClientesHeaderViewModel
