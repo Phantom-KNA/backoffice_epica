@@ -7,6 +7,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
 {
     public interface IClientesApiClient
     {
+        Task<List<EmpresaResponse>> GetEmpresasClienteAsync(int id);
         Task<ClienteDetailsResponse> GetDetallesGeneralesClienteAsync(int id);
         Task<MensajeResponse> GetClienteExisteTelefonoAsync(string telefono);
         Task<MensajeResponse> GetClienteExisteCorreoAsync(string correo);

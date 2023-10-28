@@ -53,7 +53,7 @@ public class ClientesController : Controller
 
     #region "Funciones"
 
-    #region Consulta Clientes
+    #region Consulta Personas Fisicas
 
     [Authorize]
     public IActionResult Index()
@@ -148,11 +148,19 @@ public class ClientesController : Controller
             var Organizaciones = "";
 
             if (!string.IsNullOrWhiteSpace(row.organizacion)) {
+
                 var OrganizacionesCliente = (from n in ListPF where n.id == row.id select n.organizacion).ToList();
 
-                foreach (var org in OrganizacionesCliente)
-                {
-                    Organizaciones += org + "/";
+                foreach (var org in OrganizacionesCliente) {
+
+                    if (!string.IsNullOrWhiteSpace(org)){
+                        if (org == OrganizacionesCliente.Last()) {
+                            Organizaciones += org;
+                        } else {
+                            Organizaciones += org + " / ";
+                        }
+
+                    }
                 }
 
             } else {
@@ -446,7 +454,7 @@ public class ClientesController : Controller
     }
     #endregion
 
-    #region Detalles Cliente
+    #region Detalles Personas fisicas
 
     #region Tap Datos Generales
     [Authorize]
@@ -460,11 +468,13 @@ public class ClientesController : Controller
             if (validacion == true)
             {
                 ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(id);
+                List<EmpresaResponse> empresasResponse = await _clientesApiClient.GetEmpresasClienteAsync(id);
 
                 if (user.value == null)
                 {
                     return RedirectToAction("Index");
                 }
+                string empresasConcatenadas = string.Join("/", empresasResponse.Select(e => e.Empresa));
 
                 ClientesDetallesViewModel clientesDetallesViewModel = new ClientesDetallesViewModel
                 {
@@ -473,7 +483,7 @@ public class ClientesController : Controller
                     Telefono = user.value.Telefono.IsNullOrEmpty() ? "-" : user.value.Telefono,
                     Email = user.value.Email.IsNullOrEmpty() ? "-" : user.value.Email,
                     CURP = user.value.CURP.IsNullOrEmpty() ? "-" : user.value.CURP,
-                    Organizacion = user.value.Organizacion ?? "-",
+                    Organizacion = empresasConcatenadas ?? "",
                     Sexo = user.value.Sexo.IsNullOrEmpty() ? "-" : user.value.Sexo,
                     RFC = user.value.RFC.IsNullOrEmpty() ? "-" : user.value.RFC,
                     INE = user.value.INE.IsNullOrEmpty() ? "-" : user.value.INE,
@@ -498,7 +508,7 @@ public class ClientesController : Controller
                     Telefono = user.value.Telefono ?? "",
                     Correo = user.value.Email ?? "",
                     Curp = user.value.CURP ?? "",
-                    Organizacion = user.value.Organizacion ?? "",
+                    Organizacion = empresasConcatenadas ?? "",
                     Rfc = user.value.RFC ?? "",
                     Sexo = user.value.Sexo ?? ""
                 };
@@ -522,11 +532,12 @@ public class ClientesController : Controller
 
             return RedirectToAction("Index");
 
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             return RedirectToAction("Index");
         }
-       
+
     }
     #endregion
 
@@ -540,6 +551,7 @@ public class ClientesController : Controller
         if (validacion == true)
         {
             ClienteDetailsResponse user = await _clientesApiClient.GetDetallesGeneralesClienteAsync(id);
+            List<EmpresaResponse> empresasResponse = await _clientesApiClient.GetEmpresasClienteAsync(id);
             var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
             var listaEmpresa = await _catalogosApiClient.GetEmpresasAsync();
 
@@ -549,6 +561,8 @@ public class ClientesController : Controller
             }
 
             ViewBag.UrlView = "Cuentas";
+            string empresasConcatenadas = string.Join("/", empresasResponse.Select(e => e.Empresa));
+
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
             {
                 Id = user.value.IdCliente,
@@ -556,7 +570,7 @@ public class ClientesController : Controller
                 Telefono = user.value.Telefono ?? "",
                 Correo = user.value.Email ?? "",
                 Curp = user.value.CURP ?? "",
-                Organizacion = user.value.Organizacion ??"",
+                Organizacion = empresasConcatenadas ?? "",
                 Rfc = user.value.RFC ?? "",
                 Sexo = user.value.Sexo ?? ""
             };
@@ -639,14 +653,14 @@ public class ClientesController : Controller
                 noCuenta = row.noCuenta,
                 saldo = row.saldo,
                 estatus = row.estatus,
-                tipoPersona = row.tipoPersona,
+                tipoPersona = row.tipoPersona ?? "-",
                 alias = !string.IsNullOrEmpty(row.alias) ? row.alias : "-",
-                fechaActualizacion = row.fechaActualizacion,
-                fechaAlta = row.fechaAlta,
-                email = row.email,
-                telefono = row.telefono,
-                fechaActualizacionformat = row.fechaActualizacion.ToString(),
-                fechaAltaFormat = row.fechaAlta.ToString(),
+                fechaActualizacion = row.fechaActualizacion ?? "-",
+                fechaAlta = row.fechaAlta ?? "-",
+                email = row.email ?? "-",
+                telefono = row.telefono ?? "-",
+                fechaActualizacionformat = row.fechaActualizacion?.ToString(),
+                fechaAltaFormat = row.fechaAlta?.ToString(),
                 Acciones = await this.RenderViewToStringAsync("~/Views/Clientes/Detalles/Cuentas/_Acciones.cshtml", row)
             });
         }
@@ -786,6 +800,7 @@ public class ClientesController : Controller
         if (validacion == true)
         {
             ClienteDetailsResponse user = await _clientesApiClient.GetDetallesGeneralesClienteAsync(cliente);
+            List<EmpresaResponse> empresasResponse = await _clientesApiClient.GetEmpresasClienteAsync(cliente);
 
             if (user.value == null)
             {
@@ -793,6 +808,8 @@ public class ClientesController : Controller
             }
 
             ViewBag.UrlView = "Movimientos";
+            string empresasConcatenadas = string.Join("/", empresasResponse.Select(e => e.Empresa));
+
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
             {
                 Id = user.value.IdCliente,
@@ -800,7 +817,7 @@ public class ClientesController : Controller
                 Telefono = user.value.Telefono ?? "",
                 Correo = user.value.Email ?? "",
                 Curp = user.value.CURP ?? "",
-                Organizacion = user.value.Organizacion ?? "",
+                Organizacion = empresasConcatenadas ?? "",
                 Rfc = user.value.RFC ?? "",
                 Sexo = user.value.Sexo ?? "",
                 NoCuenta = noCuenta
@@ -847,11 +864,14 @@ public class ClientesController : Controller
         if (validacion == true)
         {
             ClienteDetailsResponse user = await _clientesApiClient.GetDetallesGeneralesClienteAsync(id);
+            List<EmpresaResponse> empresasResponse = await _clientesApiClient.GetEmpresasClienteAsync(id);
 
             if (user.value == null)
             {
                 return RedirectToAction("Index");
             }
+
+            string empresasConcatenadas = string.Join("/", empresasResponse.Select(e => e.Empresa));
 
             ViewBag.UrlView = "Tarjetas";
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
@@ -861,8 +881,8 @@ public class ClientesController : Controller
                 Telefono = user.value.Telefono ?? "",
                 Correo = user.value.Email ?? "",
                 Curp = user.value.CURP ?? "",
-                Organizacion = user.value.Organizacion ?? "",
-                Rfc = user.value.RFC ?? "", 
+                Organizacion = empresasConcatenadas ?? "",
+                Rfc = user.value.RFC ?? "",
                 Sexo = user.value.Sexo ?? ""
             };
 
@@ -918,6 +938,7 @@ public class ClientesController : Controller
                 proxyNumber = row.proxyNumber,
                 clabe = row.clabe,
                 tarjeta = row.tarjeta,
+                tipoProducto = row.tipoProducto ?? "-",
                 //Estatus = row.Estatus
                 //Acciones = await this.RenderViewToStringAsync("~/Views/Tarjetas/_Acciones.cshtml", row)
             });
@@ -958,6 +979,7 @@ public class ClientesController : Controller
         {
             ClienteDetailsResponse user = await _clientesApiClient.GetDetallesGeneralesClienteAsync(id);
             var listaDocumentos = await _catalogosApiClient.GetTipoDocumentosAsync();
+            List<EmpresaResponse> empresasResponse = await _clientesApiClient.GetEmpresasClienteAsync(id);
 
             if (user.value == null)
             {
@@ -965,6 +987,8 @@ public class ClientesController : Controller
             }
 
             ViewBag.UrlView = "Documentos";
+            string empresasConcatenadas = string.Join("/", empresasResponse.Select(e => e.Empresa));
+
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
             {
                 Id = user.value.IdCliente,
@@ -972,7 +996,7 @@ public class ClientesController : Controller
                 Telefono = user.value.Telefono ?? "",
                 Correo = user.value.Email ?? "",
                 Curp = user.value.CURP ?? "",
-                Organizacion = user.value.Organizacion ?? "",
+                Organizacion = empresasConcatenadas ?? "",
                 Rfc = user.value.RFC ?? "",
                 Sexo = user.value.Sexo ?? ""
             };
@@ -1160,6 +1184,187 @@ public class ClientesController : Controller
 
     #endregion
 
+    #endregion
+
+    #region Consulta Personas Morales
+
+    [Authorize]
+    public IActionResult PersonasMorales()
+    {
+        var loginResponse = _userContextService.GetLoginResponse();
+        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
+        if (validacion == true)
+            return View(loginResponse);
+
+        return NotFound();
+    }
+
+    [Authorize]
+    [HttpPost]
+    public async Task<JsonResult> ConsultaPersonasMorales(List<RequestListFilters> filters)
+    {
+        var request = new RequestList();
+
+        int totalRecord = 0;
+        int filterRecord = 0;
+        int paginacion = 0;
+        int columna = 0;
+        bool tipoFiltro = false;
+
+        var draw = Request.Form["draw"].FirstOrDefault();
+        int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
+        int skip = Convert.ToInt32(Request.Form["start"].FirstOrDefault() ?? "0");
+
+        request.Pagina = skip / pageSize + 1;
+        request.Registros = pageSize;
+        request.Busqueda = Request.Form["search[value]"].FirstOrDefault();
+        request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+        request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
+
+        if (request.ColumnaOrdenamiento != null)
+        {
+            if (request.ColumnaOrdenamiento == "NombreCompleto")
+            {
+                columna = 1;
+            }
+            else if (request.ColumnaOrdenamiento == "Telefono")
+            {
+                columna = 2;
+            }
+            else if (request.ColumnaOrdenamiento == "Email")
+            {
+                columna = 3;
+            }
+            else if (request.ColumnaOrdenamiento == "Curp")
+            {
+                columna = 4;
+            }
+            else if (request.ColumnaOrdenamiento == "Organizacion")
+            {
+                columna = 5;
+            }
+            else if (request.ColumnaOrdenamiento == "estatusweb")
+            {
+                columna = 6;
+            }
+            else if (request.ColumnaOrdenamiento == "Estatus")
+            {
+                columna = 7;
+            }
+        }
+
+        if (request.Ordenamiento != null)
+        {
+            if (request.Ordenamiento == "asc")
+            {
+                tipoFiltro = true;
+            }
+            else
+            {
+                tipoFiltro = false;
+            }
+        }
+
+        var gridData = new ResponseGrid<ClienteResponseGrid>();
+        List<ClienteResponse> ListPF = new List<ClienteResponse>();
+
+        if (!string.IsNullOrEmpty(request.Busqueda))
+        {
+            filters.RemoveAll(x => x.Key == "nombreCliente");
+
+            filters.Add(new RequestListFilters
+            {
+                Key = "nombreCliente",
+                Value = request.Busqueda
+            });
+        }
+
+        //Validar si hay algun filtro con valor ingresado
+        var validaFiltro = filters.Where(x => x.Value != null).ToList();
+
+        if (validaFiltro.Count != 0)
+        {
+            (ListPF, paginacion) = await _clientesApiClient.GetClientesFilterAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), columna, tipoFiltro, filters);
+        }
+        else
+        {
+            (ListPF, paginacion) = await _clientesApiClient.GetClientesAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), columna, tipoFiltro);
+        }
+
+        var discs = ListPF.DistinctBy(x => x.id).ToList();
+
+        var List = new List<ClienteResponseGrid>();
+        foreach (var row in discs)
+        {
+
+            var Organizaciones = "";
+
+            if (!string.IsNullOrWhiteSpace(row.organizacion))
+            {
+
+                var OrganizacionesCliente = (from n in ListPF where n.id == row.id select n.organizacion).ToList();
+
+                foreach (var org in OrganizacionesCliente)
+                {
+
+                    if (!string.IsNullOrWhiteSpace(org))
+                    {
+                        if (org == OrganizacionesCliente.Last())
+                        {
+                            Organizaciones += org;
+                        }
+                        else
+                        {
+                            Organizaciones += org + " / ";
+                        }
+
+                    }
+                }
+
+            }
+            else
+            {
+                Organizaciones = "-";
+            }
+
+            List.Add(new ClienteResponseGrid
+            {
+                id = row.id,
+                nombreCompleto = row.nombreCompleto == null ? "-" : row.nombreCompleto,
+                vinculo = !string.IsNullOrWhiteSpace(row.nombreCompleto) ? (row.nombreCompleto + "|" + row.id.ToString()).ToUpper() : "-",
+                telefono = !string.IsNullOrWhiteSpace(row.telefono) ? row.telefono : "-",
+                email = !string.IsNullOrWhiteSpace(row.email) ? row.email : "-",
+                CURP = !string.IsNullOrWhiteSpace(row.CURP) ? row.CURP : "-",
+                organizacion = Organizaciones,
+                membresia = !string.IsNullOrWhiteSpace(row.membresia) ? row.membresia : "-",
+                sexo = !string.IsNullOrWhiteSpace(row.sexo) ? row.sexo : "-",
+                estatus = row.estatus,
+                estatusweb = !string.IsNullOrWhiteSpace(row.estatusweb) ? row.estatusweb : "-",
+                Acciones = await this.RenderViewToStringAsync("~/Views/Clientes/_Acciones.cshtml", row)
+            });
+        }
+
+        //Filtro TextBox Busqueda Rapida
+        if (!string.IsNullOrEmpty(request.Busqueda))
+        {
+            List = List.Where(x =>
+            (x.nombreCompleto?.ToUpper() ?? "").Contains(request.Busqueda.ToUpper()) ||
+            (x.telefono?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.email?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.CURP?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.organizacion?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
+            ).ToList();
+        }
+
+        gridData.Data = List;
+        gridData.RecordsTotal = paginacion;
+        filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.RecordsTotal ?? 0;
+        gridData.RecordsFiltered = filterRecord;
+        gridData.Draw = draw;
+
+        request.Busqueda = "";
+        return Json(gridData);
+    }
     #endregion
 
     #region Registro Clientes

@@ -18,6 +18,8 @@ public class TarjetasResponse
     public string proxyNumber { get; set; }
     public string cadena { get; set; }
     public int Estatus { get; set; }
+    public string? tipoProducto { get; set; }
+
 }
 
 public class TarjetasResponseGrid : TarjetasResponse

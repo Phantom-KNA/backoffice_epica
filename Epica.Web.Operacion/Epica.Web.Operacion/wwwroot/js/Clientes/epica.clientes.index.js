@@ -86,7 +86,7 @@ var KTDatatableRemoteAjax = function () {
                 { data: 'telefono', name: 'Telefono', title: 'Teléfono' },
                 { data: 'email', name: 'Email', title: 'Correo Electrónico' },
                 { data: 'curp', name: 'Curp', title: 'CURP' },
-                { data: 'organizacion', name: 'Organizacion', title: 'Organización' },
+                { data: 'organizacion', name: 'Organizacion', title: 'Empresa/s' },
                 {
                     data: 'estatusweb', name: 'estatusweb', title: 'Estatus Web',
                     render: function (data, type, row) {
