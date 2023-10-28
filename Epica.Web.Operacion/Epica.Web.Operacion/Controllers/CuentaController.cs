@@ -302,6 +302,7 @@ public class CuentaController : Controller
         if (validacion == true)
         {
             ClienteDetailsResponse user = await _usuariosApiClient.GetDetallesGeneralesClienteAsync(cliente);
+            List<EmpresaResponse> empresasResponse = await _usuariosApiClient.GetEmpresasClienteAsync(id);
 
             if (user.value == null)
             {
@@ -309,6 +310,8 @@ public class CuentaController : Controller
             }
 
             ViewBag.UrlView = "Movimientos";
+            string empresasConcatenadas = string.Join("/", empresasResponse.Select(e => e.Empresa));
+
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
             {
                 Id = user.value.IdCliente,
@@ -316,7 +319,7 @@ public class CuentaController : Controller
                 Telefono = user.value.Telefono ?? "",
                 Correo = user.value.Email ?? "",
                 Curp = user.value.CURP ?? "",
-                Organizacion = user.value.Organizacion ?? "",
+                Organizacion = empresasConcatenadas ?? "",
                 Rfc = user.value.RFC ?? "",
                 Sexo = user.value.Sexo ?? "",
                 NoCuenta = noCuenta

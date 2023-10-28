@@ -546,10 +546,39 @@ namespace Epica.Web.Operacion.Services.Transaccion
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return cliente!;
             }
 
             return cliente!;
+        }
+
+        public async Task<List<EmpresaResponse>> GetEmpresasClienteAsync(int id)
+        {
+            List<EmpresaResponse>? empresas = new List<EmpresaResponse>();
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.ClientesOperations.GetEmpresasCliente(id);
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var settings = new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+                    empresas = JsonConvert.DeserializeObject<List<EmpresaResponse>>(jsonResponse, settings);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return empresas!;
+            }
+
+            return empresas!;
         }
         public async Task<MensajeResponse> GetRegistroAsignacionCuentaCliente(AsignarCuentaResponse request)
         {
