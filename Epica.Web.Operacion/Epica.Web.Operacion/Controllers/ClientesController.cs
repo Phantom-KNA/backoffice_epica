@@ -197,7 +197,7 @@ public class ClientesController : Controller
         }
 
         gridData.Data = List;
-        gridData.RecordsTotal = paginacion;
+        gridData.RecordsTotal = List.Count;
         filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.RecordsTotal ?? 0;
         gridData.RecordsFiltered = filterRecord;
         gridData.Draw = draw;
