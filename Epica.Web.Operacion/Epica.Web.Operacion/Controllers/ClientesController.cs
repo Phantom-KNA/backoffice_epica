@@ -468,11 +468,13 @@ public class ClientesController : Controller
             if (validacion == true)
             {
                 ClienteDetailsResponse user = await _clientesApiClient.GetDetallesCliente(id);
+                List<EmpresaResponse> empresasResponse = await _clientesApiClient.GetEmpresasClienteAsync(id);
 
                 if (user.value == null)
                 {
                     return RedirectToAction("Index");
                 }
+                string empresasConcatenadas = string.Join("/", empresasResponse.Select(e => e.Empresa));
 
                 ClientesDetallesViewModel clientesDetallesViewModel = new ClientesDetallesViewModel
                 {
@@ -481,7 +483,7 @@ public class ClientesController : Controller
                     Telefono = user.value.Telefono.IsNullOrEmpty() ? "-" : user.value.Telefono,
                     Email = user.value.Email.IsNullOrEmpty() ? "-" : user.value.Email,
                     CURP = user.value.CURP.IsNullOrEmpty() ? "-" : user.value.CURP,
-                    Organizacion = user.value.Organizacion ?? "-",
+                    Organizacion = empresasConcatenadas ?? "",
                     Sexo = user.value.Sexo.IsNullOrEmpty() ? "-" : user.value.Sexo,
                     RFC = user.value.RFC.IsNullOrEmpty() ? "-" : user.value.RFC,
                     INE = user.value.INE.IsNullOrEmpty() ? "-" : user.value.INE,
@@ -506,7 +508,7 @@ public class ClientesController : Controller
                     Telefono = user.value.Telefono ?? "",
                     Correo = user.value.Email ?? "",
                     Curp = user.value.CURP ?? "",
-                    Organizacion = user.value.Organizacion ?? "",
+                    Organizacion = empresasConcatenadas ?? "",
                     Rfc = user.value.RFC ?? "",
                     Sexo = user.value.Sexo ?? ""
                 };
@@ -530,11 +532,12 @@ public class ClientesController : Controller
 
             return RedirectToAction("Index");
 
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             return RedirectToAction("Index");
         }
-       
+
     }
     #endregion
 
@@ -548,6 +551,7 @@ public class ClientesController : Controller
         if (validacion == true)
         {
             ClienteDetailsResponse user = await _clientesApiClient.GetDetallesGeneralesClienteAsync(id);
+            List<EmpresaResponse> empresasResponse = await _clientesApiClient.GetEmpresasClienteAsync(id);
             var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
             var listaEmpresa = await _catalogosApiClient.GetEmpresasAsync();
 
@@ -557,6 +561,8 @@ public class ClientesController : Controller
             }
 
             ViewBag.UrlView = "Cuentas";
+            string empresasConcatenadas = string.Join("/", empresasResponse.Select(e => e.Empresa));
+
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
             {
                 Id = user.value.IdCliente,
@@ -564,7 +570,7 @@ public class ClientesController : Controller
                 Telefono = user.value.Telefono ?? "",
                 Correo = user.value.Email ?? "",
                 Curp = user.value.CURP ?? "",
-                Organizacion = user.value.Organizacion ??"",
+                Organizacion = empresasConcatenadas ?? "",
                 Rfc = user.value.RFC ?? "",
                 Sexo = user.value.Sexo ?? ""
             };
@@ -794,6 +800,7 @@ public class ClientesController : Controller
         if (validacion == true)
         {
             ClienteDetailsResponse user = await _clientesApiClient.GetDetallesGeneralesClienteAsync(cliente);
+            List<EmpresaResponse> empresasResponse = await _clientesApiClient.GetEmpresasClienteAsync(cliente);
 
             if (user.value == null)
             {
@@ -801,6 +808,8 @@ public class ClientesController : Controller
             }
 
             ViewBag.UrlView = "Movimientos";
+            string empresasConcatenadas = string.Join("/", empresasResponse.Select(e => e.Empresa));
+
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
             {
                 Id = user.value.IdCliente,
@@ -808,7 +817,7 @@ public class ClientesController : Controller
                 Telefono = user.value.Telefono ?? "",
                 Correo = user.value.Email ?? "",
                 Curp = user.value.CURP ?? "",
-                Organizacion = user.value.Organizacion ?? "",
+                Organizacion = empresasConcatenadas ?? "",
                 Rfc = user.value.RFC ?? "",
                 Sexo = user.value.Sexo ?? "",
                 NoCuenta = noCuenta
@@ -855,11 +864,14 @@ public class ClientesController : Controller
         if (validacion == true)
         {
             ClienteDetailsResponse user = await _clientesApiClient.GetDetallesGeneralesClienteAsync(id);
+            List<EmpresaResponse> empresasResponse = await _clientesApiClient.GetEmpresasClienteAsync(id);
 
             if (user.value == null)
             {
                 return RedirectToAction("Index");
             }
+
+            string empresasConcatenadas = string.Join("/", empresasResponse.Select(e => e.Empresa));
 
             ViewBag.UrlView = "Tarjetas";
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
@@ -869,8 +881,8 @@ public class ClientesController : Controller
                 Telefono = user.value.Telefono ?? "",
                 Correo = user.value.Email ?? "",
                 Curp = user.value.CURP ?? "",
-                Organizacion = user.value.Organizacion ?? "",
-                Rfc = user.value.RFC ?? "", 
+                Organizacion = empresasConcatenadas ?? "",
+                Rfc = user.value.RFC ?? "",
                 Sexo = user.value.Sexo ?? ""
             };
 
@@ -967,6 +979,7 @@ public class ClientesController : Controller
         {
             ClienteDetailsResponse user = await _clientesApiClient.GetDetallesGeneralesClienteAsync(id);
             var listaDocumentos = await _catalogosApiClient.GetTipoDocumentosAsync();
+            List<EmpresaResponse> empresasResponse = await _clientesApiClient.GetEmpresasClienteAsync(id);
 
             if (user.value == null)
             {
@@ -974,6 +987,8 @@ public class ClientesController : Controller
             }
 
             ViewBag.UrlView = "Documentos";
+            string empresasConcatenadas = string.Join("/", empresasResponse.Select(e => e.Empresa));
+
             ClientesHeaderViewModel header = new ClientesHeaderViewModel
             {
                 Id = user.value.IdCliente,
@@ -981,7 +996,7 @@ public class ClientesController : Controller
                 Telefono = user.value.Telefono ?? "",
                 Correo = user.value.Email ?? "",
                 Curp = user.value.CURP ?? "",
-                Organizacion = user.value.Organizacion ?? "",
+                Organizacion = empresasConcatenadas ?? "",
                 Rfc = user.value.RFC ?? "",
                 Sexo = user.value.Sexo ?? ""
             };
