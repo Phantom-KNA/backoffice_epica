@@ -98,6 +98,9 @@ var KTDatatableRemoteAjax = function () {
                     }
                 },
                 {
+                    data: 'tipoProducto', name: 'TipoProducto', title: 'Tipo Producto'
+                },
+                {
                     title: '',
                     orderable: false,
                     data: null,

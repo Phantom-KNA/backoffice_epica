@@ -158,6 +158,7 @@ public class TarjetasController : Controller
                 clabe = !string.IsNullOrWhiteSpace(row.clabe) ? row.clabe : "-",
                 tarjeta = !string.IsNullOrWhiteSpace(row.tarjeta) ? row.tarjeta : "-",
                 Estatus = row.Estatus,
+                tipoProducto = row.tipoProducto ?? "-",
                 Acciones = await this.RenderViewToStringAsync("~/Views/Tarjetas/_Acciones.cshtml", row)
             });
         }

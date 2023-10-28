@@ -926,6 +926,7 @@ public class ClientesController : Controller
                 proxyNumber = row.proxyNumber,
                 clabe = row.clabe,
                 tarjeta = row.tarjeta,
+                tipoProducto = row.tipoProducto ?? "-",
                 //Estatus = row.Estatus
                 //Acciones = await this.RenderViewToStringAsync("~/Views/Tarjetas/_Acciones.cshtml", row)
             });

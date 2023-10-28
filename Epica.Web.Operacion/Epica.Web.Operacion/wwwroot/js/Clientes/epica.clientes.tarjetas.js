@@ -57,7 +57,8 @@ var KTDatatableRemoteAjax = function () {
                     }
                 },
                 { data: "clabe", name: "clabe", title: "Clabe" },
-                { data: "proxyNumber", name: "proxyNumber", title: "Proxy" }
+                { data: "proxyNumber", name: "proxyNumber", title: "Proxy" },
+                { data: "tipoProducto", name: "tipoProducto", title: "Tipo Producto" }
                 //{
                 //    title: '',
                 //    orderable: false,
