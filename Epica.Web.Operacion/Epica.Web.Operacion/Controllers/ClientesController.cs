@@ -139,33 +139,33 @@ public class ClientesController : Controller
             (ListPF, paginacion) = await _clientesApiClient.GetClientesAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros),columna, tipoFiltro);
         }
 
-        var discs = ListPF.DistinctBy(x => x.id).ToList();
+        //var discs = ListPF.DistinctBy(x => x.id).ToList();
 
         var List = new List<ClienteResponseGrid>();
-        foreach (var row in discs)
+        foreach (var row in ListPF)
         {
 
-            var Organizaciones = "";
+            //var Organizaciones = "";
 
-            if (!string.IsNullOrWhiteSpace(row.organizacion)) {
+            //if (!string.IsNullOrWhiteSpace(row.organizacion)) {
 
-                var OrganizacionesCliente = (from n in ListPF where n.id == row.id select n.organizacion).ToList();
+            //    var OrganizacionesCliente = (from n in ListPF where n.id == row.id select n.organizacion).ToList();
 
-                foreach (var org in OrganizacionesCliente) {
+            //    foreach (var org in OrganizacionesCliente) {
 
-                    if (!string.IsNullOrWhiteSpace(org)){
-                        if (org == OrganizacionesCliente.Last()) {
-                            Organizaciones += org;
-                        } else {
-                            Organizaciones += org + " / ";
-                        }
+            //        if (!string.IsNullOrWhiteSpace(org)){
+            //            if (org == OrganizacionesCliente.Last()) {
+            //                Organizaciones += org;
+            //            } else {
+            //                Organizaciones += org + " / ";
+            //            }
 
-                    }
-                }
+            //        }
+            //    }
 
-            } else {
-                Organizaciones = "-";
-            }
+            //} else {
+            //    Organizaciones = "-";
+            //}
             
             List.Add(new ClienteResponseGrid
             {
@@ -175,7 +175,7 @@ public class ClientesController : Controller
                 telefono = !string.IsNullOrWhiteSpace(row.telefono) ? row.telefono: "-",
                 email = !string.IsNullOrWhiteSpace(row.email) ? row.email: "-",
                 CURP = !string.IsNullOrWhiteSpace(row.CURP) ? row.CURP : "-",
-                organizacion = Organizaciones,
+                organizacion = !string.IsNullOrWhiteSpace(row.organizacion) ? row.organizacion : "-",
                 membresia = !string.IsNullOrWhiteSpace(row.membresia) ? row.membresia: "-",
                 sexo = !string.IsNullOrWhiteSpace(row.sexo) ? row.sexo: "-",
                 estatus = row.estatus,
@@ -197,7 +197,7 @@ public class ClientesController : Controller
         }
 
         gridData.Data = List;
-        gridData.RecordsTotal = List.Count;
+        gridData.RecordsTotal = paginacion;
         filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.RecordsTotal ?? 0;
         gridData.RecordsFiltered = filterRecord;
         gridData.Draw = draw;
