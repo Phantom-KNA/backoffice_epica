@@ -1151,6 +1151,11 @@ public class ClientesController : Controller
 
             DocumentoShowResponse response = await _clientesApiClient.GetVisualizarDocumentosClienteAsync(url);
 
+            if (response.Documento == null) {
+                result.Error = true;
+                return Json(result);
+            }
+
             var ArchivoUsuario = File(response.Documento, response.MimeType, response.Nombre);
 
             byte[] bytes;
@@ -1338,9 +1343,7 @@ public class ClientesController : Controller
                 organizacion = Organizaciones,
                 membresia = !string.IsNullOrWhiteSpace(row.membresia) ? row.membresia : "-",
                 sexo = !string.IsNullOrWhiteSpace(row.sexo) ? row.sexo : "-",
-                estatus = row.estatus,
-                estatusweb = !string.IsNullOrWhiteSpace(row.estatusweb) ? row.estatusweb : "-",
-                Acciones = await this.RenderViewToStringAsync("~/Views/Clientes/_Acciones.cshtml", row)
+                Acciones = await this.RenderViewToStringAsync("~/Views/Clientes/_AccionesMoral.cshtml", row)
             });
         }
 

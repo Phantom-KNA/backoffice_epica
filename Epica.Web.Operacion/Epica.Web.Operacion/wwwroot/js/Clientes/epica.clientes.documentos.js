@@ -251,6 +251,8 @@ $(document).on('click', '#btnVerDocumento', function (e) {
                 }
                 $('#Ver_Docto').modal('show');
 
+            } else {
+                toastr.error('Hubo un problema al procesar el documento. Verifique su existencia.', "");
             }
 
         },
