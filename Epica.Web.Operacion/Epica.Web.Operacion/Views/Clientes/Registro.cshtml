@@ -56,7 +56,7 @@
                         <label class="form-label required">Nombre: &nbsp;</label>
                         <div class="position-relative">
                             <input asp-for="@Model!.ClientesDetalles!.IdCliente" required hidden class="form-control form-control-sm form-control-solid" id="idCliente" type="text" value="@(Model?.ClientesDetalles!.IdCliente ?? 0)" autocomplete="off" />
-                            <input asp-for="ClientesDetalles!.Nombre" class="form-control form-control-sm form-control-solid" id="Nombre" type="text" value="@(Model?.ClientesDetalles!.Nombre ?? "")" autocomplete="off" required minlength="3" maxlength="40" pattern="^[A-Za-z]+$"  oninput="validateInput(this)" data-error-message="Nombre" />
+                            <input asp-for="ClientesDetalles!.Nombre" readonly class="form-control form-control-sm form-control-solid" id="Nombre" type="text" value="@(Model?.ClientesDetalles!.Nombre ?? "")" autocomplete="off" required minlength="3" maxlength="40" pattern="^[A-Za-z]+$"  oninput="validateInput(this)" data-error-message="Nombre" />
                             <span asp-validation-for="@Model!.ClientesDetalles!.Nombre" class="text-danger"></span>
                         </div>
                     </div>
@@ -130,21 +130,21 @@
                     <div class="py-2 px-4 col-md-3 fv-row">
                         <label class="form-label required">Curp: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="ClientesDetalles!.Curp" class="form-control form-control-sm form-control-solid" id="Curp" type="text" value="@(Model?.ClientesDetalles!.Curp ?? "")" autocomplete="off" required minlenght="18" maxlength="18" data-error-message="Curp"/>
+                            <input asp-for="ClientesDetalles!.Curp" readonly class="form-control form-control-sm form-control-solid" id="Curp" type="text" value="@(Model?.ClientesDetalles!.Curp ?? "")" autocomplete="off" required minlenght="18" maxlength="18" data-error-message="Curp"/>
                             <span asp-validation-for="ClientesDetalles!.Curp" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-3 fv-row">
                         <label class="form-label required">RFC: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="ClientesDetalles!.RFC" class="form-control form-control-sm form-control-solid" id="Rfc" type="text" value="@(Model?.ClientesDetalles!.RFC ?? "")" autocomplete="off" required data-error-message="RFC" minlength="12" maxlength="13" />
+                            <input asp-for="ClientesDetalles!.RFC" readonly class="form-control form-control-sm form-control-solid" id="Rfc" type="text" value="@(Model?.ClientesDetalles!.RFC ?? "")" autocomplete="off" required data-error-message="RFC" minlength="12" maxlength="13" />
                             <span asp-validation-for="ClientesDetalles!.RFC" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-3 fv-row">
                         <label class="form-label required">INE: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="ClientesDetalles!.INE" class="form-control form-control-sm form-control-solid" id="Ine" type="text" value="@(Model?.ClientesDetalles!.INE ?? "")" autocomplete="off" required data-error-message="INE" oninput="validateNumbersInput(this)" minlength="12" maxlength="13"/>
+                            <input asp-for="ClientesDetalles!.INE" readonly class="form-control form-control-sm form-control-solid" id="Ine" type="text" value="@(Model?.ClientesDetalles!.INE ?? "")" autocomplete="off" required data-error-message="INE" oninput="validateNumbersInput(this)" minlength="12" maxlength="13"/>
                             <span asp-validation-for="ClientesDetalles!.INE" class="text-danger"></span>
                         </div>
                     </div>
