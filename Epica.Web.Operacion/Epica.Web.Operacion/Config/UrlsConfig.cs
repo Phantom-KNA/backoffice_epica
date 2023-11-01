@@ -86,7 +86,11 @@ public class UrlsConfig
         public static string GetInsertaDocumentoCliente() => $"/api/v1/registro/documento";
 
     }
-
+    public class PersonaMoralOperations
+    {
+        public static string GetPersonasMoralesInfo(int pageNumber, int totalRecords) => $"/api/v1/clientesmorales/clientes_morales_info?pageNumber={pageNumber}&pageSize={totalRecords}";
+        public static string GetPersonaMoral(int id) => $"/api/v1/clientesmorales/cliente_moral?idEmpresa={id}";
+    }
     public class CatalogosOperations
     {
         public static string GetMediosPago() => $"/api/v1/catalogos/medios_pago";

@@ -69,7 +69,7 @@ var KTDatatableRemoteAjax = function () {
             }],
             columns: [
                 {
-                    data: 'vinculo', name: 'vinculo', title: 'Nombre',
+                    data: 'vinculo', name: 'Nombre', title: 'Nombre',
                     render: function (data, type, row) {
                         var partes = data.split("|"); // Separar la parte entera y decimal
                         var Nombre = partes[0];
@@ -78,13 +78,14 @@ var KTDatatableRemoteAjax = function () {
                         if (Nombre == "-") {
                             return Nombre;
                         } else {
-                            return "<a href='/Clientes/Detalle/DatosGenerales?id=" + ID + "' id='Redireccion'>" + Nombre + "</a>";
+                            return "<a href='/Clientes/DetallePersonaMoral/DatosGeneralesPersonaMoral?id=" + ID + "' id='Redireccion'>" + Nombre + "</a>";
                         }
                     }
                 },
                 { data: 'telefono', name: 'Telefono', title: 'Teléfono' },
                 { data: 'email', name: 'Email', title: 'Correo Electrónico' },
-                { data: 'curp', name: 'Curp', title: 'CURP' },
+                { data: 'rfc', name: 'RFC', title: 'RFC' },
+                { data: 'giro', name: 'Giro', title: 'Giro' },
                 {
                     title: '',
                     orderable: false,
