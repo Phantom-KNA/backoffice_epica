@@ -147,7 +147,7 @@ public class CuentaController : Controller
             {
                 idCuenta = row.idCuenta,
                 nombrePersona = !string.IsNullOrWhiteSpace(row.nombrePersona) ? row.nombrePersona: "-",
-                noCuenta = row.noCuenta + "|" + row.idCuenta.ToString() + "|" + row.idCliente.ToString(),
+                noCuenta = row.noCuenta + "|" + row.idCuenta.ToString() + "|" + row.idCliente.ToString() + "|" + row.idTipoPersona.ToString(),
                 saldo = row.saldo,
                 estatus = row.estatus,
                 tipoPersona = !string.IsNullOrWhiteSpace(row.tipoPersona) ? row.tipoPersona : "-",

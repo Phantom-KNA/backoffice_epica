@@ -145,6 +145,11 @@ public class UrlsConfig
         public static string GetTransaccionesDevolver() => $"/api/v1/reintentador/resumen";
     }
 
+    public class AbonosOperations
+    {
+        public static string GetAbonosSpeiIN(int numberPage, int TotalRecords) => $"/api/v1/transacciones/resumen_speiin?pageNumber={numberPage}&pageSize={TotalRecords}";
+    }
+
     public string users { get; set; }
     public string Authenticate { get; set; }
     public string Transaccion { get; set; }

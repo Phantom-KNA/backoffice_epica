@@ -23,6 +23,7 @@ public class CuentasResponse
     public string clabe { get; set; }
     public string concatLabel { get; set; }
     public int bloqueoSPEIOut { get; set; }
+    public int idTipoPersona { get; set; }
 }
 
 public class CuentasResponseGrid : CuentasResponse

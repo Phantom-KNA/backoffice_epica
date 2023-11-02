@@ -1401,6 +1401,55 @@ public class ClientesController : Controller
     }
     #endregion
 
+    #region Tap Movimientos 
+    [Authorize]
+    [Route("Clientes/DetallePersonaMoral/Movimientos")]
+    public async Task<IActionResult> TransaccionesPersonaMoral(int id, int cliente, string noCuenta)
+    {
+        var loginResponse = _userContextService.GetLoginResponse();
+        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
+        if (validacion == true)
+        {
+            DatosClienteMoralResponse user = await _personaMoralServices.GetDetallesPersonaMoral(cliente);
+
+            if (user == null) {
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.UrlView = "Movimientos";
+
+            PersonaMoralHeaderViewModel header = new PersonaMoralHeaderViewModel
+            {
+                Id = user.Id,
+                Nombre = user.Nombre.IsNullOrEmpty() ? "-" : user.Nombre,
+                Telefono = user.Telefono.IsNullOrEmpty() ? "-" : user.Telefono,
+                Correo = user.Email.IsNullOrEmpty() ? "-" : user.Email,
+                Rfc = user.RFC.IsNullOrEmpty() ? "-" : user.RFC,
+                RegimenFiscal = user.RegimenFiscal.IsNullOrEmpty() ? "-" : user.RegimenFiscal
+            };
+            ViewBag.Info = header;
+            ViewBag.Nombre = header.Nombre;
+            ViewBag.NombrePascal = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(header.Nombre.ToLower());
+
+
+            ViewBag.NumCuenta = noCuenta;
+
+            if ((id == 0) && (noCuenta == null)) {
+                ViewBag.TipoConsulta = "IsGeneral";
+                ViewBag.AccountID = cliente;
+            } else {
+                ViewBag.TipoConsulta = "IsEspecific";
+                ViewBag.AccountID = id;
+            }
+
+            return View("~/Views/Clientes/DetallesPersonaMoral/Transacciones/DetalleMovimientos.cshtml");
+        }
+
+        return NotFound();
+    }
+
+    #endregion
+
     #endregion
 
     #region Registro Clientes
