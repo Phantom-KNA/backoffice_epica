@@ -191,6 +191,22 @@ namespace Epica.Web.Operacion.Controllers
             return Json(gridData);
         }
 
+        [Authorize]
+        [HttpPatch]
+        public async Task<ActionResult> PatchAutorizadorSpeinIn(string claveRastreo, bool rechazar)
+        {
+            var response = await _abonoService.PatchAutorizadorSpeiInAsync(claveRastreo, rechazar);
+
+            if (response.Error == false)
+            {
+                return Ok(new { mensaje = response.message });
+            }
+            else
+            {
+                return Ok(new { mensaje = response.message });
+            }
+        }
+
         #endregion
 
         #endregion
