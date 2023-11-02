@@ -106,7 +106,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 var filtroNombreCliente = filters.FirstOrDefault(x => x.Key == "nombreCliente");
                 var filtroTelefono = filters.FirstOrDefault(x => x.Key == "telefono");
                 var filtroCorreoElectronico = filters.FirstOrDefault(x => x.Key == "correoElectronico");
-                var filtroRFC = filters.FirstOrDefault(x => x.Key == "RFC");
+                var filtroRFC = filters.FirstOrDefault(x => x.Key == "rfc");
                 var filtroGiro = filters.FirstOrDefault(x => x.Key == "giro");
 
                 if (filtroNombreCliente!.Value != null)

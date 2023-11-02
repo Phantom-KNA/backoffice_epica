@@ -1282,9 +1282,12 @@ public class ClientesController : Controller
         //Validar si hay algun filtro con valor ingresado
         var validaFiltro = filters.Where(x => x.Value != null).ToList();
 
-        if (validaFiltro.Count != 0) {
-            //(ListPF, paginacion) = await _personaMoralServices.GetPersonasMoralesAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), columna, tipoFiltro);
-        } else {
+        if (validaFiltro.Count != 0)
+        {
+            (ListPF, paginacion) = await _personaMoralServices.GetPersonasMoralesFilterAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), columna, tipoFiltro, filters);
+        }
+        else
+        {
             (ListPF, paginacion) = await _personaMoralServices.GetPersonasMoralesAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), columna, tipoFiltro);
         }
 
