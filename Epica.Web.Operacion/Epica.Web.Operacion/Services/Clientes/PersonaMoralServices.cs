@@ -93,5 +93,73 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return cliente!;
         }
 
+        public async Task<(List<DatosClienteMoralResponse>, int)> GetPersonasMoralesFilterAsync(int pageNumber, int recordsTotal, int columna, bool ascendente, List<RequestListFilters> filters)
+        {
+            FiltroDatosResponsePersonasMorales? responseDatos = new FiltroDatosResponsePersonasMorales();
+            List<DatosClienteMoralResponse>? listaClientes = new List<DatosClienteMoralResponse>();
+            int paginacion = 0;
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.PersonaMoralOperations.GetPersonasMoralesFiltro(pageNumber, recordsTotal);
+
+                var filtroNombreCliente = filters.FirstOrDefault(x => x.Key == "nombreCliente");
+                var filtroTelefono = filters.FirstOrDefault(x => x.Key == "telefono");
+                var filtroCorreoElectronico = filters.FirstOrDefault(x => x.Key == "correoElectronico");
+                var filtroRFC = filters.FirstOrDefault(x => x.Key == "rfc");
+                var filtroGiro = filters.FirstOrDefault(x => x.Key == "giro");
+
+                if (filtroNombreCliente!.Value != null)
+                {
+                    uri += string.Format("&nombre={0}", Convert.ToString(filtroNombreCliente.Value));
+                }
+
+                if (filtroTelefono!.Value != null)
+                {
+                    uri += string.Format("&telefono={0}", Convert.ToString(filtroTelefono.Value));
+                }
+
+                if (filtroCorreoElectronico!.Value != null)
+                {
+                    uri += string.Format("&correo={0}", Convert.ToString(filtroCorreoElectronico.Value));
+                }
+
+                if (filtroRFC!.Value != null)
+                {
+                    uri += string.Format("&RFC={0}", Convert.ToString(filtroRFC.Value));
+                }
+
+                if (filtroGiro!.Value != null)
+                {
+                    uri += string.Format("&giro={0}", Convert.ToString(filtroGiro.Value));
+                }
+
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var settings = new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+                    responseDatos = JsonConvert.DeserializeObject<FiltroDatosResponsePersonasMorales>(jsonResponse, settings);
+
+                    listaClientes = responseDatos.listaResultado;
+                    paginacion = Convert.ToInt32(responseDatos.cantidadEncontrada);
+
+                    return (listaClientes, paginacion)!;
+                }
+
+            }
+            catch (Exception)
+            {
+                return (listaClientes, paginacion)!; ;
+            }
+
+            return (listaClientes, paginacion);
+        }
+
     }
 }

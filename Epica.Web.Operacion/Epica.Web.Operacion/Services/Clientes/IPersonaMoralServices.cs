@@ -7,6 +7,8 @@ namespace Epica.Web.Operacion.Services.Transaccion
 {
     public interface IPersonaMoralServices
     {
+        Task<(List<DatosClienteMoralResponse>, int)> GetPersonasMoralesFilterAsync(int pageNumber, int recordsTotal, int columna, bool ascendente, List<RequestListFilters> filters);
+
         //Task<ClienteDetailsResponse> GetDetallesGeneralesClienteAsync(int id);
         Task<(List<DatosClienteMoralResponse>, int)> GetPersonasMoralesAsync(int pageNumber, int recordsTotal, int columna, bool ascendente);
         Task<DatosClienteMoralResponse> GetDetallesPersonaMoral(int id);
