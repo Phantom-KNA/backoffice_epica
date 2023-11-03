@@ -90,6 +90,7 @@ public class UrlsConfig
     {
         public static string GetPersonasMoralesFiltro(int pageNumber, int totalRecords) => $"/api/v1/clientesmorales/buscar_filtro?pageNumber={pageNumber}&pageSize={totalRecords}";
         public static string GetPersonasMoralesInfo(int pageNumber, int totalRecords) => $"/api/v1/clientesmorales/clientes_morales_info?pageNumber={pageNumber}&pageSize={totalRecords}";
+        public static string GetEmpleadosMorales(int pageNumber, int totalRecords, int id) => $"/api/v1/clientesmorales/clientes_empresa?pageNumber={pageNumber}&pageSize={totalRecords}&idEmpresa={id}";
         public static string GetPersonaMoral(int id) => $"/api/v1/clientesmorales/cliente_moral?idEmpresa={id}";
     }
     public class CatalogosOperations

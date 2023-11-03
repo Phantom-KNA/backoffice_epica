@@ -1646,6 +1646,111 @@ public class ClientesController : Controller
     }
     #endregion
 
+    #region Tap Empleados
+    [Authorize]
+    [Route("Clientes/DetallePersonaMoral/Empleados")]
+    public async Task<IActionResult> EmpleadosPersonaMoral(int id)
+    {
+        var loginResponse = _userContextService.GetLoginResponse();
+        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
+        if (validacion == true)
+        {
+            DatosClienteMoralResponse user = await _personaMoralServices.GetDetallesPersonaMoral(id);
+
+            if (user == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.UrlView = "Empleados";
+            PersonaMoralHeaderViewModel header = new PersonaMoralHeaderViewModel
+            {
+                Id = user.Id,
+                Nombre = user.Nombre.IsNullOrEmpty() ? "-" : user.Nombre,
+                Telefono = user.Telefono.IsNullOrEmpty() ? "-" : user.Telefono,
+                Correo = user.Email.IsNullOrEmpty() ? "-" : user.Email,
+                Rfc = user.RFC.IsNullOrEmpty() ? "-" : user.RFC,
+                RegimenFiscal = user.RegimenFiscal.IsNullOrEmpty() ? "-" : user.RegimenFiscal
+            };
+
+            ViewBag.AccountID = id;
+            ViewBag.Info = header;
+            ViewBag.Nombre = header.Nombre;
+            ViewBag.NombrePascal = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(header.Nombre.ToLower());
+
+            return View("~/Views/Clientes/DetallesPersonaMoral/Empleados/DetalleEmpleados.cshtml");
+        }
+
+        return RedirectToAction("Index");
+    }
+
+    [Authorize]
+    [HttpPost]
+    public async Task<JsonResult> ConsultaEmpleados(string id)
+    {
+        var request = new RequestList();
+
+        int totalRecord = 0;
+        int filterRecord = 0;
+        int paginacion = 0;
+        int columna = 0;
+        bool tipoFiltro = false;
+
+        var draw = Request.Form["draw"].FirstOrDefault();
+        int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
+        int skip = Convert.ToInt32(Request.Form["start"].FirstOrDefault() ?? "0");
+
+        request.Pagina = skip / pageSize + 1;
+        request.Registros = pageSize;
+        request.Busqueda = Request.Form["search[value]"].FirstOrDefault();
+        request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+        request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
+
+        var gridData = new ResponseGrid<EmpresaClienteResponseGrid>();
+        List<EmpresaClienteResponse> ListPF = new List<EmpresaClienteResponse>();
+
+        (ListPF, paginacion) = await _personaMoralServices.GetEmpleadosPersonaMoralAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), Convert.ToInt32(id));
+
+        var List = new List<EmpresaClienteResponseGrid>();
+        foreach (var row in ListPF)
+        {
+            List.Add(new EmpresaClienteResponseGrid
+            {
+                NombreCompleto = !string.IsNullOrWhiteSpace(row.NombreCompleto) ? row.NombreCompleto : "-",
+                Email = !string.IsNullOrWhiteSpace(row.Email) ? row.Email : "-",
+                Curp = !string.IsNullOrWhiteSpace(row.Curp) ? row.Curp : "-",
+                Puesto = !string.IsNullOrWhiteSpace(row.Puesto) ? row.Puesto : "-",
+                Area = !string.IsNullOrWhiteSpace(row.Area) ? row.Area : "-",
+                Roles = !string.IsNullOrWhiteSpace(row.Roles) ? row.Roles : "-",
+                active = row.active,
+                EstatusWeb = row.EstatusWeb
+            });
+        }
+
+        //Filtro TextBox Busqueda Rapida
+        if (!string.IsNullOrEmpty(request.Busqueda))
+        {
+            List = List.Where(x =>
+            (x.NombreCompleto?.ToUpper() ?? "").Contains(request.Busqueda.ToUpper()) ||
+            (x.Email?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.Curp?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.Puesto?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.Area?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            (x.Roles?.ToLower() ?? "").Contains(request.Busqueda.ToLower())
+            ).ToList();
+        }
+
+        gridData.Data = List;
+        gridData.RecordsTotal = paginacion;
+        filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.RecordsTotal ?? 0;
+        gridData.RecordsFiltered = filterRecord;
+        gridData.Draw = draw;
+
+        request.Busqueda = "";
+        return Json(gridData);
+    }
+    #endregion
+
     #endregion
 
     #region Registro Clientes

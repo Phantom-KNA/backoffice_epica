@@ -161,5 +161,40 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return (listaClientes, paginacion);
         }
 
+        public async Task<(List<EmpresaClienteResponse>, int)> GetEmpleadosPersonaMoralAsync(int pageNumber, int recordsTotal, int id)
+        {
+
+            List<EmpresaClienteResponse>? listaEmpleados = new List<EmpresaClienteResponse>();
+            int paginacion = 0;
+            ResponseEmpleadosConsulta resultadoConsulta = new ResponseEmpleadosConsulta();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.PersonaMoralOperations.GetEmpleadosMorales(pageNumber, recordsTotal, id);
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var settings = new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+                    resultadoConsulta = JsonConvert.DeserializeObject<ResponseEmpleadosConsulta>(jsonResponse, settings);
+                    paginacion = resultadoConsulta.cantidadEncontrada;
+                    listaEmpleados = resultadoConsulta.listaResultado;
+                    return (listaEmpleados, paginacion)!;
+                }
+
+            }
+            catch (Exception)
+            {
+                return (listaEmpleados, paginacion)!; ;
+            }
+
+            return (listaEmpleados, paginacion);
+        }
+
     }
 }
