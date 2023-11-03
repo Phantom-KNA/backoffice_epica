@@ -200,11 +200,11 @@ namespace Epica.Web.Operacion.Controllers
 
             if (response.Error == false)
             {
-                return Ok(new { mensaje = response.Error });
+                return Ok(new { success = true });
             }
             else
             {
-                return Ok(new { mensaje = response.Error });
+                return Ok(new { success = false, response.message });
             }
         }
         [Authorize]
@@ -216,11 +216,11 @@ namespace Epica.Web.Operacion.Controllers
 
             if (response.Error == false)
             {
-                return Ok(new { mensaje = response.Error});
+                return Ok(new { Data = response.Error});
             }
             else
             {
-                return Ok(new { mensaje = response.Error });
+                return Ok(new { Data = response.Error });
             }
         }
         #endregion

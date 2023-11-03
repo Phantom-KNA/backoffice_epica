@@ -150,7 +150,7 @@ public class UrlsConfig
     public class AbonosOperations
     {
         public static string GetAbonosSpeiIN(int numberPage, int TotalRecords) => $"/api/v1/transacciones/resumen_speiin?pageNumber={numberPage}&pageSize={TotalRecords}";
-        public static string PatchAutorizadorSpeiIn(string claveRastreo) => $"/api/v2/control-abono?claveRastreo={claveRastreo}";
+        public static string PatchAutorizadorSpeiIn(string claveRastreo) => $"/api/v2/control-abono/{claveRastreo}";
     }
 
     public string Abonos{ get; set; }

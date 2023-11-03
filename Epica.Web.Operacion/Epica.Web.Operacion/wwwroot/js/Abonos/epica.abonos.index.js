@@ -265,8 +265,8 @@ function RechazarAbono(claveRastreo) {
                 cache: false,
                 type: 'PATCH',
                 data: { claveRastreo: claveRastreo },
-                success: function (data) {
-                    if (data.error === false) {
+                success: function (response) {
+                    if (response.success === true) {
                         datatable.ajax.reload();
                         Swal.fire(
                             'Rechazar Abono',
@@ -278,7 +278,7 @@ function RechazarAbono(claveRastreo) {
                         datatable.ajax.reload();
                         Swal.fire(
                             'Acreditación Abono',
-                            data.message,
+                            response.message,
                             'success'
                         );
                     }
