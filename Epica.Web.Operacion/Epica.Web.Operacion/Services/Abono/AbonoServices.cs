@@ -73,26 +73,22 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return (ListaAbonos, paginacion);
         }
 
-        public async Task<(List<TransaccionesResponse>, int)> GetTransaccionesFilterAsync(int pageNumber, int recordsTotal, int columna, bool ascendente, List<RequestListFilters> filters)
+        public async Task<(List<TransaccionSPEIINResponse>, int)> GetAbonosFilterAsync(int pageNumber, int recordsTotal, int columna, bool ascendente, List<RequestListFilters> filters)
         {
-            List<TransaccionesResponse>? ListaTransacciones = new List<TransaccionesResponse>();
-            FiltroDatosResponseTransacciones responseConsulta = new FiltroDatosResponseTransacciones();
+            List<TransaccionSPEIINResponse>? ListaTransacciones = new List<TransaccionSPEIINResponse>();
+            ResponseSpeiINConsulta responseConsulta = new ResponseSpeiINConsulta();
             int paginacion = 0;
 
             try
             {
-                var uri = Urls.Transaccion + UrlsConfig.TransaccionesOperations.GetTransaccionesFilter(pageNumber, recordsTotal);
+                var uri = Urls.Transaccion + UrlsConfig.AbonosOperations.GetAbonosSpeiINFiltro(pageNumber, recordsTotal);
 
                 var filtroCuentaOrdenante = filters.FirstOrDefault(x => x.Key == "cuentaOrdenante");
-                var filtronombreOrdenante = filters.FirstOrDefault(x => x.Key == "nombreOrdenante");
-                var filtronombreBeneficiario = filters.FirstOrDefault(x => x.Key == "nombreBeneficiario");
                 var filtroclaveRastreo = filters.FirstOrDefault(x => x.Key == "claveRastreo");
-                var filtroEstatus = filters.FirstOrDefault(x => x.Key == "estatus");
+                var filtronombreOrdenante = filters.FirstOrDefault(x => x.Key == "nombreOrdenante");
                 var filtromonto = filters.FirstOrDefault(x => x.Key == "monto");
-                var filtrofechaInstruccion = filters.FirstOrDefault(x => x.Key == "fecha_instruccion");
-                var filtrofechaAutorizacion = filters.FirstOrDefault(x => x.Key == "fecha_autorizacion");
-                var filtroconcepto = filters.FirstOrDefault(x => x.Key == "concepto");
-
+                var filtroestatusAutorizacion = filters.FirstOrDefault(x => x.Key == "estatusAutorizacion");
+                var filtroestatusTransaccion = filters.FirstOrDefault(x => x.Key == "estatusTransaccion");
 
                 if (filtroCuentaOrdenante!.Value != null)
                 {
@@ -109,34 +105,19 @@ namespace Epica.Web.Operacion.Services.Transaccion
                     uri += string.Format("&nombreOrdenante={0}", Convert.ToString(filtronombreOrdenante.Value));
                 }
 
-                if (filtronombreBeneficiario!.Value != null)
-                {
-                    uri += string.Format("&nombreBeneficiario={0}", Convert.ToString(filtronombreBeneficiario.Value));
-                }
-
-                if (filtroconcepto!.Value != null)
-                {
-                    uri += string.Format("&concepto={0}", Convert.ToString(filtroconcepto.Value));
-                }
-
                 if (filtromonto!.Value != null)
                 {
                     uri += string.Format("&monto={0}", Convert.ToString(filtromonto.Value));
                 }
 
-                if (filtrofechaInstruccion!.Value != null)
+                if (filtroestatusAutorizacion!.Value != null)
                 {
-                    uri += string.Format("&fechaInstruccion={0}", Convert.ToString(filtrofechaInstruccion.Value));
+                    uri += string.Format("&estatusAutizacion={0}", Convert.ToString(filtroestatusAutorizacion.Value));
                 }
 
-                if (filtrofechaAutorizacion!.Value != null)
+                if (filtroestatusTransaccion!.Value != null)
                 {
-                    uri += string.Format("&fechaAutorizacion={0}", Convert.ToString(filtrofechaAutorizacion.Value));
-                }
-
-                if (filtroEstatus!.Value != null)
-                {
-                    uri += string.Format("&estatus={0}", Convert.ToString(filtroEstatus.Value));
+                    uri += string.Format("&estatusTransaccion={0}", Convert.ToString(filtroestatusTransaccion.Value));
                 }
 
                 var response = await ApiClient.GetAsync(uri);
@@ -151,7 +132,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                         MissingMemberHandling = MissingMemberHandling.Ignore
                     };
 
-                    responseConsulta = JsonConvert.DeserializeObject<FiltroDatosResponseTransacciones>(jsonResponse, settings);
+                    responseConsulta = JsonConvert.DeserializeObject<ResponseSpeiINConsulta>(jsonResponse, settings);
 
                     ListaTransacciones = responseConsulta.listaResultado;
                     paginacion = Convert.ToInt32(responseConsulta.cantidadEncontrada);

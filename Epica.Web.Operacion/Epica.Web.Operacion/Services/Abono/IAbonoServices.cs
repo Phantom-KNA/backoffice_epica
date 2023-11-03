@@ -7,7 +7,6 @@ namespace Epica.Web.Operacion.Services.Transaccion
     {
         Task<MensajeResponse> PatchAutorizadorSpeiInAsync(string claveRastreo, bool rechazar);
         Task<(List<TransaccionSPEIINResponse>, int)> GetAbonosAsync(int pageNumber, int recordsTotal, int columna, bool ascendente);
-        Task<(List<TransaccionesResponse>, int)> GetTransaccionesFilterAsync(int pageNumber, int recordsTotal, int columna, bool ascendente, List<RequestListFilters> filters);
-        
+        Task<(List<TransaccionSPEIINResponse>, int)> GetAbonosFilterAsync(int pageNumber, int recordsTotal, int columna, bool ascendente, List<RequestListFilters> filters);      
     }
 }

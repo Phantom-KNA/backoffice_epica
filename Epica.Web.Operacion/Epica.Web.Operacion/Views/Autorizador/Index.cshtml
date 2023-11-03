@@ -68,29 +68,31 @@
                                     </div>
                                     <br />
                                     <div class="row">
-
                                         <div class="col-6">
-                                            <label class="form-label fs-5 fw-semibold mb-3">Estatus:</label>
-                                            <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatus" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_tipo" data-minimum-results-for-search="Infinity">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Estatus Autorización:</label>
+                                            <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatusAutorizacion" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_estatus_autorizacion" data-minimum-results-for-search="Infinity">
                                                 <option></option>
-                                                <option value="enproceso">En Proceso</option>
-                                                <option value="entransito">En Transito</option>
-                                                <option value="liquidado">Liquidado</option>
-                                                <option value="devuelto">Devuelto</option>
+                                                <option value="1">Abono Aplicado</option>
+                                                <option value="2">Abono Rechazado</option>
+                                                <option value="3">Abono Aplicado(Reenviado)</option>
+                                                <option value="4">Abono con Error</option>
+                                                <option value="5">Abono Rechazado Definitivo</option>
 
                                             </select>
                                         </div>
-                                        
+                                        <div class="col-6">
+                                            <label class="form-label fs-5 fw-semibold mb-3">Estatus Transacción:</label>
+                                            <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatusTransaccion" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_estatus_transaccion" data-minimum-results-for-search="Infinity">
+                                                <option></option>
+                                                <option value="1">Transacción Autorizada</option>
+                                                <option value="2">Supera Perfil Transaccional</option>
+                                                <option value="3">Inflinge Transacciones Mismo Periodo</option>
+                                                <option value="4">Horario No Habitual</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <br />
                                     
-                                    <br />
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <label class="form-label fs-5 fw-semibold mb-3">Concepto:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" onkeypress="return SinCaracteresEspeciales(event)" data-filtrar="concepto" placeholder="Concepto de la Transacción" id="filtro_transaccion" />
-                                        </div>
-                                    </div>
                                     <br />
                                     <div class="d-flex justify-content-end">
                                         <button type="reset" class="btn btn-sm btn-light btn-active-light-primary me-2 btn_limpiar_filtros" data-kt-menu-dismiss="true" data-kt-customer-table-filter="reset">Limpiar</button>

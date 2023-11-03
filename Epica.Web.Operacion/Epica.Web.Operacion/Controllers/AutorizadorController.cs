@@ -92,41 +92,33 @@ namespace Epica.Web.Operacion.Controllers
 
             if (request.ColumnaOrdenamiento != null)
             {
-                if (request.ColumnaOrdenamiento == "cuetaOrigenOrdenante")
+                if (request.ColumnaOrdenamiento == "ClaveRastreo")
                 {
                     columna = 1;
                 }
-                else if (request.ColumnaOrdenamiento == "vinculo")
+                else if (request.ColumnaOrdenamiento == "Monto")
                 {
                     columna = 2;
                 }
-                else if (request.ColumnaOrdenamiento == "NombreCuenta")
+                else if (request.ColumnaOrdenamiento == "CuentaOrdenante")
                 {
                     columna = 3;
                 }
-                else if (request.ColumnaOrdenamiento == "Institucion")
+                else if (request.ColumnaOrdenamiento == "NombreOrdenante")
                 {
                     columna = 4;
                 }
-                else if (request.ColumnaOrdenamiento == "Concepto")
+                else if (request.ColumnaOrdenamiento == "DescripcionEstatusAutorizacion")
                 {
                     columna = 5;
                 }
-                else if (request.ColumnaOrdenamiento == "Monto")
+                else if (request.ColumnaOrdenamiento == "DescripcionEstatusTransaccion")
                 {
                     columna = 6;
                 }
-                else if (request.ColumnaOrdenamiento == "FechaInstruccion")
+                else if (request.ColumnaOrdenamiento == "Concepto")
                 {
                     columna = 7;
-                }
-                else if (request.ColumnaOrdenamiento == "FechaAutorizacion")
-                {
-                    columna = 8;
-                }
-                else if (request.ColumnaOrdenamiento == "Estatus")
-                {
-                    columna = 9;
                 }
             }
 
@@ -160,10 +152,9 @@ namespace Epica.Web.Operacion.Controllers
             var validaFiltro = filters.Where(x => x.Value != null).ToList();
 
             if (validaFiltro.Count != 0) {
-                //(ListPF, paginacion) = await _abonoService.GetTransaccionesFilterAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), columna, tipoFiltro, filters);
+                (ListPF, paginacion) = await _abonoService.GetAbonosFilterAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), columna, tipoFiltro, filters);
             } else {
                 (ListPF, paginacion) = await _abonoService.GetAbonosAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), columna, tipoFiltro);
-
             }
 
             var List = new List<ResumenTransaccionSPEIINResponseGrid>();
