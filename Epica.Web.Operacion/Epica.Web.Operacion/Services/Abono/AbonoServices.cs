@@ -181,6 +181,8 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 }
 
                 var accessToken = userResponse.Token;
+
+                _apiClient.DefaultRequestHeaders.Clear();
                 _apiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
                 var response = await _apiClient.PatchAsync(uri, new StringContent(""));

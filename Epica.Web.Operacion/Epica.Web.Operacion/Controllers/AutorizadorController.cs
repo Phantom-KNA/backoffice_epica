@@ -178,8 +178,8 @@ namespace Epica.Web.Operacion.Controllers
                     NombreOrdenante = !string.IsNullOrWhiteSpace(row.NombreOrdenante) ? row.NombreOrdenante : "-",
                     Concepto = !string.IsNullOrWhiteSpace(row.Concepto) ? row.Concepto : "-",
                     DescripcionEstatusAutorizacion = !string.IsNullOrWhiteSpace(row.DescripcionEstatusAutorizacion) ? row.DescripcionEstatusAutorizacion : "-",
-                    descripcioEstatusTransaccion = !string.IsNullOrWhiteSpace(row.descripcioEstatusTransaccion) ? row.descripcioEstatusTransaccion : "-"
-                    //Acciones = await this.RenderViewToStringAsync("~/Views/Transacciones/_Acciones.cshtml", row)
+                    descripcioEstatusTransaccion = !string.IsNullOrWhiteSpace(row.descripcioEstatusTransaccion) ? row.descripcioEstatusTransaccion : "-",
+                    Acciones = await this.RenderViewToStringAsync("~/Views/Autorizador/_Acciones.cshtml", row)
                 });
             }
 
@@ -193,20 +193,36 @@ namespace Epica.Web.Operacion.Controllers
 
         [Authorize]
         [HttpPatch]
-        public async Task<ActionResult> PatchAutorizadorSpeinIn(string claveRastreo, bool rechazar)
+        public async Task<ActionResult> AcreditarAbono(string claveRastreo)
         {
+            bool rechazar = false;
             var response = await _abonoService.PatchAutorizadorSpeiInAsync(claveRastreo, rechazar);
 
             if (response.Error == false)
             {
-                return Ok(new { mensaje = response.message });
+                return Ok(new { mensaje = response.Error });
             }
             else
             {
-                return Ok(new { mensaje = response.message });
+                return Ok(new { mensaje = response.Error });
             }
         }
+        [Authorize]
+        [HttpPatch]
+        public async Task<ActionResult> RechazarAbono(string claveRastreo)
+        {
+            bool rechazar = true;
+            var response = await _abonoService.PatchAutorizadorSpeiInAsync(claveRastreo, rechazar);
 
+            if (response.Error == false)
+            {
+                return Ok(new { mensaje = response.Error});
+            }
+            else
+            {
+                return Ok(new { mensaje = response.Error });
+            }
+        }
         #endregion
 
         #endregion

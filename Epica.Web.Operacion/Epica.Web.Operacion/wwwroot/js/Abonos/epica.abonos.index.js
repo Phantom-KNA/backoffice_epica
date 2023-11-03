@@ -200,3 +200,97 @@ $("#filtro_cuenta_ordenante, #filtro_claveRastreo, #filtro_nombreBeneficiario, #
         $("#btnAplicarFiltros").click();
     }
 });
+
+function AcreditarAbono(claveRastreo) {
+    Swal.fire({
+        title: 'Acreditar Abono',
+        text: "¿Estás seguro de que deseas acreditar el abono?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: siteLocation + 'Autorizador/AcreditarAbono',
+                async: true,
+                cache: false,
+                type: 'PATCH',
+                data: { claveRastreo: claveRastreo },
+                success: function (data) {
+                    if (data.error === false) {
+                        datatable.ajax.reload();
+                        Swal.fire(
+                            'Acreditación Abono',
+                            'Se ha acreditado el abono con éxito.',
+                            'success'
+                        );
+                    }
+                    else {
+                        datatable.ajax.reload();
+                        Swal.fire(
+                            'Acreditación Abono',
+                            data.message,
+                            'success'
+                        );
+                    }
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire(
+                        'Acreditación Abono',
+                        'Hubo un problema al realizar esta solicitud. Inténtalo más tarde.',
+                        'danger'
+                    );
+                }
+            });
+        }
+    });
+}
+
+function RechazarAbono(claveRastreo) {
+    Swal.fire({
+        title: 'Rechazar Abono',
+        text: "¿Estás seguro de que deseas rechazar el abono?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: siteLocation + 'Autorizador/RechazarAbono',
+                async: true,
+                cache: false,
+                type: 'PATCH',
+                data: { claveRastreo: claveRastreo },
+                success: function (data) {
+                    if (data.error === false) {
+                        datatable.ajax.reload();
+                        Swal.fire(
+                            'Rechazar Abono',
+                            'Se ha rechazado el abono con éxito.',
+                            'success'
+                        );
+                    }
+                    else {
+                        datatable.ajax.reload();
+                        Swal.fire(
+                            'Acreditación Abono',
+                            data.message,
+                            'success'
+                        );
+                    }
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire(
+                        'Rechazar Abono',
+                        'Hubo un problema al realizar esta solicitud. Inténtalo más tarde.',
+                        'danger'
+                    );
+                }
+            });
+        }
+    });
+}
