@@ -19,6 +19,7 @@ using System.Globalization;
 using Epica.Web.Operacion.Models.Response;
 using System.IO;
 using Microsoft.IdentityModel.Tokens;
+using static Epica.Web.Operacion.Controllers.TransaccionesController;
 
 namespace Epica.Web.Operacion.Controllers;
 
@@ -32,6 +33,7 @@ public class ClientesController : Controller
     private readonly ICatalogosApiClient _catalogosApiClient;
     private readonly ILogsApiClient _logsApiClient;
     private readonly IPersonaMoralServices _personaMoralServices;
+    private readonly ITransaccionesApiClient _transaccionesApiClient;
     #endregion
 
     #region "Constructores"
@@ -41,7 +43,8 @@ public class ClientesController : Controller
         ITarjetasApiClient tarjetasApiClient,
         UserContextService userContextService,
         ILogsApiClient logsApiClient,
-        IPersonaMoralServices personaMoralServices
+        IPersonaMoralServices personaMoralServices,
+        ITransaccionesApiClient transaccionesApiClient
         )
     {
         _logsApiClient = logsApiClient;
@@ -51,6 +54,7 @@ public class ClientesController : Controller
         _catalogosApiClient = catalogosApiClient;
         _tarjetasApiClient = tarjetasApiClient;
         _personaMoralServices = personaMoralServices;
+        _transaccionesApiClient = transaccionesApiClient;
     }
     #endregion
 
@@ -1404,6 +1408,67 @@ public class ClientesController : Controller
     }
     #endregion
 
+    #region Tap Cuentas
+
+    [Authorize]
+    [Route("Clientes/DetallePersonaMoral/Cuentas")]
+    public async Task<IActionResult> CuentasPersonaMoral(int id)
+    {
+        var loginResponse = _userContextService.GetLoginResponse();
+        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
+        if (validacion == true)
+        {
+            DatosClienteMoralResponse user = await _personaMoralServices.GetDetallesPersonaMoral(id);
+            var listaRoles = await _catalogosApiClient.GetRolClienteAsync();
+            var listaEmpresa = await _catalogosApiClient.GetEmpresasAsync();
+
+            if (user == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.UrlView = "Cuentas";
+
+            PersonaMoralHeaderViewModel header = new PersonaMoralHeaderViewModel
+            {
+                Id = user.Id,
+                Nombre = user.Nombre.IsNullOrEmpty() ? "-" : user.Nombre,
+                Telefono = user.Telefono.IsNullOrEmpty() ? "-" : user.Telefono,
+                Correo = user.Email.IsNullOrEmpty() ? "-" : user.Email,
+                Rfc = user.RFC.IsNullOrEmpty() ? "-" : user.RFC,
+                RegimenFiscal = user.RegimenFiscal.IsNullOrEmpty() ? "-" : user.RegimenFiscal
+            };
+
+            AsignarCuentaDetailsResponse asign = new AsignarCuentaDetailsResponse
+            {
+                IdCliente = user.Id,
+                ListaRoles = listaRoles,
+                ListaEmpresa = listaEmpresa
+            };
+
+            ViewBag.Info = header;
+            ViewBag.Nombre = header.Nombre;
+            ViewBag.AccountID = id;
+            ViewBag.AsignData = asign;
+            ViewBag.NombrePascal = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(header.Nombre.ToLower());
+
+            var validacionEdicion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Cuentas" && modulo.Editar == 0);
+            if (validacionEdicion == true)
+            {
+                ViewBag.ValEdicion = true;
+            }
+            else
+            {
+                ViewBag.ValEdicion = false;
+            }
+
+            return View("~/Views/Clientes/DetallesPersonaMoral/Cuentas/DetalleCuentas.cshtml");
+        }
+
+        return NotFound();
+    }
+    #endregion
+
     #region Tap Movimientos 
     [Authorize]
     [Route("Clientes/DetallePersonaMoral/Movimientos")]
@@ -1451,6 +1516,134 @@ public class ClientesController : Controller
         return NotFound();
     }
 
+    [HttpPost]
+    public async Task<JsonResult> ConsultaMovimientosPersonaMoral(string id, string TipoConsulta)
+    {
+        var request = new RequestList();
+
+        int totalRecord = 0;
+        int filterRecord = 0;
+
+        var draw = Request.Form["draw"].FirstOrDefault();
+        int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
+        int skip = Convert.ToInt32(Request.Form["start"].FirstOrDefault() ?? "0");
+
+        request.Pagina = skip / pageSize + 1;
+        request.Registros = pageSize;
+        request.Busqueda = Request.Form["search[value]"].FirstOrDefault();
+        request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+        request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
+
+        var gridData = new ResponseGrid<ResumenTransaccionResponseGrid>();
+        List<TransaccionesResponse> ListPF = new List<TransaccionesResponse>();
+        TransaccionesDetailsgeneralResponse resp = new TransaccionesDetailsgeneralResponse();
+
+        if (TipoConsulta == "IsGeneral") {
+
+            resp = await _transaccionesApiClient.GetTransaccionesClienteAsync(Convert.ToInt32(id));
+            ListPF = resp.value;
+
+        } else {
+
+            resp = await _transaccionesApiClient.GetTransaccionesCuentaAsync(Convert.ToInt32(id));
+            ListPF = resp.value;
+        }
+
+        var List = new List<ResumenTransaccionResponseGrid>();
+
+        if (ListPF != null)
+        {
+            foreach (var row in ListPF)
+            {
+                List.Add(new ResumenTransaccionResponseGrid
+                {
+                    id = row.idTransaccion,
+                    cuetaOrigenOrdenante = !string.IsNullOrEmpty(row.cuetaOrigenOrdenante) ? row.cuetaOrigenOrdenante : "-",
+                    claveRastreo = !string.IsNullOrEmpty(row.claveRastreo) ? row.claveRastreo : "-",
+                    nombreOrdenante = !string.IsNullOrEmpty(row.nombreOrdenante) ? row.nombreOrdenante : "-",
+                    nombreBeneficiario = !string.IsNullOrEmpty(row.nombreBeneficiario) ? row.nombreBeneficiario : "-",
+                    monto = row.monto,
+                    estatus = row.estatus,
+                    concepto = row.concepto,
+                    idMedioPago = row.idMedioPago,
+                    idCuentaAhorro = row.idCuentaAhorro,
+                    fechaAlta = row.fechaAlta,
+                    fechaInstruccion = row.fechaInstruccion,
+                    fechaAutorizacion = row.fechaAutorizacion,
+                    Acciones = await this.RenderViewToStringAsync("~/Views/Clientes/Detalles/Transacciones/_Acciones.cshtml", row)
+                });
+            }
+            if (!string.IsNullOrEmpty(request.Busqueda))
+            {
+                List = List.Where(x =>
+                (x.id.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.claveRastreo?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.nombreOrdenante?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.nombreBeneficiario?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.monto.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.estatus.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.concepto?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.idMedioPago.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.idCuentaAhorro.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+                (x.fechaAlta.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower())
+                ).ToList();
+            }
+        }
+
+
+        gridData.RecordsTotal = List.Count;
+        gridData.Data = List.Skip(skip).Take(pageSize).ToList();
+        filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.Data.Count;
+        gridData.RecordsFiltered = filterRecord;
+        gridData.Draw = draw;
+
+        return Json(gridData);
+    }
+    #endregion
+
+    #region Tap Tarjetas
+    [Authorize]
+    [Route("Clientes/DetallePersonaMoral/Tarjetas")]
+    public async Task<IActionResult> TarjetasPersonaMoral(int id)
+    {
+        var loginResponse = _userContextService.GetLoginResponse();
+        var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
+        if (validacion == true)
+        {
+            DatosClienteMoralResponse user = await _personaMoralServices.GetDetallesPersonaMoral(id);
+
+            if (user == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.UrlView = "Tarjetas";
+            PersonaMoralHeaderViewModel header = new PersonaMoralHeaderViewModel
+            {
+                Id = user.Id,
+                Nombre = user.Nombre.IsNullOrEmpty() ? "-" : user.Nombre,
+                Telefono = user.Telefono.IsNullOrEmpty() ? "-" : user.Telefono,
+                Correo = user.Email.IsNullOrEmpty() ? "-" : user.Email,
+                Rfc = user.RFC.IsNullOrEmpty() ? "-" : user.RFC,
+                RegimenFiscal = user.RegimenFiscal.IsNullOrEmpty() ? "-" : user.RegimenFiscal
+            };
+
+            RegistrarTarjetaRequest renderRef = new RegistrarTarjetaRequest
+            {
+                idCliente = id
+            };
+
+            ViewBag.DatosRef = renderRef;
+            ViewBag.Info = header;
+            ViewBag.Nombre = header.Nombre;
+            ViewBag.AccountID = id;
+            ViewBag.NombrePascal = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(header.Nombre.ToLower());
+
+            return View("~/Views/Clientes/DetallesPersonaMoral/Tarjetas/DetalleTarjetas.cshtml", loginResponse);
+        }
+
+        return RedirectToAction("Index", "Tarjetas");
+    }
     #endregion
 
     #endregion

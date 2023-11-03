@@ -91,7 +91,7 @@
             </li>
 
             <li class="nav-item mt-2">
-                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(ViewBag.UrlView.Contains("Cuentas") ? "active" : "")" asp-action="Cuentas" asp-controller="Clientes" asp-route-id="@Model.Id">
+                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(ViewBag.UrlView.Contains("Cuentas") ? "active" : "")" asp-action="CuentasPersonaMoral" asp-controller="Clientes" asp-route-id="@Model.Id">
                     CUENTAS
                 </a>
             </li>
@@ -103,7 +103,7 @@
             </li>
 
             <li class="nav-item mt-2">
-                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(ViewBag.UrlView.Contains("Tarjetas") ? "active" : "")" asp-action="Tarjetas" asp-controller="Clientes" asp-route-id="@Model.Id">
+                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(ViewBag.UrlView.Contains("Tarjetas") ? "active" : "")" asp-action="TarjetasPersonaMoral" asp-controller="Clientes" asp-route-id="@Model.Id">
                     TARJETAS
                 </a>
             </li>
