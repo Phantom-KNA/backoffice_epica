@@ -218,25 +218,27 @@ function AcreditarAbono(claveRastreo) {
                 cache: false,
                 type: 'PATCH',
                 data: { claveRastreo: claveRastreo },
-                success: function (data) {
-                    if (data.error === false) {
-                        datatable.ajax.reload();
+                success: function (response) {
+                    console.log(response);
+                    if (response.success === true) {
+                        datatable_myAccounts.ajax.reload();
                         Swal.fire(
                             'Acreditación Abono',
-                            'Se ha acreditado el abono con éxito.',
+                            response.message,
                             'success'
                         );
                     }
                     else {
-                        datatable.ajax.reload();
+                        datatable_myAccounts.ajax.reload();
                         Swal.fire(
                             'Acreditación Abono',
-                            data.message,
-                            'success'
+                            response.message,
+                            'error'
                         );
                     }
                 },
                 error: function (xhr, status, error) {
+                    datatable_myAccounts.ajax.reload();
                     Swal.fire(
                         'Acreditación Abono',
                         'Hubo un problema al realizar esta solicitud. Inténtalo más tarde.',
@@ -267,23 +269,25 @@ function RechazarAbono(claveRastreo) {
                 data: { claveRastreo: claveRastreo },
                 success: function (response) {
                     if (response.success === true) {
-                        datatable.ajax.reload();
+                        datatable_myAccounts.ajax.reload();
                         Swal.fire(
                             'Rechazar Abono',
-                            'Se ha rechazado el abono con éxito.',
-                            'success'
-                        );
-                    }
-                    else {
-                        datatable.ajax.reload();
-                        Swal.fire(
-                            'Acreditación Abono',
                             response.message,
                             'success'
                         );
                     }
+                    else {
+                        datatable_myAccounts.ajax.reload();
+                        Swal.fire(
+                            'Acreditación Abono',
+                            response.message,
+                            'error'
+                        );
+                    }
+                    reload();
                 },
                 error: function (xhr, status, error) {
+                    datatable_myAccounts.ajax.reload();
                     Swal.fire(
                         'Rechazar Abono',
                         'Hubo un problema al realizar esta solicitud. Inténtalo más tarde.',

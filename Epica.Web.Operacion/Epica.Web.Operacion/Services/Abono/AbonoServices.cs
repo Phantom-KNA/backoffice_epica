@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Immutable;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -170,27 +171,40 @@ namespace Epica.Web.Operacion.Services.Transaccion
         public async Task<MensajeResponse> PatchAutorizadorSpeiInAsync(string claveRastreo, bool rechazar)
         {
             MensajeResponse respuesta = new MensajeResponse();
-
+            var payload = "";
             try
             {
                 var userResponse = _userContextService.GetLoginResponse();
                 var uri = Urls.Abonos + UrlsConfig.AbonosOperations.PatchAutorizadorSpeiIn(claveRastreo);
-                if (rechazar == true)
-                {
-                    uri += "?rechazar=1"; 
-                }
-
                 var accessToken = userResponse.Token;
 
                 _apiClient.DefaultRequestHeaders.Clear();
                 _apiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-                var response = await _apiClient.PatchAsync(uri, new StringContent(""));
+                if (rechazar == true)
+                {
+                    payload = rechazar ? "rechazar=1" : "";
+                } 
+
+                var response = await _apiClient.PatchAsync(uri, new StringContent(payload));
+
                 if (response.IsSuccessStatusCode)
                 {
                     response.EnsureSuccessStatusCode();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
                     respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
+                }
+                else
+                {
+                    if (response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        respuesta.message = "No se encontró la clave de rastreo";
+                    }
+                    else
+                    {
+                        var jsonResponse = await response.Content.ReadAsStringAsync();
+                        respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
+                    }
                 }
 
             }

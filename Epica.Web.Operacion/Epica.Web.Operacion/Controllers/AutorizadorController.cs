@@ -193,14 +193,14 @@ namespace Epica.Web.Operacion.Controllers
 
         [Authorize]
         [HttpPatch]
-        public async Task<ActionResult> AcreditarAbono(string claveRastreo)
+        public async Task<IActionResult> AcreditarAbono(string claveRastreo)
         {
             bool rechazar = false;
             var response = await _abonoService.PatchAutorizadorSpeiInAsync(claveRastreo, rechazar);
 
             if (response.Error == false)
             {
-                return Ok(new { success = true });
+                return Ok(new { success = true, response.message });
             }
             else
             {
@@ -209,18 +209,18 @@ namespace Epica.Web.Operacion.Controllers
         }
         [Authorize]
         [HttpPatch]
-        public async Task<ActionResult> RechazarAbono(string claveRastreo)
+        public async Task<IActionResult> RechazarAbono(string claveRastreo)
         {
             bool rechazar = true;
             var response = await _abonoService.PatchAutorizadorSpeiInAsync(claveRastreo, rechazar);
 
             if (response.Error == false)
             {
-                return Ok(new { Data = response.Error});
+                return Ok(new { success = true, response.message });
             }
             else
             {
-                return Ok(new { Data = response.Error });
+                return Ok(new { success = false, response.message });
             }
         }
         #endregion
