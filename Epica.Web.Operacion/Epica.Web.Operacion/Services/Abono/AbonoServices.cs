@@ -5,7 +5,10 @@ using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.UserResolver;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Immutable;
+using System.Net.Http;
 using System.Text;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -14,6 +17,8 @@ namespace Epica.Web.Operacion.Services.Transaccion
     public class AbonoServices : ApiClientBase, IAbonoServices
     {
         private readonly UserContextService _userContextService;
+        private readonly HttpClient _apiClient;
+
         public AbonoServices(
             HttpClient httpClient, 
             ILogger<AbonoServices> logger, 
@@ -24,6 +29,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
             IUserResolver userResolver) : base(httpClient, logger, config, httpContext, configuration, userResolver)
         {
             _userContextService = userContextService;
+            _apiClient = httpClient;
         }
 
         public async Task<(List<TransaccionSPEIINResponse>, int)> GetAbonosAsync(int pageNumber, int recordsTotal, int columna, bool ascendente)
@@ -161,6 +167,40 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return (ListaTransacciones, paginacion);
         }
 
-        
+        public async Task<MensajeResponse> PatchAutorizadorSpeiInAsync(string claveRastreo, bool rechazar)
+        {
+            MensajeResponse respuesta = new MensajeResponse();
+
+            try
+            {
+                var userResponse = _userContextService.GetLoginResponse();
+                var uri = Urls.Abonos + UrlsConfig.AbonosOperations.PatchAutorizadorSpeiIn(claveRastreo);
+                if (rechazar == true)
+                {
+                    uri += "?rechazar=1"; 
+                }
+
+                var accessToken = userResponse.Token;
+                _apiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+                var response = await _apiClient.PatchAsync(uri, new StringContent(""));
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    respuesta = JsonConvert.DeserializeObject<MensajeResponse>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                respuesta.Error = true;
+                respuesta.Detalle = ex.Message;
+                return respuesta;
+            }
+
+            return respuesta;
+        }
     }
 }
+
