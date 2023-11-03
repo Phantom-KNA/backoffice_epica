@@ -279,7 +279,7 @@ function RechazarAbono(claveRastreo) {
                     else {
                         datatable_myAccounts.ajax.reload();
                         Swal.fire(
-                            'Acreditación Abono',
+                            'Rechazar Abono',
                             response.message,
                             'error'
                         );
