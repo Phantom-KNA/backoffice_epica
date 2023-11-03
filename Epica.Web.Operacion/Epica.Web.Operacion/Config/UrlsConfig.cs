@@ -86,7 +86,13 @@ public class UrlsConfig
         public static string GetInsertaDocumentoCliente() => $"/api/v1/registro/documento";
 
     }
-
+    public class PersonaMoralOperations
+    {
+        public static string GetPersonasMoralesFiltro(int pageNumber, int totalRecords) => $"/api/v1/clientesmorales/buscar_filtro?pageNumber={pageNumber}&pageSize={totalRecords}";
+        public static string GetPersonasMoralesInfo(int pageNumber, int totalRecords) => $"/api/v1/clientesmorales/clientes_morales_info?pageNumber={pageNumber}&pageSize={totalRecords}";
+        public static string GetEmpleadosMorales(int pageNumber, int totalRecords, int id) => $"/api/v1/clientesmorales/clientes_empresa?pageNumber={pageNumber}&pageSize={totalRecords}&idEmpresa={id}";
+        public static string GetPersonaMoral(int id) => $"/api/v1/clientesmorales/cliente_moral?idEmpresa={id}";
+    }
     public class CatalogosOperations
     {
         public static string GetMediosPago() => $"/api/v1/catalogos/medios_pago";
@@ -141,6 +147,15 @@ public class UrlsConfig
         public static string GetTransaccionesDevolver() => $"/api/v1/reintentador/resumen";
     }
 
+    public class AbonosOperations
+    {
+        public static string GetAbonosSpeiIN(int numberPage, int TotalRecords) => $"/api/v1/transacciones/resumen_speiin?pageNumber={numberPage}&pageSize={TotalRecords}";
+        public static string PatchAutorizadorSpeiIn(string claveRastreo) => $"/api/v2/control-abono/{claveRastreo}";
+        public static string GetAbonosSpeiINFiltro(int numberPage, int TotalRecords) => $"/api/v1/transacciones/buscar_filtro_speiin?pageNumber={numberPage}&pageSize={TotalRecords}";
+
+    }
+
+    public string Abonos{ get; set; }
     public string users { get; set; }
     public string Authenticate { get; set; }
     public string Transaccion { get; set; }

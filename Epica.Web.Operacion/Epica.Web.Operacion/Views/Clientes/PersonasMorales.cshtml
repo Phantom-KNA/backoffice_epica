@@ -63,34 +63,15 @@
                                             <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="correoElectronico" maxlength="40" placeholder="Correo Electrónico" id="filtro_correo_electronico" />
                                         </div>
                                         <div class="col-6">
-                                            <label class="form-label fs-5 fw-semibold mb-3">CURP:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" oninput="validateAlphanumericInput(this)" maxlength="18" data-filtrar="curp" placeholder="CURP" id="filtro_curp" />
-                                        </div>
-                                    </div>
-                                    <br />
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <label class="form-label fs-5 fw-semibold mb-3">Estatus Web:</label>
-                                            <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatusWeb" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_estatus_web" data-minimum-results-for-search="Infinity">
-                                                <option></option>
-                                                <option value="1">Activo</option>
-                                                <option value="2">Desactivado</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-6">
-                                            <label class="form-label fs-5 fw-semibold mb-3">Estatus Total:</label>
-                                            <select class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-filtrar="estatusTotal" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" id="filtro_estatus_total" data-minimum-results-for-search="Infinity">
-                                                <option></option>
-                                                <option value="activo">Activo</option>
-                                                <option value="bloqueado">Desactivado</option>
-                                            </select>
+                                            <label class="form-label fs-5 fw-semibold mb-3">RFC:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" oninput="validateAlphanumericInput(this)" maxlength="13" data-filtrar="rfc" placeholder="RFC" id="filtro_rfc" />
                                         </div>
                                     </div>
                                     <br />
                                     <div class="row">
                                         <div class="col-12">
-                                            <label class="form-label fs-5 fw-semibold mb-3">Organización:</label>
-                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="organizacion" @* onkeypress="return SoloLetras(event)" oninput="validateInput(this)" *@ maxlength="30" placeholder="Organización" id="filtro_organizacion" />
+                                            <label class="form-label fs-5 fw-semibold mb-3">Giro:</label>
+                                            <input class="form-control form-control-sm fw-bold filtro-control" data-filtrar="giro" maxlength="30" placeholder="Giro" id="filtro_giro" />
                                         </div>
                                     </div>
                                     <br />
@@ -114,16 +95,16 @@
                             </div>
 
                             <div id="kt_datatable_buttons" class="d-none"></div>
-                            @{
+@*                            @{
                                 var validacion = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Insertar == 0);
                                 if (validacion == true)
                                 {
                                     <a class="btn btn-sm btn-primary" href="/Clientes/Registro">
-                                        <i class="bi bi-plus-lg"></i>&nbsp;Registrar Persona Física
+                                        <i class="bi bi-plus-lg"></i>&nbsp;Registrar Persona Moral
                                     </a>
 
                                 }
-                            }
+                            }*@
 
                         </div>
                     </div>
@@ -196,7 +177,7 @@
 </div>
 
 @section Scripts{
-    <script src="~/js/Clientes/epica.clientes.index.js" asp-append-version="true"></script>
+    <script src="~/js/Clientes/epica.personaMoral.index.js" asp-append-version="true"></script>
     <script asp-append-version="true" src="~/js/components/utilerias.js"></script>
 
 }

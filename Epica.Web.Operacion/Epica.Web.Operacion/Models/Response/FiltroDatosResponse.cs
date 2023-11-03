@@ -13,6 +13,12 @@ public class FiltroDatosResponse
     public int? cantidadEncontrada { get; set; }
 }
 
+public class FiltroDatosResponsePersonasMorales
+{
+    public List<DatosClienteMoralResponse> listaResultado { get; set; }
+    public int? cantidadEncontrada { get; set; }
+}
+
 public class FiltroDatosResponseCuenta
 {
     public List<CuentasResponse> listaResultado { get; set; }

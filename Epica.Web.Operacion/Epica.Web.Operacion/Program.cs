@@ -72,6 +72,8 @@ builder.Services.AddScoped<ICatalogosApiClient, CatalogosApiClient>();
 builder.Services.AddScoped<ILogsApiClient, LogsApiClient>();
 builder.Services.AddScoped<IUsuariosApiClient,  UsuariosApiClient>();
 builder.Services.AddScoped<IReintentadorService, ReintentadorService>();
+builder.Services.AddScoped<IPersonaMoralServices, PersonaMoralServices>();
+builder.Services.AddScoped<IAbonoServices, AbonoServices>();
 
 
 builder.Services.AddSingleton<UserContextService>();
