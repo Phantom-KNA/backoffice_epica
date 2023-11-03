@@ -171,7 +171,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
         public async Task<MensajeResponse> PatchAutorizadorSpeiInAsync(string claveRastreo, bool rechazar)
         {
             MensajeResponse respuesta = new MensajeResponse();
-            var payload = "";
+            string payload = "";
             try
             {
                 var userResponse = _userContextService.GetLoginResponse();
@@ -183,7 +183,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
                 if (rechazar == true)
                 {
-                    payload = rechazar ? "rechazar=1" : "";
+                    payload = "rechazar=1";
                 } 
 
                 var response = await _apiClient.PatchAsync(uri, new StringContent(payload));
@@ -198,6 +198,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 {
                     if (response.StatusCode == HttpStatusCode.NotFound)
                     {
+                        respuesta.Error = true;
                         respuesta.message = "No se encontró la clave de rastreo";
                     }
                     else
