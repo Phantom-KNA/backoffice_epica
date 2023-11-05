@@ -34,6 +34,10 @@ var KTDatatableTransacciones = (function () {
             ajax: {
                 url: "ConsultaCargaMasiva",
                 type: "POST",
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $(".dataTables_processing").hide();
+                    toastr.error("Se agoto el tiempo de espera para consultar estos datos. Inténtelo más tarde.");
+                },
                 data: function (d) {
                     var filtros = [];
                     $(".filtro-control").each(function () {
@@ -147,6 +151,10 @@ var KTDatatableTransacciones = (function () {
         datatable_transaccion.ajax.reload();
     };
 
+    var ErrorControl = function () {
+        dataTable.ext.errMode = 'throw';
+    };
+
     return {
         init: function () {
             table = document.querySelector("#kt_datatable_movements");
@@ -167,6 +175,10 @@ var KTDatatableTransacciones = (function () {
         },
         reload: function () {
             reload();
+        },
+
+        ErrorControl: function () {
+            ErrorControl();
         },
     };
 })();

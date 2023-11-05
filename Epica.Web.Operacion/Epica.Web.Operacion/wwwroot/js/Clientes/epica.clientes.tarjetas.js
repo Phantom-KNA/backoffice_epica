@@ -40,6 +40,10 @@ var KTDatatableRemoteAjax = function () {
             ajax: {
                 url: siteLocation + 'Clientes/ConsultaTarjetas',
                 type: 'POST',
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $(".dataTables_processing").hide();
+                    toastr.error("Se agoto el tiempo de espera para consultar estos datos. Inténtelo más tarde.");
+                },
                 data: function (d) {
                     d.id = AccountId;
                 },
@@ -256,6 +260,10 @@ var KTDatatableRemoteAjax = function () {
         datatable.ajax.reload();
     }
 
+    var ErrorControl = function () {
+        dataTable.ext.errMode = 'throw';
+    }
+
     return {
         init: function () {
             //init();
@@ -272,7 +280,10 @@ var KTDatatableRemoteAjax = function () {
         },
         recargar: function () {
             recargar();
-        }
+        },
+        ErrorControl: function () {
+            ErrorControl();
+        },
     };
 }();
 

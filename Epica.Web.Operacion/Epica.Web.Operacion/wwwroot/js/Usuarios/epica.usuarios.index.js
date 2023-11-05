@@ -40,6 +40,10 @@ var KTDatatableRemoteAjax = function () {
             ajax: {
                 url: siteLocation + 'Usuarios/Consulta',
                 type: 'POST',
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $(".dataTables_processing").hide();
+                    toastr.error("Se agoto el tiempo de espera para consultar estos datos. Inténtelo más tarde.");
+                },
                 data: function (d) {
                     var filtros = [];
                     $(".filtro-control").each(function () {
@@ -176,6 +180,10 @@ var KTDatatableRemoteAjax = function () {
         datatable.ajax.reload();
     }
 
+    var ErrorControl = function () {
+        dataTable.ext.errMode = 'throw';
+    };
+
     $(".btn-filtrar").click(function () {
         recargar();
     })
@@ -204,7 +212,11 @@ var KTDatatableRemoteAjax = function () {
         },
         recargar: function () {
             recargar();
-        }
+        },
+
+        ErrorControl: function () {
+            ErrorControl();
+        },
     };
 }();
 

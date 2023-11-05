@@ -40,7 +40,7 @@ var KTDatatableRemoteAjax = function () {
                 url: siteLocation + 'Cuenta/ConsultaCuentas',
                 type: 'POST',
                 error: function (jqXHR, textStatus, errorThrown) {
-                    toastr.error("No se pudo encontrar información disponible.");
+                    toastr.error("Se agoto el tiempo de espera para consultar estos datos. Inténtelo más tarde.");
                 },
                 data: function (d) {
                     d.id = AccountId,
