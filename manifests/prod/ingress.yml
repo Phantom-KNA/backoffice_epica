@@ -6,7 +6,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: azure/application-gateway
     appgw.ingress.kubernetes.io/override-frontend-port: "8081"
-    appgw.ingress.kubernetes.io/request-timeout: 300
+    appgw.ingress.kubernetes.io/request-timeout: "300"
 spec:
   rules:
   - http:
