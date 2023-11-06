@@ -1722,6 +1722,7 @@ public class ClientesController : Controller
                 Puesto = !string.IsNullOrWhiteSpace(row.Puesto) ? row.Puesto : "-",
                 Area = !string.IsNullOrWhiteSpace(row.Area) ? row.Area : "-",
                 Roles = !string.IsNullOrWhiteSpace(row.Roles) ? row.Roles : "-",
+                vinculo = !string.IsNullOrWhiteSpace(row.NombreCompleto) ? (row.NombreCompleto + "|" + row.IdCliente.ToString()).ToUpper() : "-",
                 active = row.active,
                 EstatusWeb = row.EstatusWeb
             });

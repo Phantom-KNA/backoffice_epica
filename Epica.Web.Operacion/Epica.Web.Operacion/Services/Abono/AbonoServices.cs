@@ -149,14 +149,14 @@ namespace Epica.Web.Operacion.Services.Transaccion
             return (ListaTransacciones, paginacion);
         }
 
-        public async Task<MensajeResponse> PatchAutorizadorSpeiInAsync(string claveRastreo, bool rechazar)
+        public async Task<MensajeResponse> PatchAutorizadorSpeiInAsync(int id, bool rechazar)
         {
             MensajeResponse respuesta = new MensajeResponse();
             string payload = "";
             try
             {
                 var userResponse = _userContextService.GetLoginResponse();
-                var uri = Urls.Abonos + UrlsConfig.AbonosOperations.PatchAutorizadorSpeiIn(claveRastreo);
+                var uri = Urls.Abonos + UrlsConfig.AbonosOperations.PatchAutorizadorSpeiIn(id);
                 var accessToken = userResponse.Token;
 
                 _apiClient.DefaultRequestHeaders.Clear();

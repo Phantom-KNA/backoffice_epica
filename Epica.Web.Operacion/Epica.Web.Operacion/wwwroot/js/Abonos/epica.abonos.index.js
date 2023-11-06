@@ -201,7 +201,7 @@ $("#filtro_cuenta_ordenante, #filtro_claveRastreo, #filtro_nombreBeneficiario, #
     }
 });
 
-function AcreditarAbono(claveRastreo) {
+function AcreditarAbono(id) {
     Swal.fire({
         title: 'Acreditar Abono',
         text: "¿Estás seguro de que deseas acreditar el abono?",
@@ -217,7 +217,7 @@ function AcreditarAbono(claveRastreo) {
                 async: true,
                 cache: false,
                 type: 'PATCH',
-                data: { claveRastreo: claveRastreo },
+                data: { id: id },
                 success: function (response) {
                     console.log(response);
                     if (response.success === true) {
@@ -250,7 +250,7 @@ function AcreditarAbono(claveRastreo) {
     });
 }
 
-function RechazarAbono(claveRastreo) {
+function RechazarAbono(id) {
     Swal.fire({
         title: 'Rechazar Abono',
         text: "¿Estás seguro de que deseas rechazar el abono?",
@@ -266,7 +266,7 @@ function RechazarAbono(claveRastreo) {
                 async: true,
                 cache: false,
                 type: 'PATCH',
-                data: { claveRastreo: claveRastreo },
+                data: { id: id },
                 success: function (response) {
                     if (response.success === true) {
                         datatable_myAccounts.ajax.reload();

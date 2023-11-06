@@ -27,6 +27,7 @@ public class EmpresaClienteResponse
     public int? active { get; set; }
     [JsonPropertyName("estatusWeb")]
     public int? EstatusWeb { get; set; }
+    public string? vinculo { get; set; }
 }
 
 public class EmpresaClienteResponseGrid : EmpresaClienteResponse

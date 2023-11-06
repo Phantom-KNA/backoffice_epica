@@ -42,7 +42,7 @@ var KTDatatableRemoteAjax = function () {
                 type: 'POST',
                 error: function (jqXHR, textStatus, errorThrown) {
                     $(".dataTables_processing").hide();
-                    toastr.error("No se pudo encontrar información disponible.");
+                    toastr.error("Se agoto el tiempo de espera para consultar estos datos. Inténtelo más tarde.");
                 },
                 data: function (d) {
                     d.id = AccountId;
@@ -53,7 +53,15 @@ var KTDatatableRemoteAjax = function () {
                 "targets": "_all",
             }],
             columns: [
-                { data: 'nombreCompleto', name: 'NombreCompleto', title: 'Nombre Completo' },
+                {
+                    data: 'vinculo', name: 'NombreCompleto', title: 'Nombre Completo',
+                    render: function (data, type, row) {
+                        var partes = data.split("|"); 
+                        var Nombre = partes[0];
+                        var idCliente = partes[1];
+                        return "<a href='/Clientes/Detalle/DatosGenerales?id=" + idCliente + "'>" + Nombre + "</a>";
+                    }
+                },
                 { data: 'email', name: 'Email', title: 'Correo Electrónico' },
                 { data: 'curp', name: 'Curp', title: 'CURP' },
                 { data: 'puesto', name: 'Puesto', title: 'Puesto' },
