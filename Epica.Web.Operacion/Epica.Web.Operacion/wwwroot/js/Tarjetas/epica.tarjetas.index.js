@@ -32,13 +32,19 @@ var KTDatatableRemoteAjax = function () {
             pagingType: 'simple_numbers',
             searching: true,
             lengthMenu: [5, 10, 15, 25, 50, 100],
-            processing: true,
+            processing: false,
             serverSide: true,
             filter: true,
             ordering: true,
             ajax: {
                 url: siteLocation + 'Tarjetas/Consulta',
                 type: 'POST',
+                beforeSend: function () {
+                    KTApp.showPageLoading();
+                },
+                complete: function () {
+                    KTApp.hidePageLoading();
+                },
                 error: function (jqXHR, textStatus, errorThrown) {
                     $(".dataTables_processing").hide();
                     toastr.error("No se pudo encontrar información disponible.");

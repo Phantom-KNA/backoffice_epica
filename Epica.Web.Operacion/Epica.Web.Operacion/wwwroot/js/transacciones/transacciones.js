@@ -28,7 +28,7 @@ var KTDatatableTransacciones = (function () {
             pagingType: 'simple_numbers',
             searching: true,
             lengthMenu: [10, 15, 20, 25, 50, 100],
-            processing: true,
+            processing: false,
             serverSide: true,
             filter: true,
             ordering: true,
@@ -36,6 +36,12 @@ var KTDatatableTransacciones = (function () {
             ajax: {
                 url: "Transacciones/Consulta",
                 type: "POST",
+                beforeSend: function () {
+                    KTApp.showPageLoading();
+                },
+                complete: function () {
+                    KTApp.hidePageLoading();
+                },
                 error: function (jqXHR, textStatus, errorThrown) {
                     $(".dataTables_processing").hide();
                     toastr.error("Se agoto el tiempo de espera para consultar estos datos. Inténtelo más tarde.");
