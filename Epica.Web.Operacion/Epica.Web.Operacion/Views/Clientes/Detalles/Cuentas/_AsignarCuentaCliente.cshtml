@@ -48,7 +48,7 @@
                         <div class="form-group input-group-sm col-md-12 row">
                             <label class="col-md-3 form-label required" required>Empresa:&nbsp;</label>
                             <div class="col-md-9">
-                                <select asp-for="IdEmpresa" id="idEmpresa" class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-kt-select2="true" data-placeholder="Seleccione una opción" data-minimum-results-for-search="Infinity" required>
+                                <select asp-for="IdEmpresa" id="idEmpresa" class="form-select form-select-sm form-select-solid fw-bold" data-placeholder="Seleccione una opción" required>
                                     <option></option>
                                     @foreach (var Roles in Model.ListaEmpresa!)
                                     {
@@ -64,6 +64,5 @@
     </div>
 </div>
 </form>
-
 
 
