@@ -106,15 +106,12 @@ var KTDatatableRemoteAjax = function () {
     };
 
     $(document).on('click', '#GuardarCuenta', function (e) {
-
-        
-
         toastr.success('Se guardó la información de manera exitosa', "");
         $("#btnCerrarCuenta").click();
     });
 
     var plugins = () => {
-        $('.form-select2').select2();
+        $('.form-select').select2();
     }
 
     //var exportButtons = () => {
@@ -191,6 +188,7 @@ var KTDatatableRemoteAjax = function () {
 }();
 
 jQuery(document).ready(function () {
+    $('.form-select').select2({});
     KTDatatableRemoteAjax.init();
 });
 
