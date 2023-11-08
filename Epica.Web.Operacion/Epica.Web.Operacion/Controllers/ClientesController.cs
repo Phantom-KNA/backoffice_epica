@@ -1467,6 +1467,93 @@ public class ClientesController : Controller
 
         return NotFound();
     }
+
+    [Authorize]
+    [HttpPost]
+    public async Task<JsonResult> ConsultaCuentasPersonaMorales(string id)
+    {
+        var loginResponse = _userContextService.GetLoginResponse();
+        JsonResult result = new JsonResult("");
+        //Invoca al método que se encarga de realizar la petición Api
+        var request = new RequestList();
+
+        int totalRecord = 0;
+        int filterRecord = 0;
+
+        var draw = Request.Form["draw"].FirstOrDefault();
+        int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
+        int skip = Convert.ToInt32(Request.Form["start"].FirstOrDefault() ?? "0");
+
+        request.Pagina = skip / pageSize + 1;
+        request.Registros = pageSize;
+        request.Busqueda = Request.Form["search[value]"].FirstOrDefault();
+        request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+        request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
+
+        var gridData = new ResponseGrid<CuentasPersonaMoralResponseGrid>();
+        List<CuentasPersonaMoralResponse> ListPF = new List<CuentasPersonaMoralResponse>();
+
+        ListPF = await _cuentaApiClient.GetCuentasByEmpresasAsync(Convert.ToInt32(request.Pagina), Convert.ToInt32(request.Registros), Convert.ToInt32(id));
+
+        ////Almacena el subtotal de registro en caso de obtener un parámetro de búsqueda
+        var List = new List<CuentasPersonaMoralResponseGrid>();
+        foreach (var row in ListPF)
+        {
+            var validacionEdicion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Editar == 0);
+            if (validacionEdicion == true)
+            {
+                row.validarPermiso = true;
+            }
+            else
+            {
+                row.validarPermiso = false;
+            }
+
+            List.Add(new CuentasPersonaMoralResponseGrid
+            {
+                IdCuenta = row.IdCuenta,
+                NombrePersona = row.NombrePersona,
+                vinculo = row.NoCuenta + "|" + row.IdCuenta.ToString() + "|" + id,
+                NoCuenta = row.NoCuenta,
+                Saldo = row.Saldo,
+                Estatus = row.Estatus,
+                TipoPersona = row.TipoPersona ?? "-",
+                Alias = !string.IsNullOrEmpty(row.Alias) ? row.Alias : "-",
+                FechaActualizacion = row.FechaActualizacion ?? "-",
+                FechaAlta = row.FechaAlta ?? "-",
+                Acciones = await this.RenderViewToStringAsync("~/Views/Clientes/DetallesPersonaMoral/Cuentas/_Acciones.cshtml", row)
+            });
+        }
+
+        //if (!string.IsNullOrEmpty(request.Busqueda))
+        //{
+        //    if (request.Busqueda.ToLower() == "activo")
+        //    {
+        //        request.Busqueda = "2";
+        //    }
+        //    else if (request.Busqueda.ToLower() == "desactivado")
+        //    {
+        //        request.Busqueda = "1";
+        //    }
+
+        //    List = List.Where(x =>
+        //    (x.nombrePersona?.ToUpper() ?? "").Contains(request.Busqueda.ToUpper()) ||
+        //    (x.noCuenta?.ToLower() ?? "").Contains(request.Busqueda.ToUpper()) ||
+        //    (x.alias?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+        //    (x.saldo.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+        //    (x.fechaActualizacion.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+        //    (x.fechaAlta.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower())
+        //    ).ToList();
+        //}
+
+        gridData.RecordsTotal = List.Count;
+        gridData.Data = List.Skip(skip).Take(pageSize).ToList();
+        filterRecord = string.IsNullOrEmpty(request.Busqueda) ? gridData.RecordsTotal ?? 0 : gridData.Data.Count;
+        gridData.RecordsFiltered = filterRecord;
+        gridData.Draw = draw;
+
+        return Json(gridData);
+    }
     #endregion
 
     #region Tap Movimientos 

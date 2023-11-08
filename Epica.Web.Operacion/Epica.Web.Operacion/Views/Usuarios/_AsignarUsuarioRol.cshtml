@@ -7,20 +7,18 @@
                 <div class="d-flex flex-stack row">
                     <div class="row mb-5 mt-5">
                         <div class="form-group input-group-sm col-md-12 row">
-                            <label class="form-label required">Buscar usuario por correo electrónico: &nbsp;</label>
-
-                            <input type="text" id="findnombreUsuario" name="findnombreUsuario" class="form-control form-control-sm form-control-solid" placeholder="Nombre de Usuario" autocomplete="off" />
+                            <label class="form-label">Buscar usuario por correo electrónico: &nbsp;</label>
+                            <input type="text" id="findnombreUsuario" name="findnombreUsuario" class="form-control form-control-sm" placeholder="Nombre de Usuario" autocomplete="off" />
                             <button type="button" class="btn btn-sm btn-primary" id="btnBuscarUsuario">Buscar</button>
-
                         </div>
                     </div>
                 </div>
                 <div class="d-flex flex-stack row">
                     <div class="row mb-5 mt-5">
                         <div class="form-group input-group-sm col-md-12 row">
-                            <label class="col-md-3 form-label" required>Nombre de Usuario: &nbsp;</label>
+                            <label class="col-md-3 form-label required" required>Nombre de Usuario: &nbsp;</label>
                             <div class="col-md-9">
-                                <select asp-for="idUsuario" class="form-select form-select-sm  form-select-solid" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" data-minimum-results-for-search="Infinity" required>
+                                <select asp-for="idUsuario" class="form-select form-select-sm" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" data-minimum-results-for-search="Infinity" required>
                                     <option></option>
                                 </select>
                                 @* <input asp-for="idUsuario" hidden class="form-control form-control-sm form-control-solid" id="idUsuario" readonly type="text" autocomplete="off" /> *@
@@ -32,9 +30,9 @@
                 <div class="d-flex flex-stack row">
                     <div class="row mb-5 mt-5">
                         <div class="form-group input-group-sm col-md-12 row">
-                            <label class="col-md-3 form-label" required>Rol: &nbsp;</label>
+                            <label class="col-md-3 form-label required" required>Rol: &nbsp;</label>
                             <div class="col-md-9">
-                                <select asp-for="idRol" class="form-select form-select-sm  form-select-solid" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" data-minimum-results-for-search="Infinity" required>
+                                <select asp-for="idRol" class="form-select form-select-sm" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" data-minimum-results-for-search="Infinity" required>
                                     <option></option>
                                     @foreach (var Roles in Model!.ListaRoles!)
                                     {

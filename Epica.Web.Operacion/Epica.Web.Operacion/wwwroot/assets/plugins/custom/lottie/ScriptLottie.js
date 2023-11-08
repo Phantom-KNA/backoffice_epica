@@ -1,4 +1,4 @@
-﻿KTApp.showPageLoading();
+﻿//KTApp.showPageLoading();
 animation = bodymovin.loadAnimation({
     container: document.getElementById('layout'),
     renderer: 'svg',
@@ -24,7 +24,7 @@ $(document).ready(function () {
             tablasTotales++;
             var tabla = $(this).DataTable();
 
-            tabla.on('preXhr.dt', function () {
+            tabla.on('preXhr.dt', function (e, settings, data) {
                 KTApp.showPageLoading();
             });
 

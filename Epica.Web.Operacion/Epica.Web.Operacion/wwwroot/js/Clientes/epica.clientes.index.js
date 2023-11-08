@@ -3,7 +3,7 @@ var datatable;
 var filterAccount;
 
 var KTDatatableRemoteAjax = function () {
-    var table;
+    var table;   
     var initDatatable = function () {
         datatable = $('#kt_datatable_user').DataTable({
             "order": [],
@@ -32,19 +32,13 @@ var KTDatatableRemoteAjax = function () {
             pagingType: 'simple_numbers',
             searching: true,
             lengthMenu: [5, 10, 15, 25, 50, 100],
-            processing: false,
+            //processing: false,
             serverSide: true,
             filter: true,
             ordering: true,
             ajax: {
                 url: siteLocation + 'Clientes/Consulta',
                 type: 'POST',
-                beforeSend: function () {
-                    KTApp.showPageLoading();
-                },
-                complete: function () {
-                    KTApp.hidePageLoading();
-                },
                 error: function (jqXHR, textStatus, errorThrown) {
                     $(".dataTables_processing").hide();
                     toastr.error("Se agoto el tiempo de espera para consultar estos datos. Inténtelo más tarde.");
@@ -60,14 +54,6 @@ var KTDatatableRemoteAjax = function () {
                     });
                     d.filters = filtros;
                 },
-            },
-            map: function (raw) {
-                // sample data mapping
-                var dataSet = raw;
-                if (typeof raw.data !== 'undefined') {
-                    dataSet = raw.data;
-                }
-                return dataSet;
             },
             columnDefs: [{
                 "defaultContent": "-",
@@ -223,10 +209,6 @@ var KTDatatableRemoteAjax = function () {
         },
     };
 }();
-
-jQuery(document).ready(function () {
-    KTDatatableRemoteAjax.init();
-});
 
 function GestionarClienteWeb(AccountID, estatus) {
     Swal.fire({
@@ -635,3 +617,9 @@ function ResetContrasenaTelefono(Telefono, ID) {
 $(document).on("click", "#Redireccion", function () {
     toastr.info("Accediendo a información.");
 });
+
+jQuery(document).ready(function () {
+    toastr.info("Obteniendo información.");
+    KTDatatableRemoteAjax.init();
+});
+

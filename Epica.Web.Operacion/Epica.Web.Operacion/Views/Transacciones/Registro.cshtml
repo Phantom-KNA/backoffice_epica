@@ -44,21 +44,21 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Clave de rastreo: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="@Model.TransacccionDetalles.ClaveRastreo" class="form-control form-control-sm form-control-solid" id="ClaveRastreo" type="text" value="@(Model?.TransacccionDetalles.ClaveRastreo ?? "")" autocomplete="off" required oninput="validateClaveInput(this)" data-error-message="Clave Rastreo" minlength="20" maxlength="25" />
+                            <input asp-for="@Model.TransacccionDetalles.ClaveRastreo" class="form-control form-control-sm" id="ClaveRastreo" type="text" value="@(Model?.TransacccionDetalles.ClaveRastreo ?? "")" autocomplete="off" required oninput="validateClaveInput(this)" data-error-message="Clave Rastreo" minlength="20" maxlength="25" />
                             <span asp-validation-for="@Model!.TransacccionDetalles.ClaveRastreo" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Cuenta ordenante: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="@Model!.TransacccionDetalles.cuentaOrdenante" class="form-control form-control-sm form-control-solid" id="CuentaOrdenante" type="text" value="@(Model?.TransacccionDetalles.cuentaOrdenante ?? "")" autocomplete="off" required oninput="validateNumbersInput(this)" data-error-message="Cuenta Ordenante" minlength="16" maxlength="18" />
+                            <input asp-for="@Model!.TransacccionDetalles.cuentaOrdenante" class="form-control form-control-sm" id="CuentaOrdenante" type="text" value="@(Model?.TransacccionDetalles.cuentaOrdenante ?? "")" autocomplete="off" required oninput="validateNumbersInput(this)" data-error-message="Cuenta Ordenante" minlength="16" maxlength="18" />
                             <span asp-validation-for="@Model!.TransacccionDetalles.cuentaOrdenante" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Cuenta beneficiario: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="@Model!.TransacccionDetalles.NoCuentaBeneficiario" class="form-control form-control-sm form-control-solid" id="NoCuentaBeneficiario" type="text" value="@(Model?.TransacccionDetalles.NoCuentaBeneficiario ?? "")" autocomplete="off" required oninput="validateNumbersInput(this)" data-error-message="Cuenta Beneficiario" minlength="16" maxlength="18" />
+                            <input asp-for="@Model!.TransacccionDetalles.NoCuentaBeneficiario" class="form-control form-control-sm" id="NoCuentaBeneficiario" type="text" value="@(Model?.TransacccionDetalles.NoCuentaBeneficiario ?? "")" autocomplete="off" required oninput="validateNumbersInput(this)" data-error-message="Cuenta Beneficiario" minlength="16" maxlength="18" />
                             <span asp-validation-for="@Model!.TransacccionDetalles.NoCuentaBeneficiario" class="text-danger"></span>
                         </div>
                     </div>
@@ -68,21 +68,21 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Monto: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="@Model!.TransacccionDetalles.Monto" class="form-control form-control-sm form-control-solid" id="Monto" type="number" value="@(Model?.TransacccionDetalles.Monto.ToString() ?? "")" autocomplete="off" required data-error-message="Monto" type="text" autocomplete="off" oninput="validateMontoInput(this)" maxlength="20" />
+                            <input asp-for="@Model!.TransacccionDetalles.Monto" class="form-control form-control-sm" id="Monto" type="number" value="@(Model?.TransacccionDetalles.Monto.ToString() ?? "")" autocomplete="off" required data-error-message="Monto" type="text" autocomplete="off" oninput="validateMontoInput(this)" maxlength="20" />
                             <span asp-validation-for="@Model!.TransacccionDetalles.Monto" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Concepto: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="@Model!.TransacccionDetalles.Concepto" class="form-control form-control-sm form-control-solid" id="Concepto" type="text" value="@(Model?.TransacccionDetalles.Concepto ?? "")" autocomplete="off" required data-error-message="Concepto" oninput="validateInput(this)" minlength="3" maxlength="40" />
+                            <input asp-for="@Model!.TransacccionDetalles.Concepto" class="form-control form-control-sm" id="Concepto" type="text" value="@(Model?.TransacccionDetalles.Concepto ?? "")" autocomplete="off" required data-error-message="Concepto" oninput="validateInput(this)" minlength="3" maxlength="40" />
                             <span asp-validation-for="@Model!.TransacccionDetalles.Concepto" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Tipo de operación: &nbsp;</label>
                         <div class="position-relative">
-                            <select asp-for="@Model!.TransacccionDetalles.TipoOperacion" id="TipoOperacion" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción" data-minimum-results-for-search="Infinity" required data-error-message="Tipo de Operación">
+                            <select asp-for="@Model!.TransacccionDetalles.TipoOperacion" id="TipoOperacion" class="form-select form-select-sm" data-placeholder="Seleccione una opción" required data-error-message="Tipo de Operación">
                                 <option></option>
                                 @{
                                     if (Model != null)
@@ -127,13 +127,13 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Fecha de operación: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="TransacccionDetalles.FechaOperacion" id="FechaOperacion" class="form-control form-control-sm form-control-solid" type="date" required data-error-message="Fecha de Operación" min="1990-01-01" max="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                            <input asp-for="TransacccionDetalles.FechaOperacion" id="FechaOperacion" class="form-control form-control-sm" type="date" required data-error-message="Fecha de Operación" min="1990-01-01" max="@DateTime.Now.ToString("yyyy-MM-dd")" />
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Medio de pago: &nbsp;</label>
                         <div class="position-relative">
-                            <select asp-for="TransacccionDetalles.MedioPago" id="MedioPago" class="form-select form-select-sm form-select-solid" data-placeholder="Seleccione una opción" data-minimum-results-for-search="Infinity" required data-error-message="Medio de Pago">
+                            <select asp-for="TransacccionDetalles.MedioPago" id="MedioPago" class="form-select form-select-sm" data-placeholder="Seleccione una opción" required data-error-message="Medio de Pago">
                                 <option></option>
                                 @foreach (var medioPago in Model!.ListaMediosPago!)
                                 {
@@ -145,7 +145,7 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Comisión: &nbsp;</label>
                         <div class="position-relative">
-                            <select asp-for="@Model!.TransacccionDetalles.Comision" id="Comision" class="form-select form-select-sm  form-select-solid" data-placeholder="Seleccione una opción" data-minimum-results-for-search="Infinity" required>
+                            <select asp-for="@Model!.TransacccionDetalles.Comision" id="Comision" class="form-select form-select-sm" data-placeholder="Seleccione una opción" required>
                                 <option></option>
                                 @{
                                     if (Model != null)

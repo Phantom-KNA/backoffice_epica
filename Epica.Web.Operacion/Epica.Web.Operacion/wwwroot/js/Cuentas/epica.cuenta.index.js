@@ -43,12 +43,6 @@ var KTDatatableRemoteAjax = function () {
             ajax: {
                 url: siteLocation + 'Cuenta/Consulta',
                 type: 'POST',
-                beforeSend: function () {
-                    KTApp.showPageLoading();
-                },
-                complete: function () {
-                    KTApp.hidePageLoading();
-                },
                 error: function (jqXHR, textStatus, errorThrown) {
                     $(".dataTables_processing").hide();
                     toastr.error("Se agoto el tiempo de espera para consultar estos datos. Inténtelo más tarde.");

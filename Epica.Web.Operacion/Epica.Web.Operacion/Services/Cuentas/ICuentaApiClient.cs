@@ -11,6 +11,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
         Task<(List<CuentasResponse>, int)> GetCuentasFilterAsync(int pageNumber, int recordsTotal, int columna, bool ascendente, List<RequestListFilters> filters);
         Task<int> GetTotalCuentasAsync();
         Task<List<CobranzaReferenciadaResponse>> GetCobranzaReferenciadaAsync(int id);
+        Task<List<CuentasPersonaMoralResponse>> GetCuentasByEmpresasAsync(int pageNumber, int recordsTotal, int idCliente);
         Task<List<CuentasResponse>> GetCuentasByClienteAsync(int idCliente);
         Task<List<DatosCuentaResponse>> GetDetalleCuentasAsync(string idCliente);
         Task<List<CuentaEspecificaResponse>> GetDetalleCuentasSinAsignarAsync(string NumCuenta);

@@ -54,6 +54,7 @@ public class UrlsConfig
         public static string GetCuentasTotal() => $"/api/v1/cuentas/total";
         public static string GetCobranzaReferenciada(int id) => $"/api/v1/transacciones/cobranza_referenciada?idCuenta={id}";
         public static string GetCuentasClientes(int id) => $"/api/v1/cuentas/cliente_cuentas?idCliente={id}";
+        public static string GetCuentasPersonasMorales(int pageNumber, int totalRecords, int id) => $"/api/v1/cuentas/empresa_cuentas?pageNumber={pageNumber}&pageSize={totalRecords}&idClienteEmpresa={id}";
         public static string GetCuentaDetalle(string NoCuenta) => $"/api/v1/cuentas/buscar_cuenta?noCuenta={NoCuenta}";
         public static string GetCuentaDetalleSinAsignar(string NoCuenta) => $"/api/v1/catalogos/buscar_cuenta_asignar?noCuenta={NoCuenta}";
         public static string GetBloqueaCuenta(int idCuenta, int estatus, int nip, string softoken, string valida) => $"/api/v1/cuentas/bloquear_desbloquear_cuenta?idCuenta={idCuenta}&estatus={estatus}&nip={nip}&softoken={softoken}&valida={valida}";

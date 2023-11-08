@@ -4,13 +4,12 @@
 <div class="modal-content">
     <div class="modal-body ">
         <div class="card-body">
-            <input asp-for="IdCliente" hidden class="form-control form-control-sm form-control-solid" id="idCliente" readonly value="@Model.IdCliente" type="text" autocomplete="off" />
+            <input asp-for="IdCliente" hidden class="form-control form-control-sm" id="idCliente" readonly value="@Model.IdCliente" type="text" autocomplete="off" />
                 <div class="d-flex flex-stack row">
                     <div class="row mb-5 mt-5">
                         <div class="form-group input-group-sm col-md-12 row">
-                            <label class="form-label required">Buscar Cuenta:&nbsp;</label>
-
-                            <input type="text" id="nombreCliente" name="nombreCliente" onkeypress="return SoloNumeros(event)" maxlength="16" class="form-control form-control-sm form-control-solid" placeholder="Número de Cuenta" autocomplete="off" />
+                            <label class="form-label">Buscar Cuenta:&nbsp;</label>
+                            <input type="text" id="nombreCliente" name="nombreCliente" onkeypress="return SoloNumeros(event)" maxlength="16" class="form-control form-control-sm" placeholder="Número de Cuenta" autocomplete="off" />
                             <button type="button" class="btn btn-sm btn-primary" id="btnBuscarCliente">Buscar</button>
 
                         </div>
@@ -21,7 +20,7 @@
                         <div class="form-group input-group-sm col-md-12 row">
                             <label class="col-md-3 form-label required" required>Cuenta:&nbsp;</label>
                             <div class="col-md-9">
-                                <input required asp-for="IdCuenta" hidden class="form-control form-control-sm form-control-solid" id="IdCuenta" readonly type="text" autocomplete="off" />
+                                <input required asp-for="IdCuenta" hidden class="form-control form-control-sm" id="IdCuenta" readonly type="text" autocomplete="off" />
                                 <input type="text" id="numeroCuenta" name="numeroCuenta" class="form-control form-control-sm form-control-solid" placeholder="Número de Cuenta" readonly autocomplete="off" />
                             </div>
                         </div>
@@ -32,7 +31,7 @@
                         <div class="form-group input-group-sm col-md-12 row">
                             <label class="col-md-3 form-label required" required>Rol:&nbsp;</label>
                             <div class="col-md-9">
-                                <select asp-for="Rol" id="rol" class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-kt-select2="true" data-placeholder="Seleccione una opción" data-minimum-results-for-search="Infinity" required>
+                                <select asp-for="Rol" id="rol" class="form-select form-select-sm fw-bold filtro-control filtro-control-select" data-kt-select2="true" data-placeholder="Seleccione una opción" data-minimum-results-for-search="Infinity" required>
                                     <option></option>
                                     @foreach (var Roles in Model.ListaRoles!)
                                     {
@@ -48,7 +47,7 @@
                         <div class="form-group input-group-sm col-md-12 row">
                             <label class="col-md-3 form-label required" required>Empresa:&nbsp;</label>
                             <div class="col-md-9">
-                                <select asp-for="IdEmpresa" id="idEmpresa" class="form-select form-select-sm form-select-solid fw-bold" data-placeholder="Seleccione una opción" required>
+                                <select asp-for="IdEmpresa" id="idEmpresa" class="form-select form-select-sm fw-bold" data-placeholder="Seleccione una opción" data-kt-select2="true" data-minimum-results-for-search="Infinity" required>
                                     <option></option>
                                     @foreach (var Roles in Model.ListaEmpresa!)
                                     {

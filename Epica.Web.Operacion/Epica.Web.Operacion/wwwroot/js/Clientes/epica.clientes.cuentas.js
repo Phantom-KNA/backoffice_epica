@@ -32,7 +32,7 @@ var KTDatatableRemoteAjax = function () {
             responsive: true,
             pagingType: 'simple_numbers',
             searching: true,
-            lengthMenu: [15, 25, 50, 100],
+            lengthMenu: [5, 10, 15, 25, 50, 100],
             processing: true,
             serverSide: true,
             filter: true,
@@ -111,7 +111,7 @@ var KTDatatableRemoteAjax = function () {
     });
 
     var plugins = () => {
-        $('.form-select').select2();
+        $('.form-select2').select2();
     }
 
     //var exportButtons = () => {
