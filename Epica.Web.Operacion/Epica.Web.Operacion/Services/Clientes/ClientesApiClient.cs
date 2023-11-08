@@ -6,7 +6,6 @@ using Epica.Web.Operacion.Models.Request;
 using Epica.Web.Operacion.Services.UserResolver;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Epica.Web.Operacion.Services.Transaccion
