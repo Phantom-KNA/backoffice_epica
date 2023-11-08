@@ -66,7 +66,7 @@ builder.Services.AddScoped<ITransaccionesApiClient, TransaccionesApiClient>();
 builder.Services.AddScoped<ICuentaApiClient, CuentaApiClient>();
 builder.Services.AddScoped<IClientesApiClient, ClientesApiClient>();
 builder.Services.AddScoped<IClientesApiClient, ClientesApiClient>();
-builder.Services.AddTransient<ILoginApiClient, LoginApiClient>();
+builder.Services.AddScoped<ILoginApiClient, LoginApiClient>();
 builder.Services.AddScoped<ITarjetasApiClient, TarjetasApiClient>();
 builder.Services.AddScoped<ICatalogosApiClient, CatalogosApiClient>();
 builder.Services.AddScoped<ILogsApiClient, LogsApiClient>();
