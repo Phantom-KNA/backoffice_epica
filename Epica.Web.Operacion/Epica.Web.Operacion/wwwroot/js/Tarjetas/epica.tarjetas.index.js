@@ -39,12 +39,6 @@ var KTDatatableRemoteAjax = function () {
             ajax: {
                 url: siteLocation + 'Tarjetas/Consulta',
                 type: 'POST',
-                beforeSend: function () {
-                    KTApp.showPageLoading();
-                },
-                complete: function () {
-                    KTApp.hidePageLoading();
-                },
                 error: function (jqXHR, textStatus, errorThrown) {
                     $(".dataTables_processing").hide();
                     toastr.error("No se pudo encontrar información disponible.");

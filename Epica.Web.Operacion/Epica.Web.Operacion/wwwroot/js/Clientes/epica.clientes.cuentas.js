@@ -32,7 +32,7 @@ var KTDatatableRemoteAjax = function () {
             responsive: true,
             pagingType: 'simple_numbers',
             searching: true,
-            lengthMenu: [15, 25, 50, 100],
+            lengthMenu: [5, 10, 15, 25, 50, 100],
             processing: true,
             serverSide: true,
             filter: true,
