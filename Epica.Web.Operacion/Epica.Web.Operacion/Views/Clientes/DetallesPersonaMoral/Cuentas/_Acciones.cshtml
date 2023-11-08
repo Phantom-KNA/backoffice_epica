@@ -1,0 +1,13 @@
+﻿@model Epica.Web.Operacion.Models.Response.CuentasPersonaMoralResponse
+<div class="dropdown dropdown-inline">
+    <button type="button" class="btn btn-sm btn-icon btn-light btn-active-light-primary me-2 btnDetalle" data-id="@Model.NoCuenta" data-estatus="@Model.Estatus" title="Detalles de Cuenta">
+        <i class="bi bi-question-circle"></i>
+    </button>
+    @if(Model.validarPermiso == true)
+    {
+        <button type="button" class="btn btn-sm btn-icon btn-light btn-active-light-primary me-2 btnDesasignar" data-id="@Model.IdCuenta" data-cliente="@Model.IdCliente" title="Desvincular Cuenta del Cliente">
+            <i class="bi bi-trash"></i>
+        </button>
+    }
+
+</div>

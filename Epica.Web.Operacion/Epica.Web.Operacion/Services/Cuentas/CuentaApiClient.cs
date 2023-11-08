@@ -264,6 +264,31 @@ namespace Epica.Web.Operacion.Services.Transaccion
 
             return ListaCuentas;
         }
+        public async Task<List<CuentasPersonaMoralResponse>> GetCuentasByEmpresasAsync(int pageNumber, int recordsTotal, int idCliente)
+        {
+
+            List<CuentasPersonaMoralResponse>? ListaCuentas = new List<CuentasPersonaMoralResponse>();
+
+            try
+            {
+                var uri = Urls.Transaccion + UrlsConfig.CuentasOperations.GetCuentasPersonasMorales(pageNumber, recordsTotal, idCliente);
+                var response = await ApiClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    response.EnsureSuccessStatusCode();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    ListaCuentas = JsonConvert.DeserializeObject<List<CuentasPersonaMoralResponse>>(jsonResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return ListaCuentas;
+            }
+
+            return ListaCuentas;
+        }
 
         public async Task<List<DatosCuentaResponse>> GetDetalleCuentasAsync(string NumCuenta)
         {

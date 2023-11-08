@@ -38,7 +38,7 @@ var KTDatatableRemoteAjax = function () {
             filter: true,
             ordering: true,
             ajax: {
-                url: siteLocation + 'Clientes/ConsultaCuentas',
+                url: siteLocation + 'Clientes/ConsultaCuentasPersonaMorales',
                 type: 'POST',
                 error: function (jqXHR, textStatus, errorThrown) {
                     $(".dataTables_processing").hide();
@@ -54,7 +54,7 @@ var KTDatatableRemoteAjax = function () {
             }],
             columns: [
                 {
-                    data: 'concatLabel', name: 'concatLabel', title: 'Número Cuenta',
+                    data: 'vinculo', name: 'vinculo', title: 'Número Cuenta',
                     render: function (data, type, row) {
                         var partes = data.split("|"); // Separar la parte entera y decimal
                         var NumCuenta = partes[0];
@@ -71,22 +71,8 @@ var KTDatatableRemoteAjax = function () {
                 },
                 { data: 'alias', name: 'Alias', title: 'Alias' },
                 { data: 'nombrePersona', name: 'NombrePersona', title: 'Nombre de Persona' },
-                { data: 'fechaAltaFormat', name: 'fechaAltaFormat', title: 'Fecha de Alta' },
-                { data: 'fechaActualizacionformat', name: 'fechaActualizacionformat', title: 'Fecha de Actualizacion' },
-                {
-                    data: 'estatus', name: 'Estatus', title: 'Estatus Cuenta',
-                    render: function (data, type, row) {
-                        return data == 1 ?
-                            "<span class='badge badge-light-danger' >Desactivado</span>" : "<span class='badge badge-light-success' >Activo</span>";
-                    }
-                },
-                {
-                    data: 'bloqueoSPEIOut', name: 'BloqueoSpeiOut', title: 'Estatus Spei Out',
-                    render: function (data, type, row) {
-                        return data == 1 ?
-                            "<span class='badge badge-light-danger' >Desactivado</span>" : "<span class='badge badge-light-success' >Activo</span>";
-                    }
-                },
+                { data: 'fechaAlta', name: 'FechaAlta', title: 'Fecha de Alta' },
+                { data: 'fechaActualizacion', name: 'FechaActualizacion', title: 'Fecha de Actualizacion' },
                 {
                     title: '',
                     orderable: false,
