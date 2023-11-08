@@ -1,15 +1,16 @@
 ﻿@model Epica.Web.Operacion.Models.Response.DatosClienteMoralResponse
 <div class="dropdown dropdown-inline">
-@*    <a href="javascript:;" class="btn btn-sm btn-icon btn-light btn-active-light-primary me-2" data-bs-toggle="dropdown">
+    <a href="javascript:;" class="btn btn-sm btn-icon btn-light btn-active-light-primary me-2" data-bs-toggle="dropdown">
         <i class="bi bi-three-dots"></i>
-    </a>*@
-@*    <ul class="dropdown-menu menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4">
-*@@*        <li class="menu-item px-3">
-    *@            <a data-id="@Model.Id" asp-controller="Clientes" asp-action="DatosGeneralesPersonaMoral" asp-route-id="@Model.Id" class="btnDetalle menu-link px-3">
-                <i title="Detalle" class="btn btn-sm btn-icon btn-light btn-active-light-primary me-2 bi bi-info-circle"></i>&nbsp;
+    </a>
+    <ul class="dropdown-menu menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4">
+        <li class="menu-item px-3">
+                <a data-id="@Model.Id" asp-controller="Clientes" asp-action="DatosGeneralesPersonaMoral" asp-route-id="@Model.Id" class="btnDetalle menu-link px-3">
+                <i title="Detalle" class="bi bi-info-circle"></i>&nbsp;
+                Detalle
             </a>
-@*        </li>
-*@        @*        @if (Model.email != null)
+        </li>
+        @*        @if (Model.email != null)
         {
         <li class="menu-item px-3">
         <a data-id="@Model.email" onclick="ResetContrasenaEmail('@Model.email', @Model.id)" title="Restablecer Contraseña por Correo Electrónico" class="btnEditar menu-link px-3">
@@ -28,5 +29,5 @@
         </a>
         </li>
         }*@
-@*    </ul>
-*@</div>
+    </ul>
+</div>
