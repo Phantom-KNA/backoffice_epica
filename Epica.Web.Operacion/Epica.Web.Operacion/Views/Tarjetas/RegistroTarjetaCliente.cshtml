@@ -45,21 +45,21 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Número de tarjeta: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="@Model.TarjetasDetalles.numeroTarjeta" class="form-control form-control-sm form-control-solid" id="NumeroTarjeta" type="text" value="@(Model?.TarjetasDetalles.numeroTarjeta ?? "")" autocomplete="off" required oninput="validateNumbersInput(this)" data-error-message="Número de Tarjeta" minlength="14" maxlength="16" />
+                            <input asp-for="@Model.TarjetasDetalles.numeroTarjeta" class="form-control form-control-sm" id="NumeroTarjeta" type="text" value="@(Model?.TarjetasDetalles.numeroTarjeta ?? "")" autocomplete="off" required oninput="validateNumbersInput(this)" data-error-message="Número de Tarjeta" minlength="14" maxlength="16" />
                             <span asp-validation-for="@Model!.TarjetasDetalles.numeroTarjeta" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Número proxy: &nbsp;</label>
                         <div class="position-relative">
-                            <input asp-for="@Model!.TarjetasDetalles.proxyNumber" class="form-control form-control-sm form-control-solid" id="proxyNumber" type="text" value="@(Model?.TarjetasDetalles.proxyNumber ?? "")" autocomplete="off" required oninput="validateNumbersInput(this)" data-error-message="Número de Proxy" minlength="11" maxlength="11" />
+                            <input asp-for="@Model!.TarjetasDetalles.proxyNumber" class="form-control form-control-sm" id="proxyNumber" type="text" value="@(Model?.TarjetasDetalles.proxyNumber ?? "")" autocomplete="off" required oninput="validateNumbersInput(this)" data-error-message="Número de Proxy" minlength="11" maxlength="11" />
                             <span asp-validation-for="@Model!.TarjetasDetalles.proxyNumber" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Mes de vigencia: &nbsp;</label>
                         <div class="position-relative">
-                            <select asp-for="@Model!.TarjetasDetalles.mesVigencia" class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" data-minimum-results-for-search="Infinity" required id="mesVigencia" autocomplete="off">
+                            <select asp-for="@Model!.TarjetasDetalles.mesVigencia" class="form-select form-select-sm fw-bold filtro-control filtro-control-select" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" data-minimum-results-for-search="Infinity" required id="mesVigencia" autocomplete="off">
                                 <option value="">Selecciona un mes</option>
                                 <option value="01">01</option>
                                 <option value="02">02</option>
@@ -82,7 +82,7 @@
                     <div class="py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Año de vigencia: &nbsp;</label>
                         <div class="position-relative">
-                            <select asp-for="@Model!.TarjetasDetalles.yearVigencia" id="yearVigencia" autocomplete="off" class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" data-minimum-results-for-search="Infinity" required>
+                            <select asp-for="@Model!.TarjetasDetalles.yearVigencia" id="yearVigencia" autocomplete="off" class="form-select form-select-sm fw-bold filtro-control filtro-control-select" data-kt-select2="true" data-placeholder="Seleciona una opción" data-allow-clear="true" required data-minimum-results-for-search="Infinity">
                                 <option value="">Seleccione un año</option>
                                 @for (var year = DateTime.Now.Year; year <= DateTime.Now.Year + 5; year++)
                                 {
@@ -95,9 +95,9 @@
                     <div class="form-group input-group-sm py-2 px-4 col-md-4 fv-row">
                         <label class="form-label required">Buscar Persona: &nbsp;</label>
 
-                        <input type="text" id="nombreCliente" name="nombreCliente" class="form-control form-control-sm form-control-solid" placeholder="Buscar nombre" autocomplete="off" oninput="validateLettersInput(this)" data-error-message="Persona Física" minlength="3" maxlength="20" />
+                        <input type="text" id="nombreCliente" name="nombreCliente" class="form-control form-control-sm" placeholder="Buscar nombre" autocomplete="off" oninput="validateLettersInput(this)" data-error-message="Persona Física" minlength="3" maxlength="20" />
                         <button type="button" class="btn btn-sm btn-primary align-center" id="btnBuscarCliente">Buscar</button>
-                        <select asp-for="TarjetasDetalles.idCliente" id="selectClientes" class="form-select form-select-sm form-select-solid fw-bold filtro-control filtro-control-select" data-kt-select2="true"  data-placeholder="Seleciona una opción" data-minimum-results-for-search="Infinity" required>
+                        <select asp-for="TarjetasDetalles.idCliente" id="selectClientes" class="form-select form-select-sm fw-bold filtro-control filtro-control-select" data-kt-select2="true"  data-placeholder="Seleciona una opción" required>
                                 <option></option>
                             </select>
 
