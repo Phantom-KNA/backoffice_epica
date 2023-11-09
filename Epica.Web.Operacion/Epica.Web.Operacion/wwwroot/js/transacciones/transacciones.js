@@ -177,6 +177,7 @@ var KTDatatableTransacciones = (function () {
     //};
 
     $(".btn-filtrar").click(function () {
+        $('#search_input').val('');
         reload();
     })
 

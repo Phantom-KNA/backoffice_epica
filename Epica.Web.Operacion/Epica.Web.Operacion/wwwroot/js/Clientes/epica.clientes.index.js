@@ -176,7 +176,6 @@ var KTDatatableRemoteAjax = function () {
 
     $(".btn-filtrar").click(function () {
         $('#search_input').val('');
-        datatable.search('').draw();
         recargar();
     })
 
