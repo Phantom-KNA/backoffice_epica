@@ -111,7 +111,7 @@ var KTDatatableRemoteAjax = function () {
     });
 
     var plugins = () => {
-        $('.form-select').select2();
+        $('.form-select2').select2();
     }
 
     //var exportButtons = () => {

@@ -16,7 +16,7 @@ using Epica.Web.Operacion.Services.Usuarios;
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(10);
+    options.Limits.KeepAliveTimeout = TimeSpan.FromSeconds(180);
 });
 
 // Configuración de autenticación JWT
@@ -66,7 +66,7 @@ builder.Services.AddScoped<ITransaccionesApiClient, TransaccionesApiClient>();
 builder.Services.AddScoped<ICuentaApiClient, CuentaApiClient>();
 builder.Services.AddScoped<IClientesApiClient, ClientesApiClient>();
 builder.Services.AddScoped<IClientesApiClient, ClientesApiClient>();
-builder.Services.AddTransient<ILoginApiClient, LoginApiClient>();
+builder.Services.AddScoped<ILoginApiClient, LoginApiClient>();
 builder.Services.AddScoped<ITarjetasApiClient, TarjetasApiClient>();
 builder.Services.AddScoped<ICatalogosApiClient, CatalogosApiClient>();
 builder.Services.AddScoped<ILogsApiClient, LogsApiClient>();
@@ -91,8 +91,8 @@ builder.Services.AddSession(options =>
 #region CanalProxy
 builder.Services.AddHttpClient("serviciosAPI", client =>
 {
-    client.BaseAddress = new Uri(builder.Configuration["UrlAPI"]);
-    client.Timeout = TimeSpan.FromMinutes(10);
+    client.BaseAddress = new Uri(builder.Configuration["urls:transaccion"]);
+    client.Timeout = TimeSpan.FromSeconds(160);
 })
 .ConfigureHttpMessageHandlerBuilder((action) =>
 {
