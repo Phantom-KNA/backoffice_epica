@@ -32,10 +32,10 @@ var KTDatatableRemoteAjax = function () {
             pagingType: 'simple_numbers',
             searching: true,
             lengthMenu: [5, 10, 15, 25, 50, 100],
-            processing: false,
+            processing: true,
             serverSide: true,
             filter: true,
-            ordering: true,
+            ordering: false,
             ajax: {
                 url: siteLocation + 'Clientes/ConsultaPersonasMorales',
                 type: 'POST',

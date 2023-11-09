@@ -35,7 +35,7 @@ var KTDatatableRemoteAjax = function () {
             processing: false,
             serverSide: true,
             filter: true,
-            ordering: true,
+            ordering: false,
             ajax: {
                 url: siteLocation + 'Tarjetas/Consulta',
                 type: 'POST',

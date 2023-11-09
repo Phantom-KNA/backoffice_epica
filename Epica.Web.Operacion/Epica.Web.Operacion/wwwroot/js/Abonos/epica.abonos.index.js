@@ -28,10 +28,10 @@ var KTDatatableTransacciones = (function () {
             pagingType: 'simple_numbers',
             searching: true,
             lengthMenu: [10, 15, 20, 25, 50, 100],
-            processing: false,
+            processing: true,
             serverSide: true,
             filter: true,
-            ordering: true,
+            ordering: false,
             // Configuración de la fuente de datos AJAX
             ajax: {
                 url: "Autorizador/Consulta",
