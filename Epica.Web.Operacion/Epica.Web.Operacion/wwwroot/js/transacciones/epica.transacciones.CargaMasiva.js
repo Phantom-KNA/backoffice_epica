@@ -29,7 +29,7 @@ var KTDatatableTransacciones = (function () {
             processing: true,
             serverSide: true,
             filter: true,
-            ordering: true,
+            ordering: false,
             // Configuración de la fuente de datos AJAX
             ajax: {
                 url: "ConsultaCargaMasiva",

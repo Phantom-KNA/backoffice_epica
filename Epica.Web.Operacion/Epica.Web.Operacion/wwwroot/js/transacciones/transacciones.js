@@ -31,7 +31,7 @@ var KTDatatableTransacciones = (function () {
             processing: false,
             serverSide: true,
             filter: true,
-            ordering: true,
+            ordering: false,
             // Configuración de la fuente de datos AJAX
             ajax: {
                 url: "Transacciones/Consulta",
@@ -177,6 +177,7 @@ var KTDatatableTransacciones = (function () {
     //};
 
     $(".btn-filtrar").click(function () {
+        $('#search_input').val('');
         reload();
     })
 
