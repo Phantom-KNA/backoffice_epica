@@ -55,7 +55,11 @@ namespace Epica.Web.Operacion.Controllers
             }
             else
             {
-                ViewBag.ErrorMessage = "Nombre de usuario o contraseña inválidos.";
+                if (loginResponse.Mensaje == "Gateway Time-out") {
+                    ViewBag.ErrorMessage = "Se agotó el tiempo de espera para iniciar sesión. Intentelo nuevamente.";
+                } else {
+                    ViewBag.ErrorMessage = "Nombre de usuario o contraseña inválidos.";
+                }
                 return View("~/Views/Account/Login.cshtml");
             }
 

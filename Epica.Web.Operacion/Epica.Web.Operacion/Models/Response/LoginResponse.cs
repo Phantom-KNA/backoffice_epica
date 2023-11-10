@@ -14,5 +14,6 @@ namespace Epica.Web.Operacion.Models.Response
         public bool IsAuthenticated { get; set; }
         public string? NombreDispositivo { get; set; }
         public string? DireccionIp { get; set; }
+        public string? Mensaje { get; set; }
     }
 }
