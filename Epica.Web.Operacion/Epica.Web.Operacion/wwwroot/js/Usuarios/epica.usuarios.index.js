@@ -352,13 +352,21 @@ function DesAsignarRol(idUser) {
                 type: 'POST',
                 data: { idUsuario: idUser },
                 success: function (data) {
+                    if (data.error == true) {
+                        Swal.fire(
+                            'Error',
+                            'Hubo un problema al gestionar los permisos de este usuario. Intentelo más tarde.',
+                            'error'
+                        );
+                    } else {
+                        datatable.ajax.reload();
+                        Swal.fire(
+                            'Usuario Actualizado',
+                            'Se ha actualizado el usuario con éxito.',
+                            'success'
+                        )
+                    }
 
-                    datatable.ajax.reload();
-                    Swal.fire(
-                        'Usuario Actualizado',
-                        'Se ha actualizado el usuario con éxito.',
-                        'success'
-                    )
                 },
                 error: function (xhr, status, error) {
                 }

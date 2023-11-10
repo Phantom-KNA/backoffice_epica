@@ -56,6 +56,7 @@ namespace Epica.Web.Operacion.Services.Login
                 else
                 {
                     loginResponse.IsAuthenticated = false;
+                    loginResponse.Mensaje = response.ReasonPhrase;
 
                 }
 
