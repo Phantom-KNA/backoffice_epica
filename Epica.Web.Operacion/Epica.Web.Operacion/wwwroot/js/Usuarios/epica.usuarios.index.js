@@ -310,8 +310,10 @@ $(document).on('click', '#GuardarAsignacion', function (e) {
 
             if (cierre == 'true') {
                 $('#idUsuario').val('');
-                $('#nombreUsuario').val('');
+                $('#idRol').val('');
                 $('#findnombreUsuario').val('');
+                $('#idUsuario').empty();
+                $('#idRol').val(null).trigger('change');
             }
 
         },
@@ -330,6 +332,8 @@ $('#modal_asignacion').on('hidden.bs.modal', function () {
     $('#idUsuario').val('');
     $('#idRol').val('');
     $('#findnombreUsuario').val('');
+    $('#idUsuario').empty();
+    $('#idRol').val(null).trigger('change');
 });
 
 function DesAsignarRol(idUser) {
