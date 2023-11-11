@@ -5,7 +5,7 @@ namespace Epica.Web.Operacion.Services.Login
 {
     public interface ILoginApiClient
     {
-        Task<LoginResponse> GetCredentialsAsync(LoginRequest loginRequest, UserContextService userContextService);
+        Task<object> GetCredentialsAsync(LoginRequest loginRequest, UserContextService userContextService);
         Task LogoutAsync(HttpContext httpContext);
 
 

@@ -45,24 +45,27 @@ namespace Epica.Web.Operacion.Controllers
                 DispositivoAcceso = nombreDispositivo ?? ""
             };
 
-            var loginResponse = await _loginApiClient.GetCredentialsAsync(loginRequest, _userContextService);
+            for(int i = 0; i<2; i++)
+            {
+                var loginResponse = await _loginApiClient.GetCredentialsAsync(loginRequest, _userContextService);
 
-            if (loginResponse.IsAuthenticated)
-            {
-                HttpContext.Session.SetObject("LoginResponse", loginResponse);
-                HttpContext.Session.SetString("CurrentSession", "Ok");
-                return RedirectToAction("Index", "Home");
-            }
-            else
-            {
-                if (loginResponse.Mensaje == "Gateway Time-out") {
-                    ViewBag.ErrorMessage = "Se agotó el tiempo de espera para iniciar sesión. Intentelo nuevamente.";
-                } else {
-                    ViewBag.ErrorMessage = "Nombre de usuario o contraseña inválidos.";
+                if (loginResponse is LoginResponse response)
+                {
+                    HttpContext.Session.SetObject("LoginResponse", loginResponse);
+                    HttpContext.Session.SetString("CurrentSession", "Ok");
+                    return RedirectToAction("Index", "Home");
                 }
-                return View("~/Views/Account/Login.cshtml");
+                else if (loginResponse is MensajeResponse mensaje)
+                {
+                    if(mensaje.Codigo == "400")
+                    {
+                        ViewBag.ErrorMessage = "Nombre de usuario o contraseña inválidos.";
+                        return View("~/Views/Account/Login.cshtml");
+                    }
+                }
             }
-
+            ViewBag.ErrorMessage = "Se agotó el tiempo de espera para iniciar sesión. Inténtelo nuevamente.";
+            return View("~/Views/Account/Login.cshtml");
         }
 
         [Authorize]

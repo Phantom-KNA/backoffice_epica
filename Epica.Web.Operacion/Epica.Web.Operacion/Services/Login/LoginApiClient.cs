@@ -5,6 +5,7 @@ using Epica.Web.Operacion.Services.UserResolver;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 
@@ -22,8 +23,9 @@ namespace Epica.Web.Operacion.Services.Login
         {
         }
 
-        public async Task<LoginResponse> GetCredentialsAsync(LoginRequest loginRequest, UserContextService userContextService)
+        public async Task<object> GetCredentialsAsync(LoginRequest loginRequest, UserContextService userContextService)
         {
+            MensajeResponse mensajeResponse = new MensajeResponse();
             LoginResponse loginResponse = new LoginResponse();
 
             try
@@ -46,28 +48,39 @@ namespace Epica.Web.Operacion.Services.Login
                     {
                         new Claim(ClaimTypes.Name, loginResponse.Usuario!)
                     };
-
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
                     await HttpContext.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
                     userContextService.SetLoginResponse(loginResponse);
-
+                    return loginResponse;
                 }
-                else
+                else if (response.StatusCode == HttpStatusCode.GatewayTimeout)
                 {
-                    loginResponse.IsAuthenticated = false;
-                    loginResponse.Mensaje = response.ReasonPhrase;
-
+                    mensajeResponse = new MensajeResponse
+                    {
+                        Codigo = "504",
+                        message = "Error 504: Gateway Timeout",
+                        Error = true
+                    };
+                    return mensajeResponse;
                 }
-
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                loginResponse.IsAuthenticated = false;
-
+                mensajeResponse = new MensajeResponse
+                {
+                    Codigo = "400",
+                    message = ex.Message,
+                    Error = true
+                };
+                return mensajeResponse;
             }
-
-            return loginResponse;
+            mensajeResponse = new MensajeResponse
+            {
+                Codigo = "404",
+                Error = true
+            };
+            return mensajeResponse;
         }
         public async Task LogoutAsync(HttpContext httpContext)
         {
