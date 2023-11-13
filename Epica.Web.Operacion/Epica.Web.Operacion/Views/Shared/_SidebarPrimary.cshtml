@@ -141,7 +141,7 @@
                 <!--begin:Menu item-->
             }
             @{
-                var validacion5 = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Operacion" && modulo.Ver == 0);
+                var validacion5 = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Operaciones" && modulo.Ver == 0);
                 if (validacion5 == true)
                 {
                     <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item py-2">
