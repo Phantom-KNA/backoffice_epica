@@ -59,7 +59,6 @@ var KTDatatableRemoteAjax = function () {
                 "targets": "_all"
             }],
             columns: [
-                { data: 'id', name: 'Id', title: 'Id Rol' },
                 { data: 'nombreRol', name: 'nombreRol', title: 'Nombre del Rol' },
                 {
                     data: 'listaGen', name: 'Transacciones', title: 'Transacciones',
@@ -206,6 +205,45 @@ var KTDatatableRemoteAjax = function () {
                                     renderList += CrearEstructuraCheck(true, "Cuentas", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
                                 } else {
                                     renderList += CrearEstructuraCheck(false, "Cuentas", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
+                                }
+
+                            }
+                        });
+
+                        renderList += "</ul>";
+                        return renderList;
+                    }
+                },
+                {
+                    data: 'listaGen', name: 'Operaciones', title: 'Operaciones',
+                    render: function (data, type, row) {
+                        var renderList = "<ul>";
+
+                        $(data).each(function (entry, value) {
+                            if (value.vista == "Operaciones") {
+
+                                if (value.escritura == true) {
+                                    renderList += CrearEstructuraCheck(true, "Operaciones", value.idPermiso, value.idRol, "Escritura", "Crear Registros");
+                                } else {
+                                    renderList += CrearEstructuraCheck(false, "Operaciones", value.idPermiso, value.idRol, "Escritura", "Crear Registros");
+                                }
+
+                                if (value.lectura == true) {
+                                    renderList += CrearEstructuraCheck(true, "Operaciones", value.idPermiso, value.idRol, "Lectura", "Consultar Registros");
+                                } else {
+                                    renderList += CrearEstructuraCheck(false, "Operaciones", value.idPermiso, value.idRol, "Lectura", "Consultar Registros");
+                                }
+
+                                if (value.eliminar == true) {
+                                    renderList += CrearEstructuraCheck(true, "Operaciones", value.idPermiso, value.idRol, "Eliminar", "Eliminar Registros");
+                                } else {
+                                    renderList += CrearEstructuraCheck(false, "Operaciones", value.idPermiso, value.idRol, "Eliminar", "Eliminar Registros");
+                                }
+
+                                if (value.actualizar == true) {
+                                    renderList += CrearEstructuraCheck(true, "Operaciones", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
+                                } else {
+                                    renderList += CrearEstructuraCheck(false, "Operaciones", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
                                 }
 
                             }
@@ -409,12 +447,23 @@ function GestionarPermisos(event) {
                 contentType: false,
                 processData: false,
                 success: function (data) {
-                    datatable.ajax.reload();
-                    Swal.fire(
-                        'Asignación de Permisos',
-                        'Se ha actualizado el permiso con éxito.',
-                        'success'
-                    )
+
+                    if (data.error == false) {
+                        Swal.fire(
+                            'Asignación de Permisos',
+                            'Se ha actualizado el permiso con éxito.',
+                            'success'
+                        )
+                        datatable.ajax.reload();
+
+                    } else {
+                        Swal.fire(
+                            'Asignación de Permisos',
+                            'Hubo un problema al asignar el permiso, verifique su existencia.',
+                            'error'
+                        )
+                        datatable.ajax.reload();
+                    }
                 },
                 error: function (xhr, status, error) {
                 }
