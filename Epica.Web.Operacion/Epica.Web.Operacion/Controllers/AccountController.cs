@@ -63,6 +63,7 @@ namespace Epica.Web.Operacion.Controllers
                         return View("~/Views/Account/Login.cshtml");
                     }
                 }
+                await Task.Delay(TimeSpan.FromSeconds(10));
             }
             ViewBag.ErrorMessage = "Se agotó el tiempo de espera para iniciar sesión. Inténtelo nuevamente.";
             return View("~/Views/Account/Login.cshtml");
