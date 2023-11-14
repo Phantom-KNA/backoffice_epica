@@ -44,27 +44,24 @@ namespace Epica.Web.Operacion.Controllers
                 Ip = ipAddress,
                 DispositivoAcceso = nombreDispositivo ?? ""
             };
-
-            for(int i = 0; i<2; i++)
+            
+            var loginResponse = await _loginApiClient.GetCredentialsAsync(loginRequest, _userContextService);
+            
+            if (loginResponse is LoginResponse response)
             {
-                var loginResponse = await _loginApiClient.GetCredentialsAsync(loginRequest, _userContextService);
-
-                if (loginResponse is LoginResponse response)
-                {
-                    HttpContext.Session.SetObject("LoginResponse", loginResponse);
-                    HttpContext.Session.SetString("CurrentSession", "Ok");
-                    return RedirectToAction("Index", "Home");
-                }
-                else if (loginResponse is MensajeResponse mensaje)
-                {
-                    if(mensaje.Codigo == "400")
-                    {
-                        ViewBag.ErrorMessage = "Nombre de usuario o contraseña inválidos.";
-                        return View("~/Views/Account/Login.cshtml");
-                    }
-                }
-                await Task.Delay(TimeSpan.FromSeconds(10));
+                HttpContext.Session.SetObject("LoginResponse", loginResponse);
+                HttpContext.Session.SetString("CurrentSession", "Ok");
+                return RedirectToAction("Index", "Home");
             }
+            else if (loginResponse is MensajeResponse mensaje)
+            {
+                if(mensaje.Codigo == "400")
+                {
+                    ViewBag.ErrorMessage = "Nombre de usuario o contraseña inválidos.";
+                    return View("~/Views/Account/Login.cshtml");
+                }
+            }
+            
             ViewBag.ErrorMessage = "Se agotó el tiempo de espera para iniciar sesión. Inténtelo nuevamente.";
             return View("~/Views/Account/Login.cshtml");
         }

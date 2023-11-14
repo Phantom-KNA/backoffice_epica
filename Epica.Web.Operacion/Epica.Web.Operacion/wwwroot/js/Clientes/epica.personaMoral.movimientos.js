@@ -280,3 +280,7 @@ var ModalDetalle = function () {
         }
     }
 }();
+
+$(document).on("click", "#Redireccion", function () {
+    KTApp.showPageLoading();
+});

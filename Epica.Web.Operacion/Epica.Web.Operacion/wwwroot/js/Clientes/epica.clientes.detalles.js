@@ -83,3 +83,7 @@ function ResetContrasenaTelefono(Telefono, ID) {
     })
 
 }
+
+$(document).on("click", "#Redireccion", function () {
+    KTApp.showPageLoading();
+});

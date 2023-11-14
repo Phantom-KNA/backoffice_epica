@@ -262,3 +262,7 @@ $(document).on('click', '#btnVerDocumento', function (e) {
 
     });
 });
+
+$(document).on("click", "#Redireccion", function () {
+    KTApp.showPageLoading();
+});

@@ -411,3 +411,7 @@ $(document).on('click', '.btnDesasignar', function (e) {
         }
     })
 });
+
+$(document).on("click", "#Redireccion", function () {
+    KTApp.showPageLoading();
+});
