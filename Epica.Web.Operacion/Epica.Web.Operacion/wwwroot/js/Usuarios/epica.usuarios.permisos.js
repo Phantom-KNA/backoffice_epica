@@ -56,7 +56,8 @@ var KTDatatableRemoteAjax = function () {
             },
             columnDefs: [{
                 "defaultContent": "-",
-                "targets": "_all"
+                "targets": "_all",
+                "className": "no-wrap"
             }],
             columns: [
                 { data: 'nombreRol', name: 'nombreRol', title: 'Nombre del Rol' },
@@ -70,27 +71,27 @@ var KTDatatableRemoteAjax = function () {
                             if (value.vista == "Transacciones") {
 
                                 if (value.escritura == true) {
-                                    renderList += CrearEstructuraCheck(true, "Transacciones", value.idPermiso, value.idRol, "Escritura", "Crear Registros");
+                                    renderList += CrearEstructuraCheck(true, "Transacciones", value.idPermiso, value.idRol, "Escritura", "Crear");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Transacciones", value.idPermiso, value.idRol, "Escritura", "Crear Registros");
+                                    renderList += CrearEstructuraCheck(false, "Transacciones", value.idPermiso, value.idRol, "Escritura", "Crear");
                                 }
 
                                 if (value.lectura == true) {
-                                    renderList += CrearEstructuraCheck(true, "Transacciones", value.idPermiso, value.idRol, "Lectura", "Consultar Registros");
+                                    renderList += CrearEstructuraCheck(true, "Transacciones", value.idPermiso, value.idRol, "Lectura", "Consultar");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Transacciones", value.idPermiso, value.idRol, "Lectura", "Consultar Registros");
+                                    renderList += CrearEstructuraCheck(false, "Transacciones", value.idPermiso, value.idRol, "Lectura", "Consultar");
                                 }
 
                                 if (value.eliminar == true) {
-                                    renderList += CrearEstructuraCheck(true, "Transacciones", value.idPermiso, value.idRol, "Eliminar", "Eliminar Registros");
+                                    renderList += CrearEstructuraCheck(true, "Transacciones", value.idPermiso, value.idRol, "Eliminar", "Eliminar");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Transacciones", value.idPermiso, value.idRol, "Eliminar", "Eliminar Registros");
+                                    renderList += CrearEstructuraCheck(false, "Transacciones", value.idPermiso, value.idRol, "Eliminar", "Eliminar");
                                 }
 
                                 if (value.actualizar == true) {
-                                    renderList += CrearEstructuraCheck(true, "Transacciones", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
+                                    renderList += CrearEstructuraCheck(true, "Transacciones", value.idPermiso, value.idRol, "Actualizar", "Modificar");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Transacciones", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
+                                    renderList += CrearEstructuraCheck(false, "Transacciones", value.idPermiso, value.idRol, "Actualizar", "Modificar");
                                 }
              
                             }                        
@@ -107,27 +108,27 @@ var KTDatatableRemoteAjax = function () {
                         $(data).each(function (entry, value) {
                             if (value.vista == "Clientes") {
                                 if (value.escritura == true) {
-                                    renderList += CrearEstructuraCheck(true, "Clientes", value.idPermiso, value.idRol, "Escritura", "Crear Registros");
+                                    renderList += CrearEstructuraCheck(true, "Clientes", value.idPermiso, value.idRol, "Escritura", "Crear");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Clientes", value.idPermiso, value.idRol, "Escritura", "Crear Registros");
+                                    renderList += CrearEstructuraCheck(false, "Clientes", value.idPermiso, value.idRol, "Escritura", "Crear");
                                 }
 
                                 if (value.lectura == true) {
-                                    renderList += CrearEstructuraCheck(true, "Clientes", value.idPermiso, value.idRol, "Lectura", "Consultar Registros");
+                                    renderList += CrearEstructuraCheck(true, "Clientes", value.idPermiso, value.idRol, "Lectura", "Consultar");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Clientes", value.idPermiso, value.idRol, "Lectura", "Consultar Registros");
+                                    renderList += CrearEstructuraCheck(false, "Clientes", value.idPermiso, value.idRol, "Lectura", "Consultar");
                                 }
 
                                 if (value.eliminar == true) {
-                                    renderList += CrearEstructuraCheck(true, "Clientes", value.idPermiso, value.idRol, "Eliminar", "Eliminar Registros");
+                                    renderList += CrearEstructuraCheck(true, "Clientes", value.idPermiso, value.idRol, "Eliminar", "Eliminar");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Clientes", value.idPermiso, value.idRol, "Eliminar", "Eliminar Registros");
+                                    renderList += CrearEstructuraCheck(false, "Clientes", value.idPermiso, value.idRol, "Eliminar", "Eliminar");
                                 }
 
                                 if (value.actualizar == true) {
-                                    renderList += CrearEstructuraCheck(true, "Clientes", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
+                                    renderList += CrearEstructuraCheck(true, "Clientes", value.idPermiso, value.idRol, "Actualizar", "Modificar");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Clientes", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
+                                    renderList += CrearEstructuraCheck(false, "Clientes", value.idPermiso, value.idRol, "Actualizar", "Modificar");
                                 }
                             }
                         });
@@ -145,27 +146,27 @@ var KTDatatableRemoteAjax = function () {
                             if (value.vista == "Tarjetas") {
 
                                 if (value.escritura == true) {
-                                    renderList += CrearEstructuraCheck(true, "Tarjetas", value.idPermiso, value.idRol, "Escritura", "Crear Registros");
+                                    renderList += CrearEstructuraCheck(true, "Tarjetas", value.idPermiso, value.idRol, "Escritura", "Crear");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Tarjetas", value.idPermiso, value.idRol, "Escritura", "Crear Registros");
+                                    renderList += CrearEstructuraCheck(false, "Tarjetas", value.idPermiso, value.idRol, "Escritura", "Crear");
                                 }
 
                                 if (value.lectura == true) {
-                                    renderList += CrearEstructuraCheck(true, "Tarjetas", value.idPermiso, value.idRol, "Lectura", "Consultar Registros");
+                                    renderList += CrearEstructuraCheck(true, "Tarjetas", value.idPermiso, value.idRol, "Lectura", "Consultar");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Tarjetas", value.idPermiso, value.idRol, "Lectura", "Consultar Registros");
+                                    renderList += CrearEstructuraCheck(false, "Tarjetas", value.idPermiso, value.idRol, "Lectura", "Consultar");
                                 }
 
                                 if (value.eliminar == true) {
-                                    renderList += CrearEstructuraCheck(true, "Tarjetas", value.idPermiso, value.idRol, "Eliminar", "Eliminar Registros");
+                                    renderList += CrearEstructuraCheck(true, "Tarjetas", value.idPermiso, value.idRol, "Eliminar", "Eliminar");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Tarjetas", value.idPermiso, value.idRol, "Eliminar", "Eliminar Registros");
+                                    renderList += CrearEstructuraCheck(false, "Tarjetas", value.idPermiso, value.idRol, "Eliminar", "Eliminar");
                                 }
 
                                 if (value.actualizar == true) {
-                                    renderList += CrearEstructuraCheck(true, "Tarjetas", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
+                                    renderList += CrearEstructuraCheck(true, "Tarjetas", value.idPermiso, value.idRol, "Actualizar", "Modificar");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Tarjetas", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
+                                    renderList += CrearEstructuraCheck(false, "Tarjetas", value.idPermiso, value.idRol, "Actualizar", "Modificar");
                                 }
 
                             }
@@ -184,27 +185,27 @@ var KTDatatableRemoteAjax = function () {
                             if (value.vista == "Cuentas") {
 
                                 if (value.escritura == true) {
-                                    renderList += CrearEstructuraCheck(true, "Cuentas", value.idPermiso, value.idRol, "Escritura", "Crear Registros");
+                                    renderList += CrearEstructuraCheck(true, "Cuentas", value.idPermiso, value.idRol, "Escritura", "Crear");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Cuentas", value.idPermiso, value.idRol, "Escritura", "Crear Registros");
+                                    renderList += CrearEstructuraCheck(false, "Cuentas", value.idPermiso, value.idRol, "Escritura", "Crear");
                                 }
 
                                 if (value.lectura == true) {
-                                    renderList += CrearEstructuraCheck(true, "Cuentas", value.idPermiso, value.idRol, "Lectura", "Consultar Registros");
+                                    renderList += CrearEstructuraCheck(true, "Cuentas", value.idPermiso, value.idRol, "Lectura", "Consultar");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Cuentas", value.idPermiso, value.idRol, "Lectura", "Consultar Registros");
+                                    renderList += CrearEstructuraCheck(false, "Cuentas", value.idPermiso, value.idRol, "Lectura", "Consultar");
                                 }
 
                                 if (value.eliminar == true) {
-                                    renderList += CrearEstructuraCheck(true, "Cuentas", value.idPermiso, value.idRol, "Eliminar", "Eliminar Registros");
+                                    renderList += CrearEstructuraCheck(true, "Cuentas", value.idPermiso, value.idRol, "Eliminar", "Eliminar");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Cuentas", value.idPermiso, value.idRol, "Eliminar", "Eliminar Registros");
+                                    renderList += CrearEstructuraCheck(false, "Cuentas", value.idPermiso, value.idRol, "Eliminar", "Eliminar");
                                 }
 
                                 if (value.actualizar == true) {
-                                    renderList += CrearEstructuraCheck(true, "Cuentas", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
+                                    renderList += CrearEstructuraCheck(true, "Cuentas", value.idPermiso, value.idRol, "Actualizar", "Modificar");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Cuentas", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
+                                    renderList += CrearEstructuraCheck(false, "Cuentas", value.idPermiso, value.idRol, "Actualizar", "Modificar");
                                 }
 
                             }
@@ -223,27 +224,27 @@ var KTDatatableRemoteAjax = function () {
                             if (value.vista == "Operaciones") {
 
                                 if (value.escritura == true) {
-                                    renderList += CrearEstructuraCheck(true, "Operaciones", value.idPermiso, value.idRol, "Escritura", "Crear Registros");
+                                    renderList += CrearEstructuraCheck(true, "Operaciones", value.idPermiso, value.idRol, "Escritura", "Crear");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Operaciones", value.idPermiso, value.idRol, "Escritura", "Crear Registros");
+                                    renderList += CrearEstructuraCheck(false, "Operaciones", value.idPermiso, value.idRol, "Escritura", "Crear");
                                 }
 
                                 if (value.lectura == true) {
-                                    renderList += CrearEstructuraCheck(true, "Operaciones", value.idPermiso, value.idRol, "Lectura", "Consultar Registros");
+                                    renderList += CrearEstructuraCheck(true, "Operaciones", value.idPermiso, value.idRol, "Lectura", "Consultar");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Operaciones", value.idPermiso, value.idRol, "Lectura", "Consultar Registros");
+                                    renderList += CrearEstructuraCheck(false, "Operaciones", value.idPermiso, value.idRol, "Lectura", "Consultar");
                                 }
 
                                 if (value.eliminar == true) {
-                                    renderList += CrearEstructuraCheck(true, "Operaciones", value.idPermiso, value.idRol, "Eliminar", "Eliminar Registros");
+                                    renderList += CrearEstructuraCheck(true, "Operaciones", value.idPermiso, value.idRol, "Eliminar", "Eliminar");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Operaciones", value.idPermiso, value.idRol, "Eliminar", "Eliminar Registros");
+                                    renderList += CrearEstructuraCheck(false, "Operaciones", value.idPermiso, value.idRol, "Eliminar", "Eliminar");
                                 }
 
                                 if (value.actualizar == true) {
-                                    renderList += CrearEstructuraCheck(true, "Operaciones", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
+                                    renderList += CrearEstructuraCheck(true, "Operaciones", value.idPermiso, value.idRol, "Actualizar", "Modificar");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Operaciones", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
+                                    renderList += CrearEstructuraCheck(false, "Operaciones", value.idPermiso, value.idRol, "Actualizar", "Modificar");
                                 }
 
                             }
@@ -262,27 +263,27 @@ var KTDatatableRemoteAjax = function () {
                             if (value.vista == "Configuracion") {
 
                                 if (value.escritura == true) {
-                                    renderList += CrearEstructuraCheck(true, "Configuracion", value.idPermiso, value.idRol, "Escritura", "Crear Registros");
+                                    renderList += CrearEstructuraCheck(true, "Configuracion", value.idPermiso, value.idRol, "Escritura", "Crear");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Configuracion", value.idPermiso, value.idRol, "Escritura", "Crear Registros");
+                                    renderList += CrearEstructuraCheck(false, "Configuracion", value.idPermiso, value.idRol, "Escritura", "Crear");
                                 }
 
                                 if (value.lectura == true) {
-                                    renderList += CrearEstructuraCheck(true, "Configuracion", value.idPermiso, value.idRol, "Lectura", "Consultar Registros");
+                                    renderList += CrearEstructuraCheck(true, "Configuracion", value.idPermiso, value.idRol, "Lectura", "Consultar");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Configuracion", value.idPermiso, value.idRol, "Lectura", "Consultar Registros");
+                                    renderList += CrearEstructuraCheck(false, "Configuracion", value.idPermiso, value.idRol, "Lectura", "Consultar");
                                 }
 
                                 if (value.eliminar == true) {
-                                    renderList += CrearEstructuraCheck(true, "Configuracion", value.idPermiso, value.idRol, "Eliminar", "Eliminar Registros");
+                                    renderList += CrearEstructuraCheck(true, "Configuracion", value.idPermiso, value.idRol, "Eliminar", "Eliminar");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Configuracion", value.idPermiso, value.idRol, "Eliminar", "Eliminar Registros");
+                                    renderList += CrearEstructuraCheck(false, "Configuracion", value.idPermiso, value.idRol, "Eliminar", "Eliminar");
                                 }
 
                                 if (value.actualizar == true) {
-                                    renderList += CrearEstructuraCheck(true, "Configuracion", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
+                                    renderList += CrearEstructuraCheck(true, "Configuracion", value.idPermiso, value.idRol, "Actualizar", "Modificar");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Configuracion", value.idPermiso, value.idRol, "Actualizar", "Modificar Registros");
+                                    renderList += CrearEstructuraCheck(false, "Configuracion", value.idPermiso, value.idRol, "Actualizar", "Modificar");
                                 }
 
                             }
@@ -489,7 +490,7 @@ function CrearEstructuraCheck(Activo, Vista, IdPermiso, idRol, Accion, Label) {
     } else {
         Cadena += "class='form-check-input' type='checkbox'>"
     }
-    Cadena += "<span class='fw-semibold ps-2 fs-6'>"+Label+"</span>";
+    Cadena += "<span class='fw-semibold ps-2 fs-6' style='font-size: 50%'>"+Label+"</span>";
     Cadena += "</label></li>";
 
     return Cadena;
