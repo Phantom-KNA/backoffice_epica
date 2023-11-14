@@ -158,6 +158,15 @@ namespace Epica.Web.Operacion.Controllers
             }
 
             var List = new List<ResumenTransaccionSPEIINResponseGrid>();
+
+            bool permisoEditar = false;
+
+            var validacionEdicionEditar = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Operaciones" && modulo.Editar == 0);
+            
+            if (validacionEdicionEditar == true)
+                permisoEditar = true;
+            ViewBag.permisoEditar = permisoEditar;
+
             foreach (var row in ListPF)
             {
                 List.Add(new ResumenTransaccionSPEIINResponseGrid

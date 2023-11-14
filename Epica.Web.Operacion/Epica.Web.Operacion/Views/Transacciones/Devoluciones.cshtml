@@ -114,7 +114,7 @@
                             <div id="kt_datatable_buttons" class="d-none"></div>
 
                             @{
-                                var validacion = Model?.AccionesPorModulo!.Any(modulo => modulo.ModuloAcceso == "Transacciones" && modulo.Insertar == 0);
+                                var validacion = Model?.AccionesPorModulo!.Any(modulo => modulo.ModuloAcceso == "Operaciones" && modulo.Insertar == 0);
                                 if (validacion == true)
                                 {
                                     <div class="m-0">
