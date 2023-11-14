@@ -300,3 +300,7 @@ jQuery(document).ready(function () {
     //    });
     KTDatatableRemoteAjax.init();
 });
+
+$(document).on("click", "#Redireccion", function () {
+    KTApp.showPageLoading();
+});
