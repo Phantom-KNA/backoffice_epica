@@ -38,7 +38,7 @@ var KTDatatableTransacciones = (function () {
                 type: "POST",
                 error: function (jqXHR, textStatus, errorThrown) {
                     $(".dataTables_processing").hide();
-                    toastr.error("No se pudo encontrar información disponible.");
+                    toastr.error("Se agoto el tiempo de espera para consultar estos datos. Inténtelo más tarde.");
                 },
                 data: function (d) {
                     var filtros = [];
