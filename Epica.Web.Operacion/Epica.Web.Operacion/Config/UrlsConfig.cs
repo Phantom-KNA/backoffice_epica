@@ -145,7 +145,7 @@ public class UrlsConfig
         public static string DevolverTransacciones() => $"/api/v1/reintentador/aplicar_devoluciones";
         public static string DevolverTransaccion(string ClaveRastreo) => $"/api/v1/reintentador/aplicar_devolucion?claveRastreo={ClaveRastreo}";
         public static string AgregarTransaccion(string ClaveRastreo) => $"/api/v1/reintentador/add_transacciones?claveRastreo={ClaveRastreo}";
-        public static string GetTransaccionesDevolver() => $"/api/v1/reintentador/resumen";
+        public static string GetTransaccionesDevolver(string claveRastreo) => $"/api/v1/reintentador/resumen?claveRastreo={claveRastreo}";
     }
 
     public class AbonosOperations

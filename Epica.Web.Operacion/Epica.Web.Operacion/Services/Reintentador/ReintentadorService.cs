@@ -138,13 +138,13 @@ namespace Epica.Web.Operacion.Services.Log
             return respuesta;
         }
 
-        public async Task<List<DevolucionesResponse>> GetTransaccionesDevolverReintentar()
+        public async Task<List<DevolucionesResponse>> GetTransaccionesDevolverReintentar(string? claveRastreo)
         {
             List<DevolucionesResponse> listaTransacciones = new List<DevolucionesResponse>();
 
             try
             {
-                var uri = Urls.Transaccion + UrlsConfig.ReintentadorOperations.GetTransaccionesDevolver();
+                var uri = Urls.Transaccion + UrlsConfig.ReintentadorOperations.GetTransaccionesDevolver(claveRastreo);
                 var response = await ApiClient.GetAsync(uri);
 
                 if (response.IsSuccessStatusCode)

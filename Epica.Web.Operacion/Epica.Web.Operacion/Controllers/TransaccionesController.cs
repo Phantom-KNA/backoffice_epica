@@ -495,7 +495,16 @@ namespace Epica.Web.Operacion.Controllers
             var gridData = new ResponseGrid<DevolucionesResponseGrid>();
             List<DevolucionesResponse> ListPF = new List<DevolucionesResponse>();
 
-            ListPF = await _reintentadorService.GetTransaccionesDevolverReintentar();
+            if (!string.IsNullOrEmpty(request.Busqueda))
+            {
+                ListPF = await _reintentadorService.GetTransaccionesDevolverReintentar(request!.Busqueda!.ToString());
+
+            }
+            else
+            {
+                ListPF = await _reintentadorService.GetTransaccionesDevolverReintentar(null);
+            }
+
 
             var List = new List<DevolucionesResponseGrid>();
             foreach (var row in ListPF)
@@ -513,19 +522,19 @@ namespace Epica.Web.Operacion.Controllers
                     Acciones = await this.RenderViewToStringAsync("~/Views/Transacciones/_AccionesDevoluciones.cshtml", row)
                 });
             }
-            if (!string.IsNullOrEmpty(request.Busqueda))
-            {
-                List = List.Where(x =>
-                (x.Id.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-                (x.ClaveRastreo?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-                (x.CuentaOrigen?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-                (x.Monto.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-                (x.Concepto?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-                (x.FechaAlta?.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-                (x.CuentaDestino?.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
-                (x.BancoTxt?.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower())
-                ).ToList();
-            }
+            //if (!string.IsNullOrEmpty(request.Busqueda))
+            //{
+            //    List = List.Where(x =>
+            //    (x.Id.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            //    (x.ClaveRastreo?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            //    (x.CuentaOrigen?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            //    (x.Monto.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            //    (x.Concepto?.ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            //    (x.FechaAlta?.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            //    (x.CuentaDestino?.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower()) ||
+            //    (x.BancoTxt?.ToString().ToLower() ?? "").Contains(request.Busqueda.ToLower())
+            //    ).ToList();
+            //}
             //Aplicacion de Filtros temporal, 
             //var filtroCuentaOrdenante = filters.FirstOrDefault(x => x.Key == "cuentaOrdenante");
             //var filtroNombreOrdenante = filters.FirstOrDefault(x => x.Key == "nombreOrdenante");

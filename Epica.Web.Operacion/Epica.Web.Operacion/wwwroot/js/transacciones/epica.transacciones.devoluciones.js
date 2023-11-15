@@ -92,9 +92,15 @@ var KTDatatableTransacciones = (function () {
     };
 
     var handleSearchDatatable = function () {
-        var filterSearch = document.getElementById('search_input');
+        const filterSearch = document.getElementById('search_input');
         filterSearch.addEventListener('keyup', function (e) {
-            datatable_myAccounts.search(e.target.value).draw();
+            if (e.key === 'Enter') {
+                if (filterSearch.value.length >= 6 && filterSearch.value.length <= 40) {
+                    datatable_myAccounts.search(filterSearch.value).draw();
+                }
+            } else if (filterSearch.value === '') {
+                datatable_myAccounts.search(filterSearch.value).draw();
+            }
         });
     }
 
