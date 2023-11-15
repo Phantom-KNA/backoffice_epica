@@ -36,7 +36,7 @@ var KTDatatableRemoteAjax = function () {
             pagingType: 'simple_numbers',
             searching: true,
             lengthMenu: [5, 10, 15, 25, 50, 100],
-            processing: true,
+            processing: false,
             serverSide: true,
             filter: true,
             ordering: false,
@@ -681,6 +681,14 @@ $('#kt_datatable').on('show.bs.dropdown', function () {
 
 $('#kt_datatable').on('hide.bs.dropdown', function () {
     $('#kt_datatable').css("overflow", "auto");
+})
+
+$('#kt_datatable').on('processing.dt', function (e, settings, processing) {
+    if (processing) {
+        KTApp.showPageLoading();
+    } else {
+        KTApp.hidePageLoading();
+    }
 })
 
 //function SoloNumeros(e) {

@@ -385,6 +385,13 @@ $("#filtro_username, #filtro_rol, #filtro_fecha_alta, #filtro_fecha_acceso").on(
     }
 });
 
+$('#kt_datatable').on('processing.dt', function (e, settings, processing) {
+    if (processing) {
+        KTApp.showPageLoading();
+    } else {
+        KTApp.hidePageLoading();
+    }
+})
 
 
 

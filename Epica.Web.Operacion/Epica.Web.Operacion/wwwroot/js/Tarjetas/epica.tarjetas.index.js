@@ -375,6 +375,14 @@ function isValidInput(input) {
     return input.length === 6 && !isNaN(input);
 }
 
+$('#kt_datatable_card').on('processing.dt', function (e, settings, processing) {
+    if (processing) {
+        KTApp.showPageLoading();
+    } else {
+        KTApp.hidePageLoading();
+    }
+})
+
 //function Registro() {
 //    Swal.fire({
 //        title: '<span class="swal-title-custom"><b>Valida tu identidad</b></span>',

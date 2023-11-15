@@ -32,7 +32,7 @@ var KTDatatableRemoteAjax = function () {
             pagingType: 'simple_numbers',
             searching: true,
             lengthMenu: [5, 10, 15, 25, 50, 100],
-            processing: true,
+            processing: false,
             serverSide: true,
             filter: true,
             ordering: false,
@@ -621,3 +621,10 @@ jQuery(document).ready(function () {
     KTDatatableRemoteAjax.init();
 });
 
+$('#kt_datatable_user').on('processing.dt', function (e, settings, processing) {
+    if (processing) {
+        KTApp.showPageLoading();
+    } else {
+        KTApp.hidePageLoading();
+    }
+})

@@ -167,20 +167,23 @@ namespace Epica.Web.Operacion.Controllers
                 permisoEditar = true;
             ViewBag.permisoEditar = permisoEditar;
 
-            foreach (var row in ListPF)
+            if (ListPF != null)
             {
-                List.Add(new ResumenTransaccionSPEIINResponseGrid
+                foreach (var row in ListPF)
                 {
-                    Id = row.Id,
-                    ClaveRastreo = !string.IsNullOrWhiteSpace(row.ClaveRastreo) ? row.ClaveRastreo : "-",
-                    Monto = row.Monto,
-                    CuentaOrdenante = !string.IsNullOrWhiteSpace(row.CuentaOrdenante) ? row.CuentaOrdenante : "-",
-                    NombreOrdenante = !string.IsNullOrWhiteSpace(row.NombreOrdenante) ? row.NombreOrdenante : "-",
-                    Concepto = !string.IsNullOrWhiteSpace(row.Concepto) ? row.Concepto : "-",
-                    DescripcionEstatusAutorizacion = !string.IsNullOrWhiteSpace(row.DescripcionEstatusAutorizacion) ? row.DescripcionEstatusAutorizacion : "-",
-                    descripcioEstatusTransaccion = !string.IsNullOrWhiteSpace(row.descripcioEstatusTransaccion) ? row.descripcioEstatusTransaccion : "-",
-                    Acciones = await this.RenderViewToStringAsync("~/Views/Autorizador/_Acciones.cshtml", row)
-                });
+                    List.Add(new ResumenTransaccionSPEIINResponseGrid
+                    {
+                        Id = row.Id,
+                        ClaveRastreo = !string.IsNullOrWhiteSpace(row.ClaveRastreo) ? row.ClaveRastreo : "-",
+                        Monto = row.Monto,
+                        CuentaOrdenante = !string.IsNullOrWhiteSpace(row.CuentaOrdenante) ? row.CuentaOrdenante : "-",
+                        NombreOrdenante = !string.IsNullOrWhiteSpace(row.NombreOrdenante) ? row.NombreOrdenante : "-",
+                        Concepto = !string.IsNullOrWhiteSpace(row.Concepto) ? row.Concepto : "-",
+                        DescripcionEstatusAutorizacion = !string.IsNullOrWhiteSpace(row.DescripcionEstatusAutorizacion) ? row.DescripcionEstatusAutorizacion : "-",
+                        descripcioEstatusTransaccion = !string.IsNullOrWhiteSpace(row.descripcioEstatusTransaccion) ? row.descripcioEstatusTransaccion : "-",
+                        Acciones = await this.RenderViewToStringAsync("~/Views/Autorizador/_Acciones.cshtml", row)
+                    });
+                }
             }
 
             gridData.Data = List;

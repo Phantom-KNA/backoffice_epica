@@ -427,3 +427,11 @@ $("#filtro_cuenta_ordenante, #filtro_claveRastreo, #filtro_nombreBeneficiario, #
         $("#btnAplicarFiltros").click();
     }
 });
+
+$('#kt_datatable_movements').on('processing.dt', function (e, settings, processing) {
+    if (processing) {
+        KTApp.showPageLoading();
+    } else {
+        KTApp.hidePageLoading();
+    }
+})

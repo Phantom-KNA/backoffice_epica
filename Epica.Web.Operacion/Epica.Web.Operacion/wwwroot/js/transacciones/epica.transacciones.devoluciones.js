@@ -503,3 +503,11 @@ $(document).on('click', '#ValidarTransaccionAdd', function () {
         }
     });
 });
+
+$('#kt_datatable_movements').on('processing.dt', function (e, settings, processing) {
+    if (processing) {
+        KTApp.showPageLoading();
+    } else {
+        KTApp.hidePageLoading();
+    }
+})
