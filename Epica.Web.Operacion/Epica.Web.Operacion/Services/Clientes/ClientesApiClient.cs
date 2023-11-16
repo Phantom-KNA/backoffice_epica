@@ -371,7 +371,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return listaDocumentosCliente;
             }
 
             return listaDocumentosCliente!;
