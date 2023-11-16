@@ -28,7 +28,7 @@ var KTDatatableTransacciones = (function () {
             pagingType: 'simple_numbers',
             searching: true,
             lengthMenu: [10, 15, 20, 25, 50, 100],
-            processing: true,
+            processing: false,
             serverSide: true,
             filter: true,
             ordering: false,
@@ -298,3 +298,11 @@ function RechazarAbono(id) {
         }
     });
 }
+
+$('#kt_datatable_abono').on('processing.dt', function (e, settings, processing) {
+    if (processing) {
+        KTApp.showPageLoading();
+    } else {
+        KTApp.hidePageLoading();
+    }
+})

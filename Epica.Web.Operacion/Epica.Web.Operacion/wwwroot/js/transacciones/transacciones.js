@@ -135,7 +135,7 @@ var KTDatatableTransacciones = (function () {
         const filterSearch = document.getElementById('search_input');
         filterSearch.addEventListener('keyup', function (e) {
             if (e.key === 'Enter') {
-                if (filterSearch.value.length >= 6 && filterSearch.value.length <= 40) {
+                if (filterSearch.value.length >= 18 && filterSearch.value.length <= 40) {
                     datatable_myAccounts.search(filterSearch.value).draw();
                 }
             } else if (filterSearch.value === '') {
@@ -427,3 +427,11 @@ $("#filtro_cuenta_ordenante, #filtro_claveRastreo, #filtro_nombreBeneficiario, #
         $("#btnAplicarFiltros").click();
     }
 });
+
+$('#kt_datatable_movements').on('processing.dt', function (e, settings, processing) {
+    if (processing) {
+        KTApp.showPageLoading();
+    } else {
+        KTApp.hidePageLoading();
+    }
+})

@@ -32,7 +32,7 @@ var KTDatatableRemoteAjax = function () {
             pagingType: 'simple_numbers',
             searching: true,
             lengthMenu: [5, 10, 15, 25, 50, 100],
-            processing: true,
+            processing: false,
             serverSide: true,
             filter: true,
             ordering: false,
@@ -105,14 +105,14 @@ var KTDatatableRemoteAjax = function () {
     };
 
     var exportButtons = () => {
-        const documentTitle = 'Clientes';
+        const documentTitle = 'Personas Morales';
         var buttons = new $.fn.dataTable.Buttons(table, {
             buttons: [
                 {
                     extend: 'excelHtml5',
                     title: documentTitle,
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5]
+                        columns: [0, 1, 2, 3, 4]
                     }
                 }
             ]
@@ -607,3 +607,11 @@ function ResetContrasenaTelefono(Telefono, ID) {
 $(document).on("click", "#Redireccion", function () {
     toastr.info("Accediendo a información.");
 });
+
+$('#kt_datatable_user').on('processing.dt', function (e, settings, processing) {
+    if (processing) {
+        KTApp.showPageLoading();
+    } else {
+        KTApp.hidePageLoading();
+    }
+})

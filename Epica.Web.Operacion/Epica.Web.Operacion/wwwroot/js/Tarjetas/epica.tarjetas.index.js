@@ -148,7 +148,7 @@ var KTDatatableRemoteAjax = function () {
         const filterSearch = document.querySelector('[data-kt-customer-table-filter="search"]');
         filterSearch.addEventListener('keyup', function (e) {
             if (e.key === 'Enter') {
-                if (e.target.value.length >= 4 && e.target.value.length <= 16) {
+                if (e.target.value.length >= 16 && e.target.value.length <= 16) {
                     datatable.search(e.target.value).draw();
                 }
             } else if (filterSearch.value === '') {
@@ -239,6 +239,7 @@ var KTDatatableRemoteAjax = function () {
 jQuery(document).ready(function () {
     KTDatatableRemoteAjax.init();
 });
+
 function validateNumbersInput(inputElement) {
     var inputValue = inputElement.value;
     var cleanValue = '';

@@ -36,7 +36,7 @@ var KTDatatableRemoteAjax = function () {
             pagingType: 'simple_numbers',
             searching: true,
             lengthMenu: [5, 10, 15, 25, 50, 100],
-            processing: true,
+            processing: false,
             serverSide: true,
             filter: true,
             ordering: false,
@@ -161,7 +161,7 @@ var KTDatatableRemoteAjax = function () {
         var filterSearch = document.getElementById('search_input');
         filterSearch.addEventListener('keyup', function (e) {
             if (e.key === 'Enter') {
-                if (filterSearch.value.length >= 6 && filterSearch.value.length <= 20) {
+                if (filterSearch.value.length >= 18 && filterSearch.value.length <= 20) {
                     datatable.search(e.target.value).draw();
                 }
             } else if (filterSearch.value === '') {
@@ -681,6 +681,14 @@ $('#kt_datatable').on('show.bs.dropdown', function () {
 
 $('#kt_datatable').on('hide.bs.dropdown', function () {
     $('#kt_datatable').css("overflow", "auto");
+})
+
+$('#kt_datatable').on('processing.dt', function (e, settings, processing) {
+    if (processing) {
+        KTApp.showPageLoading();
+    } else {
+        KTApp.hidePageLoading();
+    }
 })
 
 //function SoloNumeros(e) {

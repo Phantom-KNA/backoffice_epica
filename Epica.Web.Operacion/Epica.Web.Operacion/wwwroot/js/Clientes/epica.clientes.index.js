@@ -32,7 +32,7 @@ var KTDatatableRemoteAjax = function () {
             pagingType: 'simple_numbers',
             searching: true,
             lengthMenu: [5, 10, 15, 25, 50, 100],
-            processing: true,
+            processing: false,
             serverSide: true,
             filter: true,
             ordering: false,
@@ -118,14 +118,14 @@ var KTDatatableRemoteAjax = function () {
     };
 
     var exportButtons = () => {
-        const documentTitle = 'Clientes';
+        const documentTitle = 'Personas Fisicas';
         var buttons = new $.fn.dataTable.Buttons(table, {
             buttons: [
                 {
                     extend: 'excelHtml5',
                     title: documentTitle,
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5]
+                        columns: [0, 1, 2, 3, 4, 5, 6]
                     }
                 }
             ]
@@ -147,7 +147,7 @@ var KTDatatableRemoteAjax = function () {
         var filterSearch = document.getElementById('search_input');
         filterSearch.addEventListener('keyup', function (e) {
             if (e.key === 'Enter') {
-                if (e.target.value.length >= 3 && e.target.value.length <= 40) {
+                if (e.target.value.length >= 3 && e.target.value.length <= 60) {
                     datatable.search(e.target.value).draw();
                 }
             } else if (e.target.value === '') {
@@ -621,3 +621,10 @@ jQuery(document).ready(function () {
     KTDatatableRemoteAjax.init();
 });
 
+$('#kt_datatable_user').on('processing.dt', function (e, settings, processing) {
+    if (processing) {
+        KTApp.showPageLoading();
+    } else {
+        KTApp.hidePageLoading();
+    }
+})
