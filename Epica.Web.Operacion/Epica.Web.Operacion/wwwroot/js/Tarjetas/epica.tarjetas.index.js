@@ -239,6 +239,7 @@ var KTDatatableRemoteAjax = function () {
 jQuery(document).ready(function () {
     KTDatatableRemoteAjax.init();
 });
+
 function validateNumbersInput(inputElement) {
     var inputValue = inputElement.value;
     var cleanValue = '';
@@ -374,14 +375,6 @@ function validateInputToken(inputElement) {
 function isValidInput(input) {
     return input.length === 6 && !isNaN(input);
 }
-
-$('#kt_datatable_card').on('processing.dt', function (e, settings, processing) {
-    if (processing) {
-        KTApp.showPageLoading();
-    } else {
-        KTApp.hidePageLoading();
-    }
-})
 
 //function Registro() {
 //    Swal.fire({

@@ -26,7 +26,7 @@ var KTDatatableTransacciones = (function () {
             pagingType: 'simple_numbers',
             searching: true,
             lengthMenu: [10, 15, 25, 50, 100],
-            processing: true,
+            processing: false,
             serverSide: true,
             filter: true,
             ordering: false,
