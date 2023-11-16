@@ -1099,24 +1099,28 @@ public class ClientesController : Controller
             ListPF = await _clientesApiClient.GetDocumentosClienteAsync(Convert.ToInt32(idAccount));
 
             var List = new List<DocumentosClienteResponseGrid>();
-            foreach (var row in ListPF.value)
+
+            if (ListPF.value != null)
             {
-                var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(row.ruta_documento);
-                var ally = System.Convert.ToBase64String(plainTextBytes);
-
-                row.urlAlly = ally;
-
-                List.Add(new DocumentosClienteResponseGrid
+                foreach (var row in ListPF.value)
                 {
-                    IdCliente = row.IdCliente,
-                    DescripcionDocumento = row.DescripcionDocumento,
-                    tipo_documento = row.tipo_documento,
-                    fechaalta = row.fecha_alta.ToString(),
-                    fechaactualizacion = row.fecha_actualizacion.ToString(),
-                    Observaciones = row.Observaciones,
-                    urlAlly = ally,
-                    Acciones = await this.RenderViewToStringAsync("~/Views/Clientes/_AccionesDocumentos.cshtml", row)
-                });
+                    var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(row.ruta_documento);
+                    var ally = System.Convert.ToBase64String(plainTextBytes);
+
+                    row.urlAlly = ally;
+
+                    List.Add(new DocumentosClienteResponseGrid
+                    {
+                        IdCliente = row.IdCliente,
+                        DescripcionDocumento = row.DescripcionDocumento,
+                        tipo_documento = row.tipo_documento,
+                        fechaalta = row.fecha_alta.ToString(),
+                        fechaactualizacion = row.fecha_actualizacion.ToString(),
+                        Observaciones = row.Observaciones,
+                        urlAlly = ally,
+                        Acciones = await this.RenderViewToStringAsync("~/Views/Clientes/_AccionesDocumentos.cshtml", row)
+                    });
+                }
             }
 
             if (!string.IsNullOrEmpty(request.Busqueda))
