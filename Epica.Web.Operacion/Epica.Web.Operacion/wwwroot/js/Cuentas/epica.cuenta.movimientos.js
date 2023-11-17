@@ -72,7 +72,7 @@ var KTDatatableRemoteAjax = function () {
                     }
                 },
                 //{ data: "fechaAlta", name: "Fecha", title: "FECHA" },
-                { data: "fechaInstruccion", name: "FechaInstruccion", title: "FECHA INSTRUCCIÓN" },
+                { data: "fechaAlta", name: "FechaAlta", title: "FECHA ALTA" },
                 { data: "fechaAutorizacion", name: "FechaAutorizacion", title: "FECHA AUTORIZACIÓN" },
                 {
                     data: "estatus", name: "Estatus", title: "ESTATUS",
