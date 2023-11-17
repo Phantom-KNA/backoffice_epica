@@ -37,7 +37,7 @@ var KTDatatableRemoteAjax = function () {
             processing: false,
             serverSide: true,
             filter: true,
-            ordering: true,
+            ordering: false,
             ajax: {
                 url: siteLocation + 'Clientes/ConsultarListadoDocumentos',
                 type: 'POST',
