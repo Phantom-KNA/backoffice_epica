@@ -47,41 +47,8 @@ stages:
         azureSubscription: 'Azure subscription 1 - Prod'
         azureContainerRegistry: '{"loginServer":"acralquimiaprod.azurecr.io", "id" : "/subscriptions/1bbd807f-3fcf-4844-8e40-760ec2cc71ad/resourceGroups/rg-alquimia-prod/providers/Microsoft.ContainerRegistry/registries/acralquimiaprod"}'
         action: Push an image
+        includeLatestTag: true
 
     - upload: manifests
       artifact: manifests
-
-- stage: Deploy
-  displayName: Deploy stage
-  dependsOn: Build
-
-  jobs:
-  - deployment: Deploy
-    displayName: Deploy
-    pool:
-      vmImage: $(vmImageName)
-    environment: 'WebAppOperacion-1352.alquimia'
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: KubernetesManifest@0
-            displayName: Create imagePullSecret
-            inputs:
-              action: createSecret
-              secretName: $(imagePullSecret)
-              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
-
-          - task: KubernetesManifest@0
-            displayName: Deploy to Kubernetes cluster
-            inputs:
-              action: deploy
-              manifests: |
-                $(Pipeline.Workspace)/manifests/prod/deployment.yml
-                $(Pipeline.Workspace)/manifests/prod/service.yml
-                $(Pipeline.Workspace)/manifests/prod/ingress.yml
-              imagePullSecrets: |
-                $(imagePullSecret)
-              containers: |
-                $(containerRegistry)/$(imageRepository):$(tag)
 
