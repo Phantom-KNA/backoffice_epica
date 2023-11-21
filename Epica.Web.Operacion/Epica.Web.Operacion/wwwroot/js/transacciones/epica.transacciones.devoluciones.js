@@ -366,7 +366,7 @@ function DevolverTransaccion(claveRastreo) {
                             'error'
                         )
                     } else {
-                        datatable_transaccion.ajax.reload();
+                        KTDatatableTransacciones.reload();
                         Swal.fire(
                             'Devolver Transacción',
                             'Se ha realizado la devolución de la transacción con éxito.',
@@ -450,13 +450,14 @@ function ReenviarTransaccion(claveRastreo) {
                                     success: function (data) {
                                         KTApp.hidePageLoading();
                                         if (data.error == true) {
+                                            
                                             Swal.fire(
                                                 'Reenviar Transacción',
                                                 'Hubo un problema para reenviar esta transacción, inténtelo más tarde o verifique su existencia.',
                                                 'error'
                                             )
                                         } else {
-                                            datatable_transaccion.ajax.reload();
+                                            KTDatatableTransacciones.reload();
                                             Swal.fire(
                                                 'Reenviar Transacción',
                                                 'Se ha realizado el reenvío de la transacción con éxito.',
