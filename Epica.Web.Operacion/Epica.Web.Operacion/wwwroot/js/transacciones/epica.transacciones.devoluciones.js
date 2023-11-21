@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-const KTBlockUI = require("../components/blockui");
+//const KTBlockUI = require("../components/blockui");
 
 var datatable_myAccounts;
 
