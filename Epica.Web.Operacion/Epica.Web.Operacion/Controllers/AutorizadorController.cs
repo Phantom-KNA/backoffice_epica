@@ -90,6 +90,7 @@ namespace Epica.Web.Operacion.Controllers
             request.ColumnaOrdenamiento = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
             request.Ordenamiento = Request.Form["order[0][dir]"].FirstOrDefault();
 
+            //_
             if (request.ColumnaOrdenamiento != null)
             {
                 if (request.ColumnaOrdenamiento == "ClaveRastreo")
