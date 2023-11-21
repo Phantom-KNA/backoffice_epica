@@ -1,4 +1,7 @@
 ﻿"use strict";
+
+const KTBlockUI = require("../components/blockui");
+
 var datatable_myAccounts;
 
 //Agregar la tabla de transacciones
@@ -210,8 +213,7 @@ $(document).on('click', '.btn_reenviar_transacciones', function () {
     }).then((result) => {
         if (result.isConfirmed) {
 
-            toastr.info('Reenviando Transacciones...', "");
-
+            //toastr.info('Reenviando Transacciones...', "");
             $.ajax({
                 url: 'ReenviarTransacciones',
                 async: true,
@@ -223,14 +225,14 @@ $(document).on('click', '.btn_reenviar_transacciones', function () {
                     if (data.error == true) {
                         Swal.fire(
                             'Reenviar Transacción',
-                            'Hubo un problema al eliminar esta transacción, inténtelo más tarde o verifique su existencia.',
+                            'Hubo un problema al reenviar esta transacción, inténtelo más tarde o verifique su existencia.',
                             'error'
                         )
                     } else {
                         datatable_transaccion.ajax.reload();
                         Swal.fire(
                             'Reenviar Transacción',
-                            'Se ha eliminado la transacción con éxito.',
+                            'Se ha reenviado la transacción con éxito.',
                             'success'
                         )
                     }
@@ -323,6 +325,7 @@ function DevolverTransaccion(claveRastreo) {
         }
     }).then((result) => {
         if (result.isConfirmed) {
+            KTApp.showPageLoading();
             const [tokenInput, codigoInput] = result.value;
 
             // Realiza la validación del token y código de seguridad
@@ -333,6 +336,7 @@ function DevolverTransaccion(claveRastreo) {
                 type: 'POST',
                 data: { token: tokenInput, codigo: codigoInput },
                 success: function (validationResult) {
+                    KTApp.hidePageLoading();
                     if (validationResult.mensaje === true) {
     Swal.fire({
         title: 'Devolver Transacciones',
@@ -344,8 +348,8 @@ function DevolverTransaccion(claveRastreo) {
         confirmButtonText: 'Aceptar'
     }).then((result) => {
         if (result.isConfirmed) {
-
-            toastr.info('Aplicando Devolución a transacción...', "");
+            KTApp.showPageLoading();
+            //toastr.info('Aplicando Devolución a transacción...', "");
 
             $.ajax({
                 url: 'DevolverTransaccion',
@@ -354,7 +358,7 @@ function DevolverTransaccion(claveRastreo) {
                 type: 'POST',
                 data: { clavesRastreo: claveRastreo },
                 success: function (data) {
-
+                    KTApp.hidePageLoading();
                     if (data.error == true) {
                         Swal.fire(
                             'Devolver Transacción',
@@ -371,6 +375,7 @@ function DevolverTransaccion(claveRastreo) {
                     }
                 },
                 error: function (xhr, status, error) {
+                    KTApp.hidePageLoading();
                 }
             });
         }
@@ -384,6 +389,7 @@ function DevolverTransaccion(claveRastreo) {
                     }
                 },
                 error: function () {
+                    KTApp.hidePageLoading();
                 }
             });
         }
@@ -412,7 +418,7 @@ function ReenviarTransaccion(claveRastreo) {
     }).then((result) => {
         if (result.isConfirmed) {
             const [tokenInput, codigoInput] = result.value;
-
+            KTApp.showPageLoading();
             // Realiza la validación del token y código de seguridad
             $.ajax({
                 url: '/Autenticacion/ValidarTokenYCodigo',
@@ -421,6 +427,7 @@ function ReenviarTransaccion(claveRastreo) {
                 type: 'POST',
                 data: { token: tokenInput, codigo: codigoInput },
                 success: function (validationResult) {
+                    KTApp.hidePageLoading();
                     if (validationResult.mensaje === true) {
                         Swal.fire({
                             title: 'Reenviar Transacción',
@@ -432,8 +439,8 @@ function ReenviarTransaccion(claveRastreo) {
                             confirmButtonText: 'Aceptar'
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                toastr.info('Aplicando Devolución a transacción...', "");
-
+                                //toastr.info('Aplicando Devolución a transacción...', "");
+                                KTApp.showPageLoading();
                                 $.ajax({
                                     url: 'ReenviarTransaccion',
                                     async: true,
@@ -441,6 +448,7 @@ function ReenviarTransaccion(claveRastreo) {
                                     type: 'POST',
                                     data: { clavesRastreo: claveRastreo },
                                     success: function (data) {
+                                        KTApp.hidePageLoading();
                                         if (data.error == true) {
                                             Swal.fire(
                                                 'Reenviar Transacción',
@@ -457,6 +465,7 @@ function ReenviarTransaccion(claveRastreo) {
                                         }
                                     },
                                     error: function (xhr, status, error) {
+                                        KTApp.hidePageLoading();
                                     }
                                 });
                             }
@@ -470,6 +479,7 @@ function ReenviarTransaccion(claveRastreo) {
                     }
                 },
                 error: function () {
+                    KTApp.hidePageLoading();
                 }
             });
         }
