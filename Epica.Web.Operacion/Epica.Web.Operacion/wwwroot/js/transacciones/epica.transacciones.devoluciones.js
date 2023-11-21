@@ -56,12 +56,12 @@ var KTDatatableTransacciones = (function () {
                 "targets": "_all"
             }],
             columns: [
-                {
-                    data: "claveRastreo", name: "ClaveRastreo", title: "",
-                    render: function (data, type, row) {
-                        return "<input type='checkbox' class='reenviarCb' data-claveRastreo='" + data +"'>"
-                    }
-                },
+                //{
+                //    data: "claveRastreo", name: "ClaveRastreo", title: "",
+                //    render: function (data, type, row) {
+                //        return "<input type='checkbox' class='reenviarCb' data-claveRastreo='" + data +"'>"
+                //    }
+                //},
                 { data: "cuentaOrigen", name: "CuentaOrigen", title: "Cuenta Origen" },
                 {
                     data: "monto", name: "Monto", title: "Monto",
