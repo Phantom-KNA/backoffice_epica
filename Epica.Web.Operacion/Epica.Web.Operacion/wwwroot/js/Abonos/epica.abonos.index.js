@@ -195,6 +195,66 @@ $(document).ready(function () {
     KTDatatableTransacciones.init();
 });
 
+$(document).on('click', '.btnDetalle', function (e) {
+    var id = $(this).data('id');
+
+    ModalDetalle.init(id);
+});
+
+var ModalDetalle = function () {
+
+    var init = function (id) {
+        abrirModal(id);
+    }
+    var abrirModal = function (id) {
+
+        $.ajax({
+            cache: false,
+            type: 'GET',
+            url: siteLocation + "Autorizador/DetalleSpeiIn",
+            data: { 'Id': id},
+            success: function (result) {
+                if (result.error) {
+                    $(window).scrollTop(0);
+                    $("#DivSuccessMessage").hide();
+                    $("#DivErrorMessage").show();
+                    setTimeout(function () { $("#DivErrorMessage").hide() }, 3000);
+                    $("#ErrorMessage").text(result.errorDescription);
+                } else {
+                    $('#modal_detalle #modalLabelTitle').html('Detalle de Spei In');
+                    $('#modal_detalle .modal-body').html(result.result);
+
+                    $('#modal_detalle').modal('show');
+                }
+
+                return;
+            },
+            error: function (res) {
+                $("#DivSuccessMessage").hide();
+                $("#DivErrorMessage").show();
+                $("#ErrorMessage").text('Error');
+            }
+        });
+        listeners();
+    }
+    // Inicializa los listeners de los botones relacionados a la ventana modal
+    var listeners = function () {
+
+    }
+    // Cerramos la ventana modal
+    var cerrarModal = function () {
+        $('#btnCancelar').click();
+    }
+    return {
+        init: function (id) {
+            init(id);
+        },
+        cerrarventanamodal: function () {
+            cerrarModal();
+        }
+    }
+}();
+
 $("#filtro_cuenta_ordenante, #filtro_claveRastreo, #filtro_nombreBeneficiario, #filtro_transaccion, #filtro_monto").on("keydown", function (e) {
     if (e.keyCode === 13) {
         e.preventDefault();
