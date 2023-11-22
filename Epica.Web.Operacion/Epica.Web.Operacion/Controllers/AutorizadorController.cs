@@ -180,6 +180,7 @@ namespace Epica.Web.Operacion.Controllers
                         CuentaOrdenante = !string.IsNullOrWhiteSpace(row.CuentaOrdenante) ? row.CuentaOrdenante : "-",
                         NombreOrdenante = !string.IsNullOrWhiteSpace(row.NombreOrdenante) ? row.NombreOrdenante : "-",
                         Concepto = !string.IsNullOrWhiteSpace(row.Concepto) ? row.Concepto : "-",
+                        Fecha = !string.IsNullOrWhiteSpace(row.Fecha) ? row.Fecha : "-",
                         DescripcionEstatusAutorizacion = !string.IsNullOrWhiteSpace(row.DescripcionEstatusAutorizacion) ? row.DescripcionEstatusAutorizacion : "-",
                         descripcioEstatusTransaccion = !string.IsNullOrWhiteSpace(row.descripcioEstatusTransaccion) ? row.descripcioEstatusTransaccion : "-",
                         Acciones = await this.RenderViewToStringAsync("~/Views/Autorizador/_Acciones.cshtml", row)
