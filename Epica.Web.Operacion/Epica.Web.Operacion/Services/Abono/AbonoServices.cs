@@ -115,10 +115,10 @@ namespace Epica.Web.Operacion.Services.Transaccion
                     uri += string.Format("&estatusAutizacion={0}", Convert.ToString(filtroestatusAutorizacion.Value));
                 }
 
-                if (filtroestatusTransaccion!.Value != null)
-                {
-                    uri += string.Format("&estatusTransaccion={0}", Convert.ToString(filtroestatusTransaccion.Value));
-                }
+                //if (filtroestatusTransaccion!.Value != null)
+                //{
+                //    uri += string.Format("&estatusTransaccion={0}", Convert.ToString(filtroestatusTransaccion.Value));
+                //}
 
                 var response = await ApiClient.GetAsync(uri);
 

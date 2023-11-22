@@ -22,6 +22,8 @@ public class TransaccionSPEIINResponse
     public string? DescripcionEstatusAutorizacion { get; set; }
     [JsonPropertyName("descripcioEstatusTransaccion")]
     public string? descripcioEstatusTransaccion { get; set; }
+    [JsonPropertyName("fecha")]
+    public string? Fecha { get; set; }
 }
 
 public class ResumenTransaccionSPEIINResponseGrid : TransaccionSPEIINResponse

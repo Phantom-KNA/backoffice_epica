@@ -79,9 +79,10 @@ var KTDatatableTransacciones = (function () {
                     render: function (data, type, row) {
                         return '<div class="multiline-text" style="max-width: 150px; white-space: normal; word-wrap: break-word;">' + data + '</div>';
                     }
-                },                
+                },       
+                { data: "fecha", name: "fecha", title: "Fecha"},
                 { data: "descripcionEstatusAutorizacion", name: "DescripcionEstatusAutorizacion", title: "Estatus Autorización" },
-                { data: "descripcioEstatusTransaccion", name: "DescripcionEstatusTransaccion", title: "Estatus Transacción" },
+                { data: "descripcioEstatusTransaccion", name: "DescripcionEstatusTransaccion", title: "Motivo Rechazo" },
                 {
                     title: '',
                     orderable: false,
@@ -113,14 +114,14 @@ var KTDatatableTransacciones = (function () {
     }
 
     var exportButtons = () => {
-        const documentTitle = 'Transacciones';
+        const documentTitle = 'Autorizador';
         var buttons = new $.fn.dataTable.Buttons(table, {
             buttons: [
                 {
                     extend: 'excelHtml5',
                     title: documentTitle,
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7,8]
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7]
                     }
                 }
             ]
