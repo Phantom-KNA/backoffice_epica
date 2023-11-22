@@ -24,6 +24,11 @@ public class TransaccionSPEIINResponse
     public string? descripcioEstatusTransaccion { get; set; }
     [JsonPropertyName("fecha")]
     public string? Fecha { get; set; }
+
+    [JsonPropertyName("nombreBeneficiario")]
+    public string? NombreBeneficiario { get; set; }
+    [JsonPropertyName("cuentaBeneficiario")]
+    public string? CuentaBeneficiario { get; set; }
 }
 
 public class ResumenTransaccionSPEIINResponseGrid : TransaccionSPEIINResponse

@@ -229,7 +229,36 @@ namespace Epica.Web.Operacion.Controllers
             }
         }
         #endregion
+        [Authorize]
+        public async Task<IActionResult> DetalleSpeiIn(string Id)
+        {
+            var result = new JsonResultDto();
 
+            TransaccionSPEIINResponse detalleSpeiIn = new TransaccionSPEIINResponse();
+
+            try
+            {
+                detalleSpeiIn = await _abonoService.GetSpeiInDetalleAsync(Convert.ToInt32(Id));
+
+                if (detalleSpeiIn != null)
+                {
+                    result.Error = false;
+                    result.Result = await this.RenderViewToStringAsync("~/Views/Autorizador/_Detalle.cshtml", detalleSpeiIn);
+                }
+                else
+                {
+                    result.Error = true;
+                    result.ErrorDescription = "ERROR";
+                    return Json(result);
+                }
+            }
+            catch (Exception)
+            {
+                result.Error = true;
+                result.ErrorDescription = "Error1";
+            }
+            return Json(result);
+        }
         #endregion
 
         #region "Modelos"
