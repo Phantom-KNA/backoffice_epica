@@ -478,6 +478,7 @@ namespace Epica.Web.Operacion.Controllers
         public async Task<JsonResult> ConsultaDevoluciones(List<RequestListFilters> filters)
         {
             var request = new RequestList();
+            var loginResponse = _userContextService.GetLoginResponse();
 
             int totalRecord = 0;
             int filterRecord = 0;
@@ -505,6 +506,15 @@ namespace Epica.Web.Operacion.Controllers
                 ListPF = await _reintentadorService.GetTransaccionesDevolverReintentar(null);
             }
 
+            bool permisoEditar = false;
+            bool permisoVer = false;
+
+            var validacionEdicionEditar = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Reintentador" && modulo.Editar == 0);
+
+            if (validacionEdicionEditar == true)
+                permisoEditar = true;
+
+            ViewBag.permisoEditar = permisoEditar;
 
             var List = new List<DevolucionesResponseGrid>();
             foreach (var row in ListPF)
