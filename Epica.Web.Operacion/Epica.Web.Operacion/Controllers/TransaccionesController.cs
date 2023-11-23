@@ -465,7 +465,7 @@ namespace Epica.Web.Operacion.Controllers
         public IActionResult Devoluciones()
         {
             var loginResponse = _userContextService.GetLoginResponse();
-            var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Operaciones" && modulo.Ver == 0);
+            var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Reintentador" && modulo.Ver == 0);
             if (validacion == true)
             {
                 return View(loginResponse);
