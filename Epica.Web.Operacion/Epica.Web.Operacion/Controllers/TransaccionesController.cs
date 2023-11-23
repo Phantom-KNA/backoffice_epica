@@ -618,10 +618,29 @@ namespace Epica.Web.Operacion.Controllers
         public async Task<JsonResult> ReenviarTransacciones(List<string> clavesRastreo)
         {
             MensajeResponse response = new MensajeResponse();
+            var loginResponse = _userContextService.GetLoginResponse();
 
             try
             {
                 response = await _reintentadorService.GetReenviarTransaccionesAsync(clavesRastreo);
+
+
+                LogRequest logRequest = new LogRequest
+                {
+                    IdUser = loginResponse.IdUsuario.ToString(),
+                    Modulo = "Reintentador",
+                    Fecha = HoraHelper.GetHoraCiudadMexico(),
+                    NombreEquipo = loginResponse.NombreDispositivo,
+                    Accion = "Reenviar Transacciones",
+                    Ip = loginResponse.DireccionIp,
+                    Envio = JsonConvert.SerializeObject(clavesRastreo),
+                    Respuesta = response.Error.ToString(),
+                    Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
+                    IdRegistro = loginResponse.IdUsuario
+                };
+
+                await _logsApiClient.InsertarLogAsync(logRequest);
+
             } catch (Exception ex) {
                 response.Error = true;
             }
@@ -633,10 +652,40 @@ namespace Epica.Web.Operacion.Controllers
         public async Task<JsonResult> ReenviarTransaccion(string clavesRastreo)
         {
             MensajeResponse response = new MensajeResponse();
+            var loginResponse = _userContextService.GetLoginResponse();
 
             try
             {
                 response = await _reintentadorService.GetReenviarTransaccionAsync(clavesRastreo);
+
+                string detalle = response.Detalle;
+                int idRegistro = 0;
+                try
+                {
+                    string pattern = @"\d+";
+                    Match match = Regex.Match(detalle, pattern);
+                    idRegistro = int.Parse(match.Value);
+                }
+                catch (FormatException)
+                {
+                    idRegistro = 0;
+                }
+
+                LogRequest logRequest = new LogRequest
+                {
+                    IdUser = loginResponse.IdUsuario.ToString(),
+                    Modulo = "Reintentador",
+                    Fecha = HoraHelper.GetHoraCiudadMexico(),
+                    NombreEquipo = loginResponse.NombreDispositivo,
+                    Accion = "Reenviar Transaccion",
+                    Ip = loginResponse.DireccionIp,
+                    Envio = JsonConvert.SerializeObject(clavesRastreo),
+                    Respuesta = response.Error.ToString(),
+                    Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
+                    IdRegistro = idRegistro
+                };
+
+                await _logsApiClient.InsertarLogAsync(logRequest);
             }
             catch (Exception ex)
             {
@@ -667,10 +716,27 @@ namespace Epica.Web.Operacion.Controllers
         public async Task<JsonResult> DevolverTransaccion(string clavesRastreo)
         {
             MensajeResponse response = new MensajeResponse();
+            var loginResponse = _userContextService.GetLoginResponse();
 
             try
             {
                 response = await _reintentadorService.GetDevolverTransaccionAsync(clavesRastreo);
+
+                LogRequest logRequest = new LogRequest
+                {
+                    IdUser = loginResponse.IdUsuario.ToString(),
+                    Modulo = "Reintentador",
+                    Fecha = HoraHelper.GetHoraCiudadMexico(),
+                    NombreEquipo = loginResponse.NombreDispositivo,
+                    Accion = "Devolver Transaccion",
+                    Ip = loginResponse.DireccionIp,
+                    Envio = JsonConvert.SerializeObject(clavesRastreo),
+                    Respuesta = response.Error.ToString(),
+                    Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
+                    IdRegistro = loginResponse.IdUsuario
+                };
+
+                await _logsApiClient.InsertarLogAsync(logRequest);
             }
             catch (Exception ex)
             {

@@ -17,6 +17,8 @@ using System;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.IdentityModel.Tokens;
+using Epica.Web.Operacion.Models.Response;
+using System.Reflection;
 
 namespace Epica.Web.Operacion.Controllers
 {
@@ -209,6 +211,23 @@ namespace Epica.Web.Operacion.Controllers
         {
             bool rechazar = false;
             var response = await _abonoService.PatchAutorizadorSpeiInAsync(id, rechazar);
+            var loginResponse = _userContextService.GetLoginResponse();
+
+            LogRequest logRequest = new LogRequest
+            {
+                IdUser = loginResponse.IdUsuario.ToString(),
+                Modulo = "Autorizador",
+                Fecha = HoraHelper.GetHoraCiudadMexico(),
+                NombreEquipo = loginResponse.NombreDispositivo,
+                Accion = "Acreditar Abono",
+                Ip = loginResponse.DireccionIp,
+                Envio = JsonConvert.SerializeObject(id),
+                Respuesta = response.Error.ToString(),
+                Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
+                IdRegistro = id
+            };
+
+            await _logsApiClient.InsertarLogAsync(logRequest);
 
             if (response.Error == false)
             {
@@ -226,6 +245,24 @@ namespace Epica.Web.Operacion.Controllers
             bool rechazar = true;
             var response = await _abonoService.PatchAutorizadorSpeiInAsync(id, rechazar);
 
+            var loginResponse = _userContextService.GetLoginResponse();
+
+            LogRequest logRequest = new LogRequest
+            {
+                IdUser = loginResponse.IdUsuario.ToString(),
+                Modulo = "Autorizador",
+                Fecha = HoraHelper.GetHoraCiudadMexico(),
+                NombreEquipo = loginResponse.NombreDispositivo,
+                Accion = "Rechazar Abono",
+                Ip = loginResponse.DireccionIp,
+                Envio = JsonConvert.SerializeObject(id),
+                Respuesta = response.Error.ToString(),
+                Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
+                IdRegistro = id
+            };
+
+            await _logsApiClient.InsertarLogAsync(logRequest);
+
             if (response.Error == false)
             {
                 return Ok(new { success = true, response.message });
@@ -236,6 +273,7 @@ namespace Epica.Web.Operacion.Controllers
             }
         }
         #endregion
+
         [Authorize]
         public async Task<IActionResult> DetalleSpeiIn(string Id)
         {
