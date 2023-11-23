@@ -722,6 +722,19 @@ namespace Epica.Web.Operacion.Controllers
             {
                 response = await _reintentadorService.GetDevolverTransaccionAsync(clavesRastreo);
 
+                string detalle = response.Detalle;
+                int idRegistro = 0;
+                try
+                {
+                    string pattern = @"\d+";
+                    Match match = Regex.Match(detalle, pattern);
+                    idRegistro = int.Parse(match.Value);
+                }
+                catch (FormatException)
+                {
+                    idRegistro = 0;
+                }
+
                 LogRequest logRequest = new LogRequest
                 {
                     IdUser = loginResponse.IdUsuario.ToString(),
@@ -733,7 +746,7 @@ namespace Epica.Web.Operacion.Controllers
                     Envio = JsonConvert.SerializeObject(clavesRastreo),
                     Respuesta = response.Error.ToString(),
                     Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
-                    IdRegistro = loginResponse.IdUsuario
+                    IdRegistro = idRegistro
                 };
 
                 await _logsApiClient.InsertarLogAsync(logRequest);
