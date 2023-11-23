@@ -89,6 +89,7 @@ namespace Epica.Web.Operacion.Services.Transaccion
                 var filtromonto = filters.FirstOrDefault(x => x.Key == "monto");
                 var filtroestatusAutorizacion = filters.FirstOrDefault(x => x.Key == "estatusAutorizacion");
                 var filtroestatusTransaccion = filters.FirstOrDefault(x => x.Key == "estatusTransaccion");
+                var filtroFecha = filters.FirstOrDefault(x => x.Key == "fecha");
 
                 if (filtroCuentaOrdenante!.Value != null)
                 {
@@ -115,10 +116,10 @@ namespace Epica.Web.Operacion.Services.Transaccion
                     uri += string.Format("&estatusAutizacion={0}", Convert.ToString(filtroestatusAutorizacion.Value));
                 }
 
-                //if (filtroestatusTransaccion!.Value != null)
-                //{
-                //    uri += string.Format("&estatusTransaccion={0}", Convert.ToString(filtroestatusTransaccion.Value));
-                //}
+                if (filtroFecha!.Value != null)
+                {
+                    uri += string.Format("&fecha={0}", Convert.ToString(filtroFecha.Value));
+                }
 
                 var response = await ApiClient.GetAsync(uri);
 
