@@ -141,8 +141,9 @@
                 <!--begin:Menu item-->
             }
             @{
-                var validacion5 = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Operaciones" && modulo.Ver == 0);
-                if (validacion5 == true)
+                var validacionAutorizador = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Autorizador" && modulo.Ver == 0);
+                var validacionReintentador = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Reintentador" && modulo.Ver == 0);
+                if (validacionAutorizador == true || validacionReintentador == true)
                 {
                     <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item py-2">
                         <!--begin:Menu link-->
@@ -155,7 +156,9 @@
                         <!--begin:Menu sub-->
                         <div class="menu-sub menu-sub-dropdown menu-sub-indention px-2 py-4 w-250px mh-75 overflow-auto">
                             <!--begin:Menu item-->
-                            <div class="menu-item">
+                            @if(validacionReintentador == true)
+                            {
+                                <div class="menu-item">
                                 <!--begin:Menu link-->
                                 <a class="menu-link" asp-action="Devoluciones" asp-controller="Transacciones">
                                     <span class="menu-bullet">
@@ -163,20 +166,23 @@
                                     </span>
                                     <span class="menu-title">Reintentador</span>
                                 </a>
-
+                                </div>
+                            }
+                            @if (validacionAutorizador == true)
+                            {
                                 <!--end:Menu link-->
-                            </div>
-                            <div class="menu-item">
-                                <!--begin:Menu link-->
-                                <a class="menu-link" asp-action="Index" asp-controller="Autorizador">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title">Autorizador</span>
-                                </a>
+                                <div class="menu-item">
+                                    <!--begin:Menu link-->
+                                    <a class="menu-link" asp-action="Index" asp-controller="Autorizador">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">Autorizador</span>
+                                    </a>
 
-                                <!--end:Menu link-->
-                            </div>
+                                    <!--end:Menu link-->
+                                </div>
+                            }
                             <!--end:Menu item-->
                         </div>
                         <!--end:Menu sub-->

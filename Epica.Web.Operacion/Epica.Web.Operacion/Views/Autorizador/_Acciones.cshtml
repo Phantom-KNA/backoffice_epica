@@ -1,5 +1,6 @@
 ﻿@model Epica.Web.Operacion.Models.Response.TransaccionSPEIINResponse
-@if (ViewBag.permisoEditar == true)
+
+@if (ViewBag.permisoEditar == true || ViewBag.permisoVer == true)
 {
 <div class="dropdown dropdown-inline">
 
@@ -7,19 +8,24 @@
         <i class="bi bi-three-dots"></i>
     </a>
     <ul class="dropdown-menu menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4">
-
+        @if (ViewBag.permisoEditar == true)
+        {
             <li class="menu-item px-3">
                 <a data-id="@Model.Id" onclick="AcreditarAbono('@Model.Id')" title="Acreditar Abono" class="btnEditar menu-link px-3">
                     <i class="bi bi-check"></i>&nbsp;
                     Acreditar
                 </a>
             </li>
+        }
+        @if (ViewBag.permisoVer == true)
+        {
             <li class="menu-item px-3">
                 <a class="btnDetalle menu-link px-3" data-id="@Model.Id" title="Detalles de Spei In" data-kt-docs-datatable-subtable="expand_row">
                     <i class="bi bi-info-circle"></i>&nbsp;
                     Detalle
                 </a>
             </li>
+        }
 @*             <li class="menu-item px-3">
 
                 <a data-id="@Model.Id" onclick="RechazarAbono('@Model.Id')" title="Rechazar Abono" class="btnEditar menu-link px-3">

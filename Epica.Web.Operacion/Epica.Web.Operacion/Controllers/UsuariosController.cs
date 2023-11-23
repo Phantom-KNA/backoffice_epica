@@ -295,8 +295,8 @@ namespace Epica.Web.Operacion.Controllers
 
                 if (row.AccionesPorModulo!.Count == 0) {
                     listPermisos = mapeoRolesVistaVacio(row.Id);
-                } else if (row.AccionesPorModulo.Count == 6) {
-                    listPermisos = mapeoRolesVista(row.AccionesPorModulo);
+                } else if (row.AccionesPorModulo.Count == 7) {
+                    listPermisos = mapeoRolesVistaParcial(row.AccionesPorModulo, row.Id);
                 } else {
                     listPermisos = mapeoRolesVistaParcial(row.AccionesPorModulo, row.Id);
                 }
@@ -510,9 +510,9 @@ namespace Epica.Web.Operacion.Controllers
         private List<ListUserPermissionResponse> mapeoRolesVistaParcial(List<UserPermisosResponse> listaPermisos, int id)
         {
             var res = new List<ListUserPermissionResponse>();
-            String[] catalogoVista = { "Clientes", "Cuentas", "Tarjetas", "Transacciones", "Configuracion", "Operaciones" };
+            String[] catalogoVista = { "Clientes", "Cuentas", "Tarjetas", "Transacciones", "Configuracion", "Autorizador", "Reintentador" };
 
-            for (int i = 0; i <= 5; i++)
+            for (int i = 0; i <= 6; i++)
             {
                 var genPermisos = catalogoVista[i];
 
@@ -580,9 +580,9 @@ namespace Epica.Web.Operacion.Controllers
         private List<ListUserPermissionResponse> mapeoRolesVistaVacio(int id)
         {
             var res = new List<ListUserPermissionResponse>();
-            String[] catalogoVista = { "Clientes", "Cuentas", "Tarjetas", "Transacciones", "Configuracion", "Operaciones" };
+            String[] catalogoVista = { "Clientes", "Cuentas", "Tarjetas", "Transacciones", "Configuracion", "Autorizador", "Reintentador" };
 
-            for (int i = 0; i <= 5; i++)
+            for (int i = 0; i <= 6; i++)
             {
                 var genPermisos = catalogoVista[i];
 

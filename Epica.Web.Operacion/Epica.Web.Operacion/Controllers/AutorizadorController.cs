@@ -17,6 +17,8 @@ using System;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.IdentityModel.Tokens;
+using Epica.Web.Operacion.Models.Response;
+using System.Reflection;
 
 namespace Epica.Web.Operacion.Controllers
 {
@@ -57,7 +59,7 @@ namespace Epica.Web.Operacion.Controllers
         public IActionResult Index()
         {
             var loginResponse = _userContextService.GetLoginResponse();
-            var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Operaciones" && modulo.Ver == 0);
+            var validacion = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Autorizador" && modulo.Ver == 0);
             if (validacion == true)
             {
                 return View(loginResponse);
@@ -161,12 +163,19 @@ namespace Epica.Web.Operacion.Controllers
             var List = new List<ResumenTransaccionSPEIINResponseGrid>();
 
             bool permisoEditar = false;
+            bool permisoVer = false;
 
-            var validacionEdicionEditar = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Operaciones" && modulo.Editar == 0);
-            
+            var validacionEdicionEditar = loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Autorizador" && modulo.Editar == 0);
+            var validacionVer= loginResponse?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Autorizador" && modulo.Ver == 0);
+
             if (validacionEdicionEditar == true)
                 permisoEditar = true;
+
+            if (validacionVer == true)
+                permisoVer = true;
+
             ViewBag.permisoEditar = permisoEditar;
+            ViewBag.permisoVer = permisoVer;
 
             if (ListPF != null)
             {
@@ -202,6 +211,23 @@ namespace Epica.Web.Operacion.Controllers
         {
             bool rechazar = false;
             var response = await _abonoService.PatchAutorizadorSpeiInAsync(id, rechazar);
+            var loginResponse = _userContextService.GetLoginResponse();
+
+            LogRequest logRequest = new LogRequest
+            {
+                IdUser = loginResponse.IdUsuario.ToString(),
+                Modulo = "Autorizador",
+                Fecha = HoraHelper.GetHoraCiudadMexico(),
+                NombreEquipo = loginResponse.NombreDispositivo,
+                Accion = "Acreditar Abono",
+                Ip = loginResponse.DireccionIp,
+                Envio = JsonConvert.SerializeObject(id),
+                Respuesta = response.Error.ToString(),
+                Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
+                IdRegistro = id
+            };
+
+            await _logsApiClient.InsertarLogAsync(logRequest);
 
             if (response.Error == false)
             {
@@ -219,6 +245,24 @@ namespace Epica.Web.Operacion.Controllers
             bool rechazar = true;
             var response = await _abonoService.PatchAutorizadorSpeiInAsync(id, rechazar);
 
+            var loginResponse = _userContextService.GetLoginResponse();
+
+            LogRequest logRequest = new LogRequest
+            {
+                IdUser = loginResponse.IdUsuario.ToString(),
+                Modulo = "Autorizador",
+                Fecha = HoraHelper.GetHoraCiudadMexico(),
+                NombreEquipo = loginResponse.NombreDispositivo,
+                Accion = "Rechazar Abono",
+                Ip = loginResponse.DireccionIp,
+                Envio = JsonConvert.SerializeObject(id),
+                Respuesta = response.Error.ToString(),
+                Error = response.Error ? JsonConvert.SerializeObject(response.Detalle) : string.Empty,
+                IdRegistro = id
+            };
+
+            await _logsApiClient.InsertarLogAsync(logRequest);
+
             if (response.Error == false)
             {
                 return Ok(new { success = true, response.message });
@@ -229,6 +273,7 @@ namespace Epica.Web.Operacion.Controllers
             }
         }
         #endregion
+
         [Authorize]
         public async Task<IActionResult> DetalleSpeiIn(string Id)
         {

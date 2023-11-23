@@ -216,35 +216,74 @@ var KTDatatableRemoteAjax = function () {
                     }
                 },
                 {
-                    data: 'listaGen', name: 'Operaciones', title: 'Operaciones',
+                    data: 'listaGen', name: 'Autorizador', title: 'Autorizador',
                     render: function (data, type, row) {
                         var renderList = "<ul>";
 
                         $(data).each(function (entry, value) {
-                            if (value.vista == "Operaciones") {
+                            if (value.vista == "Autorizador") {
 
                                 if (value.escritura == true) {
-                                    renderList += CrearEstructuraCheck(true, "Operaciones", value.idPermiso, value.idRol, "Escritura", "Crear");
+                                    renderList += CrearEstructuraCheck(true, "Autorizador", value.idPermiso, value.idRol, "Escritura", "Crear");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Operaciones", value.idPermiso, value.idRol, "Escritura", "Crear");
+                                    renderList += CrearEstructuraCheck(false, "Autorizador", value.idPermiso, value.idRol, "Escritura", "Crear");
                                 }
 
                                 if (value.lectura == true) {
-                                    renderList += CrearEstructuraCheck(true, "Operaciones", value.idPermiso, value.idRol, "Lectura", "Consultar");
+                                    renderList += CrearEstructuraCheck(true, "Autorizador", value.idPermiso, value.idRol, "Lectura", "Consultar");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Operaciones", value.idPermiso, value.idRol, "Lectura", "Consultar");
+                                    renderList += CrearEstructuraCheck(false, "Autorizador", value.idPermiso, value.idRol, "Lectura", "Consultar");
                                 }
 
                                 if (value.eliminar == true) {
-                                    renderList += CrearEstructuraCheck(true, "Operaciones", value.idPermiso, value.idRol, "Eliminar", "Eliminar");
+                                    renderList += CrearEstructuraCheck(true, "Autorizador", value.idPermiso, value.idRol, "Eliminar", "Eliminar");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Operaciones", value.idPermiso, value.idRol, "Eliminar", "Eliminar");
+                                    renderList += CrearEstructuraCheck(false, "Autorizador", value.idPermiso, value.idRol, "Eliminar", "Eliminar");
                                 }
 
                                 if (value.actualizar == true) {
-                                    renderList += CrearEstructuraCheck(true, "Operaciones", value.idPermiso, value.idRol, "Actualizar", "Modificar");
+                                    renderList += CrearEstructuraCheck(true, "Autorizador", value.idPermiso, value.idRol, "Actualizar", "Modificar");
                                 } else {
-                                    renderList += CrearEstructuraCheck(false, "Operaciones", value.idPermiso, value.idRol, "Actualizar", "Modificar");
+                                    renderList += CrearEstructuraCheck(false, "Autorizador", value.idPermiso, value.idRol, "Actualizar", "Modificar");
+                                }
+
+                            }
+                        });
+
+                        renderList += "</ul>";
+                        return renderList;
+                    }
+                },
+                {
+                    data: 'listaGen', name: 'Reintentador', title: 'Reintentador',
+                    render: function (data, type, row) {
+                        var renderList = "<ul>";
+
+                        $(data).each(function (entry, value) {
+                            if (value.vista == "Reintentador") {
+
+                                if (value.escritura == true) {
+                                    renderList += CrearEstructuraCheck(true, "Reintentador", value.idPermiso, value.idRol, "Escritura", "Crear");
+                                } else {
+                                    renderList += CrearEstructuraCheck(false, "Reintentador", value.idPermiso, value.idRol, "Escritura", "Crear");
+                                }
+
+                                if (value.lectura == true) {
+                                    renderList += CrearEstructuraCheck(true, "Reintentador", value.idPermiso, value.idRol, "Lectura", "Consultar");
+                                } else {
+                                    renderList += CrearEstructuraCheck(false, "Reintentador", value.idPermiso, value.idRol, "Lectura", "Consultar");
+                                }
+
+                                if (value.eliminar == true) {
+                                    renderList += CrearEstructuraCheck(true, "Reintentador", value.idPermiso, value.idRol, "Eliminar", "Eliminar");
+                                } else {
+                                    renderList += CrearEstructuraCheck(false, "Reintentador", value.idPermiso, value.idRol, "Eliminar", "Eliminar");
+                                }
+
+                                if (value.actualizar == true) {
+                                    renderList += CrearEstructuraCheck(true, "Reintentador", value.idPermiso, value.idRol, "Actualizar", "Modificar");
+                                } else {
+                                    renderList += CrearEstructuraCheck(false, "Reintentador", value.idPermiso, value.idRol, "Actualizar", "Modificar");
                                 }
 
                             }
