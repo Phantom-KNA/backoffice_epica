@@ -1620,6 +1620,12 @@
   margin-bottom: 0.25rem !important;
 }
 
+.mycustom-1 {
+    margin-top: .25rem !important;
+    margin-bottom: .25rem !important;
+    margin-left: 10px
+}
+
 .my-2 {
   margin-top: 0.5rem !important;
   margin-bottom: 0.5rem !important;

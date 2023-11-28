@@ -17,6 +17,40 @@
         <div id="kt_aside_menu" class="menu menu-rounded menu-column menu-title-gray-600 menu-state-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500 fw-semibold fs-6" data-kt-menu="true">
             <!--begin:Menu item-->
             @{
+                var atentionClientValid = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Cuentas" && modulo.Ver == 0);
+                if (atentionClientValid == true)
+                {
+                    <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item py-2">
+                        <!--begin:Menu link-->
+                        <span class="menu-link menu-center">
+                            <span class="menu-icon me-0">
+                                <i class="fonticon-card fs-1"></i>
+                            </span>
+                        </span>
+                        <!--end:Menu link-->
+                        <!--begin:Menu sub-->
+                        <div class="menu-sub menu-sub-dropdown px-2 py-4 w-250px mh-75 overflow-auto">
+                            <!--begin:Menu item-->
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link" asp-action="Index" asp-controller="AtencionClientes">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">AtencionClientes</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                            <!--end:Menu item-->
+                        </div>
+                        <!--end:Menu sub-->
+                    </div>
+                }
+                <!--end:Menu item-->
+                <!--begin:Menu item-->
+            }
+
+            @{
                 var validacion2 = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Clientes" && modulo.Ver == 0);
                 if (validacion2 == true)
                 {
@@ -59,6 +93,8 @@
                     <!--begin:Menu item-->
                 }
              }
+
+            
 
             @{
                 var validacion = Model?.AccionesPorModulo.Any(modulo => modulo.ModuloAcceso == "Cuentas" && modulo.Ver == 0);

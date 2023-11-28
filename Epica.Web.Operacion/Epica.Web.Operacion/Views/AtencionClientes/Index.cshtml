@@ -1,0 +1,266 @@
+﻿@{
+    ViewData["Title"] = "Consultar Información del Cliente";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section LogoPage{
+    <i class="bi bi-person fs-1 w-40px"></i>
+}
+@section breadcrumb{
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted">
+        Atención al Cliente
+    </li>
+}
+
+
+<div class="col-md-12">
+    <div class="card card-flush h-lg-100">
+        <div class="card-header border-0 pt-6">
+            <div class="card-title">
+                <div class="d-flex align-items-center position-relative my-1">
+                    <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor"></rect>
+                            <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor"></path>
+                        </svg>
+                    </span>
+                    <input type="text" id="search_name" data-kt-customer-table-filter="search" class="form-control form-control-sm w-250px ps-15" placeholder="Nombre de cliente">
+                    
+                </div>
+                <div class="d-flex align-items-center position-relative mycustom-1">
+                    <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor"></rect>
+                            <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor"></path>
+                        </svg>
+                    </span>
+                    <input type="text" id="search_last_fourt_digit" data-kt-customer-table-filter="search" class="form-control form-control-sm w-250px ps-15" placeholder="Últimos 4 digitos de la tarjeta">
+
+                </div>
+                <div class="d-flex align-items-center position-relative mycustom-1">
+                    <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor"></rect>
+                            <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor"></path>
+                        </svg>
+                    </span>
+                    <input type="text" id="search_telephone" data-kt-customer-table-filter="search" class="form-control form-control-sm w-250px ps-15" placeholder="Número de Teléfono">
+
+                </div>
+            </div>
+            
+            <div class="card-toolbar">
+                <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
+
+                    <div class="card-toolbar">
+                        <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
+                            <div class="m-0">
+                                <button type="button" class="btn btn-sm btn-light-primary me-3">
+                                    &nbsp;Consultar
+                                </button>
+                            </div>
+
+                            <div id="kt_datatable_buttons" class="d-none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3" style="max-width: 540px; margin-top: 10px;">
+            <div class="row g-0" style="flex-wrap: nowrap;">
+                <div class="image-container border border-transparent">
+                    <img class="img-fluid rounded" src="https://img.freepik.com/vrije-vector/mysterieuze-maffia-man-die-een-sigaret-rookt_52683-34828.jpg?w=740&t=st=1701127687~exp=1701128287~hmac=75772722a617c52de0da5fe2bc94ad0a442f01493d68dcc0294e296e2395c0ae" alt="Foto de Perfil">
+                </div>
+                <div class="col-md-4">
+                    
+                </div>
+                <div class="col-md-8" style="align-self: center;">
+                    <div class="card-body">
+                        <h5 class="card-title">Batman Diaz Perez</h5>
+                        <!--<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>-->
+                        <p class="card-text"><small class="text-muted">ern456@gmail.com</small></p>
+                    </div>
+                </div>
+                <div class="col-md-8" style="align-self: center;">
+                    <div class="card-body">
+                        <h5 class="card-title">Teléfono</h5>
+                        <!--<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>-->
+                        <p class="card-text"><small class="text-muted">+520048922</small></p>
+                        <h5 class="card-title">Dirección</h5>
+                        <!--<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>-->
+                        <p class="card-text"><small class="text-muted">Ninguna</small></p>
+                    </div>
+                </div>
+                <div class="card-toolbar" style="align-self: center;">
+                    <div class="d-flex justify-content-start" data-kt-customer-table-toolbar="base">
+                        <div class="m-0">
+                            <button type="button" class="btn btn-sm btn-light-primary me-3">
+                                &nbsp;Recuperar contraseña
+                            </button>
+                        </div>
+                        <div id="kt_datatable_buttons" class="d-none"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="container text-start" style="margin-top: 15px">
+            <div class="row row-cols-auto">
+                <div class="col">
+                    <i class="bi bi-person fs-1 w-40px"></i>
+                 
+                </div>
+                <div class="col col-lg-2" style="width:auto;">
+                    <h3>Información</h3>
+                </div>
+            </div>
+            <p class="card-text" style="margin-top: 15px; margin-left: 30px;"><small class="text-muted">Tarjeta seleccionada:</small></p>
+
+            <!-- Example single danger button -->
+            
+
+            <div class="btn-group" style="margin-top: 5px; margin-left: 30px;">
+                <button class="btn btn-secondary btn-lg" type="button">
+                    4126 08** **** 4058
+                </button>
+                <button type="button" class="btn btn-lg btn-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="visually-hidden">Toggle Dropdown</span>
+                </button>
+
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">0126 08** **** 4008</a></li>
+                </ul>
+            </div>
+
+            <ul class="nav nav-tabs nav-pills" style="margin-top: 15px; margin-left: 30px;">
+                <li class="nav-item me-0">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#kt_vtab_pane_1">Tarjeta</a>
+                </li>
+                <li class="nav-item me-0">
+                    <a class="nav-link" data-bs-toggle="tab" href="#kt_vtab_pane_2">Mov.</a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" data-bs-toggle="tab" href="#kt_vtab_pane_3">Transf.</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#kt_vtab_pane_3">Transaciones</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#kt_vtab_pane_3">Logs</a>
+                </li>
+            </ul>
+
+            <div class="row row-cols-auto">
+                <div class="col">
+                    <p class="card-text" style="margin-top: 30px; margin-left: 30px; font-size: 18px;"><small class="text-muted">SALDO DISPONIBLE:</small></p>
+
+                </div>
+                <div class="col" >
+                    <h3 style="margin-top: 30px; margin-left: 30px; font-size: 18px;">$1100.50</h3>
+                </div>
+            </div>
+            <div class="form-check form-switch" style="margin-top: 30px; margin-left: 30px; font-size: 18px;">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                <label class="form-check-label" for="flexSwitchCheckDefault">Tarjeta activa</label>
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+</div>
+
+<div class="modal fade" id="modal_detalle" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header header-modal">
+                <h1 class="modal-title fs-5 text-header-modal" id="modalLabelTitle"></h1>
+                <button type="button" class="custom-close-button" data-bs-dismiss="modal" aria-label="Close">
+                    <span>✕</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer" style="padding:10px">
+                <button type="button" class="btn btn-success btn-sm font-weight-bold" data-bs-dismiss="modal" aria-label="Close" id="btnCerrar">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script asp-append-version="true" src="~/js/components/accounting.js"></script>
+    <script asp-append-version="true" src="~/js/AtencionClientes/epica.atencionclientes.index.js"></script>
+    <script asp-append-version="true" src="~/js/components/utilerias.js"></script>
+
+    <script>
+        var TranID = '';
+    </script>
+}
+<style>
+    .ocultar {
+        display: none;
+    }
+    .custom-cell {
+        white-space: nowrap; /* Evita el ajuste de texto automático */
+        max-width: 150px; /* Establece un ancho máximo para la celda */
+    }
+
+    table {
+        text-align: left;
+    }
+
+    /* alinear verticalmente el texto al principio de la celda */
+    td, th {
+        vertical-align: top;
+    }
+
+    .header-modal {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .text-header-modal {
+        color: white;
+    }
+
+    .custom-close-button {
+        color: white;
+        background-color: transparent;
+        border: none;
+        opacity: 1;
+        padding: 0;
+        font-size: 1rem;
+        line-height: 1;
+        cursor: pointer;
+        transition: color 0.3s, opacity 0.3s;
+        position: absolute;
+        right: 0;
+        padding: 21px;
+    }
+
+        .custom-close-button:hover {
+            opacity: 0.8;
+        }
+
+    .dropdown-menu {
+        position: absolute; /* Establece la posición absoluta */
+        z-index: 9999; /* Establece un valor alto para el z-index para que esté por encima de la tabla */
+    }
+
+    .table-responsive,
+    .dataTables_scrollBody {
+        overflow: visible !important;
+    }
+
+    .table-responsive-disabled .dataTables_scrollBody {
+        overflow: hidden !important;
+    }
+</style>

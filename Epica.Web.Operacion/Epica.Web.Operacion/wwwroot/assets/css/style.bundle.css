@@ -9476,6 +9476,12 @@ textarea.form-control-lg {
     margin-bottom: .25rem !important
 }
 
+.mycustom-1 {
+    margin-top: .25rem !important;
+    margin-bottom: .25rem !important;
+    margin-left: 10px
+}
+
 .my-2 {
     margin-top: .5rem !important;
     margin-bottom: .5rem !important
@@ -54996,4 +55002,17 @@ router-outlet {
 [data-kt-app-toolbar-sticky=on] .app-toolbar {
     padding-top: 0 !important;
     padding-bottom: 0 !important
+}
+
+
+.image-container {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    border: 2px solid #000;
+    border-radius: 10px;
+}
+
+.border-transparent {
+    border-color: transparent !important;
 }

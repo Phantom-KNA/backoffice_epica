@@ -1,0 +1,53 @@
+﻿@model Epica.Web.Operacion.Models.Response.CuentasResponse
+<div class="dropdown dropdown-inline">
+    <button type="button" class="btn btn-sm btn-icon btn-light btn-active-light-primary me-2 btnCobranzaRef" onclick="pruebas(@Model.idCuenta)" id="@Model.idCuenta" title="Ver SubCuentas" data-kt-docs-datatable-subtable="expand_row">
+        <i class="bi bi-plus"></i>
+    </button>
+    <a href="javascript:;" class="btn btn-sm btn-icon btn-light btn-active-light-primary me-2" title="Acciones" data-bs-toggle="dropdown">
+        <i class="bi bi-three-dots"></i>
+    </a>
+
+    <ul class="dropdown-menu menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4" style="position:absolute;z-index: 9999">
+        <li class="menu-item px-3">
+            <a class="btnEditar menu-link px-3 btnDetalle" data-id="@Model.noCuenta" data-estatus="@Model.estatus" title="Detalles de Cuenta">
+                <i class="bi bi-info-circle"></i>&nbsp;
+            Detalle
+        </a>
+        </li>
+        <li class="menu-item px-3">
+            <a data-id="@Model.idCuenta" href="/Clientes/Detalle/Movimientos?id=@Model.idCuenta&cliente=@Model.idCliente&noCuenta=@Model.noCuenta" title="Consultar Transacciones de la cuenta" class="btnEditar menu-link px-3">
+                <i class="bi bi-credit-card"></i>&nbsp;
+                Transacciones
+            </a>
+        </li>
+        <li class="menu-item px-3">
+            @if (Model.estatus == 1) {
+                <a data-id="@Model.idCuenta" onclick="GestionarCuenta(@Model.idCuenta, 'True')" title="Desbloquear Cuenta" class="btnEditar menu-link px-3">
+                    <i class="bi bi-unlock"></i>&nbsp;
+                    Desbl Cuenta
+                </a>
+            } else {
+                <a data-id="@Model.idCuenta" onclick="GestionarCuenta(@Model.idCuenta, 'False')" title="Bloquear Cuenta" class="btnEditar menu-link px-3">
+                    <i class="bi bi-lock"></i>&nbsp;
+                    Bloquear Cuenta
+                </a>
+            }
+        </li>
+        <li class="menu-item px-3">
+            @if (Model.bloqueoSPEIOut == 1)
+            {
+                <a data-id="@Model.idCuenta" onclick="GestionarCuentaSpeiOut(@Model.idCuenta, 'True')" title="Desbloquear Cuenta" class="btnEditar menu-link px-3">
+                    <i class="bi bi-unlock"></i>&nbsp;
+                    Desbl SpeiOut
+                </a>
+            }
+            else
+            {
+                <a data-id="@Model.idCuenta" onclick="GestionarCuentaSpeiOut(@Model.idCuenta, 'False')" title="Bloquear Cuenta" class="btnEditar menu-link px-3">
+                    <i class="bi bi-lock"></i>&nbsp;
+                    Bloquear SpeiOut
+                </a>
+            }
+        </li>
+    </ul>
+</div>
